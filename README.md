@@ -3,5 +3,5 @@
 
 ### Team Members:
 - Student1 99100000
-- Student2 Farhad Esmaeilzadeh 99105226
+- Farhad Esmaeilzadeh 99105226
 - Student3 99100000
