@@ -1,0 +1,29 @@
+Main
+------------------
+controller
+1.response
+2.regex
+3.enum menu
+------------------
+Game
+1.User
+2.Card:
+	monster
+	spell
+	trap
+3.Deck:
+	main
+	side
+4.board
+5.Phase
+
+-----------------
+Menu
+1.login menu
+2.Main menu
+3.Duel menu
+4.Deck menu
+5.Scoreboard menu
+6.Profile menu
+7.Shop menu
+8.
