@@ -40,7 +40,7 @@ public class Response  {
 	public static String setCardInWrongPhase = "you can’t do this action in this phase";
 	public static String successfulCardSetting = "set successfully";
 	public static String unableToChangePositionOfCard = "you can’t change this card position";
-	public static String CardInWantedPosition = "this card is already in the wanted position";
+	public static String cardInWantedPosition = "this card is already in the wanted position";
 	public static String unableToChangePositionInTurnTwice = "you already changed this card position in this turn";
 	public static String changeMonsterCardModeInWrongPhase = "you can’t do this action in this phase";
 	public static String successfulMonserCardPositionChange = "monster card position changed successfully";
