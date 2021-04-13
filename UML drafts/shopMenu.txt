@@ -1,5 +1,9 @@
-ShopMenu: extends AbstractMenu
+ShopMenu implements Menuable:
 
-------------------------------
--buyCard(cardName:String):void
--showAllCardsInShop():void
+-----------------------------
+-buyCard(matcher:Matcher):void
+-showAllCards(matcher:Matcher):void
+-increaseMoney(matcher:Matcher):void
+
+-canBuyCard(cardName:String):boolean
+

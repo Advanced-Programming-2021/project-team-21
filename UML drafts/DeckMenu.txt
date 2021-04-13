@@ -1,0 +1,21 @@
+DeckMenu implements Menuable:
+
+-----------------------------
+-showCard(matcher:Matcher):void
+-createNewDeck(matcher:Matcher):void
+-deleteDeck(matcher:Matcher):void
+-setActiveDeck(matcher:Matcher):void
+-addCardToDeck(matcher:Matcher):void
+-removeCardFromDeck(matcher:Matcher):void
+-showAllDecks(matcher:Matcher):void
+-showDeck(matcher:Matcher):void
+-showUserCards(matcher:Matcher):void
+
+
+
+-canCreateNewDeck(deckName:String):boolean
+-canDeleteDeck(deckName:String):boolean
+-canActivateDeck(deckName:String):boolean
+-canAddCardToDeck(cardName:Stirng,deckName:String,isSideDeck:boolean):boolean
+-canRemoveCardFromDeck(cardName:Stirng,deckName:String,isSideDeck:boolean):boolean
+

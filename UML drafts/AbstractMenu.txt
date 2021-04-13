@@ -1,4 +1,4 @@
-AbstractMenu:
+Menuable INTERFACE:
 
 -------------------
 +ABSTRACT run():void

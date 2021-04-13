@@ -1,0 +1,8 @@
+ProfileMenu implements Menuable:
+
+--------------------------------
+-changeNichname(matcher:Matcher):void
+-changePassowrd(matcher:Matcher):void
+
+-canChangeNichname(newNichname:String):boolean
+-canChangePassword(oldPassword:String,newPassword:String):boolean
