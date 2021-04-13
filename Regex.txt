@@ -7,7 +7,7 @@ public class Regex() {
 	public static String createUser;
 	public static String login;
 	public static String logout;
-	public static String showScoreboard
+	public static String showScoreboard;
 	public static String changeNickname;
 	public static String changePassowrd;
 	public static String createDeck;
