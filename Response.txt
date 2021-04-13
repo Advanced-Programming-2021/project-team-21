@@ -50,7 +50,7 @@ public class Response  {
 	public static String unableToAttack = "you can’t attack with this card";
 	public static String attackInWrongPhase = "you can’t do this action in this phase";
 	public static String cardAttackedBefore = "this card already attacked";
-	public static String noCardToAttakWith = "there is no card to attack here";
+	public static String noCardToAttackWith = "there is no card to attack here";
 	public static String destructionOfTwoSideCards = "both you and your opponent monster cards are destroyed and no one receives damage";
 	public static String destructionOfDefensePositionMonster = "the defense position monster is destroyed";
 	public static String noDestruction = "no card is destroyed";
