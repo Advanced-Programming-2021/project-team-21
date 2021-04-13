@@ -17,7 +17,6 @@ public class Response  {
 	public static String successfulDeckDeletion = "deck deleted successfully";
 	public static String successfulDeckActivation = "deck activated successfully";
 	public static String successfulCardAddition = "card added to deck successfully";
-	public static String noCardExistsInAddition = "card with name " + <card name> + " does not exist";
 	public static String successfulCardRemovation = "card removed form deck successfully";
 	public static String noCardExistToBuy = "there is no card with this name";
 	public static String lackOfMoney = "not enough money";
