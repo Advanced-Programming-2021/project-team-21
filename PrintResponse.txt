@@ -46,9 +46,6 @@ public class PrintResponse {
 	public static void printSuccessfulCardAddition () {
 		System.out.println(Response.successfulCardAddition);
 	}
-	public static void printNoCardExistsInAddition () {
-		System.out.println(Response.noCardExistsInAddition);
-	}
 	public static void printSuccessfulCardRemovation () {
 		System.out.println(Response.successfulCardRemovation);
 	}
