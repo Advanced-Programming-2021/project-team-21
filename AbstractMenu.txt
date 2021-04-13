@@ -1,0 +1,7 @@
+AbstractMenu:
+
+-------------------
++ABSTRACT run():void
+-ABSTRACT showCurrentMenu():void
+-ABSTRACT enterMenu():void
+-ABSTRACT exitMenu():void

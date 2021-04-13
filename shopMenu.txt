@@ -1,0 +1,5 @@
+ShopMenu: extends AbstractMenu
+
+------------------------------
+-buyCard(cardName:String):void
+-showAllCardsInShop():void
