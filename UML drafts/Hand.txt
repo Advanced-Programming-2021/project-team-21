@@ -1,0 +1,10 @@
+Hand:
+-cardsInHand:Arraylist<Card>
+-handOwner:User
+
+----------------------------
+-Hand(handOwner:User): <<constructor>>
+-addCardFromHand():void
+-removeCardFromHand():void
+-getCardsInHand():Arraylist<Card>
+
