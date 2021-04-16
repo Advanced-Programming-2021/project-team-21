@@ -1,16 +1,14 @@
 package menu;
 
 public class DeckMenu {
-	private deckName;
-	private Hashmap<String, Arraylist<String> decks;
 	private Arraylist<String> cards;
-	public DeckMenu(String deckName):void
-	public static createrDeck(String deckName):void
+	public DeckMenu(String deckName) : <<constructor>>
+	public static createDeck(String deckName):void
 	public static deleteDeck(String deckName):void
 	public static activateDeck(String deckName):void
 	public static addCardToDeck(String cardname, String deckName):void
 	public static removeCardFromDeck(String cardname, String deckName, String Side):void
-	public static showAllDeck():void
-	public static showDec(String deckName, String Side):void
+	public static showAllDecks():void
+	public static showDeck(String deckName, String Side):void
 	public static showDeckCards():void
 }
