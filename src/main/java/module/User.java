@@ -1,18 +1,36 @@
 package module;
 
+import controller.ProgramController;
+
+import java.util.ArrayList;
+
 public class User {
     private String username;
     private String password;
     private String nickname;
-    private int money;
+    private int score;
+    private int coins;
+    private ArrayList<Deck> decks;
+    private ArrayList<Card> cards;
+    private Board board;
+
+    {
+        coins = 0;
+        decks = new ArrayList<>();
+        cards = new ArrayList<>();
+    }
 
     public User(String username, String password, String nickname) {
+        setUsername(username);
+        setPassword(password);
+        setNickname(nickname);
+        ProgramController.saveData(this);
     }
 
     public static User getUserByUsername(String username) {
     }
 
-    public void setPassowrd(String newPassword) {
+    public void setPassword(String newPassword) {
     }
 
     public void getPassword() {
@@ -36,7 +54,7 @@ public class User {
     public void getUsername() {
     }
 
-    public String setNichname(String nichname) {
+    public String setNickname(String nickname) {
     }
 
     public void getNichname() {
@@ -75,9 +93,12 @@ public class User {
     public void remvoeCard(card:Card) {
     }
 
-    public void increaseMoney(amount:int){}
+    public void increaseMoney(amount:int) {
+    }
 
-    public void increaseScore(amount:int){}
+    public void increaseScore(amount:int) {
+    }
 
-    public boolean doesUserExist(username:String){}
+    public boolean doesUserExist(username:String) {
+    }
 }
