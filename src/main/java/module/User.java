@@ -18,6 +18,10 @@ public class User {
         return money;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void setMoney(int money) {
         this.money = money;
     }
