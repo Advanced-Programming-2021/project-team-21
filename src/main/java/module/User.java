@@ -84,17 +84,17 @@ public class User {
         return score;
     }
 
-    public int setActiveDeck(Deck deck) {
-        deck.setActive(true);
-        ProgramController.saveData(deck);
-    }
-
     public Deck getActiveDeck() {
         for (Deck deck : decks) {
             if (deck.isActive())
                 return deck;
         }
         return null;
+    }
+
+    public void setActiveDeck(Deck deck) {
+        deck.setActive(true);
+        ProgramController.saveData(deck);
     }
 
     public Deck setSideDeck(Deck deck) {
