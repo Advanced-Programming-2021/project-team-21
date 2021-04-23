@@ -70,5 +70,5 @@ public class Responses {
     public static String unableToSpecialSummonMonster = "there is no way you could special summon a monster";
     public static String emergencySpecialSummon = "you should special summon right now";
     public static String emptinessOfGraveyard = "graveyard empty";
-    public static
+    public static String unableToShowOpponentCard = "card is not visible";
 }
