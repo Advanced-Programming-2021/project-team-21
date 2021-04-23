@@ -66,7 +66,7 @@ public class User {
         return username;
     }
 
-    public String setNickname(String nickname) {
+    public void setNickname(String nickname) {
         this.nickname = nickname;
         ProgramController.saveData(this);
     }
@@ -75,7 +75,7 @@ public class User {
         return nickname;
     }
 
-    public int setScore(int score) {
+    public String setScore(int score) {
         this.score = score;
         ProgramController.saveData(this);
     }
