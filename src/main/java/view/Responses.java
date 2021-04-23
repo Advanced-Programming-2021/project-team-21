@@ -71,4 +71,5 @@ public class Responses {
     public static String emergencySpecialSummon = "you should special summon right now";
     public static String emptinessOfGraveyard = "graveyard empty";
     public static String unableToShowOpponentCard = "card is not visible";
+    public static String loginMenuShow = "Login Menu";
 }

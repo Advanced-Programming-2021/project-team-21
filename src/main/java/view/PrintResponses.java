@@ -248,4 +248,5 @@ public class PrintResponses {
     public static void printUnableToShowOpponentCard() {
         System.out.println(Responses.unableToShowOpponentCard);
     }
+    public static void printLoginMenuShow(){ System.out.println(Responses.loginMenuShow); }
 }
