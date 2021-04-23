@@ -22,5 +22,7 @@ public class User {
         this.money = money;
     }
 
-
+    public String getNickname() {
+        return nickname;
+    }
 }
