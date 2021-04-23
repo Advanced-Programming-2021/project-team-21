@@ -31,39 +31,57 @@ public class User {
     }
 
     public void setPassword(String newPassword) {
+        this.password = newPassword;
+        ProgramController.saveData(this);
     }
 
-    public void getPassword() {
+    public String getPassword() {
+        return password;
     }
 
-    public String getMoney() {
+    public int getCoins() {
+        return coins;
     }
 
-    public void setMoney(int money) {
+    public void setCoins(int coins) {
+        this.coins = coins;
+        ProgramController.saveData(this);
     }
 
     public Board getBoard() {
+        return board;
     }
 
     public void setBoard(Board board) {
+        this.board = board;
+        ProgramController.saveData(this);
     }
 
     public Board setUsername(String username) {
+        this.username = username;
+        ProgramController.saveData(this);
     }
 
-    public void getUsername() {
+    public String getUsername() {
+        return username;
     }
 
     public String setNickname(String nickname) {
+        this.nickname = nickname;
+        ProgramController.saveData(this);
     }
 
-    public void getNichname() {
+    public String getNickname() {
+        return nickname;
     }
 
-    public String setScore(int score) {
+    public int setScore(int score) {
+        this.score = score;
+        ProgramController.saveData(this);
     }
 
-    public void getScore() {
+    public int getScore() {
+        return score;
     }
 
     public int setActiveDeck(Deck deck) {
