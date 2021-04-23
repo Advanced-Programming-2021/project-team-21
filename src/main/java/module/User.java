@@ -30,13 +30,13 @@ public class User {
     public static User getUserByUsername(String username) {
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String newPassword) {
         this.password = newPassword;
         ProgramController.saveData(this);
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public int getCoins() {
@@ -66,13 +66,13 @@ public class User {
         return username;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
         ProgramController.saveData(this);
-    }
-
-    public String getNickname() {
-        return nickname;
     }
 
     public String setScore(int score) {
@@ -85,9 +85,16 @@ public class User {
     }
 
     public int setActiveDeck(Deck deck) {
+        deck.setActive(true);
+        ProgramController.saveData(deck);
     }
 
-    public void getActiveDeck() {
+    public Deck getActiveDeck() {
+        for (Deck deck : decks) {
+            if (deck.isActive())
+                return deck;
+        }
+        return null;
     }
 
     public Deck setSideDeck(Deck deck) {
@@ -96,13 +103,14 @@ public class User {
     public void getSideDeck() {
     }
 
-    public Deck getDecks() {
+    public ArrayList<Deck> getDecks() {
+        return decks;
     }
 
-    public Arraylist<Deck> addDeck(deck:Deck) {
+    public Deck addDeck(Deck deck) {
     }
 
-    public void removeDeck(deck:Deck) {
+    public void removeDeck(Deck deck) {
     }
 
     public void addCard(card:Card) {
