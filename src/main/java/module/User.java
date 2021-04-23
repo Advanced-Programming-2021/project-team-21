@@ -6,4 +6,7 @@ public class User {
     private String nickname;
     private int money;
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
