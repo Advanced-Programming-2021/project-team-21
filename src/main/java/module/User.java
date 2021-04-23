@@ -57,7 +57,7 @@ public class User {
         ProgramController.saveData(this);
     }
 
-    public Board setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
         ProgramController.saveData(this);
     }
@@ -75,7 +75,7 @@ public class User {
         ProgramController.saveData(this);
     }
 
-    public String setScore(int score) {
+    public void setScore(int score) {
         this.score = score;
         ProgramController.saveData(this);
     }
