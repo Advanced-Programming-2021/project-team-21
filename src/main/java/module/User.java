@@ -6,7 +6,7 @@ public class User {
     private String nickname;
     private int money;
 
-    public User(username:String, password:String, nickname:String) {
+    public User(String username, String password, String nickname) {
     }
 
     public static User getUserByUsername(String username) {
