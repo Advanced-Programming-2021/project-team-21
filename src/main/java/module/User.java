@@ -6,12 +6,12 @@ public class User {
     private String nickname;
     private int money;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getMoney() {
@@ -21,5 +21,6 @@ public class User {
     public void setMoney(int money) {
         this.money = money;
     }
+
 
 }
