@@ -31,15 +31,31 @@ public class LoginMenu implements Menuable {
         String username = matcher.group("username") , password = matcher.group("password") ,
                 nickname = matcher.group("nickname");
         if (User.getUserByUsername(username) != null){
-            PrintResponses.printUserExists(username);
+            PrintResponses.printUserExistsWithUsername(username);
             return;
         }
-
+        if (User.getUserByNickname(nickname) != null){
+            PrintResponses.printUserExistsWithNickname(nickname);
+            return;
+        }
+        new User(username , password , nickname);
         PrintResponses.printSuccessfulUserCreation();
     }
 
     private void loginNewUser(Matcher matcher) {
+        String username = matcher.group("username") , password = matcher.group("password");
+        User user = User.getUserByUsername(username);
+        if (user == null){
+            PrintResponses.printNoUserExists();
+            return;
+        }
+        if (!user.getPassword().equals(password)){
+            PrintResponses.printWrongPasswordInLogin();
+            return;
+        }
         PrintResponses.printSuccessfulLogout();
+        ProgramController.userInGame = user;
+        ProgramController.currentMenu = Menus.MAIN_MENU;
     }
 
 

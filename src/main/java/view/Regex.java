@@ -13,6 +13,9 @@ public class Regex {
             "(?=.*--nickname (?<nickname>\\S+))";
     public static String userCreateShort = "user create (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))" +
             "(?=.*-n (?<nickname>\\S+))";
+    public static String userChangeNickname = "profile change --nickname (?<nickname>\\S+)";
+    public static String changePassword = "profile change (?=.*--password (?<password>\\S+))(?=.*--new (?<newPassword>\\S+))";
+    public static String changePasswordShort = "profile change (?=.*-p (?<password>\\S+))(?=.*-n (?<newPassword>\\S+))";
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);
