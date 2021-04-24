@@ -30,9 +30,11 @@ public class User {
     }
 
     public static User getUserByUsername(String username) {
+        return null;
     }
 
     public static User getUserByNickname(String nickname) {
+        return null;
     }
     public String getPassword() {
         return password;
@@ -101,10 +103,12 @@ public class User {
         ProgramController.saveData(deck);
     }
 
-    public Deck setSideDeck(Deck deck) {
+    public void setSideDeck(Deck deck) {
+
     }
 
-    public void getSideDeck() {
+    public Deck getSideDeck() {
+        return null;
     }
 
     public ArrayList<Deck> getDecks() {
@@ -144,9 +148,11 @@ public class User {
     public boolean doesUserExist(String username) {
         File file = new File("directoy????");
         String[] pathNames = file.list();
-        for (String pathName : pathNames){
-            if (pathName.equals(username))
-                return true;
+        if (pathNames != null) {
+            for (String pathName : pathNames){
+                if (pathName.equals(username))
+                    return true;
+            }
         }
         return false;
     }
