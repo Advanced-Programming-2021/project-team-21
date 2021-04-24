@@ -30,6 +30,8 @@ public class User {
     public static User getUserByUsername(String username) {
     }
 
+    public static User getUserByNickname(String nickname) {
+    }
     public String getPassword() {
         return password;
     }

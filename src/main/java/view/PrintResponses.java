@@ -249,4 +249,6 @@ public class PrintResponses {
         System.out.println(Responses.unableToShowOpponentCard);
     }
     public static void printLoginMenuShow(){ System.out.println(Responses.loginMenuShow); }
+    public static void printUserExists(String username){
+        System.out.println("user with username " + username + " already exists"); }
 }
