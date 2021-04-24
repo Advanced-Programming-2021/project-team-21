@@ -2,6 +2,7 @@ package module;
 
 import controller.ProgramController;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class User {
@@ -109,24 +110,43 @@ public class User {
         return decks;
     }
 
-    public Deck addDeck(Deck deck) {
+    public void  addDeck(Deck deck) {
+        this.decks.add(deck);
+        ProgramController.saveData(this);
     }
 
     public void removeDeck(Deck deck) {
+        this.decks.remove(deck);
+        ProgramController.saveData(this);
     }
 
-    public void addCard(card:Card) {
+    public void addCard(Card card) {
+        this.cards.add(card);
+        ProgramController.saveData(this);
     }
 
-    public void remvoeCard(card:Card) {
+    public void removeCard(Card card) {
+        this.cards.remove(card);
+        ProgramController.saveData(this);
     }
 
-    public void increaseMoney(amount:int) {
+    public void increaseCoins(int amount) {
+        this.coins += amount;
+        ProgramController.saveData(this);
     }
 
-    public void increaseScore(amount:int) {
+    public void increaseScore(int amount) {
+        this.score += amount;
+        ProgramController.saveData(this);
     }
 
-    public boolean doesUserExist(username:String) {
+    public boolean doesUserExist(String username) {
+        File file = new File("directoy????");
+        String[] pathNames = file.list();
+        for (String pathName : pathNames){
+            if (pathName.equals(username))
+                return true;
+        }
+        return false;
     }
 }
