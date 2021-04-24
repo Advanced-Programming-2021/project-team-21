@@ -21,7 +21,7 @@ public abstract class Card {
         return null;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
