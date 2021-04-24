@@ -5,22 +5,23 @@ import module.User;
 import view.*;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginMenu implements Menuable {
     @Override
     public void run(String command) {
         Matcher matcher;
-        if ((matcher = Regex.getMatcher(command, Regex.userLogin)).matches() ||
-                (matcher = Regex.getMatcher(command, Regex.userLoginShort)).matches()) {
+        if ((matcher = Regex.getMatcher(command, Regex.userLogin)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.userLoginShort)).find()) {
             loginNewUser(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuEnter).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuEnter).find()) {
             PrintResponses.printNoLoginYet();
-        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuExit).find()) {
             exitMenu();
-        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuShow).find()) {
             showCurrentMenu();
-        } else if ((matcher = Regex.getMatcher(command, Regex.userCreate)).matches() ||
-                (matcher = Regex.getMatcher(command, Regex.userCreateShort)).matches()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.userCreate)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.userCreateShort)).find()) {
             createNewUser(matcher);
         } else {
             PrintResponses.printInvalidFormat();

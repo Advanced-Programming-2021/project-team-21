@@ -13,13 +13,13 @@ public class ProfileMenu implements Menuable{
     @Override
     public void run(String command) {
         Matcher matcher;
-        if ((matcher = Regex.getMatcher(command, Regex.userChangeNickname)).matches()) {
+        if ((matcher = Regex.getMatcher(command, Regex.userChangeNickname)).find()) {
             changeNickname(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuEnter).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuEnter).find()) {
             PrintResponses.printMenuNavigationError();
-        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuExit).find()) {
             exitMenu();
-        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuShow).find()) {
             showCurrentMenu();
         } else if ((matcher = Regex.getMatcher(command, changePassword)).matches() ||
                 (matcher = Regex.getMatcher(command, Regex.changePasswordShort)).matches()) {

@@ -4,7 +4,7 @@ import module.User;
 
 import java.util.*;
 public class ProgramController {
-    public static Scanner scanner;
+    public static Scanner scanner = new Scanner(System.in);
     public static Menus currentMenu = Menus.LOGIN_MENU;
     public static User userInGame;
     LoginMenu  loginMenu = new LoginMenu();
