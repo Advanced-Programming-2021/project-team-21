@@ -253,4 +253,5 @@ public class PrintResponses {
         System.out.println("user with username " + username + " already exists"); }
     public static void printUserExistsWithNickname(String nickname){
         System.out.println("user with nickname " + nickname + " already exists"); }
+        public static void printProfileMenuShow(){ System.out.println(Responses.profileMenu); }
 }

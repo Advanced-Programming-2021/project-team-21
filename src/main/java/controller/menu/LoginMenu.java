@@ -54,6 +54,7 @@ public class LoginMenu implements Menuable {
             return;
         }
         PrintResponses.printSuccessfulLogout();
+        ProgramController.userInGame = user;
         ProgramController.currentMenu = Menus.MAIN_MENU;
     }
 

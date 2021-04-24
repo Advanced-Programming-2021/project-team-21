@@ -72,4 +72,5 @@ public class Responses {
     public static String emptinessOfGraveyard = "graveyard empty";
     public static String unableToShowOpponentCard = "card is not visible";
     public static String loginMenuShow = "Login Menu";
+    public static String profileMenu = "Profile Menu";
 }
