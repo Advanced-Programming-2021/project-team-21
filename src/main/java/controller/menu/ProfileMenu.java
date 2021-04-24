@@ -55,7 +55,7 @@ public class ProfileMenu implements Menuable{
 
     @Override
     public void exitMenu() {
-        ProgramController.currentMenu = Menus.MAIN_MENU;
+        ProgramController.currentMenu = new MainMenu();
     }
 
     @Override

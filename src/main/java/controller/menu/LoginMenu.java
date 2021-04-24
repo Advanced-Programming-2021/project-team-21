@@ -56,7 +56,7 @@ public class LoginMenu implements Menuable {
         }
         PrintResponses.printSuccessfulLogout();
         ProgramController.userInGame = user;
-        ProgramController.currentMenu = Menus.MAIN_MENU;
+        ProgramController.currentMenu = new MainMenu();
     }
 
 
@@ -67,7 +67,7 @@ public class LoginMenu implements Menuable {
 
     @Override
     public void exitMenu() {
-        ProgramController.currentMenu = Menus.EXIT;
+        ProgramController.gameOn = false;
     }
 
 
