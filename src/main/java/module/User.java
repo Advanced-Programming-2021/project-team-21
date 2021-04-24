@@ -1,6 +1,7 @@
 package module;
 
 import controller.ProgramController;
+import module.card.Card;
 
 import java.util.ArrayList;
 
