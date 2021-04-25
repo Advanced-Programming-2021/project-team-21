@@ -104,7 +104,8 @@ public class User {
     }
 
     public void setSideDeck(Deck deck) {
-
+        this.decks.add(deck);
+        ProgramController.saveData(deck);
     }
 
     public Deck getSideDeck() {
