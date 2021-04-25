@@ -1,23 +1,15 @@
 package module.card;
 
-import java.io.File;
 
 public abstract class Card {
     protected String name;
+    CardType cardType;
     private String description;
-    private String cardType;
     private boolean isFaceUp;
     private int price;
 
     public Card getCardByName(String name) {
-        File file;
-        if (new File(name + ".monster.json").exists()) {
-            return new Monster(name);
-        } else if (new File(name + ".spell.json").exists()) {
-            return new Spell(name);
-        } else if (new File(name + ".trap.json").exists()) {
-            return new Trap(name);
-        }
+
         return null;
     }
 
@@ -29,12 +21,12 @@ public abstract class Card {
         this.name = name;
     }
 
-    protected void setCardType(String cardType) {
-        this.cardType = cardType;
+    protected CardType getCardType() {
+        return cardType;
     }
 
-    protected String getCardType() {
-        return cardType;
+    protected void setCardType(CardType cardType) {
+        this.cardType = cardType;
     }
 
     protected boolean isFaceUp() {
@@ -53,12 +45,12 @@ public abstract class Card {
         this.price = price;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public abstract void destroyWithoutLosingLifePoints();
