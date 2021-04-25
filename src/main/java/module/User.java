@@ -1,5 +1,6 @@
 package module;
 
+import controller.DataController;
 import controller.ProgramController;
 import module.card.Card;
 
@@ -23,10 +24,10 @@ public class User {
     }
 
     public User(String username, String password, String nickname) {
-        setUsername(username);
-        setPassword(password);
-        setNickname(nickname);
-        ProgramController.saveData(this);
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        DataController.saveData(this);
     }
 
     public static User getUserByUsername(String username) {
@@ -42,7 +43,7 @@ public class User {
 
     public void setPassword(String newPassword) {
         this.password = newPassword;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public int getCoins() {
@@ -51,7 +52,7 @@ public class User {
 
     public void setCoins(int coins) {
         this.coins = coins;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public Board getBoard() {
@@ -60,12 +61,12 @@ public class User {
 
     public void setBoard(Board board) {
         this.board = board;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void setUsername(String username) {
         this.username = username;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public String getUsername() {
@@ -78,12 +79,12 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void setScore(int score) {
         this.score = score;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public int getScore() {
@@ -100,7 +101,7 @@ public class User {
 
     public void setActiveDeck(Deck deck) {
         deck.setActive(true);
-        ProgramController.saveData(deck);
+        DataController.saveData(deck);
     }
 
     public void setSideDeck(Deck deck) {
@@ -117,32 +118,32 @@ public class User {
 
     public void  addDeck(Deck deck) {
         this.decks.add(deck);
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void removeDeck(Deck deck) {
         this.decks.remove(deck);
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void addCard(Card card) {
         this.cards.add(card);
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void removeCard(Card card) {
         this.cards.remove(card);
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void increaseCoins(int amount) {
         this.coins += amount;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public void increaseScore(int amount) {
         this.score += amount;
-        ProgramController.saveData(this);
+        DataController.saveData(this);
     }
 
     public boolean doesUserExist(String username) {
