@@ -5,6 +5,8 @@ import module.Deck;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
+import module.card.Spell;
+import module.card.Trap;
 import tech.tablesaw.api.Table;
 
 import java.io.File;
@@ -13,19 +15,36 @@ import java.io.IOException;
 
 public class DataController {
 
-    public static Card getCardFromDataBase(String cardName) {
-        Table t;
+    private static final String[] paths = {"src/main/resources/cards/Monster.csv",
+            "src/main/resources/cards/Spell.csv",
+            "src/main/resources/cards/Trap.csv"};
+
+    public static Card getCard(String cardName) {
+        for (String path : paths) {
+            Card card = getCardFromTable(cardName, path);
+            if (card != null)
+                return card;
+        }
+        return null;
+    }
+
+    private static Card getCardFromTable(String cardName, String path) {
+        Table table;
         try {
-            t = Table.read().csv("src/main/resources/Monster.csv");
-            for (int i = 0; i < t.rowCount(); i++) {
-                if (t.column("name").get(i).equals(cardName)) {
-                    String[] columnNames = t.columnNames().toArray(new String[0]);
+            table = Table.read().csv(path);
+            for (int i = 0; i < table.rowCount(); i++) {
+                if (table.column("name").get(i).equals(cardName)) {
+                    String[] columnNames = table.columnNames().toArray(new String[0]);
                     Object[] parameters = new Object[columnNames.length];
                     for (int j = 0; j < columnNames.length; j++) {
-                        parameters[j] = t.column(columnNames[j]).get(i);
-                    }
-                    Monster monsterCard = new Monster(parameters);
-                    break;
+                        parameters[j] = table.column(columnNames[j]).get(i);
+                    }//checking which constructor to call
+                    if (path.equals(paths[0]))
+                        return new Monster(parameters);
+                    else if (path.equals(paths[1]))
+                        return new Spell(parameters);
+                    else
+                        return new Trap(parameters);
                 }
             }
         } catch (IOException e) {
@@ -37,8 +56,7 @@ public class DataController {
     //creates necessary directories for storing data
     public static void createDirectories() {
         String[] directoryNames = {"src/main/resources/users", "src/main/resources/decks"
-                , "src/main/resources/cards", "src/main/resources/cards/monsters",
-                "src/main/resources/cards/spellsAndTraps"};
+                , "src/main/resources/cards"};
         for (String directoryName : directoryNames) {
             File directory = new File(directoryName);
             boolean isCreated = directory.mkdir();
