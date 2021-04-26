@@ -24,9 +24,8 @@ public class ProfileMenu implements Menuable{
         } else if ((matcher = Regex.getMatcher(command, changePassword)).matches() ||
                 (matcher = Regex.getMatcher(command, Regex.changePasswordShort)).matches()) {
             newPassword(matcher);
-        } else {
-            PrintResponses.printInvalidFormat();
-        }
+        } else PrintResponses.printInvalidFormat();
+
     }
 
     private void newPassword(Matcher matcher) {

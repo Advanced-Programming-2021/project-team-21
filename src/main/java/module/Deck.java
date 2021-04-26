@@ -1,6 +1,6 @@
 package module;
 
-import controller.ProgramController;
+import controller.DataController;
 import module.card.Card;
 import module.card.Monster;
 
@@ -11,14 +11,16 @@ public class Deck {
     private ArrayList<Card> sideDeckCards;
     private String name;
     private boolean isActive;
+    private User userWhoOwns;
 
     {
         isActive = false;
     }
 
-    public Deck(String name) {
+    public Deck(User userWhoOwns, String name) {
         setName(name);
-        ProgramController.saveData(this);
+        setUserWhoOwns(userWhoOwns);
+        DataController.saveData(this);
     }
 
     public String getName() {
@@ -41,44 +43,52 @@ public class Deck {
         return mainDeckCards;
     }
 
-    public void addCardToMainDeck(Card newCard){
+    public void addCardToMainDeck(Card newCard) {
         mainDeckCards.add(newCard);
     }
 
-    public void removeCardFromMainDeck(Card cardToRemove){
+    public void removeCardFromMainDeck(Card cardToRemove) {
         mainDeckCards.remove(cardToRemove);
     }
 
-    public void addCardToSideDeck(Card newCard){
+    public void addCardToSideDeck(Card newCard) {
         sideDeckCards.add(newCard);
     }
 
-    public void removeCardFromSideDeck(Card cardToRemove){
+    public void removeCardFromSideDeck(Card cardToRemove) {
         sideDeckCards.remove(cardToRemove);
     }
 
-    public int getNumberOfMainDeckCards(){
+    public int getNumberOfMainDeckCards() {
         return mainDeckCards.size();
     }
 
-    public int getNumberOfSideDeckCards(){
+    public int getNumberOfSideDeckCards() {
         return sideDeckCards.size();
     }
 
+
+    public User getUserWhoOwns() {
+        return userWhoOwns;
+    }
+
+    public void setUserWhoOwns(User userWhoOwns) {
+        this.userWhoOwns = userWhoOwns;
+    }
 
     @Override
     public String toString() {
         StringBuilder monstersToString = new StringBuilder(), spellAndTrapToString = new StringBuilder();
         ArrayList<Card> cards = new ArrayList<>(mainDeckCards);
         cards.addAll(sideDeckCards);
-        for (Card card: cards) {
-            if (card instanceof Monster){
+        for (Card card : cards) {
+            if (card instanceof Monster) {
                 monstersToString.append(card.getName()).append(": ").append(card.getDescription()).append("\n");
-            } else{
+            } else {
                 spellAndTrapToString.append(card.getName()).append(": ").append(card.getDescription()).append("\n");
             }
         }
-        return  "Deck:" +
+        return "Deck:" +
                 name +
                 "\nSide/Main deck:\nMonsters:\n" +
                 monstersToString +
