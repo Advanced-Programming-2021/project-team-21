@@ -254,4 +254,23 @@ public class PrintResponses {
     public static void printUserExistsWithNickname(String nickname){
         System.out.println("user with nickname " + nickname + " already exists"); }
         public static void printProfileMenuShow(){ System.out.println(Responses.profileMenu); }
+        public static void printMainMenuShow(){ System.out.println(Responses.mainMenu); }
+        public static void printDeckMenuShow(){
+            System.out.println(Responses.deckMenu);
+        }
+        public static void printDuelMenuShow(){
+            System.out.println(Responses.duelMenu);
+        }
+        public static void printExportMenuShow(){
+            System.out.println(Responses.exportMenu);
+        }
+        public static void printImportMenuShow(){
+            System.out.println(Responses.importMenu);
+        }
+        public static void printScoreboardShow(){
+            System.out.println(Responses.scoreBoard);
+        }
+        public static void printShopMenuShow(){
+            System.out.println(Responses.shopMenu);
+        }
 }
