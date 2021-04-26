@@ -25,6 +25,10 @@ public class PrintResponses {
         System.out.println(Responses.wrongPasswordInLogin);
     }
 
+    public static void printSuccessfulLogin() {
+        System.out.println(Responses.successfulLogin);
+    }
+
     public static void printSuccessfulLogout() {
         System.out.println(Responses.successfulLogout);
     }
@@ -41,7 +45,9 @@ public class PrintResponses {
         System.out.println(Responses.wrongPasswordInChange);
     }
 
-    public static void printEqualityOfCurrentAndNewPassword() { System.out.println(Responses.equalityOfCurrentAndNewPassword); }
+    public static void printEqualityOfCurrentAndNewPassword() {
+        System.out.println(Responses.equalityOfCurrentAndNewPassword);
+    }
 
     public static void printSuccessfulDeckCreation() {
         System.out.println(Responses.successfulDeckCreation);
@@ -143,17 +149,25 @@ public class PrintResponses {
         System.out.println(Responses.successfulCardSetting);
     }
 
-    public static void printUnableToChangePositionOfCard() { System.out.println(Responses.unableToChangePositionOfCard); }
+    public static void printUnableToChangePositionOfCard() {
+        System.out.println(Responses.unableToChangePositionOfCard);
+    }
 
     public static void printCardInWantedPosition() {
         System.out.println(Responses.cardInWantedPosition);
     }
 
-    public static void printUnableToChangePositionInTurnTwice() { System.out.println(Responses.unableToChangePositionInTurnTwice); }
+    public static void printUnableToChangePositionInTurnTwice() {
+        System.out.println(Responses.unableToChangePositionInTurnTwice);
+    }
 
-    public static void printChangeMonsterCardModeInWrongPhase() { System.out.println(Responses.changeMonsterCardModeInWrongPhase); }
+    public static void printChangeMonsterCardModeInWrongPhase() {
+        System.out.println(Responses.changeMonsterCardModeInWrongPhase);
+    }
 
-    public static void printSuccessfulMonsterCardPositionChange() { System.out.println(Responses.successfulMonsterCardPositionChange); }
+    public static void printSuccessfulMonsterCardPositionChange() {
+        System.out.println(Responses.successfulMonsterCardPositionChange);
+    }
 
     public static void printUnableToFlipSummonCard() {
         System.out.println(Responses.unableToFlipSummonCard);
@@ -187,15 +201,21 @@ public class PrintResponses {
         System.out.println(Responses.destructionOfTwoSideCards);
     }
 
-    public static void printDestructionOfDefensePositionMonster() { System.out.println(Responses.destructionOfDefensePositionMonster); }
+    public static void printDestructionOfDefensePositionMonster() {
+        System.out.println(Responses.destructionOfDefensePositionMonster);
+    }
 
     public static void printNoDestruction() {
         System.out.println(Responses.noDestruction);
     }
 
-    public static void printNonSpellCardsToActivateEffect() { System.out.println(Responses.nonSpellCardsToActivateEffect); }
+    public static void printNonSpellCardsToActivateEffect() {
+        System.out.println(Responses.nonSpellCardsToActivateEffect);
+    }
 
-    public static void printUnableToActivateEffectOnTurn() { System.out.println(Responses.unableToActivateEffectOnTurn); }
+    public static void printUnableToActivateEffectOnTurn() {
+        System.out.println(Responses.unableToActivateEffectOnTurn);
+    }
 
     public static void printUnableToActivateCardTwice() {
         System.out.println(Responses.unableToActivateCardTwice);
@@ -205,7 +225,9 @@ public class PrintResponses {
         System.out.println(Responses.fullnessOfSpellCardZone);
     }
 
-    public static void printUnfinishedPreparationOfSpell() { System.out.println(Responses.unfinishedPreparationOfSpell); }
+    public static void printUnfinishedPreparationOfSpell() {
+        System.out.println(Responses.unfinishedPreparationOfSpell);
+    }
 
     public static void printSuccessfulSpellActivation() {
         System.out.println(Responses.successfulSpellActivation);
@@ -223,19 +245,29 @@ public class PrintResponses {
         System.out.println(Responses.askToActivateSpellOrTrap);
     }
 
-    public static void printWrongTurnToActivateSpellOrTrap() { System.out.println(Responses.wrongTurnToActivateSpellOrTrap); }
+    public static void printWrongTurnToActivateSpellOrTrap() {
+        System.out.println(Responses.wrongTurnToActivateSpellOrTrap);
+    }
 
-    public static void printSuccessfulSpellOrTrapActivation() { System.out.println(Responses.successfulSpellOrTrapActivation); }
+    public static void printSuccessfulSpellOrTrapActivation() {
+        System.out.println(Responses.successfulSpellOrTrapActivation);
+    }
 
-    public static void printUnableToRitualSummonMonster() { System.out.println(Responses.unableToRitualSummonMonster); }
+    public static void printUnableToRitualSummonMonster() {
+        System.out.println(Responses.unableToRitualSummonMonster);
+    }
 
     public static void printEmergencyRitualSummon() {
         System.out.println(Responses.emergencyRitualSummon);
     }
 
-    public static void printInequalityOfLevelsOfSelectedAndRitualMonster() { System.out.println(Responses.inequalityOfLevelsOfSelectedAndRitualMonster); }
+    public static void printInequalityOfLevelsOfSelectedAndRitualMonster() {
+        System.out.println(Responses.inequalityOfLevelsOfSelectedAndRitualMonster);
+    }
 
-    public static void printUnableToSpecialSummonMonster() { System.out.println(Responses.unableToSpecialSummonMonster); }
+    public static void printUnableToSpecialSummonMonster() {
+        System.out.println(Responses.unableToSpecialSummonMonster);
+    }
 
     public static void printEmergencySpecialSummon() {
         System.out.println(Responses.emergencySpecialSummon);
@@ -248,29 +280,48 @@ public class PrintResponses {
     public static void printUnableToShowOpponentCard() {
         System.out.println(Responses.unableToShowOpponentCard);
     }
-    public static void printLoginMenuShow(){ System.out.println(Responses.loginMenuShow); }
-    public static void printUserExistsWithUsername(String username){
-        System.out.println("user with username " + username + " already exists"); }
-    public static void printUserExistsWithNickname(String nickname){
-        System.out.println("user with nickname " + nickname + " already exists"); }
-        public static void printProfileMenuShow(){ System.out.println(Responses.profileMenu); }
-        public static void printMainMenuShow(){ System.out.println(Responses.mainMenu); }
-        public static void printDeckMenuShow(){
-            System.out.println(Responses.deckMenu);
-        }
-        public static void printDuelMenuShow(){
-            System.out.println(Responses.duelMenu);
-        }
-        public static void printExportMenuShow(){
-            System.out.println(Responses.exportMenu);
-        }
-        public static void printImportMenuShow(){
-            System.out.println(Responses.importMenu);
-        }
-        public static void printScoreboardShow(){
-            System.out.println(Responses.scoreBoard);
-        }
-        public static void printShopMenuShow(){
-            System.out.println(Responses.shopMenu);
-        }
+
+    public static void printLoginMenuShow() {
+        System.out.println(Responses.loginMenuShow);
+    }
+
+    public static void printUserExistsWithUsername(String username) {
+        System.out.println("user with username " + username + " already exists");
+    }
+
+    public static void printUserExistsWithNickname(String nickname) {
+        System.out.println("user with nickname " + nickname + " already exists");
+    }
+
+    public static void printProfileMenuShow() {
+        System.out.println(Responses.profileMenu);
+    }
+
+    public static void printMainMenuShow() {
+        System.out.println(Responses.mainMenu);
+    }
+
+    public static void printDeckMenuShow() {
+        System.out.println(Responses.deckMenu);
+    }
+
+    public static void printDuelMenuShow() {
+        System.out.println(Responses.duelMenu);
+    }
+
+    public static void printExportMenuShow() {
+        System.out.println(Responses.exportMenu);
+    }
+
+    public static void printImportMenuShow() {
+        System.out.println(Responses.importMenu);
+    }
+
+    public static void printScoreboardShow() {
+        System.out.println(Responses.scoreBoard);
+    }
+
+    public static void printShopMenuShow() {
+        System.out.println(Responses.shopMenu);
+    }
 }
