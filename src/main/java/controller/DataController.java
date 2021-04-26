@@ -58,7 +58,7 @@ public class DataController {
     }
 
     //returns what is in the file
-    public static String getUserJsonByUsername(String username){
+    public static String getUserInformationByUsername(String username){
         File file = new File(USER_PATH);
         String[] fileNames = file.list();
         if (fileNames == null)
