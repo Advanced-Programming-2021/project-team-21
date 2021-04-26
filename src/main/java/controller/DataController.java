@@ -10,17 +10,21 @@ import module.card.Trap;
 import tech.tablesaw.api.Table;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class DataController {
 
-    private static final String[] paths = {"src/main/resources/cards/Monster.csv",
+    private static final String[] CARD_PATHS = {"src/main/resources/cards/Monster.csv",
             "src/main/resources/cards/Spell.csv",
             "src/main/resources/cards/Trap.csv"};
+    private static final String USER_PATH = "src/main/resources/users";
 
     public static Card getCard(String cardName) {
-        for (String path : paths) {
+        for (String path : CARD_PATHS) {
             Card card = getCardFromTable(cardName, path);
             if (card != null)
                 return card;
@@ -39,9 +43,9 @@ public class DataController {
                     for (int j = 0; j < columnNames.length; j++) {
                         parameters[j] = table.column(columnNames[j]).get(i);
                     }//checking which constructor to call
-                    if (path.equals(paths[0]))
+                    if (path.equals(CARD_PATHS[0]))
                         return new Monster(parameters);
-                    else if (path.equals(paths[1]))
+                    else if (path.equals(CARD_PATHS[1]))
                         return new Spell(parameters);
                     else
                         return new Trap(parameters);
@@ -49,6 +53,27 @@ public class DataController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    //returns what is in the file
+    public static String getUserJsonByUsername(String username){
+        File file = new File(USER_PATH);
+        String[] fileNames = file.list();
+        if (fileNames == null)
+            return null;
+        String givenUserFileName = username + ".user.json";
+        for (String fileName : fileNames) {
+            if (givenUserFileName.equals(fileName)){
+                String filePath = "src/main/resources/users/" + givenUserFileName;
+                file = new File(filePath);
+                try {
+                    return new Scanner(file).nextLine();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
