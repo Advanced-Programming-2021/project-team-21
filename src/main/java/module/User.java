@@ -106,10 +106,13 @@ public class User {
 
     public void setSideDeck(Deck deck) {
         this.decks.add(deck);
-        ProgramController.saveData(deck);
+        DataController.saveData(deck);
     }
 
-    public Deck getSideDeck() {
+    public ArrayList<Card> getSideDeck() {
+        for (Deck deck : decks){
+            return deck.getSideDeckCards();
+        }
         return null;
     }
 

@@ -35,6 +35,10 @@ public class Deck {
         return isActive;
     }
 
+    public ArrayList<Card> getSideDeckCards() {
+        return sideDeckCards;
+    }
+
     public void setActive(boolean active) {
         isActive = active;
     }
