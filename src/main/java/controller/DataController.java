@@ -57,8 +57,8 @@ public class DataController {
         return null;
     }
 
-    //returns what is in the file
-    public static String getUserInformationByUsername(String username){
+    //returns what is in the file as an User object
+    public static User getUserByUsername(String username){
         File file = new File(USER_PATH);
         String[] fileNames = file.list();
         if (fileNames == null)
@@ -69,7 +69,7 @@ public class DataController {
                 String filePath = "src/main/resources/users/" + givenUserFileName;
                 file = new File(filePath);
                 try {
-                    return new Scanner(file).nextLine();
+                    return new Gson().fromJson(new Scanner(file).nextLine(), User.class);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
