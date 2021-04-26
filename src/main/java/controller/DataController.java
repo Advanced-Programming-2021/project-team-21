@@ -78,6 +78,19 @@ public class DataController {
         return null;
     }
 
+    public static User getUserByNickname(String nickname){
+        File file = new File(USER_PATH);
+        String[] fileNames = file.list();
+        if (fileNames == null)
+            return null;
+        for (String fileName : fileNames) {
+            User user = getUserByUsername(fileName.replaceAll(".user.json", ""));
+            if (user != null && user.getNickname().equals(nickname))
+                return user;
+        }
+        return null;
+    }
+
     //creates necessary directories for storing data
     public static void createDirectories() {
         String[] directoryNames = {"src/main/resources/users", "src/main/resources/decks"

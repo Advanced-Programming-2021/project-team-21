@@ -31,11 +31,11 @@ public class User {
     }
 
     public static User getUserByUsername(String username) {
-        return null;
+        return DataController.getUserByUsername(username);
     }
 
     public static User getUserByNickname(String nickname) {
-        return null;
+        return DataController.getUserByNickname(nickname);
     }
     public String getPassword() {
         return password;
@@ -151,14 +151,6 @@ public class User {
     }
 
     public boolean doesUserExist(String username) {
-        File file = new File("directoy????");
-        String[] pathNames = file.list();
-        if (pathNames != null) {
-            for (String pathName : pathNames){
-                if (pathName.equals(username))
-                    return true;
-            }
-        }
-        return false;
+        return DataController.getUserByUsername(username) != null;
     }
 }
