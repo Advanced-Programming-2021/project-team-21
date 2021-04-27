@@ -10,7 +10,6 @@ public class Spell extends Card{
         setDescription((String) parameters[2]);
         setSpellTrapStatus(SpellTrapStatus.valueOf(((String) parameters[3]).toUpperCase()));
         setPrice((int) parameters[4]);
-        System.out.println(this);
     }
 
     @Override
@@ -32,13 +31,5 @@ public class Spell extends Card{
 
     public void setSpellTrapStatus(SpellTrapStatus spellTrapStatus) {
         this.spellTrapStatus = spellTrapStatus;
-    }
-
-    @Override
-    public String toString() {
-        return "Spell{" +
-                "spellTrapIcon=" + spellTrapIcon +
-                ", spellTrapStatus=" + spellTrapStatus +
-                '}';
     }
 }
