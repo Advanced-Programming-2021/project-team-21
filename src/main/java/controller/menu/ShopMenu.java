@@ -4,9 +4,14 @@ import controller.DataController;
 import controller.ProgramController;
 import module.User;
 import module.card.Card;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import view.PrintResponses;
 import view.Regex;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class ShopMenu implements Menuable{
@@ -16,11 +21,30 @@ public class ShopMenu implements Menuable{
         if ((matcher = Regex.getMatcher(command , Regex.buyACard)).find()){
             buyCard(matcher);
         }
+        else if (Regex.getMatcher(command , Regex.showCardShop).matches()){
+            printCardsShop();
+        }
+        else if (Regex.getMatcher(command , Regex.menuShow).matches()){
+            showCurrentMenu();
+        }
+        else if (Regex.getMatcher(command , Regex.menuExit).matches()){
+            exitMenu();
+        }
+        else PrintResponses.printInvalidFormat();
+    }
+
+    private void printCardsShop() {
+        HashMap <String , Card> allCards = ProgramController.allCards;
+        ArrayList<String> names = new ArrayList<>(allCards.keySet());
+        Collections.sort(names);
+        for (String name : names) {
+            PrintResponses.printCardsInShop(name , allCards.get(name).getPrice());
+        }
     }
 
     private void buyCard(Matcher matcher) {
     String cardName = matcher.group("name");
-        Card card = DataController.getCard(cardName);
+        Card card = Card.getCardByName(cardName);
         User user = ProgramController.userInGame;
         if (card == null){
             PrintResponses.printNoCardExistToBuy();

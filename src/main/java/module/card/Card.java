@@ -1,6 +1,10 @@
 package module.card;
 
 
+import controller.ProgramController;
+
+import java.util.HashMap;
+
 public abstract class Card {
     protected String name;
     CardType cardType;
@@ -8,8 +12,11 @@ public abstract class Card {
     private boolean isFaceUp;
     private int price;
 
-    public Card getCardByName(String name) {
-
+    public static Card getCardByName(String name) {
+        HashMap <String , Card>allCards = ProgramController.allCards;
+        for (String cardName : allCards.keySet()){
+            if (cardName.equals(name))return allCards.get(cardName);
+        }
         return null;
     }
 

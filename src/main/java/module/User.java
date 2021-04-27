@@ -18,7 +18,7 @@ public class User {
     private Board board;
 
     {
-        coins = 0;
+        coins = 100000;
         decks = new ArrayList<>();
         cards = new ArrayList<>();
     }

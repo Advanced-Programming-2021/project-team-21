@@ -324,4 +324,7 @@ public class PrintResponses {
     public static void printShopMenuShow() {
         System.out.println(Responses.shopMenu);
     }
+    public static void printCardsInShop(String name , int price){
+        System.out.println(name + ": " + price);
+    }
 }
