@@ -1,19 +1,27 @@
 package module.card;
 
 public enum MonsterTypes {
-    WARRIOR,
-    BEAST_WARRIOR,
-    FIEND,
-    AQUA,
-    BEAST,
-    PYRO,
-    SPELLCASTER,
-    THUNDER,
-    DRAGON,
-    MACHINE,
-    ROCK,
-    INSECT,
-    CYBERSE,
-    FAIRY,
-    SEA_SERPENT
+    WARRIOR("Warrior"),
+    BEAST_WARRIOR("Beast-Warrior"),
+    FIEND("Fiend"),
+    AQUA("Aqua"),
+    BEAST("Beast"),
+    PYRO("Pyro"),
+    SPELLCASTER("SpellCaster"),
+    THUNDER("Thunder"),
+    DRAGON("Dragon"),
+    MACHINE("Machine"),
+    ROCK("Rock"),
+    INSECT("Insect"),
+    CYBERSE("Cyberse"),
+    FAIRY("Fairy"),
+    SEA_SERPENT("Sea Serpent");
+    private String name;
+    MonsterTypes(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

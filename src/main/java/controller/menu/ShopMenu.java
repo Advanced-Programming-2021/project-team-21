@@ -4,8 +4,6 @@ import controller.DataController;
 import controller.ProgramController;
 import module.User;
 import module.card.Card;
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
 import view.PrintResponses;
 import view.Regex;
 
@@ -14,43 +12,42 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
-public class ShopMenu implements Menuable{
+public class ShopMenu implements Menuable {
     @Override
     public void run(String command) {
         Matcher matcher;
-        if ((matcher = Regex.getMatcher(command , Regex.buyACard)).find()){
+        if ((matcher = Regex.getMatcher(command, Regex.buyACard)).find()) {
             buyCard(matcher);
-        }
-        else if (Regex.getMatcher(command , Regex.showCardShop).matches()){
+        } else if (Regex.getMatcher(command, Regex.showCardShop).matches()) {
             printCardsShop();
-        }
-        else if (Regex.getMatcher(command , Regex.menuShow).matches()){
+        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
             showCurrentMenu();
-        }
-        else if (Regex.getMatcher(command , Regex.menuExit).matches()){
+        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
             exitMenu();
-        }
-        else PrintResponses.printInvalidFormat();
+        }else if ((matcher = Regex.getMatcher(command , Regex.showACard)).matches()){
+            String cardName = matcher.group("cardName");
+            PrintResponses.printACard(Card.getCardByName(cardName));
+        }else PrintResponses.printInvalidFormat();
     }
 
     private void printCardsShop() {
-        HashMap <String , Card> allCards = ProgramController.allCards;
+        HashMap<String, Card> allCards = ProgramController.allCards;
         ArrayList<String> names = new ArrayList<>(allCards.keySet());
         Collections.sort(names);
         for (String name : names) {
-            PrintResponses.printCardsInShop(name , allCards.get(name).getPrice());
+            PrintResponses.printCardsInShop(name, allCards.get(name).getPrice());
         }
     }
 
     private void buyCard(Matcher matcher) {
-    String cardName = matcher.group("name");
+        String cardName = matcher.group("name");
         Card card = Card.getCardByName(cardName);
         User user = ProgramController.userInGame;
-        if (card == null){
+        if (card == null) {
             PrintResponses.printNoCardExistToBuy();
             return;
         }
-        if (user.getCoins() < card.getPrice()){
+        if (user.getCoins() < card.getPrice()) {
             PrintResponses.printLackOfMoney();
             return;
         }

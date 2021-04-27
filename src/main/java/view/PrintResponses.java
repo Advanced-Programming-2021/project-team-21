@@ -1,5 +1,7 @@
 package view;
 
+import module.card.Card;
+
 public class PrintResponses {
     public static void printInvalidFormat() {
         System.out.println(Responses.invalidFormat);
@@ -326,5 +328,8 @@ public class PrintResponses {
     }
     public static void printCardsInShop(String name , int price){
         System.out.println(name + ": " + price);
+    }
+    public static void printACard(Card card){
+        System.out.println(card);
     }
 }

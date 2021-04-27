@@ -63,5 +63,12 @@ public class Monster extends Card {
         this.def = def;
     }
 
-
+    @Override
+    public String toString() {
+        return "Name:"  + name + "\nlevel: " + level +
+                "\nType: " + monsterType.getName() +
+                "\nATK: " + atk +
+                "\nDef: " + def +
+                "\nDescription: " + getDescription();
+    }
 }

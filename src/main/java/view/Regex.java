@@ -18,6 +18,7 @@ public class Regex {
     public static String changePasswordShort = "profile change (?=.*-p (?<password>\\S+))(?=.*-n (?<newPassword>\\S+))";
     public static String buyACard = "shop buy (?<name>\\S+)";
     public static  String showCardShop = "shop show --all";
+    public static String showACard = "card show (?<cardName>\\S+)";
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);

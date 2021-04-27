@@ -34,4 +34,8 @@ public class Trap extends Card{
         this.spellTrapStatus = spellTrapStatus;
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + name + "\nTrap\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
+    }
 }
