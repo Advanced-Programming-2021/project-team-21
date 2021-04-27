@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class DataController {
@@ -23,49 +23,51 @@ public class DataController {
             "src/main/resources/cards/Trap.csv"};
     private static final String USER_PATH = "src/main/resources/users";
 
-    public static Card getCard(String cardName) {
+
+    public static HashMap<String, Card> getAllCards() {
+        HashMap<String, Card> allCards = new HashMap<>();
         for (String path : CARD_PATHS) {
-            Card card = getCardFromTable(cardName, path);
-            if (card != null)
-                return card;
+            allCards.putAll(getCardsFromTable(path));
         }
-        return null;
+        return allCards;
     }
 
-    private static Card getCardFromTable(String cardName, String path) {
-        Table table;
+    private static HashMap<String, Card> getCardsFromTable(String path) {
+        HashMap<String, Card> cards = new HashMap<>();
         try {
-            table = Table.read().csv(path);
+            Table table = Table.read().csv(path);
             for (int i = 0; i < table.rowCount(); i++) {
-                if (table.column("name").get(i).equals(cardName)) {
-                    String[] columnNames = table.columnNames().toArray(new String[0]);
-                    Object[] parameters = new Object[columnNames.length];
-                    for (int j = 0; j < columnNames.length; j++) {
-                        parameters[j] = table.column(columnNames[j]).get(i);
-                    }//checking which constructor to call
-                    if (path.equals(CARD_PATHS[0]))
-                        return new Monster(parameters);
-                    else if (path.equals(CARD_PATHS[1]))
-                        return new Spell(parameters);
-                    else
-                        return new Trap(parameters);
+                String[] columnNames = table.columnNames().toArray(new String[0]);
+                Object[] parameters = new Object[columnNames.length];
+                for (int j = 0; j < columnNames.length; j++) {
+                    parameters[j] = table.column(columnNames[j]).get(i);
+                }//checking which constructor to call
+                if (path.equals(CARD_PATHS[0])) {
+                    Monster monster = new Monster(parameters);
+                    cards.put(monster.getName(), monster);
+                } else if (path.equals(CARD_PATHS[1])) {
+                    Spell spell = new Spell(parameters);
+                    cards.put(spell.getName(), spell);
+                } else {
+                    Trap trap = new Trap(parameters);
+                    cards.put(trap.getName(), trap);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return cards;
     }
 
     //returns what is in the file as an User object
-    public static User getUserByUsername(String username){
+    public static User getUserByUsername(String username) {
         File file = new File(USER_PATH);
         String[] fileNames = file.list();
         if (fileNames == null)
             return null;
         String givenUserFileName = username + ".user.json";
         for (String fileName : fileNames) {
-            if (givenUserFileName.equals(fileName)){
+            if (givenUserFileName.equals(fileName)) {
                 String filePath = "src/main/resources/users/" + givenUserFileName;
                 file = new File(filePath);
                 try {
@@ -78,7 +80,7 @@ public class DataController {
         return null;
     }
 
-    public static User getUserByNickname(String nickname){
+    public static User getUserByNickname(String nickname) {
         File file = new File(USER_PATH);
         String[] fileNames = file.list();
         if (fileNames == null)
