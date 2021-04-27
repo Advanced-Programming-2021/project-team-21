@@ -2,6 +2,6 @@ package module.card;
 
 public enum CardType {
     NORMAL,
-    Effect,
+    EFFECT,
     RITUAL
 }

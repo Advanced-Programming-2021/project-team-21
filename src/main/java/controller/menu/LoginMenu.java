@@ -2,10 +2,10 @@ package controller.menu;
 
 import controller.ProgramController;
 import module.User;
-import view.*;
+import view.PrintResponses;
+import view.Regex;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LoginMenu implements Menuable {
     @Override
@@ -29,28 +29,28 @@ public class LoginMenu implements Menuable {
     }
 
     private void createNewUser(Matcher matcher) {
-        String username = matcher.group("username") , password = matcher.group("password") ,
+        String username = matcher.group("username"), password = matcher.group("password"),
                 nickname = matcher.group("nickname");
-        if (User.getUserByUsername(username) != null){
+        if (User.getUserByUsername(username) != null) {
             PrintResponses.printUserExistsWithUsername(username);
             return;
         }
-        if (User.getUserByNickname(nickname) != null){
+        if (User.getUserByNickname(nickname) != null) {
             PrintResponses.printUserExistsWithNickname(nickname);
             return;
         }
-        new User(username , password , nickname);
+        new User(username, password, nickname);
         PrintResponses.printSuccessfulUserCreation();
     }
 
     private void loginNewUser(Matcher matcher) {
-        String username = matcher.group("username") , password = matcher.group("password");
+        String username = matcher.group("username"), password = matcher.group("password");
         User user = User.getUserByUsername(username);
-        if (user == null){
+        if (user == null) {
             PrintResponses.printNoUserExists();
             return;
         }
-        if (!user.getPassword().equals(password)){
+        if (!user.getPassword().equals(password)) {
             PrintResponses.printWrongPasswordInLogin();
             return;
         }

@@ -4,5 +4,8 @@ public enum SpellTrapIcon {
     NORMAL,
     CONTINUOUS,
     QUICK_PLAY,
-    COUNTER
+    COUNTER,
+    FIELD,
+    EQUIP,
+    RITUAL
 }
