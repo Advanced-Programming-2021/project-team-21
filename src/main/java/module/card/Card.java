@@ -37,7 +37,7 @@ public abstract class Card {
         isFaceUp = faceUp;
     }
 
-    protected int getPrice() {
+    public int getPrice() {
         return price;
     }
 
