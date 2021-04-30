@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -24,6 +25,18 @@ public class DataController {
             "src/main/resources/cards/Trap.csv"};
     private static final String USER_PATH = "src/main/resources/users";
 
+
+    public static ArrayList<User> getAllUsers() {
+        String[] fileNames = getAllUserFileNames();
+        ArrayList<User> allUsers = new ArrayList<>();
+        if (fileNames == null)
+            return null;
+        for (String fileName : fileNames) {
+            allUsers.add(getUserByUsername(fileName.replaceAll("src/main/resources/users", "")
+            .replaceAll(".user.json", "")));
+        }
+        return allUsers;
+    }
 
     public static HashMap<String, Card> getAllCards() {
         HashMap<String, Card> allCards = new HashMap<>();
@@ -62,15 +75,14 @@ public class DataController {
 
     //returns what is in the file as an User object
     public static User getUserByUsername(String username) {
-        File file = new File(USER_PATH);
-        String[] fileNames = file.list();
+        String[] fileNames = getAllUserFileNames();
         if (fileNames == null)
             return null;
         String givenUserFileName = username + ".user.json";
         for (String fileName : fileNames) {
             if (givenUserFileName.equals(fileName)) {
                 String filePath = "src/main/resources/users/" + givenUserFileName;
-                file = new File(filePath);
+                File file = new File(filePath);
                 try {
                     return new Gson().fromJson(new Scanner(file).nextLine(), User.class);
                 } catch (FileNotFoundException e) {
@@ -82,8 +94,7 @@ public class DataController {
     }
 
     public static User getUserByNickname(String nickname) {
-        File file = new File(USER_PATH);
-        String[] fileNames = file.list();
+        String[] fileNames = getAllUserFileNames();
         if (fileNames == null)
             return null;
         for (String fileName : fileNames) {
@@ -126,5 +137,10 @@ public class DataController {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static String[] getAllUserFileNames() {
+        File file = new File(USER_PATH);
+        return file.list();
     }
 }
