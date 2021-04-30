@@ -18,6 +18,7 @@ import java.util.Scanner;
 
 public class DataController {
 
+
     private static final String[] CARD_PATHS = {"src/main/resources/cards/Monster.csv",
             "src/main/resources/cards/Spell.csv",
             "src/main/resources/cards/Trap.csv"};
