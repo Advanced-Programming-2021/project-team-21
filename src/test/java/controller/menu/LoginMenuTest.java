@@ -28,7 +28,7 @@ class LoginMenuTest {
 
 
     @Test
-    void run() {
+    void testUserWithThisNameExists() {
         new LoginMenu().run("user create --username UsernameTestLoginMenu --nickname UsernameTestLoginMenu --password ali");
         new LoginMenu().run("user create --username UsernameTestLoginMenu --nickname UsernameTestLoginMenu --password ali");
         File file = new File("src/main/resources/users/UsernameTestLoginMenu.user.json");
