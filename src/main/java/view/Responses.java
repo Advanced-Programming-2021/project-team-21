@@ -80,4 +80,7 @@ public class Responses {
     public static String importMenu = "ImportMenu";
     public static String scoreBoard = "ScoreBoard";
     public static String shopMenu = "Shop Menu";
+    public static String activeDeck = "Decks:\n" +
+            "Active deck:";
+    public static String otherDeck = "Other decks:";
 }

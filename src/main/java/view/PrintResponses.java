@@ -1,5 +1,6 @@
 package view;
 
+import module.Deck;
 import module.card.Card;
 
 public class PrintResponses {
@@ -332,4 +333,37 @@ public class PrintResponses {
     public static void printACard(Card card){
         System.out.println(card);
     }
-}
+    public static void printDeckExist(String deckName){
+        System.out.println("deck with name " + deckName + " already exists");
+    }
+    public static void printDeckNotExist(String  deckName){
+        System.out.println("deck with name " + deckName + " does not exist");
+    }
+    public static void printCardNotExist(String cardName){
+        System.out.println("card with name " + cardName + " does not exist");
+   }
+   public static void printDeckFull(String type){
+       System.out.println(type + " deck is full");
+   }
+   public static void printInvalidAdd(String cardName , String deckName){
+       System.out.println("there are already three cards with name " + cardName + " in deck " + deckName);
+   }
+   public static void printNoCardTodDelete(String cardName , String type){
+       System.out.println("card with name " + cardName + " does not exist in " + type + " deck");
+   }
+   public static void printDeckShow(Deck deck){
+       System.out.println(deck.deckShow());
+       }
+       public static void printActive(){
+           System.out.println(Responses.activeDeck);
+       }
+       public static void printOther(){
+           System.out.println(Responses.otherDeck);
+       }
+       public static void printADeck(Deck deck , String type){
+           System.out.println(deck.toString(type));
+       }
+       public static void printAllCard(Card card){
+           System.out.println(card.getName() + ":" + card.getDescription());
+       }
+   }

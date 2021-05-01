@@ -1,8 +1,10 @@
 package module.card;
 
-
+// a problem is when there are multiple cards in print
 import controller.ProgramController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public abstract class Card {
@@ -61,4 +63,15 @@ public abstract class Card {
     }
 
     public abstract void destroyWithoutLosingLifePoints();
+
+    public static ArrayList<Card> sort(ArrayList<Card> cards){
+        ArrayList<Card>sort = new ArrayList<>(cards);
+        for (int i = 0; i < sort.size(); i++) {
+            for (int j = i + 1; j < sort.size(); j++) {
+                if (sort.get(i).getName().compareTo(sort.get(j).getName()) > 0)
+                    Collections.swap(sort , i , j);
+            }
+        }
+        return sort;
+    }
 }
