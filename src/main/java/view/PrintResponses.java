@@ -1,7 +1,10 @@
 package view;
 
 import module.Deck;
+import module.User;
 import module.card.Card;
+
+import java.util.ArrayList;
 
 public class PrintResponses {
     public static void printInvalidFormat() {
@@ -365,5 +368,10 @@ public class PrintResponses {
        }
        public static void printAllCard(Card card){
            System.out.println(card.getName() + ":" + card.getDescription());
+       }
+       public static void printScoreboard(int[] ranks , ArrayList<User>users){
+           for (int i = 0; i < users.size(); i++) {
+               System.out.println(ranks[i] + "- " + users.get(i).getNickname() + ": " + users.get(i).getScore());
+           }
        }
    }

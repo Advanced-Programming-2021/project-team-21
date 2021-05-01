@@ -32,6 +32,7 @@ public class Regex {
     public static String showDeckMain = "deck show --deck-name (?<deck name>\\S+)";
     public static String showDeckSide = "deck show (?=.*--deck-name (?<deck name>\\S+)) (?=.*--(?<side>side))";
     public static String deckShowCard = "deck show --cards";
+    public static String scoreBoard = "scoreboard show";
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);
