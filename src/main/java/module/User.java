@@ -30,6 +30,10 @@ public class User {
         DataController.saveData(this);
     }
 
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
     public static User getUserByUsername(String username) {
         return DataController.getUserByUsername(username);
     }
@@ -152,5 +156,20 @@ public class User {
 
     public boolean doesUserExist(String username) {
         return DataController.getUserByUsername(username) != null;
+    }
+    public Deck getDeckByName(String name){
+        for (Deck deck : decks) {
+            if (deck.getName().equals(name)){
+                return deck;
+            }
+        }
+        return null;
+    }
+    public void deactivateDecks(String name){
+        for (Deck deck : decks) {
+            if (deck.getName().equals(name))continue;
+            deck.setActive(false);
+        }
+        DataController.saveData(this);
     }
 }
