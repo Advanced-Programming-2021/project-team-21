@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 
 import static view.Regex.changePassword;
 
-public class ProfileMenu implements Menuable{
+public class ProfileMenu implements Menuable {
     @Override
     public void run(String command) {
         Matcher matcher;
@@ -29,12 +29,12 @@ public class ProfileMenu implements Menuable{
     }
 
     private void newPassword(Matcher matcher) {
-        String oldPassword = matcher.group("password") , newPassword = matcher.group("newPassword");
-        if (!ProgramController.userInGame.getPassword().equals(oldPassword)){
+        String oldPassword = matcher.group("password"), newPassword = matcher.group("newPassword");
+        if (!ProgramController.userInGame.getPassword().equals(oldPassword)) {
             PrintResponses.printWrongPasswordInChange();
             return;
         }
-        if (newPassword.equals(oldPassword)){
+        if (newPassword.equals(oldPassword)) {
             PrintResponses.printEqualityOfCurrentAndNewPassword();
             return;
         }
@@ -44,7 +44,7 @@ public class ProfileMenu implements Menuable{
 
     private void changeNickname(Matcher matcher) {
         String nickname = matcher.group("nickname");
-        if (User.getUserByNickname(nickname) != null){
+        if (User.getUserByNickname(nickname) != null) {
             PrintResponses.printUserExistsWithNickname(nickname);
             return;
         }

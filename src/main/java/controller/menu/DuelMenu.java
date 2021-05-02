@@ -3,7 +3,7 @@ package controller.menu;
 import controller.ProgramController;
 import view.PrintResponses;
 
-public class DuelMenu implements Menuable{
+public class DuelMenu implements Menuable {
     @Override
     public void run(String command) {
 

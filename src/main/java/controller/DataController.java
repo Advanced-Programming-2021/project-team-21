@@ -33,7 +33,7 @@ public class DataController {
             return null;
         for (String fileName : fileNames) {
             allUsers.add(getUserByUsername(fileName.replaceAll("src/main/resources/users", "")
-            .replaceAll(".user.json", "")));
+                    .replaceAll(".user.json", "")));
         }
         return allUsers;
     }

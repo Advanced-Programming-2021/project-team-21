@@ -3,7 +3,7 @@ package controller.menu;
 import controller.ProgramController;
 import view.PrintResponses;
 
-public class ImportMenu implements Menuable{
+public class ImportAndExport implements Menuable {
     @Override
     public void run(String command) {
 
@@ -16,6 +16,7 @@ public class ImportMenu implements Menuable{
 
     @Override
     public void showCurrentMenu() {
-        PrintResponses.printImportMenuShow();
+        PrintResponses.printExportAndImportMenuShow();
     }
+
 }

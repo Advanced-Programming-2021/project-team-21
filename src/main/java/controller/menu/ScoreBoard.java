@@ -18,7 +18,7 @@ public class ScoreBoard implements Menuable {
     }
 
     private void scoreBoardShow() {
-        ArrayList<User> users =DataController.getAllUsers();
+        ArrayList<User> users = DataController.getAllUsers();
         if (users == null)
             return;
         users.sort(new ScoreSorter());

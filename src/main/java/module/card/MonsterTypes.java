@@ -17,7 +17,8 @@ public enum MonsterTypes {
     FAIRY("Fairy"),
     SEA_SERPENT("Sea Serpent");
     private String name;
-    MonsterTypes(String name){
+
+    MonsterTypes(String name) {
         this.name = name;
     }
 
