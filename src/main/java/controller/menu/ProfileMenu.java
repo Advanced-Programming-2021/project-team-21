@@ -21,8 +21,8 @@ public class ProfileMenu implements Menuable{
             exitMenu();
         } else if (Regex.getMatcher(command, Regex.menuShow).find()) {
             showCurrentMenu();
-        } else if ((matcher = Regex.getMatcher(command, changePassword)).matches() ||
-                (matcher = Regex.getMatcher(command, Regex.changePasswordShort)).matches()) {
+        } else if ((matcher = Regex.getMatcher(command, changePassword)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.changePasswordShort)).find()) {
             newPassword(matcher);
         } else PrintResponses.printInvalidFormat();
 

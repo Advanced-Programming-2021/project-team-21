@@ -24,7 +24,7 @@ public class ShopMenu implements Menuable {
             showCurrentMenu();
         } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
             exitMenu();
-        }else if ((matcher = Regex.getMatcher(command , Regex.showACard)).matches()){
+        }else if ((matcher = Regex.getMatcher(command , Regex.showACard)).find()){
             String cardName = matcher.group("cardName");
             PrintResponses.printACard(Card.getCardByName(cardName));
         }else PrintResponses.printInvalidFormat();

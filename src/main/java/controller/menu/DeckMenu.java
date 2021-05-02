@@ -17,27 +17,27 @@ public class DeckMenu implements Menuable{
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.deckCreate)).find()) {
             createDeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.deckDelete)).matches()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.deckDelete)).find()) {
             deleteDeck(matcher);
         }else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
             showCurrentMenu();
-        } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).matches()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
             activateDeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.addCardMain)).matches() ||
-                (matcher = Regex.getMatcher(command, Regex.addCardSide)).matches()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.addCardMain)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.addCardSide)).find()) {
             addCard(matcher);
         }
-        else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).matches() ||
-                (matcher = Regex.getMatcher(command, Regex.removeCardSide)).matches()) {
+        else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.removeCardSide)).find()) {
             removeCard(matcher);
         }else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
             exitMenu();
         }else if (Regex.getMatcher(command, Regex.showAllDeck).matches()) {
             showAllDeck();
-        }else if ((matcher = Regex.getMatcher(command, Regex.showDeckMain)).matches() ||
-                (matcher = Regex.getMatcher(command, Regex.showDeckSide)).matches()) {
+        }else if ((matcher = Regex.getMatcher(command, Regex.showDeckMain)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.showDeckSide)).find()) {
             showADeck(matcher);
-        }else if ((matcher = Regex.getMatcher(command , Regex.showACard)).matches()){
+        }else if ((matcher = Regex.getMatcher(command , Regex.showACard)).find()){
             String cardName = matcher.group("cardName");
             PrintResponses.printACard(Card.getCardByName(cardName));
         }else if (Regex.getMatcher(command, Regex.deckShowCard).matches()) {
