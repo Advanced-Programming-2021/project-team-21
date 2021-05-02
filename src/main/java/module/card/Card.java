@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public abstract class Card {
+public class Card {
     protected String name;
     CardType cardType;
     private String description;
@@ -62,7 +62,7 @@ public abstract class Card {
         this.description = description;
     }
 
-    public abstract void destroyWithoutLosingLifePoints();
+    public void destroyWithoutLosingLifePoints(){}
 
     public static ArrayList<Card> sort(ArrayList<Card> cards){
         ArrayList<Card>sort = new ArrayList<>(cards);
