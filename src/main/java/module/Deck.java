@@ -118,7 +118,7 @@ public class Deck {
         return "invalid";
     }
     public String deckShow(){
-        return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck" +
+        return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck " +
                 this.getSideDeckCards().size() + ", " + this.isValid();
     }
     public static  ArrayList<Deck> deckSort(ArrayList<Deck> decks){
