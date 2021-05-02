@@ -117,6 +117,7 @@ public class DataController {
 
     //is called for saving User and Deck objects as json
     public static void saveData(Object object) {
+        System.out.println(object.getClass());
         String dataToWrite = new Gson().toJson(object);
         if (object instanceof User) {
             try {
@@ -129,8 +130,7 @@ public class DataController {
             }
         } else if (object instanceof Deck) {
             try {
-                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName() + "." +
-                        ((Deck) object).getUserWhoOwns().getUsername() + ".json");
+                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName()+  ".json");
                 fileWriter.write(dataToWrite);
                 fileWriter.close();
             } catch (IOException e) {
