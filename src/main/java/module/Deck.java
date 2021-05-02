@@ -12,7 +12,6 @@ public class Deck {
     private ArrayList<Card> sideDeckCards;
     private String name;
     private boolean isActive;
-    private User userWhoOwns;
 
     {
         isActive = false;
@@ -20,9 +19,8 @@ public class Deck {
         sideDeckCards = new ArrayList<>();
     }
 
-    public Deck(User userWhoOwns, String name) {
+    public Deck( String name) {
         setName(name);
-        setUserWhoOwns(userWhoOwns);
         DataController.saveData(this);
     }
 
@@ -72,15 +70,6 @@ public class Deck {
 
     public int getNumberOfSideDeckCards() {
         return sideDeckCards.size();
-    }
-
-
-    public User getUserWhoOwns() {
-        return userWhoOwns;
-    }
-
-    public void setUserWhoOwns(User userWhoOwns) {
-        this.userWhoOwns = userWhoOwns;
     }
 
     public String toString(String type) {

@@ -183,7 +183,7 @@ public class DeckMenu implements Menuable{
             PrintResponses.printDeckExist(name);
             return;
         }
-        Deck deck = new Deck(user , name);
+        Deck deck = new Deck( name);
         user.addDeck(deck);
         PrintResponses.printSuccessfulDeckCreation();
     }

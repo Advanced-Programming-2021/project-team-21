@@ -129,8 +129,7 @@ public class DataController {
             }
         } else if (object instanceof Deck) {
             try {
-                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName() + "." +
-                        ((Deck) object).getUserWhoOwns().getUsername() + ".json");
+                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName() + ".json");
                 fileWriter.write(dataToWrite);
                 fileWriter.close();
             } catch (IOException e) {
