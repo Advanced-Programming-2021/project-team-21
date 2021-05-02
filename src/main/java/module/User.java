@@ -174,23 +174,5 @@ public class User {
         }
         DataController.saveData(this);
     }
-    public static ArrayList<User>sort(ArrayList<User> users){
-        ArrayList<User>sort = new ArrayList<>(users);
-        for (int i = 0; i < sort.size(); i++) {
-            for (int j = i + 1; j < sort.size(); j++) {
-                if(checkUserScore(sort.get(i) , sort.get(j))){
-                    Collections.swap(sort , i , j );
-                }
-            }
-        }
-        return sort;
-    }
 
-    private static boolean checkUserScore(User user, User user1) {
-    if (user.getScore() < user1.getScore())return true;
-    else if(user.getScore() == user1.getScore()){
-        return user.getUsername().compareTo(user1.getUsername()) > 0;
-    }
-    return false;
-    }
 }
