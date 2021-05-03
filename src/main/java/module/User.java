@@ -14,6 +14,9 @@ public class User {
     private ArrayList<Deck> decks;
     private ArrayList<Card> cards;
     private Board board;
+    private Hand hand;
+    private ArrayList<Card> graveyard;
+    private int lifePoints;
 
     {
         coins = 100000;
@@ -174,4 +177,27 @@ public class User {
         DataController.saveData(this);
     }
 
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+    public ArrayList<Card> getGraveyard() {
+        return graveyard;
+    }
+
+    public void setGraveyard(ArrayList<Card> graveyard) {
+        this.graveyard = graveyard;
+    }
+
+    public int getLifePoints() {
+        return lifePoints;
+    }
+
+    public void setLifePoints(int lifePoints) {
+        this.lifePoints = lifePoints;
+    }
 }
