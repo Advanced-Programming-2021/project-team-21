@@ -1,11 +1,11 @@
 package module.card;
 
-public class Trap extends Card{
+public class Trap extends Card {
 
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
 
-    public Trap(Object[] parameters){
+    public Trap(Object[] parameters) {
         setName((String) parameters[0]);
         setSpellTrapIcon(SpellTrapIcon.valueOf(((String) parameters[1]).toUpperCase()));
         setDescription((String) parameters[2]);

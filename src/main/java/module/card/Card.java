@@ -1,13 +1,14 @@
 package module.card;
 
 // a problem is when there are multiple cards in print
+
 import controller.ProgramController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public abstract class Card {
+public class Card {
     protected String name;
     CardType cardType;
     private String description;
@@ -15,9 +16,9 @@ public abstract class Card {
     private int price;
 
     public static Card getCardByName(String name) {
-        HashMap <String , Card>allCards = ProgramController.allCards;
-        for (String cardName : allCards.keySet()){
-            if (cardName.equals(name))return allCards.get(cardName);
+        HashMap<String, Card> allCards = ProgramController.allCards;
+        for (String cardName : allCards.keySet()) {
+            if (cardName.equals(name)) return allCards.get(cardName);
         }
         return null;
     }
@@ -62,14 +63,15 @@ public abstract class Card {
         this.description = description;
     }
 
-    public abstract void destroyWithoutLosingLifePoints();
+    public void destroyWithoutLosingLifePoints() {
+    }
 
-    public static ArrayList<Card> sort(ArrayList<Card> cards){
-        ArrayList<Card>sort = new ArrayList<>(cards);
+    public static ArrayList<Card> sort(ArrayList<Card> cards) {
+        ArrayList<Card> sort = new ArrayList<>(cards);
         for (int i = 0; i < sort.size(); i++) {
             for (int j = i + 1; j < sort.size(); j++) {
                 if (sort.get(i).getName().compareTo(sort.get(j).getName()) > 0)
-                    Collections.swap(sort , i , j);
+                    Collections.swap(sort, i, j);
             }
         }
         return sort;

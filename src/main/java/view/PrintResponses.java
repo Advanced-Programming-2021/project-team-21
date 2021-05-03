@@ -315,12 +315,8 @@ public class PrintResponses {
         System.out.println(Responses.duelMenu);
     }
 
-    public static void printExportMenuShow() {
-        System.out.println(Responses.exportMenu);
-    }
-
-    public static void printImportMenuShow() {
-        System.out.println(Responses.importMenu);
+    public static void printExportAndImportMenuShow() {
+        System.out.println(Responses.exportAndImportMenu);
     }
 
     public static void printScoreboardShow() {
@@ -330,48 +326,62 @@ public class PrintResponses {
     public static void printShopMenuShow() {
         System.out.println(Responses.shopMenu);
     }
-    public static void printCardsInShop(String name , int price){
+
+    public static void printCardsInShop(String name, int price) {
         System.out.println(name + ": " + price);
     }
-    public static void printACard(Card card){
+
+    public static void printACard(Card card) {
         System.out.println(card);
     }
-    public static void printDeckExist(String deckName){
+
+    public static void printDeckExist(String deckName) {
         System.out.println("deck with name " + deckName + " already exists");
     }
-    public static void printDeckNotExist(String  deckName){
+
+    public static void printDeckNotExist(String deckName) {
         System.out.println("deck with name " + deckName + " does not exist");
     }
-    public static void printCardNotExist(String cardName){
+
+    public static void printCardNotExist(String cardName) {
         System.out.println("card with name " + cardName + " does not exist");
-   }
-   public static void printDeckFull(String type){
-       System.out.println(type + " deck is full");
-   }
-   public static void printInvalidAdd(String cardName , String deckName){
-       System.out.println("there are already three cards with name " + cardName + " in deck " + deckName);
-   }
-   public static void printNoCardTodDelete(String cardName , String type){
-       System.out.println("card with name " + cardName + " does not exist in " + type + " deck");
-   }
-   public static void printDeckShow(Deck deck){
-       System.out.println(deck.deckShow());
-       }
-       public static void printActive(){
-           System.out.println(Responses.activeDeck);
-       }
-       public static void printOther(){
-           System.out.println(Responses.otherDeck);
-       }
-       public static void printADeck(Deck deck , String type){
-           System.out.println(deck.toString(type));
-       }
-       public static void printAllCard(Card card){
-           System.out.println(card.getName() + ":" + card.getDescription());
-       }
-       public static void printScoreboard(int[] ranks , ArrayList<User>users){
-           for (int i = 0; i < users.size(); i++) {
-               System.out.println(ranks[i] + "- " + users.get(i).getNickname() + ": " + users.get(i).getScore());
-           }
-       }
-   }
+    }
+
+    public static void printDeckFull(String type) {
+        System.out.println(type + " deck is full");
+    }
+
+    public static void printInvalidAdd(String cardName, String deckName) {
+        System.out.println("there are already three cards with name " + cardName + " in deck " + deckName);
+    }
+
+    public static void printNoCardTodDelete(String cardName, String type) {
+        System.out.println("card with name " + cardName + " does not exist in " + type + " deck");
+    }
+
+    public static void printDeckShow(Deck deck) {
+        System.out.println(deck.deckShow());
+    }
+
+    public static void printActive() {
+        System.out.println(Responses.activeDeck);
+    }
+
+    public static void printOther() {
+        System.out.println(Responses.otherDeck);
+    }
+
+    public static void printADeck(Deck deck, String type) {
+        System.out.println(deck.toString(type));
+    }
+
+    public static void printAllCard(Card card) {
+        System.out.println(card.getName() + ":" + card.getDescription());
+    }
+
+    public static void printScoreboard(int[] ranks, ArrayList<User> users) {
+        for (int i = 0; i < users.size(); i++) {
+            System.out.println(ranks[i] + "- " + users.get(i).getNickname() + ": " + users.get(i).getScore());
+        }
+    }
+}

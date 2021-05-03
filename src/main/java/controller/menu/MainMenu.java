@@ -6,13 +6,13 @@ import view.Regex;
 
 import java.util.regex.Matcher;
 
-public class MainMenu implements Menuable{
+public class MainMenu implements Menuable {
     @Override
     public void run(String command) {
         Matcher matcher;
-        if (Regex.getMatcher(command , Regex.menuExit).find())exitMenu();
-        else if (Regex.getMatcher(command , Regex.menuShow).find())showCurrentMenu();
-        else if ((matcher = Regex.getMatcher(command , Regex.menuEnter)).find())menuEnter(matcher);
+        if (Regex.getMatcher(command, Regex.menuExit).find()) exitMenu();
+        else if (Regex.getMatcher(command, Regex.menuShow).find()) showCurrentMenu();
+        else if ((matcher = Regex.getMatcher(command, Regex.menuEnter)).find()) menuEnter(matcher);
         else PrintResponses.printInvalidFormat();
     }
 
@@ -35,10 +35,8 @@ public class MainMenu implements Menuable{
                 ProgramController.currentMenu = new ShopMenu();
                 break;
             case "Import":
-                ProgramController.currentMenu = new ImportMenu();
-                break;
             case "Export":
-                ProgramController.currentMenu = new ExportMenu();
+                ProgramController.currentMenu = new ImportAndExport();
                 break;
             default:
                 PrintResponses.printInvalidFormat();

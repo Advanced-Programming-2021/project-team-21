@@ -33,7 +33,7 @@ public class DataController {
             return null;
         for (String fileName : fileNames) {
             allUsers.add(getUserByUsername(fileName.replaceAll("src/main/resources/users", "")
-            .replaceAll(".user.json", "")));
+                    .replaceAll(".user.json", "")));
         }
         return allUsers;
     }
@@ -129,8 +129,7 @@ public class DataController {
             }
         } else if (object instanceof Deck) {
             try {
-                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName() + "." +
-                        ((Deck) object).getUserWhoOwns().getUsername() + ".json");
+                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName() + ".json");
                 fileWriter.write(dataToWrite);
                 fileWriter.close();
             } catch (IOException e) {

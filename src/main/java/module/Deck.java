@@ -13,17 +13,15 @@ public class Deck {
     private String name;
     private String test;
     private boolean isActive;
-    private User userWhoOwns;
 
     {
         isActive = false;
-        mainDeckCards = new ArrayList<>() ;
+        mainDeckCards = new ArrayList<>();
         sideDeckCards = new ArrayList<>();
     }
 
-    public Deck(User userWhoOwns, String name) {
+    public Deck(String name) {
         setName(name);
-        setUserWhoOwns(userWhoOwns);
         DataController.saveData(this);
     }
 
@@ -75,19 +73,10 @@ public class Deck {
         return sideDeckCards.size();
     }
 
-
-    public User getUserWhoOwns() {
-        return userWhoOwns;
-    }
-
-    public void setUserWhoOwns(User userWhoOwns) {
-        this.userWhoOwns = userWhoOwns;
-    }
-
     public String toString(String type) {
         StringBuilder monstersToString = new StringBuilder(), spellAndTrapToString = new StringBuilder();
-        ArrayList<Card>cards;
-        if (type.equals("side"))cards = new ArrayList<>(this.getSideDeckCards());
+        ArrayList<Card> cards;
+        if (type.equals("side")) cards = new ArrayList<>(this.getSideDeckCards());
         else cards = new ArrayList<>(this.getMainDeckCards());
         Card.sort(cards);
         for (Card card : cards) {
@@ -104,47 +93,53 @@ public class Deck {
                 "Spell and Traps:\n" +
                 spellAndTrapToString;
     }
-    public int getCardNumber(String cardName){
+
+    public int getCardNumber(String cardName) {
         int number = 0;
         for (Card mainDeckCard : mainDeckCards) {
-            if (mainDeckCard.getName().equals(cardName))number++;
+            if (mainDeckCard.getName().equals(cardName)) number++;
         }
         for (Card sideDeckCard : sideDeckCards) {
-            if (sideDeckCard.getName().equals(cardName))number++;
+            if (sideDeckCard.getName().equals(cardName)) number++;
         }
         return number;
     }
-    public Card checkCardInDeck(String cardName , String type){
+
+    public Card checkCardInDeck(String cardName, String type) {
         ArrayList<Card> cards;
-        if (type.equals("side"))cards = this.mainDeckCards;
-        else  cards = this.sideDeckCards;
+        if (type.equals("side")) cards = this.mainDeckCards;
+        else cards = this.sideDeckCards;
         for (Card card : cards) {
-            if (card.getName().equals(cardName))return card;
+            if (card.getName().equals(cardName)) return card;
         }
         return null;
     }
-    public String isValid(){
+
+    public String isValid() {
         if (this.getNumberOfMainDeckCards() > 39 &&
                 this.getNumberOfMainDeckCards() < 61 &&
-                this.getNumberOfSideDeckCards() < 16)return "valid";
+                this.getNumberOfSideDeckCards() < 16) return "valid";
         return "invalid";
     }
-    public String deckShow(){
-        return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck" +
+
+    public String deckShow() {
+        return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck " +
                 this.getSideDeckCards().size() + ", " + this.isValid();
     }
-    public static  ArrayList<Deck> deckSort(ArrayList<Deck> decks){
-        ArrayList <Deck>sort = new ArrayList<>(decks);
+
+    public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
+        ArrayList<Deck> sort = new ArrayList<>(decks);
         for (int i = 0; i < sort.size(); i++) {
             for (int j = i + 1; j < sort.size(); j++) {
-                if (checkDecksSort(sort.get(i) , sort.get(j))) Collections.swap(sort , i , j);
+                if (checkDecksSort(sort.get(i), sort.get(j))) Collections.swap(sort, i, j);
             }
         }
         return sort;
     }
-    public static boolean checkDecksSort(Deck deck , Deck deck1){
-        if (deck1.isActive())return true;
-        else if (deck.isActive())return false;
+
+    public static boolean checkDecksSort(Deck deck, Deck deck1) {
+        if (deck1.isActive()) return true;
+        else if (deck.isActive()) return false;
         return deck.getName().compareTo(deck1.getName()) < 0;
     }
 }

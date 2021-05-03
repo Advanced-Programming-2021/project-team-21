@@ -1,10 +1,10 @@
 package module.card;
 
-public class Spell extends Card{
+public class Spell extends Card {
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
 
-    public Spell(Object[] parameters){
+    public Spell(Object[] parameters) {
         setName((String) parameters[0]);
         setSpellTrapIcon(SpellTrapIcon.valueOf(((String) parameters[1]).toUpperCase()));
         setDescription((String) parameters[2]);
@@ -35,6 +35,6 @@ public class Spell extends Card{
 
     @Override
     public String toString() {
-        return "Name: " + name  + "\nSpell\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
+        return "Name: " + name + "\nSpell\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
     }
 }

@@ -76,8 +76,7 @@ public class Responses {
     public static String mainMenu = "Main menu";
     public static String deckMenu = "Deck Menu";
     public static String duelMenu = "Duel Menu";
-    public static String exportMenu = "Export Menu";
-    public static String importMenu = "ImportMenu";
+    public static String exportAndImportMenu = "Export/Import Menu";
     public static String scoreBoard = "ScoreBoard";
     public static String shopMenu = "Shop Menu";
     public static String activeDeck = "Decks:\n" +

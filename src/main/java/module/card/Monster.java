@@ -65,7 +65,7 @@ public class Monster extends Card {
 
     @Override
     public String toString() {
-        return "Name:"  + name + "\nlevel: " + level +
+        return "Name:" + name + "\nlevel: " + level +
                 "\nType: " + monsterType.getName() +
                 "\nATK: " + atk +
                 "\nDef: " + def +

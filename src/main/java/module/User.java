@@ -43,6 +43,7 @@ public class User {
     public static User getUserByNickname(String nickname) {
         return DataController.getUserByNickname(nickname);
     }
+
     public String getPassword() {
         return password;
     }
@@ -116,7 +117,7 @@ public class User {
     }
 
     public ArrayList<Card> getSideDeck() {
-        for (Deck deck : decks){
+        for (Deck deck : decks) {
             return deck.getSideDeckCards();
         }
         return null;
@@ -126,7 +127,7 @@ public class User {
         return decks;
     }
 
-    public void  addDeck(Deck deck) {
+    public void addDeck(Deck deck) {
         this.decks.add(deck);
         DataController.saveData(this);
     }
@@ -159,38 +160,22 @@ public class User {
     public boolean doesUserExist(String username) {
         return DataController.getUserByUsername(username) != null;
     }
-    public Deck getDeckByName(String name){
+
+    public Deck getDeckByName(String name) {
         for (Deck deck : decks) {
-            if (deck.getName().equals(name)){
+            if (deck.getName().equals(name)) {
                 return deck;
             }
         }
         return null;
     }
-    public void deactivateDecks(String name){
+
+    public void deactivateDecks(String name) {
         for (Deck deck : decks) {
-            if (deck.getName().equals(name))continue;
+            if (deck.getName().equals(name)) continue;
             deck.setActive(false);
         }
         DataController.saveData(this);
     }
-    public static ArrayList<User>sort(ArrayList<User> users){
-        ArrayList<User>sort = new ArrayList<>(users);
-        for (int i = 0; i < sort.size(); i++) {
-            for (int j = i + 1; j < sort.size(); j++) {
-                if(checkUserScore(sort.get(i) , sort.get(j))){
-                    Collections.swap(sort , i , j );
-                }
-            }
-        }
-        return sort;
-    }
 
-    private static boolean checkUserScore(User user, User user1) {
-    if (user.getScore() < user1.getScore())return true;
-    else if(user.getScore() == user1.getScore()){
-        return user.getUsername().compareTo(user1.getUsername()) > 0;
-    }
-    return false;
-    }
 }

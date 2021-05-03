@@ -16,23 +16,22 @@ public class Regex {
     public static String userChangeNickname = "profile change --nickname (?<nickname>\\S+)";
     public static String changePassword = "profile change (?=.*--password (?<password>\\S+))(?=.*--new (?<newPassword>\\S+))";
     public static String changePasswordShort = "profile change (?=.*-p (?<password>\\S+))(?=.*-n (?<newPassword>\\S+))";
-    public static String buyACard = "shop buy (?<name>\\S+)";
-    public static  String showCardShop = "shop show --all";
-    public static String showACard = "card show (?<cardName>\\S+)";
+    public static String buyACard = "shop buy (?<name>.+)";
+    public static String showCardShop = "shop show --all";
+    public static String showACard = "card show (?<cardName>[a-z A-Z]+)";
     public static String deckCreate = "deck create (?<deckName>\\S+)";
     public static String deckDelete = "deck delete (?<deckName>\\S+)";
     public static String ActiveDeck = "deck set-activate (?<deckName>\\S+)";
-    public static String addCardMain = "deck add-card (?=.*--card (?<cardName>\\S+)) (?=.*--deck (?<deckName>\\S+))";
-    public static String addCardSide = "deck add-card (?=.*--card (?<cardName>\\S+)) (?=.*--deck (?<deckName>\\S+))" +
-            "(?=.*--(?<side>side))";
-   public static String removeCardMain = "deck rm-card (?=.*--card (?<cardName>\\S+)) (?=.*--deck (?<deckName>\\S+))";
-    public static String removeCardSide = "deck rm-card (?=.*--card (?<cardName>\\S+)) (?=.*--deck (?<deckName>\\S+))"+
-            "(?=.*--(?<side>side))";
+    public static String addCardMain = "deck add-card (?=.*--card (?<cardName>[a-z A-Z]+))(?=.*--deck (?<deckName>\\S+))";
+    public static String addCardSide = addCardMain + "(?=.*--(?<side>side))";
+    public static String removeCardMain = "deck rm-card (?=.*--card (?<cardName>[a-z A-Z]+))(?=.*--deck (?<deckName>\\S+))";
+    public static String removeCardSide = removeCardMain + "(?=.*--(?<side>side))";
     public static String showAllDeck = "deck show --all";
-    public static String showDeckMain = "deck show --deck-name (?<deck name>\\S+)";
-    public static String showDeckSide = "deck show (?=.*--deck-name (?<deck name>\\S+)) (?=.*--(?<side>side))";
+    public static String showDeckMain = "deck show --deck-name (?<deckName>\\S+)";
+    public static String showDeckSide = "deck show (?=.*--deck-name (?<deckName>\\S+)) (?=.*--(?<side>side))";
     public static String deckShowCard = "deck show --cards";
     public static String scoreBoard = "scoreboard show";
+
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);
