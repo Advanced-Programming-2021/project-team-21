@@ -1,13 +1,9 @@
 package module;
 
 import controller.DataController;
-import controller.ProgramController;
 import module.card.Card;
-import org.checkerframework.checker.units.qual.A;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class User {
     private String username;
@@ -32,16 +28,16 @@ public class User {
         DataController.saveData(this);
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
-
     public static User getUserByUsername(String username) {
         return DataController.getUserByUsername(username);
     }
 
     public static User getUserByNickname(String nickname) {
         return DataController.getUserByNickname(nickname);
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 
     public String getPassword() {
@@ -71,13 +67,13 @@ public class User {
         DataController.saveData(this);
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void setUsername(String username) {
         this.username = username;
         DataController.saveData(this);
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getNickname() {
@@ -89,13 +85,13 @@ public class User {
         DataController.saveData(this);
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void setScore(int score) {
         this.score = score;
         DataController.saveData(this);
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public Deck getActiveDeck() {
@@ -111,16 +107,16 @@ public class User {
         DataController.saveData(deck);
     }
 
-    public void setSideDeck(Deck deck) {
-        this.decks.add(deck);
-        DataController.saveData(deck);
-    }
-
     public ArrayList<Card> getSideDeck() {
         for (Deck deck : decks) {
             return deck.getSideDeckCards();
         }
         return null;
+    }
+
+    public void setSideDeck(Deck deck) {
+        this.decks.add(deck);
+        DataController.saveData(deck);
     }
 
     public ArrayList<Deck> getDecks() {

@@ -23,6 +23,17 @@ public class Card {
         return null;
     }
 
+    public static ArrayList<Card> sort(ArrayList<Card> cards) {
+        ArrayList<Card> sort = new ArrayList<>(cards);
+        for (int i = 0; i < sort.size(); i++) {
+            for (int j = i + 1; j < sort.size(); j++) {
+                if (sort.get(i).getName().compareTo(sort.get(j).getName()) > 0)
+                    Collections.swap(sort, i, j);
+            }
+        }
+        return sort;
+    }
+
     public String getName() {
         return name;
     }
@@ -64,16 +75,5 @@ public class Card {
     }
 
     public void destroyWithoutLosingLifePoints() {
-    }
-
-    public static ArrayList<Card> sort(ArrayList<Card> cards) {
-        ArrayList<Card> sort = new ArrayList<>(cards);
-        for (int i = 0; i < sort.size(); i++) {
-            for (int j = i + 1; j < sort.size(); j++) {
-                if (sort.get(i).getName().compareTo(sort.get(j).getName()) > 0)
-                    Collections.swap(sort, i, j);
-            }
-        }
-        return sort;
     }
 }

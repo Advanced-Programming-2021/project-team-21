@@ -24,6 +24,22 @@ public class Deck {
         DataController.saveData(this);
     }
 
+    public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
+        ArrayList<Deck> sort = new ArrayList<>(decks);
+        for (int i = 0; i < sort.size(); i++) {
+            for (int j = i + 1; j < sort.size(); j++) {
+                if (checkDecksSort(sort.get(i), sort.get(j))) Collections.swap(sort, i, j);
+            }
+        }
+        return sort;
+    }
+
+    public static boolean checkDecksSort(Deck deck, Deck deck1) {
+        if (deck1.isActive()) return true;
+        else if (deck.isActive()) return false;
+        return deck.getName().compareTo(deck1.getName()) < 0;
+    }
+
     public String getName() {
         return name;
     }
@@ -36,12 +52,12 @@ public class Deck {
         return isActive;
     }
 
-    public ArrayList<Card> getSideDeckCards() {
-        return sideDeckCards;
-    }
-
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public ArrayList<Card> getSideDeckCards() {
+        return sideDeckCards;
     }
 
     public ArrayList<Card> getMainDeckCards() {
@@ -124,21 +140,5 @@ public class Deck {
     public String deckShow() {
         return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck " +
                 this.getSideDeckCards().size() + ", " + this.isValid();
-    }
-
-    public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
-        ArrayList<Deck> sort = new ArrayList<>(decks);
-        for (int i = 0; i < sort.size(); i++) {
-            for (int j = i + 1; j < sort.size(); j++) {
-                if (checkDecksSort(sort.get(i), sort.get(j))) Collections.swap(sort, i, j);
-            }
-        }
-        return sort;
-    }
-
-    public static boolean checkDecksSort(Deck deck, Deck deck1) {
-        if (deck1.isActive()) return true;
-        else if (deck.isActive()) return false;
-        return deck.getName().compareTo(deck1.getName()) < 0;
     }
 }
