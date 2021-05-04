@@ -23,7 +23,7 @@ class LoginMenuTest {
     @Test
     public void showCurrentMenuTest() {
         new LoginMenu().showCurrentMenu();
-        assertEquals("Login Menu", outputStreamCaptor.toString());
+        assertEquals("Login Menu\n", outputStreamCaptor.toString());
     }
 
 
