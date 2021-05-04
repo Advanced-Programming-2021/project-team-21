@@ -1,6 +1,5 @@
 package controller.menu;
 
-import controller.DataController;
 import controller.ProgramController;
 import module.User;
 import module.card.Card;
