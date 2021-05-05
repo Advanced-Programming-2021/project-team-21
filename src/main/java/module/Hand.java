@@ -10,8 +10,8 @@ public class Hand {
     private Deck deckToDraw;
     private Boolean canDraw;
 
-    private Hand (User handOwner) {
-        this.handOwner = handOwner;
+    public Hand () {
+
     }
 
     private void addCardToHand (){
