@@ -5,6 +5,7 @@ import module.card.Card;
 import module.card.CardType;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 public class Duel {
     private static final int INITIAL_LIFE_POINTS = 8000;
@@ -39,9 +40,14 @@ public class Duel {
             return FIRST_USER;
     }
 
-    public void drawPhase(){}
+    public void drawPhase(){
+        Hand currentHand = userWhoPlaysNow.getHand();
+        currentHand.shuffleDeck();
+        currentHand.drawACard();
+    }
 
-    public void mainPhase(){}
+    public void mainPhase(){
+    }
 
     public void standByPhase(){}
 
@@ -49,9 +55,14 @@ public class Duel {
 
     public void endPhase(){}
 
-    public void selectCard(int cardAddress){}
+    public void selectCard(int cardAddress){
+        Hand currentHand = userWhoPlaysNow.getHand();
+        selectedCard = currentHand.selectACard(cardAddress);
+    }
 
-    public void summonMonster(int placeInBoard){}
+    public void summonMonster(int placeInBoard){
+
+    }
 
     public void flipSummon(int placeInBoard){}
 

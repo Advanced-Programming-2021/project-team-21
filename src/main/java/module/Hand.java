@@ -14,39 +14,41 @@ public class Hand {
 
     }
 
-    private void addCardToHand (){
+    public void addCardToHand (){
 
     }
 
-    private void removeCardFromHand () {
+    public void removeCardFromHand () {
 
     }
 
-    private  ArrayList<Card> getCardsInHand () {
+    public ArrayList<Card> getCardsInHand () {
         return cardsInHand;
     }
 
-    private void drawACard () {
+    public void drawACard () {
 
     }
 
-    private void shuffleDeck () {
+    public void shuffleDeck () {
 
     }
 
-    private Card selectACard (int cardAddress) {
+    public Card selectACard (int cardAddress) {
+        return null;
+    }
+
+    public Card findACard(Card[] cards) {
+        return null;
 
     }
 
-    private Card findACard(Card[] cards) {
+    public void discardACard (int place) {
 
     }
 
-    private void discardACard (int place) {
-
-    }
-
-    private Card selectARandomCardFromHand () {
+    public Card selectARandomCardFromHand () {
+        return null;
 
     }
 }
