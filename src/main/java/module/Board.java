@@ -7,9 +7,14 @@ import java.util.ArrayList;
 
 public class Board {
    private User boardOwner;
-   private ArrayList<Monster> monsters;
-   private ArrayList<Card> spellsAndTraps;
+   private Monster[] monsters;
+   private Card[] spellsAndTraps;
    private Card fieldZone;
+
+   {
+      this.monsters = new Monster[5];
+      this.spellsAndTraps = new Card[5];
+   }
 
    public Board (User boardOwner) {
        this.boardOwner = boardOwner;

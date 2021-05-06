@@ -11,6 +11,7 @@ public class Hand {
     private User handOwner;
     private Deck deckToDraw;
     private Boolean canDraw;
+    private Card selectedCardInHand;
 
     public Hand (User handOwner) {
         User.getUserByUsername(handOwner.getUsername()).setHand(this);
@@ -28,28 +29,27 @@ public class Hand {
         return cardsInHand;
     }
 
-    public void drawACard () {
-
+    public Card drawACard () {
+        return selectedCardInHand;
     }
 
     public void shuffleDeck () {
         Collections.shuffle(cardsInHand);
     }
 
-    public Card selectACard (int cardAddress) {
-        return null;
+    public void selectACard (int cardAddress) {
+        selectedCardInHand =  cardsInHand.get(cardAddress - 1);
     }
 
-    public Card findACard(Card[] cards) {
-        return null;
-
-    }
+    //public Card findACard(Card[] cards) {
+    //    return null;
+   // }
 
     public void discardACard (int place) {
-
+        selectedCardInHand = null;
     }
 
     public Card selectARandomCardFromHand () {
-        return cardsInHand.get(new Random().nextInt(cardsInHand.size()));
+        return cardsInHand.get(new Random().nextInt(cardsInHand.size() - 1));
     }
 }

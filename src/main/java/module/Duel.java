@@ -57,8 +57,8 @@ public class Duel {
     public void endPhase(){}
 
     public void selectCard(int cardAddress){
-        Hand currentHand = userWhoPlaysNow.getHand();
-        selectedCard = currentHand.selectACard(cardAddress);
+       // Hand currentHand = userWhoPlaysNow.getHand();
+        //selectedCard = currentHand.selectACard(cardAddress);
     }
 
     public void summonMonster(int placeInBoard){
