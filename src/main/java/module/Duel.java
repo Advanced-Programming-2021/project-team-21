@@ -19,8 +19,8 @@ public class Duel {
         SECOND_USER = second_user;
         FIRST_USER.setGraveyard(new ArrayList<>());
         SECOND_USER.setGraveyard(new ArrayList<>());
-        FIRST_USER.setHand(new Hand());
-        SECOND_USER.setHand(new Hand());
+        FIRST_USER.setHand(new Hand(FIRST_USER));
+        SECOND_USER.setHand(new Hand(SECOND_USER));
         FIRST_USER.setLifePoints(INITIAL_LIFE_POINTS);
         SECOND_USER.setLifePoints(INITIAL_LIFE_POINTS);
         userWhoPlaysNow = FIRST_USER;

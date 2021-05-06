@@ -3,6 +3,8 @@ package module;
 import module.card.Card;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class Hand {
     private ArrayList<Card> cardsInHand;
@@ -10,16 +12,16 @@ public class Hand {
     private Deck deckToDraw;
     private Boolean canDraw;
 
-    public Hand () {
-
+    public Hand (User handOwner) {
+        User.getUserByUsername(handOwner.getUsername()).setHand(this);
     }
 
-    public void addCardToHand (){
-
+    public void addCardToHand (Card selectedCard){
+        cardsInHand.add(selectedCard);
     }
 
-    public void removeCardFromHand () {
-
+    public void removeCardFromHand (Card selectedCard) {
+        cardsInHand.remove(selectedCard);
     }
 
     public ArrayList<Card> getCardsInHand () {
@@ -31,7 +33,7 @@ public class Hand {
     }
 
     public void shuffleDeck () {
-
+        Collections.shuffle(cardsInHand);
     }
 
     public Card selectACard (int cardAddress) {
@@ -48,7 +50,6 @@ public class Hand {
     }
 
     public Card selectARandomCardFromHand () {
-        return null;
-
+        return cardsInHand.get(new Random().nextInt(cardsInHand.size()));
     }
 }

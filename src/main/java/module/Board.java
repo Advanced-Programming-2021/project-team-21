@@ -15,8 +15,8 @@ public class Board {
        this.boardOwner = boardOwner;
    }
 
-   public void addMonsterFaceUp (int placeInBoard) {
-
+   public void addMonsterFaceUp (int placeInBoard, Monster selectedMonsterCard) {
+      this.monsters.add(placeInBoard, selectedMonsterCard);
    }
 
    public void addMonsterFaceDown (int placeInBoard) {
