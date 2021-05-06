@@ -50,4 +50,8 @@ public class Board {
    public void disableSpellAndTrap (int placeInBoard) {
 
    }
+   // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
+   public Card getCard(int placeInBoard, char monsterOrSpell){
+      return null;
+   }
 }

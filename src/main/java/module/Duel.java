@@ -3,6 +3,7 @@ package module;
 
 import module.card.Card;
 import module.card.CardType;
+import module.card.Spell;
 
 import java.util.ArrayList;
 import java.util.logging.Handler;
@@ -64,21 +65,32 @@ public class Duel {
 
     }
 
-    public void flipSummon(int placeInBoard){}
+    public void flipSummon(int placeInBoard){
+        Board currentBoard = userWhoPlaysNow.getBoard();
+    }
 
     public void tribute(int amount, int[] placesOnBoard){}
 
     public void setMonster(int placeOnBoard){}
 
-    public void changeAttackPosition(int placeInBoard){}
+    public void changeAttackPosition(int placeInBoard){
+        Board currentBoard = userWhoPlaysNow.getBoard();
+        currentBoard.changeFacePosition(placeInBoard);
+    }
 
     public void checkMainPhaseMonsterEffects(){}
 
     public void checkSpellEffects(){}
 
-    public void useSpell(int placeInBoard){}
+    public void useSpell(int placeInBoard){
+        Board currentBoard = userWhoPlaysNow.getBoard();
+        Spell spell = (Spell) currentBoard.getCard(placeInBoard, 'S');
+    }
 
-    public void attack(int placeInBoard){}
+    public void attack(int placeInBoard){
+        Board rivalBoard = getRival(userWhoPlaysNow).getBoard();
+
+    }
 
     public void attackDirectly(){}
 
