@@ -1,6 +1,7 @@
 package module;
 
 import module.card.Card;
+import org.checkerframework.checker.units.qual.C;
 import view.PrintResponses;
 
 import java.util.ArrayList;
@@ -12,10 +13,8 @@ public class Hand {
     private User handOwner;
     private Deck deckToDraw;
     private Boolean canDraw;
-    private Card selectedCardInHand;
 
     {
-        selectedCardInHand = null;
         cardsInHand = new Card[6];
     }
 
@@ -25,7 +24,12 @@ public class Hand {
     }
 
     public void addCardToHand(Card cardToAdd) {
-
+        for (int i = cardsInHand.length - 1; i >= 0; i--) {
+            if (cardsInHand[i] == null) {
+                cardsInHand[i] = cardToAdd;
+                break;
+            }
+        }
     }
 
     public void removeCardFromHand(int cardAddress) {
@@ -39,9 +43,11 @@ public class Hand {
     public void drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0)
             // ending game
-            for (int i = getCardsInHand().length - 1; i >= 0; i++) {
-                if (cardsInHand[i] == null)
+            for (int i = getCardsInHand().length - 1; i >= 0; i--) {
+                if (cardsInHand[i] == null) {
                     cardsInHand[i] = deckToDraw.getMainDeckCards().get(0);
+                    break;
+                }
             }
         System.out.println("new card added to the hand : " + deckToDraw.getMainDeckCards().get(0).getName());
         deckToDraw.getMainDeckCards().remove(0);
@@ -51,28 +57,17 @@ public class Hand {
         Collections.shuffle(deckToDraw.getMainDeckCards());
     }
 
-    public void selectACard(int cardAddress) {
-        if (cardAddress > 6)
-            PrintResponses.printInvalidSelection();
-        else if (cardsInHand[cardAddress - 1] == null)
-            PrintResponses.printNoCardInPosition();
-        else {
-            selectedCardInHand = cardsInHand[cardAddress - 1];
-            PrintResponses.printSuccessfulCardSelection();
-        }
+    public Card selectACard(int cardAddress) {
+        return cardsInHand [cardAddress - 1];
     }
 
-    public void deselectACard() {
-        if (selectedCardInHand == null)
-            PrintResponses.printNoCardSelected();
-        else {
-            selectedCardInHand = null;
-            PrintResponses.printSuccessfulCardDeselection();
-        }
+    public void deselectACard(Card selectedCard) {
+            selectedCard = null;
     }
 
     public void discardACard(int place) {
-
+        handOwner.getBoard().getGraveyard().add(cardsInHand[place - 1]);
+        cardsInHand[place - 1] = null;
     }
 
     public Card selectARandomCardFromHand() {
