@@ -21,7 +21,7 @@ public class Board {
       this.spellsAndTraps = new Card[5];
       this.showSpellsAndTraps = new String[]{"E", "E", "E", "E", "E"};
       this.showFieldZone = "E";
-      graveyard = new ArrayList<>();
+      this.graveyard = new ArrayList<>();
    }
 
    public Card[] getMonsters() {
@@ -59,27 +59,40 @@ public class Board {
    public void addMonsterFaceUp (int placeInBoard, Card selectedMonsterCard) {
       monsters[placeInBoard - 1] = selectedMonsterCard;
       showMonsters[placeInBoard - 1] = "OO";
+      selectedMonsterCard.setFaceUp(true);
+      selectedMonsterCard.setHidden(false);
    }
 
    public void addMonsterFaceDown (int placeInBoard, Card selectedMonsterCard) {
       monsters[placeInBoard - 1] = selectedMonsterCard;
-      if (selectedMonsterCard.isHidden())
+      if (selectedMonsterCard.isHidden()){
          showMonsters[placeInBoard - 1] = "DH";
-      else
+         selectedMonsterCard.setHidden(true);
+      }
+      else{
          showMonsters[placeInBoard - 1] = "DO";
+         selectedMonsterCard.setHidden(false);
+      }
+      selectedMonsterCard.setFaceUp(false);
    }
 
    public void addSpellAndTrap (int placeInBoard, Card selectedSpellAndTrapCard) {
       spellsAndTraps[placeInBoard - 1] = selectedSpellAndTrapCard;
       showSpellsAndTraps[placeInBoard - 1] = "H";
+      selectedSpellAndTrapCard.setHidden(true);
+      selectedSpellAndTrapCard.setFaceUp(false);
    }
 
    public void changeFacePositionToAttack (int placeInBoard) {
       showMonsters[placeInBoard - 1] = "OO";
+      monsters[placeInBoard - 1].setFaceUp(true);
+      monsters[placeInBoard - 1].setHidden(false);
    }
 
    public void changeFacePositionToDefence (int placeInBoard) {
       showMonsters[placeInBoard - 1] = "DO";
+      monsters[placeInBoard - 1].setFaceUp(false);
+      monsters[placeInBoard - 1].setHidden(false);
    }
 
    public void putCardToFieldZone (Card card) {
