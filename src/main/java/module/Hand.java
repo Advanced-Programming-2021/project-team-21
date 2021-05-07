@@ -24,7 +24,7 @@ public class Hand {
     }
 
     public void addCardToHand(Card cardToAdd) {
-        for (int i = cardsInHand.length - 1; i >= 0; i++) {
+        for (int i = cardsInHand.length - 1; i >= 0; i--) {
             if (cardsInHand[i] == null) {
                 cardsInHand[i] = cardToAdd;
                 break;
@@ -43,7 +43,7 @@ public class Hand {
     public void drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0)
             // ending game
-            for (int i = getCardsInHand().length - 1; i >= 0; i++) {
+            for (int i = getCardsInHand().length - 1; i >= 0; i--) {
                 if (cardsInHand[i] == null) {
                     cardsInHand[i] = deckToDraw.getMainDeckCards().get(0);
                     break;
