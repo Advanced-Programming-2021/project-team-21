@@ -110,7 +110,10 @@ public class Board {
 
    // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
    public Card getCard(int placeInBoard, char monsterOrSpell){
-      return null;
+      if (monsterOrSpell == 's')
+         return monsters[placeInBoard - 1];
+      else
+         return spellsAndTraps[placeInBoard - 1];
    }
 
    public Card selectOwnMonster (int placeInBoard) {
@@ -136,4 +139,5 @@ public class Board {
    public Card selectOpponentFieldZone (User opponent) {
       return opponent.getBoard().getFieldZone();
    }
+
 }
