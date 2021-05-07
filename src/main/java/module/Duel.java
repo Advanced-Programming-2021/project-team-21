@@ -11,6 +11,7 @@ public class Duel {
     private final User FIRST_USER, SECOND_USER;
     private User userWhoPlaysNow;
     private Card selectedCard;
+    private int placeOfSelectedCard;
 
 
     public Duel(User first_user, User second_user) {
@@ -60,11 +61,12 @@ public class Duel {
     public void selectCard(int cardAddress) {
         Hand currentHand = userWhoPlaysNow.getHand();
         selectedCard = currentHand.selectACard(cardAddress);
+        setPlaceOfSelectedCard(cardAddress);
     }
 
     public void summonMonster(int placeInBoard) {
         Board currentBoard = userWhoPlaysNow.getBoard();
-        currentBoard.addMonsterFaceUp(placeInBoard, (Monster) selectedCard);
+        currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
     }
 
 
@@ -80,9 +82,14 @@ public class Duel {
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
     }
 
-    public void changeAttackPosition(int placeInBoard) {
+    public void changeToAttackPosition(int placeInBoard) {
         Board currentBoard = userWhoPlaysNow.getBoard();
-        currentBoard.changeFacePosition(placeInBoard);
+        currentBoard.changeFacePositionToAttack(placeInBoard);
+    }
+
+    public void changeToDefensePosition(int placeInBoard) {
+        Board currentBoard = userWhoPlaysNow.getBoard();
+        currentBoard.changeFacePositionToDefence(placeInBoard);
     }
 
     public void checkMainPhaseMonsterEffects() {
@@ -102,9 +109,24 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         if (monsterToAttack.isFaceUp()) {
             int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getAtk();
-            if (differenceOfATK >= 0) {
+            if (differenceOfATK > 0) {
                 changeLP(rival, -differenceOfATK);
-                addCardToGraveyard(monsterToAttack, rival);
+                addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+            } else if (differenceOfATK == 0) {
+                addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+                addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
+            } else {
+                changeLP(userWhoPlaysNow, differenceOfATK);
+                addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
+            }
+        } else {
+            int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getDef();
+            if (differenceOfATK > 0) {
+                changeLP(rival, -differenceOfATK);
+                addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+            } else if (differenceOfATK == 0) {
+            } else {
+                changeLP(userWhoPlaysNow, differenceOfATK);
             }
         }
     }
@@ -125,7 +147,12 @@ public class Duel {
     public void getCardFromGraveyard(int identifier) {
     }
 
-    public void addCardToGraveyard(Card card, User user) {
+    public void addCardToGraveyard(Card card, int placeInBoard, User user) {
+        if (card instanceof Monster)
+            user.getBoard().removeMonster(placeInBoard);
+        else
+            user.getBoard().removeSpellAndTrap(placeInBoard);
+
         user.getGraveyard().add(card);
     }
 
@@ -135,5 +162,13 @@ public class Duel {
 
     public void setSelectedCard(Card selectedCard) {
         this.selectedCard = selectedCard;
+    }
+
+    public int getPlaceOfSelectedCard() {
+        return placeOfSelectedCard;
+    }
+
+    public void setPlaceOfSelectedCard(int placeOfSelectedCard) {
+        this.placeOfSelectedCard = placeOfSelectedCard;
     }
 }
