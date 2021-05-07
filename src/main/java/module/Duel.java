@@ -3,7 +3,6 @@ package module;
 
 import module.card.Card;
 import module.card.Monster;
-import module.card.Spell;
 
 import java.util.ArrayList;
 
@@ -94,15 +93,29 @@ public class Duel {
 
     public void useSpell(int placeInBoard) {
         Board currentBoard = userWhoPlaysNow.getBoard();
-        Spell spell = (Spell) currentBoard.getCard(placeInBoard, 'S');
+        currentBoard.addSpellAndTrap(placeInBoard, selectedCard);
     }
 
     public void attack(int placeInBoard) {
-        Board rivalBoard = getRival(userWhoPlaysNow).getBoard();
-
+        User rival = getRival(userWhoPlaysNow);
+        Board rivalBoard = rival.getBoard();
+        Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
+        if (monsterToAttack.isFaceUp()) {
+            int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getAtk();
+            if (differenceOfATK >= 0) {
+                changeLP(rival, -differenceOfATK);
+                addCardToGraveyard(monsterToAttack, rival);
+            }
+        }
     }
 
     public void attackDirectly() {
+        User rival = getRival(userWhoPlaysNow);
+        changeLP(rival, ((Monster) selectedCard).getAtk());
+    }
+
+    public void activateEffects() {
+
     }
 
     public void changeLP(User player, int amount) {
@@ -112,6 +125,9 @@ public class Duel {
     public void getCardFromGraveyard(int identifier) {
     }
 
+    public void addCardToGraveyard(Card card, User user) {
+        user.getGraveyard().add(card);
+    }
 
     public Card getSelectedCard() {
         return selectedCard;
