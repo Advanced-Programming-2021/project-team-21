@@ -1,13 +1,16 @@
 package module;
 
 
+import module.card.Card;
+import module.card.CardType;
+
 import java.util.ArrayList;
 
 public class Duel {
     private static final int INITIAL_LIFE_POINTS = 8000;
     private final User FIRST_USER, SECOND_USER;
     private User userWhoPlaysNow;
-
+    private Card selectedCard;
 
 
     public Duel(User first_user, User second_user) {
@@ -75,5 +78,11 @@ public class Duel {
     public void getCardFromGraveyard(int identifier){}
 
 
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
 
+    public void setSelectedCard(Card selectedCard) {
+        this.selectedCard = selectedCard;
+    }
 }
