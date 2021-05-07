@@ -24,7 +24,12 @@ public class Hand {
     }
 
     public void addCardToHand(Card cardToAdd) {
-
+        for (int i = cardsInHand.length - 1; i >= 0; i++) {
+            if (cardsInHand[i] == null) {
+                cardsInHand[i] = cardToAdd;
+                break;
+            }
+        }
     }
 
     public void removeCardFromHand(int cardAddress) {
@@ -39,8 +44,10 @@ public class Hand {
         if (deckToDraw.getMainDeckCards().size() == 0)
             // ending game
             for (int i = getCardsInHand().length - 1; i >= 0; i++) {
-                if (cardsInHand[i] == null)
+                if (cardsInHand[i] == null) {
                     cardsInHand[i] = deckToDraw.getMainDeckCards().get(0);
+                    break;
+                }
             }
         System.out.println("new card added to the hand : " + deckToDraw.getMainDeckCards().get(0).getName());
         deckToDraw.getMainDeckCards().remove(0);
@@ -59,7 +66,8 @@ public class Hand {
     }
 
     public void discardACard(int place) {
-
+        handOwner.getBoard().getGraveyard().add(cardsInHand[place - 1]);
+        cardsInHand[place - 1] = null;
     }
 
     public Card selectARandomCardFromHand() {
