@@ -8,6 +8,23 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Monster extends Card implements MainEffects {
+    //for summoned effects
+    boolean isSummonEffect;
+
+    //it should be an if at the first of each attack to monster
+    boolean isBattlePhaseEffectStart;
+
+    // when a card is destroyed
+    boolean isDeathEffect;
+
+    // main phase effect that are chosen by user
+    boolean isMainPhaseChosen;
+
+    //it should be an if at the end of each attack to monster
+    boolean isBattlePhaseEffectEnd;
+
+    // it should be called when you attack a face down monster
+    boolean isAttackFlipSummon;
     Integer level;
     Attributes attribute;
     MonsterTypes monsterType;
