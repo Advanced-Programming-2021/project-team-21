@@ -20,7 +20,7 @@ public class Hand {
     }
 
     public Hand(User handOwner) {
-        User.getUserByUsername(handOwner.getUsername()).setHand(this);
+        handOwner.setHand(this);
         deckToDraw = handOwner.getActiveDeck();
     }
 

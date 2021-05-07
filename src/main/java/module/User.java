@@ -17,6 +17,7 @@ public class User {
     private Hand hand;
     private ArrayList<Card> graveyard;
     private int lifePoints;
+    private boolean canSummonMonster, canSummonSpell, canSummonTrap;
 
     {
         coins = 100000;
@@ -199,5 +200,29 @@ public class User {
 
     public void setLifePoints(int lifePoints) {
         this.lifePoints = lifePoints;
+    }
+
+    public boolean isCanSummonMonster() {
+        return canSummonMonster;
+    }
+
+    public void setCanSummonMonster(boolean canSummonMonster) {
+        this.canSummonMonster = canSummonMonster;
+    }
+
+    public boolean isCanSummonSpell() {
+        return canSummonSpell;
+    }
+
+    public void setCanSummonSpell(boolean canSummonSpell) {
+        this.canSummonSpell = canSummonSpell;
+    }
+
+    public boolean isCanSummonTrap() {
+        return canSummonTrap;
+    }
+
+    public void setCanSummonTrap(boolean canSummonTrap) {
+        this.canSummonTrap = canSummonTrap;
     }
 }

@@ -13,6 +13,7 @@ public class Card {
     CardType cardType;
     private String description;
     private boolean isFaceUp;
+    private boolean isHidden;
     private int price;
 
     public static Card getCardByName(String name) {
@@ -75,5 +76,13 @@ public class Card {
     }
 
     public void destroyWithoutLosingLifePoints() {
+    }
+
+    public boolean isHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        isHidden = hidden;
     }
 }
