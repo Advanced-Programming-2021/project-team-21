@@ -22,7 +22,6 @@ public class Board {
     private int turn;
 
 
-
     {
         this.lifePointFirstPlayer = 8000;
         this.lifePointSecondPlayer = 8000;
@@ -31,10 +30,10 @@ public class Board {
         this.spellCardsZoneFirstPlayer = new String[5];
         this.spellCardsZoneSecondPlayer = new String[5];
         this.FZOccupationFirstPlayer = 'E';
-        this.FZOccupationSecondPlayer = 'E'
+        this.FZOccupationSecondPlayer = 'E';
     }
 
-    public Board (String nicknameFirstPlayer, String nicknameSecondPlayer, Deck deckFirstPlayer, Deck deckSecondPlayer) {
+    public Board(String nicknameFirstPlayer, String nicknameSecondPlayer, Deck deckFirstPlayer, Deck deckSecondPlayer) {
         this.nicknameFirstPlayer = nicknameFirstPlayer;
         this.nicknameSecondPlayer = nicknameSecondPlayer;
         this.deckFirstPlayer = deckFirstPlayer;
@@ -125,7 +124,7 @@ public class Board {
 
 
     void changeTurn() {
-        if(getTurn() == 1)
+        if (getTurn() == 1)
             setTurn(2);
         else if (getTurn() == 2)
             setTurn(1);

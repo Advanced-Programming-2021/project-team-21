@@ -14,6 +14,7 @@ public class Card {
     private String description;
     private boolean isFaceUp;
     private int price;
+    private boolean hasEffect;
 
     public static Card getCardByName(String name) {
         HashMap<String, Card> allCards = ProgramController.allCards;
@@ -75,5 +76,21 @@ public class Card {
     }
 
     public void destroyWithoutLosingLifePoints() {
+    }
+
+    public void setHasEffect(boolean hasEffect) {
+        this.hasEffect = hasEffect;
+    }
+
+    public boolean HasEffect() {
+        return hasEffect;
+    }
+
+    //for searching a card on board or deck or graveYard
+    public Card getACardFromArrayByName(ArrayList<Card> cards, String name) {
+        for (Card card : cards) {
+            if (card.getName().equals(name)) return card;
+        }
+        return null;
     }
 }
