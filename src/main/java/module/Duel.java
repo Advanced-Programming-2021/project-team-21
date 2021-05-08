@@ -3,6 +3,7 @@ package module;
 
 import module.card.Card;
 import module.card.Monster;
+import view.PrintResponses;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class Duel {
         userWhoPlaysNow = FIRST_USER;
     }
 
-    private void changeTurn() {
+    public void changeTurn() {
         if (userWhoPlaysNow.equals(FIRST_USER))
             userWhoPlaysNow = SECOND_USER;
         else
@@ -40,28 +41,42 @@ public class Duel {
             return FIRST_USER;
     }
 
-    public void drawPhase() {
+    public Card drawACard() {
         Hand currentHand = userWhoPlaysNow.getHand();
         currentHand.shuffleDeck();
-        currentHand.drawACard();
+        return currentHand.drawACard();
     }
 
-    public void mainPhase() {
-    }
 
     public void standByPhase() {
     }
 
-    public void battlePhase() {
-    }
 
     public void endPhase() {
     }
 
-    public void selectCard(int cardAddress) {
-        Hand currentHand = userWhoPlaysNow.getHand();
-        selectedCard = currentHand.selectACard(cardAddress);
-        setPlaceOfSelectedCard(cardAddress);
+    public void selectCard(int cardAddress, String fromWhere, String ownOrOpponent) {
+        if (fromWhere.equals("Hand")) {
+            Hand currentHand = userWhoPlaysNow.getHand();
+            selectedCard = currentHand.selectACard(cardAddress);
+        } else if (ownOrOpponent.equals("own")) {
+            if (fromWhere.equals("Monster"))
+                selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
+            else
+                selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'S');
+        } else if (ownOrOpponent.equals("opponent")) {
+            if (fromWhere.equals("Monster"))
+                selectedCard = getRival(userWhoPlaysNow).getBoard().getCard(cardAddress, 'M');
+            else
+                selectedCard = getRival(userWhoPlaysNow).getBoard().getCard(cardAddress, 'S');
+        }
+        if (selectedCard != null)
+            setPlaceOfSelectedCard(cardAddress);
+    }
+
+    public void deselectACard() {
+        setSelectedCard(null);
+        setPlaceOfSelectedCard(0);
     }
 
     public void summonMonster(int placeInBoard) {
@@ -144,7 +159,8 @@ public class Duel {
         player.setLifePoints(player.getLifePoints() + amount);
     }
 
-    public void getCardFromGraveyard(int identifier) {
+    public Card getCardFromGraveyard(int identifier) {
+        return userWhoPlaysNow.getGraveyard().get(identifier);
     }
 
     public void addCardToGraveyard(Card card, int placeInBoard, User user) {
@@ -170,5 +186,9 @@ public class Duel {
 
     public void setPlaceOfSelectedCard(int placeOfSelectedCard) {
         this.placeOfSelectedCard = placeOfSelectedCard;
+    }
+
+    public User getUserWhoPlaysNow() {
+        return userWhoPlaysNow;
     }
 }

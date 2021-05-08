@@ -1,12 +1,9 @@
 package module;
 
 import module.card.Card;
-import org.checkerframework.checker.units.qual.C;
-import view.PrintResponses;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public class Hand {
     private Card[] cardsInHand;
@@ -40,7 +37,7 @@ public class Hand {
         return cardsInHand;
     }
 
-    public void drawACard() {
+    public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0)
             // ending game
             for (int i = getCardsInHand().length - 1; i >= 0; i--) {
@@ -49,8 +46,8 @@ public class Hand {
                     break;
                 }
             }
-        System.out.println("new card added to the hand : " + deckToDraw.getMainDeckCards().get(0).getName());
         deckToDraw.getMainDeckCards().remove(0);
+        return deckToDraw.getMainDeckCards().get(0);
     }
 
     public void shuffleDeck() {
@@ -58,11 +55,7 @@ public class Hand {
     }
 
     public Card selectACard(int cardAddress) {
-        return cardsInHand [cardAddress - 1];
-    }
-
-    public void deselectACard(Card selectedCard) {
-            selectedCard = null;
+        return cardsInHand[cardAddress - 1];
     }
 
     public void discardACard(int place) {
