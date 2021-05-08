@@ -14,6 +14,7 @@ public class Board {
    private Card fieldZone;
    private String showFieldZone;
    private ArrayList<Card> graveyard;
+   private ArrayList<Integer> orderToSummon;
 
    {
       this.monsters = new Card[5];
@@ -22,6 +23,12 @@ public class Board {
       this.showSpellsAndTraps = new String[]{"E", "E", "E", "E", "E"};
       this.showFieldZone = "E";
       this.graveyard = new ArrayList<>();
+      this.orderToSummon = new ArrayList<>();
+      orderToSummon.add(5);
+      orderToSummon.add(3);
+      orderToSummon.add(1);
+      orderToSummon.add(2);
+      orderToSummon.add(4);
    }
 
    public Card[] getMonsters() {
@@ -151,6 +158,12 @@ public class Board {
 
    public Card selectOpponentFieldZone (User opponent) {
       return opponent.getBoard().getFieldZone();
+   }
+
+   public Integer toSummon () {
+      int holder = orderToSummon.get(0);
+      orderToSummon.remove(0);
+      return  holder;
    }
 
 }
