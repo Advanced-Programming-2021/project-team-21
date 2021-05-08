@@ -160,7 +160,7 @@ public class Board {
       return opponent.getBoard().getFieldZone();
    }
 
-   public Integer toSummon () {
+   public Integer getAddressToSummon () {
       int holder = orderToSummon.get(0);
       orderToSummon.remove(0);
       return  holder;
