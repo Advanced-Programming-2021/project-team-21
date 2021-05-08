@@ -160,10 +160,21 @@ public class Board {
       return opponent.getBoard().getFieldZone();
    }
 
-   public Integer getAddressToSummon () {
-      int holder = orderToSummon.get(0);
-      orderToSummon.remove(0);
-      return  holder;
+   public int getAddressToSummon () {
+      for (int i = 0; i < orderToSummon.size(); i++) {
+         if(monsters[i] == null)
+            return i;
+      }
+      return 0;
    }
+
+   public Boolean isCardOnBoard (Card card) {
+      for (int i = 0; i < spellsAndTraps.length; i++){
+         if (spellsAndTraps[i] == card || monsters[i] == card)
+            return true;
+      }
+      return false;
+   }
+
 
 }
