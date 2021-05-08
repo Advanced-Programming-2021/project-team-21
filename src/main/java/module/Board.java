@@ -162,7 +162,7 @@ public class Board {
 
    public int getAddressToSummon () {
       for (int i = 0; i < orderToSummon.size(); i++) {
-         if(monsters[i] == null)
+         if(monsters[orderToSummon.get(i)] == null)
             return i;
       }
       return 0;
