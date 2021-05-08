@@ -36,6 +36,7 @@ public class Regex {
     public static final String selectFromOpponent = "select\\s(?=.*--(?<where>\\S+)\\s(?<number>\\d+))(?=.*--opponent)";
     public static final String deselectCard = "select -d";
     public static final String nextPhase = "^next phase$";
+    public static final String summon = "^summon$";
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);

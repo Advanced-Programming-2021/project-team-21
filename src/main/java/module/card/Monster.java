@@ -1,7 +1,7 @@
 package module.card;
 
 public class Monster extends Card {
-    Integer level;
+    int level;
     Attributes attribute;
     MonsterTypes monsterType;
     int atk;

@@ -3,7 +3,6 @@ package module;
 
 import module.card.Card;
 import module.card.Monster;
-import view.PrintResponses;
 
 import java.util.ArrayList;
 
@@ -13,6 +12,7 @@ public class Duel {
     private User userWhoPlaysNow;
     private Card selectedCard;
     private int placeOfSelectedCard;
+    private boolean hasSummonedOnce;
 
 
     public Duel(User first_user, User second_user) {
@@ -25,6 +25,7 @@ public class Duel {
         FIRST_USER.setLifePoints(INITIAL_LIFE_POINTS);
         SECOND_USER.setLifePoints(INITIAL_LIFE_POINTS);
         userWhoPlaysNow = FIRST_USER;
+        setHasSummonedOnce(false);
     }
 
     public void changeTurn() {
@@ -32,6 +33,7 @@ public class Duel {
             userWhoPlaysNow = SECOND_USER;
         else
             userWhoPlaysNow = FIRST_USER;
+        hasSummonedOnce = false;
     }
 
     private User getRival(User user) {
@@ -79,9 +81,11 @@ public class Duel {
         setPlaceOfSelectedCard(0);
     }
 
-    public void summonMonster(int placeInBoard) {
+    public void summonMonster() {
+        int placeInBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
+        hasSummonedOnce = true;
     }
 
 
@@ -89,7 +93,7 @@ public class Duel {
         Board currentBoard = userWhoPlaysNow.getBoard();
     }
 
-    public void tribute(int amount, int[] placesOnBoard) {
+    public void tribute(int[] placesOnBoard) {
     }
 
     public void setMonster(int placeOnBoard) {
@@ -139,7 +143,6 @@ public class Duel {
             if (differenceOfATK > 0) {
                 changeLP(rival, -differenceOfATK);
                 addCardToGraveyard(monsterToAttack, placeInBoard, rival);
-            } else if (differenceOfATK == 0) {
             } else {
                 changeLP(userWhoPlaysNow, differenceOfATK);
             }
@@ -190,5 +193,17 @@ public class Duel {
 
     public User getUserWhoPlaysNow() {
         return userWhoPlaysNow;
+    }
+
+    public boolean canSummonSelectedCard(){
+        return !(selectedCard instanceof Monster);
+    }
+
+    public boolean isHasSummonedOnce() {
+        return hasSummonedOnce;
+    }
+
+    public void setHasSummonedOnce(boolean hasSummonedOnce) {
+        this.hasSummonedOnce = hasSummonedOnce;
     }
 }

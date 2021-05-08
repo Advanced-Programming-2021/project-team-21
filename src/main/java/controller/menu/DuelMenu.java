@@ -4,9 +4,11 @@ import controller.ProgramController;
 import module.Duel;
 import module.User;
 import module.card.Card;
+import module.card.Monster;
 import view.PrintResponses;
 import view.Regex;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -44,6 +46,7 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.selectFromOpponent, this::selectCardFromOpponent);
         commandMap.put(Regex.deselectCard, this::deselectCard);
         commandMap.put(Regex.nextPhase, this::goToNextPhase);
+        commandMap.put(Regex.summon, this::summon);
 
 
         return commandMap;
@@ -68,7 +71,7 @@ public class DuelMenu implements Menuable {
             currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
             phase = Phases.DRAW_PHASE;
             Card card = currentDuel.drawACard();
-            if (card == null){
+            if (card == null) {
                 endTheGame();
             } else {
                 PrintResponses.printDrawnCard(card);
@@ -85,13 +88,13 @@ public class DuelMenu implements Menuable {
         int cardAddress = Integer.parseInt(matcher.group("number"));
         if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
                 || whereToSelectFrom.equals("field")
-                || whereToSelectFrom.equals("hand"))){
+                || whereToSelectFrom.equals("hand"))) {
             PrintResponses.printInvalidSelection();
         } else {
             currentDuel.selectCard(cardAddress, whereToSelectFrom, "own");
-            if (currentDuel.getSelectedCard() == null){
+            if (currentDuel.getSelectedCard() == null) {
                 PrintResponses.printNoCardInPosition();
-            }else {
+            } else {
                 PrintResponses.printSuccessfulCardSelection();
             }
         }
@@ -101,37 +104,37 @@ public class DuelMenu implements Menuable {
         String whereToSelectFrom = matcher.group("where");
         int cardAddress = Integer.parseInt(matcher.group("number"));
         if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
-                || whereToSelectFrom.equals("field"))){
+                || whereToSelectFrom.equals("field"))) {
             PrintResponses.printInvalidSelection();
         } else {
             currentDuel.selectCard(cardAddress, whereToSelectFrom, "opponent");
-            if (currentDuel.getSelectedCard() == null){
+            if (currentDuel.getSelectedCard() == null) {
                 PrintResponses.printNoCardInPosition();
-            }else {
+            } else {
                 PrintResponses.printSuccessfulCardSelection();
             }
         }
     }
 
-    private void deselectCard(Matcher matcher){
-        if (currentDuel.getSelectedCard() == null){
+    private void deselectCard(Matcher matcher) {
+        if (currentDuel.getSelectedCard() == null) {
             PrintResponses.printNoCardSelected();
-        } else{
+        } else {
             currentDuel.deselectACard();
             PrintResponses.printSuccessfulCardDeselection();
         }
     }
 
-    private void goToNextPhase(Matcher matcher){
-        if (phase.equals(Phases.DRAW_PHASE)){
+    private void goToNextPhase(Matcher matcher) {
+        if (phase.equals(Phases.DRAW_PHASE)) {
             phase = Phases.STANDBY_PHASE;
-        } else if (phase.equals(Phases.STANDBY_PHASE)){
+        } else if (phase.equals(Phases.STANDBY_PHASE)) {
             phase = Phases.MAIN_PHASE1;
-        } else if (phase.equals(Phases.MAIN_PHASE1)){
+        } else if (phase.equals(Phases.MAIN_PHASE1)) {
             phase = Phases.BATTLE_PHASE;
-        }else if (phase.equals(Phases.BATTLE_PHASE)){
+        } else if (phase.equals(Phases.BATTLE_PHASE)) {
             phase = Phases.MAIN_PHASE2;
-        } else if (phase.equals(Phases.MAIN_PHASE2)){
+        } else if (phase.equals(Phases.MAIN_PHASE2)) {
             phase = Phases.END_PHASE;
             PrintResponses.printPhaseName(phase);
             currentDuel.changeTurn();
@@ -140,8 +143,53 @@ public class DuelMenu implements Menuable {
         PrintResponses.printPhaseName(phase);
     }
 
-    private void endTheGame(){
+    private void endTheGame() {
+    }
 
+    private void summon(Matcher matcher) {
+        if (currentDuel.getSelectedCard() == null) {
+            PrintResponses.printNoCardSelected();
+        } else if (!currentDuel.canSummonSelectedCard()) {
+            PrintResponses.printUnableToSummonCard();
+        } else if (!(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2))) {
+            PrintResponses.printSummonInWrongPhase();
+        } else if (ProgramController.userInGame.getBoard().getAddressToSummon() == 0) {
+            PrintResponses.printFullnessOfMonsterCardZone();
+        } else if (currentDuel.isHasSummonedOnce()) {
+            PrintResponses.printUnableToSummonInTurn();
+        } else if (((Monster) currentDuel.getSelectedCard()).getLevel() > 4) {
+            if (((Monster) currentDuel.getSelectedCard()).getLevel() < 7) {
+                if (isNotEnoughCardsForTribute(1)) return;
+            } else {
+                if (isNotEnoughCardsForTribute(2)) return;
+            }
+            int[] cardToTributeAddress = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            if (areCardAddressesEmpty(cardToTributeAddress)) return;
+            currentDuel.tribute(cardToTributeAddress);
+            PrintResponses.printSuccessfulSummon();
+        } else {
+            currentDuel.summonMonster();
+            PrintResponses.printSuccessfulSummon();
+        }
+
+    }
+
+    private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
+        if (ProgramController.userInGame.getBoard().getMonsters().length == requiredCardsAmount) {
+            PrintResponses.printNoCardToTribute();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean areCardAddressesEmpty(int[] cardsAddresses) {
+        for (int toTributeAddress : cardsAddresses) {
+            if (ProgramController.userInGame.getBoard().getCard(toTributeAddress, 'M') == null) {
+                PrintResponses.printNoMonsterOnAddress();
+                return true;
+            }
+        }
+        return false;
     }
 
 
