@@ -1,5 +1,5 @@
 package module.card;
-// must add a method tp summon in which decides if the leve is less than five there is 0 tribute if the level is 5 , 6 1tribute
+// must add a method to summon in which decides if the leve is less than five there is 0 tribute if the level is 5 , 6 1tribute
 //if it is 7 8 two tributes and 9 10 11 three tribute
 
 import module.User;
@@ -167,6 +167,21 @@ public class Monster extends Card implements MainEffects {
 
     @Override
     public void attackFlipSummon(Monster attacker, Monster defense, User firstUser, User secondUser) {
+
+    }
+
+    @Override
+    public void flipSummonEffect(Card card, User firstUser, User secondUser) {
+
+    }
+
+    @Override
+    public void activateSpell(Spell spell, User firstUser, User secondUser) {
+
+    }
+
+    @Override
+    public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
 
     }
 }
