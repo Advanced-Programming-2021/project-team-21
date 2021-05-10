@@ -39,7 +39,7 @@ public class Duel {
         hasSummonedOnce = false;
     }
 
-    private User getRival(User user) {
+    public User getRival(User user) {
         if (user.equals(FIRST_USER))
             return SECOND_USER;
         else
@@ -92,7 +92,8 @@ public class Duel {
     }
 
 
-    public void flipSummon(int placeInBoard) {
+    public void flipSummon() {
+        int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
     }
 
@@ -156,6 +157,7 @@ public class Duel {
                 changeLP(userWhoPlaysNow, differenceOfATK);
             }
         }
+        ((Monster) selectedCard).setHasAttackedOnceInTrun(true);
     }
 
     public void attackDirectly() {
@@ -224,5 +226,14 @@ public class Duel {
 
     public void setHasChangedPositionOnce(boolean hasChangedPositionOnce) {
         this.hasChangedPositionOnce = hasChangedPositionOnce;
+    }
+
+    public boolean isNoCardSelected(){
+        return selectedCard == null;
+    }
+
+    //TODO implement this
+    public boolean isSelectedCardSummonedInThisTurn(){
+        return false;
     }
 }

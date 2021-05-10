@@ -49,6 +49,8 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.summon, this::summon);
         commandMap.put(Regex.set, this::set);
         commandMap.put(Regex.setPosition, this::setPosition);
+        commandMap.put(Regex.flipSummon, this::flipSummon);
+        commandMap.put(Regex.attack, this::attack);
         return commandMap;
     }
 
@@ -117,7 +119,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void deselectCard(Matcher matcher) {
-        if (currentDuel.getSelectedCard() == null) {
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
         } else {
             currentDuel.deselectACard();
@@ -147,11 +149,11 @@ public class DuelMenu implements Menuable {
     }
 
     private void summon(Matcher matcher) {
-        if (currentDuel.getSelectedCard() == null) {
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
         } else if (!currentDuel.canSummonSelectedCard()) {
             PrintResponses.printUnableToSummonCard();
-        } else if (!(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2))) {
+        } else if (isNotInMainPhases()) {
             PrintResponses.printSummonInWrongPhase();
         } else if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
             PrintResponses.printFullnessOfMonsterCardZone();
@@ -175,12 +177,12 @@ public class DuelMenu implements Menuable {
     }
 
     private void set(Matcher matcher) {
-        if (currentDuel.getSelectedCard() == null) {
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
         } else if (!currentDuel.getUserWhoPlaysNow().getHand().isCardInHand(currentDuel.getSelectedCard())) {
             PrintResponses.printUnableToSetCard();
         } else if (currentDuel.getSelectedCard() instanceof Monster) {
-            if (!(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2))) {
+            if (isNotInMainPhases()) {
                 PrintResponses.printSetCardInWrongPhase();
             } else if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
                 PrintResponses.printFullnessOfMonsterCardZone();
@@ -196,25 +198,58 @@ public class DuelMenu implements Menuable {
 
     private void setPosition(Matcher matcher) {
         String position = matcher.group("position");
-        if (currentDuel.getSelectedCard() == null) {
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
-        } else if (!currentDuel.getUserWhoPlaysNow().getBoard().isCardOnMonsterZone(currentDuel.getSelectedCard())) {
+        } else if (isSelectedCardNotInMonsterZone()) {
             PrintResponses.printUnableToChangePositionOfCard();
-        } else if (!(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2))) {
+        } else if (isNotInMainPhases()) {
             PrintResponses.printSetCardInWrongPhase();
-        } else if (isPositionTheSameAsBefore(position)){
+        } else if (isPositionTheSameAsBefore(position)) {
             PrintResponses.printCardInWantedPosition();
-        } else if (currentDuel.isHasChangedPositionOnce()){
+        } else if (currentDuel.isHasChangedPositionOnce()) {
             PrintResponses.printUnableToChangePositionInTurnTwice();
         } else {
-            if (position.equals("attack")){
+            if (position.equals("attack")) {
                 currentDuel.changeToAttackPosition();
-            } else{
+            } else {
                 currentDuel.changeToDefensePosition();
             }
             PrintResponses.printSuccessfulMonsterCardPositionChange();
         }
     }
+
+    private void flipSummon(Matcher matcher) {
+        if (currentDuel.isNoCardSelected()) {
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()) {
+            PrintResponses.printUnableToChangePositionOfCard();
+        } else if (isNotInMainPhases()) {
+            PrintResponses.printFlipSummonInWrongPhase();
+        } else if (currentDuel.isSelectedCardSummonedInThisTurn() || !(!currentDuel.getSelectedCard().isFaceUp()
+                && currentDuel.getSelectedCard().isHidden())) {
+            PrintResponses.printUnableToFlipSummonCard();
+        } else {
+            currentDuel.flipSummon();
+            PrintResponses.printSuccessfulFlipSummon();
+        }
+
+    }
+
+    private void attack(Matcher matcher){
+        int address = Integer.parseInt(matcher.group("number"));
+        if (currentDuel.isNoCardSelected()){
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()){
+            PrintResponses.printUnableToAttack();
+        } else if (isNotInBattlePhase()){
+            PrintResponses.printAttackInWrongPhase();
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTrun()){
+            PrintResponses.printCardAttackedBefore();
+        } else if (currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().getCard(currentDuel.getPlaceOfSelectedCard(), 'M') == null){
+            PrintResponses.printNoCardToAttackWith();
+        } //TODO finish implementing errors for attack method
+    }
+
 
 
     private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
@@ -235,13 +270,24 @@ public class DuelMenu implements Menuable {
         return false;
     }
 
-    private boolean isPositionTheSameAsBefore(String position){
-        if (position.equals("attack")){
+    private boolean isPositionTheSameAsBefore(String position) {
+        if (position.equals("attack")) {
             return currentDuel.getSelectedCard().isFaceUp();
-        } else{
+        } else {
             return !currentDuel.getSelectedCard().isFaceUp() && !currentDuel.getSelectedCard().isHidden();
         }
     }
 
+    private boolean isNotInMainPhases() {
+        return !(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2));
+    }
+
+    private boolean isSelectedCardNotInMonsterZone(){
+        return !currentDuel.getUserWhoPlaysNow().getBoard().isCardOnMonsterZone(currentDuel.getSelectedCard());
+    }
+
+    private boolean isNotInBattlePhase(){
+        return !phase.equals(Phases.BATTLE_PHASE);
+    }
 
 }

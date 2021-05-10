@@ -39,6 +39,8 @@ public class Regex {
     public static final String summon = "^summon$";
     public static final String set = "^set$";
     public static final String setPosition = "set\\s.*--position\\s(?<position>attack|defense)";
+    public static final String flipSummon = "^flip-summon$";
+    public static final String attack = "attack (?<number>\\d+)";
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);

@@ -1,11 +1,12 @@
 package module.card;
 
 public class Monster extends Card {
-    int level;
-    Attributes attribute;
-    MonsterTypes monsterType;
-    int atk;
-    int def;
+    private int level;
+    private Attributes attribute;
+    private MonsterTypes monsterType;
+    private int atk;
+    private int def;
+    private boolean hasAttackedOnceInTrun;
 
     public Monster(Object[] parameters) {
         setName((String) parameters[0]);
@@ -70,5 +71,13 @@ public class Monster extends Card {
                 "\nATK: " + atk +
                 "\nDef: " + def +
                 "\nDescription: " + getDescription();
+    }
+
+    public boolean isHasAttackedOnceInTrun() {
+        return hasAttackedOnceInTrun;
+    }
+
+    public void setHasAttackedOnceInTrun(boolean hasAttackedOnceInTrun) {
+        this.hasAttackedOnceInTrun = hasAttackedOnceInTrun;
     }
 }
