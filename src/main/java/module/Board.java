@@ -176,5 +176,10 @@ public class Board {
       return false;
    }
 
+   //checks if the given card is in monster zone
+   public boolean isCardOnMonsterZone(Card card){
+      return true;
+   }
+
 
 }

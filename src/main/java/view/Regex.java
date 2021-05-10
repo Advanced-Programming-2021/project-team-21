@@ -37,6 +37,8 @@ public class Regex {
     public static final String deselectCard = "select -d";
     public static final String nextPhase = "^next phase$";
     public static final String summon = "^summon$";
+    public static final String set = "^set$";
+    public static final String setPosition = "set\\s.*--position\\s(?<position>attack|defense)";
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);

@@ -2,6 +2,7 @@ package module;
 
 
 import module.card.Card;
+import module.card.CardType;
 import module.card.Monster;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Duel {
     private Card selectedCard;
     private int placeOfSelectedCard;
     private boolean hasSummonedOnce;
+    private boolean hasChangedPositionOnce;
 
 
     public Duel(User first_user, User second_user) {
@@ -26,6 +28,7 @@ public class Duel {
         SECOND_USER.setLifePoints(INITIAL_LIFE_POINTS);
         userWhoPlaysNow = FIRST_USER;
         setHasSummonedOnce(false);
+        setHasChangedPositionOnce(false);
     }
 
     public void changeTurn() {
@@ -96,19 +99,25 @@ public class Duel {
     public void tribute(int[] placesOnBoard) {
     }
 
-    public void setMonster(int placeOnBoard) {
+    public void setMonster() {
+        int placeOnBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
+        hasSummonedOnce = true;
     }
 
-    public void changeToAttackPosition(int placeInBoard) {
+    public void changeToAttackPosition() {
+        int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToAttack(placeInBoard);
+        setHasChangedPositionOnce(true);
     }
 
-    public void changeToDefensePosition(int placeInBoard) {
+    public void changeToDefensePosition() {
+        int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToDefence(placeInBoard);
+        setHasChangedPositionOnce(true);
     }
 
     public void checkMainPhaseMonsterEffects() {
@@ -195,15 +204,25 @@ public class Duel {
         return userWhoPlaysNow;
     }
 
-    public boolean canSummonSelectedCard(){
-        return !(selectedCard instanceof Monster);
+
+    public boolean canSummonSelectedCard() {
+        return !(selectedCard instanceof Monster) || !userWhoPlaysNow.getHand().isCardInHand(selectedCard)
+                || !(selectedCard.getCardType().equals(CardType.NORMAL));
     }
 
-    public boolean isHasSummonedOnce() {
+    public boolean isHasSummonedOrSetOnce() {
         return hasSummonedOnce;
     }
 
     public void setHasSummonedOnce(boolean hasSummonedOnce) {
         this.hasSummonedOnce = hasSummonedOnce;
+    }
+
+    public boolean isHasChangedPositionOnce() {
+        return hasChangedPositionOnce;
+    }
+
+    public void setHasChangedPositionOnce(boolean hasChangedPositionOnce) {
+        this.hasChangedPositionOnce = hasChangedPositionOnce;
     }
 }

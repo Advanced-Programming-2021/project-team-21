@@ -43,7 +43,7 @@ public class Card {
         this.name = name;
     }
 
-    protected CardType getCardType() {
+    public CardType getCardType() {
         return cardType;
     }
 

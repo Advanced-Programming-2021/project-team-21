@@ -71,4 +71,9 @@ public class Hand {
         Collections.shuffle(randomizeCards);
         return cardsInHand[randomizeCards.get(0)];
     }
+
+    //checks if the given card is in hand
+    public boolean isCardInHand(Card card){
+        return true;
+    }
 }
