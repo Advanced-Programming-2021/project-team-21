@@ -1,5 +1,6 @@
 package view;
 
+import controller.menu.Phases;
 import module.Deck;
 import module.User;
 import module.card.Card;
@@ -383,5 +384,24 @@ public class PrintResponses {
         for (int i = 0; i < users.size(); i++) {
             System.out.println(ranks[i] + "- " + users.get(i).getNickname() + ": " + users.get(i).getScore());
         }
+    }
+    public static void printHasNoActiveDeck(User user){
+        System.out.println(user.getUsername() + " has no active deck");
+    }
+
+    public static void printInvalidDeck(User user){
+        System.out.println(user.getUsername() + "’s deck is invalid");
+    }
+
+    public static void printPhaseName(Phases phase){
+        System.out.println("phase: " + phase.toString().toLowerCase().replace("_", " "));
+    }
+
+    public static void printDrawnCard(Card card){
+        System.out.println("new card added to the hand : " + card.getName());
+    }
+
+    public static void showTurn(User user){
+        System.out.println("its " + user.getNickname() + "’s turn");
     }
 }

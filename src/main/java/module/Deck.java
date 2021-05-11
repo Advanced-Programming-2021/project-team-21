@@ -131,15 +131,21 @@ public class Deck {
         return null;
     }
 
-    public String isValid() {
-        if (this.getNumberOfMainDeckCards() > 39 &&
-                this.getNumberOfMainDeckCards() < 61 &&
-                this.getNumberOfSideDeckCards() < 16) return "valid";
+    public String showIsValid() {
+        if (isValid())
+            return "valid";
         return "invalid";
     }
 
+    public boolean isValid(){
+        return  this.getNumberOfMainDeckCards() > 39 &&
+                this.getNumberOfMainDeckCards() < 61 &&
+                this.getNumberOfSideDeckCards() < 16;
+    }
+
+
     public String deckShow() {
         return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck " +
-                this.getSideDeckCards().size() + ", " + this.isValid();
+                this.getSideDeckCards().size() + ", " + this.showIsValid();
     }
 }

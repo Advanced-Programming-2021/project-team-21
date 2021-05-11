@@ -33,7 +33,7 @@ public class Responses {
     public static String unableToSummonInTurn = "you already summoned/set on this turn";
     public static String successfulSummon = "summoned successfully";
     public static String noCardToTribute = "there are not enough cards for tribute";
-    public static String noMonsterOnAddress = "there no monsters one this address";
+    public static String noMonsterOnAddress = "there no monsters on this address";
     public static String noMonsterOnAddresses = "there no monsters on one of this addresses";
     public static String unableToSetCard = "you can’t set this card";
     public static String setCardInWrongPhase = "you can’t do this action in this phase";
