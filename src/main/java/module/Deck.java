@@ -24,6 +24,14 @@ public class Deck {
         DataController.saveData(this);
     }
 
+    public Deck(Deck copy) {
+        Deck newDeck = new Deck("copied");
+        newDeck.name = copy.name;
+        newDeck.isActive = copy.isActive;
+        newDeck.mainDeckCards.addAll(copy.mainDeckCards);
+        newDeck.sideDeckCards.addAll(copy.sideDeckCards);
+    }
+
     public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
         ArrayList<Deck> sort = new ArrayList<>(decks);
         for (int i = 0; i < sort.size(); i++) {
