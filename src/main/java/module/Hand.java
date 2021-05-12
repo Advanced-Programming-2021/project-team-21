@@ -1,10 +1,12 @@
 package module;
 
 import module.card.Card;
+import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
 import view.PrintResponses;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
@@ -48,7 +50,7 @@ public class Hand{
         return cardsInHand;
     }
 
-    public void drawACard() {
+    public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0)
             // ending game
             for (int i = orderInHand.size() - 1; i >= 0; i--) {
@@ -59,6 +61,7 @@ public class Hand{
             }
         System.out.println("new card added to the hand : " + deckToDraw.getMainDeckCards().get(0).getName());
         deckToDraw.getMainDeckCards().remove(0);
+        return deckToDraw.getMainDeckCards().get(0);
     }
 
     public void shuffleDeck() {
@@ -95,6 +98,7 @@ public class Hand{
         return false;
     }
 
+    // the cards have been compared with reference reminder to change
     public Boolean isCardOnHand (Card card) {
         for (int i = 0; i < cardsInHand.length; i++){
             if (cardsInHand[i] == card)
@@ -102,6 +106,16 @@ public class Hand{
         }
         return false;
     }
-
-
+    // to find cards with specific cards from deck (1) and hand(2) and graveYard (4)
+    public   ArrayList<Card>  getCardsWithType(int identifier , String type){
+        ArrayList<Card> found = new ArrayList<>();
+        ArrayList <Card> lookingCards = new ArrayList<>();
+        if (identifier >= 4) lookingCards.addAll(handOwner.getBoard().getGraveyard());
+         if (identifier % 4 >= 2 ) lookingCards.addAll(Arrays.asList(this.cardsInHand));
+        else if (identifier % 2 ==  1)lookingCards.addAll(this.deckToDraw.getMainDeckCards());
+        for (Card card : lookingCards) {
+            if (card.getCardType().getName().equals(type))found.add(card);
+        }
+        return found;
+    }
 }

@@ -1,6 +1,7 @@
 package module;
 
 
+import module.card.BattlePhaseStart;
 import module.card.Card;
 import module.card.CardType;
 import module.card.Monster;
@@ -136,8 +137,13 @@ public class Duel {
         User rival = getRival(userWhoPlaysNow);
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
-        if (monsterToAttack.isFaceUp()) {
-            int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getAtk();
+        Monster attackingMonster = (Monster) selectedCard;
+        if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()){
+            if(BattlePhaseStart.run(attackingMonster , monsterToAttack , getUserWhoPlaysNow() , rival))
+                return;
+        }
+        if (monsterToAttack.isATKPosition()) {
+            int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
             if (differenceOfATK > 0) {
                 changeLP(rival, -differenceOfATK);
                 addCardToGraveyard(monsterToAttack, placeInBoard, rival);
@@ -157,7 +163,7 @@ public class Duel {
                 changeLP(userWhoPlaysNow, differenceOfATK);
             }
         }
-        ((Monster) selectedCard).setHasAttackedOnceInTrun(true);
+        ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
     }
 
     public void attackDirectly() {

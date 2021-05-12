@@ -23,15 +23,15 @@ public class Monster extends Card implements MainEffects {
     //it should be an if at the end of each attack to monster
     boolean isBattlePhaseEffectEnd;
 
-    // it should be called when you attack a face down monster
-    boolean isAttackFlipSummon;
-    Integer level;
-    Attributes attribute;
-    MonsterTypes monsterType;
-    int atk;
-    int def;
-    //command Knight effect                                                                        //marshmallon                            //texchanger
-    private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                           (1 , 1)         in battlePhaseEnd            (1 , 0)     in battlePhaseStart
+    private Integer level;
+    private Attributes attribute;
+    private MonsterTypes monsterType;
+    private int atk;
+    private int def;
+    private boolean hasAttackedOnceInTurn;
+    private boolean isATKPosition;
+    //command Knight effect                                                                                       //texchanger
+    private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 0)     in battlePhaseStart
     private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
     //Yomi ship
     private Effect canKillTheAttacker;     //( 1 , 0)        in defenseEffect
@@ -44,12 +44,13 @@ public class Monster extends Card implements MainEffects {
     //Scanner
     private Effect canScan;         //(1 , 2)           in mainPhaseChosen
     //marshmallon
+    private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
     private Effect canDecreaseLP;        //(1001 , 0)       in flipSummonAttackEffect
     // beast king barbaros
     private Effect canBeNotTribute;      //(1101 , 0)        in summonEffect
     private Effect TributeToKillAllMonsterOfOpponent;       //(4 , 1)       in summonEffect
     // TexChanger
-    private Effect summonACardFromEveryWhere;       //(2 , 1)       in battlePhaseStart
+    private Effect summonACardFromEveryWhere;       //(2 , "1" , "Cyberse")       in battlePhaseStart
     //calculator
     private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
     // mirage dragon
@@ -146,11 +147,6 @@ public class Monster extends Card implements MainEffects {
     }
 
     @Override
-    public boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
     public void deathEffect(Card card, User firstUser, User secondUser) {
 
     }
@@ -183,5 +179,33 @@ public class Monster extends Card implements MainEffects {
     @Override
     public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
 
+    }
+
+    public boolean isHasAttackedOnceInTurn() {
+        return hasAttackedOnceInTurn;
+    }
+
+    public void setHasAttackedOnceInTurn(boolean hasAttackedOnceInTrun) {
+        this.hasAttackedOnceInTurn = hasAttackedOnceInTrun;
+    }
+
+    public void setIsATKPosition(boolean isATKPosition) {
+        this.isATKPosition = isATKPosition;
+    }
+
+    public boolean isATKPosition() {
+        return this.isATKPosition;
+    }
+
+    public boolean isBattlePhaseEffectStart() {
+        return isBattlePhaseEffectStart;
+    }
+
+    public Effect getUndefeatable() {
+        return undefeatable;
+    }
+
+    public Effect getSummonACardFromEveryWhere() {
+        return summonACardFromEveryWhere;
     }
 }

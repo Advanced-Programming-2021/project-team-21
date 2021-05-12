@@ -19,6 +19,13 @@ public class Effect {
         this.attack = attack;
         this.defense = defense;
         this.type = type;
+        this.isEffect = 1;
+    }
+    public Effect (int isEffect , String isContinuous , String monsterType ){
+        this.isEffect = isEffect;
+        this.isContinuous = Integer.parseInt(isContinuous);
+        this.type = monsterType;
+        this.isEffect = 1;
     }
     public int getContinuousNumber() {
         return continuousNumber;
@@ -56,5 +63,8 @@ public class Effect {
 
     public String getType() {
         return type;
+    }
+    public boolean hasEffect(){
+        return this.isEffect != 0;
     }
 }

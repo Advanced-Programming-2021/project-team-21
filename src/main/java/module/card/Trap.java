@@ -86,7 +86,7 @@ public class Trap extends Card implements MainEffects{
 
     }
 
-    @Override
+
     public boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser) {
         return false;
     }

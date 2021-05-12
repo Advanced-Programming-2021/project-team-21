@@ -43,7 +43,7 @@ public class Card {
         this.name = name;
     }
 
-    protected CardType getCardType() {
+    public CardType getCardType() {
         return cardType;
     }
 
@@ -51,11 +51,11 @@ public class Card {
         this.cardType = cardType;
     }
 
-    protected boolean isFaceUp() {
+    public boolean isFaceUp() {
         return isFaceUp;
     }
 
-    protected void setFaceUp(boolean faceUp) {
+    public void setFaceUp(boolean faceUp) {
         isFaceUp = faceUp;
     }
 

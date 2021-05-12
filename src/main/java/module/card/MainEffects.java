@@ -10,7 +10,9 @@ public interface MainEffects {
     void summonEffect(Card card, User firstUser, User secondUser);
 
     //it should be an if at the first of each attack to monster
-    boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser);
+    /* boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser) {
+        return false;
+    }*/
 
     // when a card is destroyed
     void deathEffect(Card card, User firstUser, User secondUser);
