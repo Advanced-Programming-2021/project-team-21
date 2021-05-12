@@ -15,6 +15,7 @@ public class Card {
     private boolean isFaceUp;
     private int price;
     private boolean hasEffect;
+    private boolean isATK;
 
     public static Card getCardByName(String name) {
         HashMap<String, Card> allCards = ProgramController.allCards;
@@ -84,6 +85,15 @@ public class Card {
 
     public boolean HasEffect() {
         return hasEffect;
+    }
+
+
+    public void setATK(boolean ATK) {
+        isATK = ATK;
+    }
+
+    public boolean isATK() {
+        return isATK;
     }
 
     //for searching a card on board or deck or graveYard

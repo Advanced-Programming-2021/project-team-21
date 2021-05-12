@@ -226,7 +226,7 @@ public class DuelMenu implements Menuable {
         } else if (isNotInMainPhases()) {
             PrintResponses.printFlipSummonInWrongPhase();
         } else if (currentDuel.isSelectedCardSummonedInThisTurn() || !(!currentDuel.getSelectedCard().isFaceUp()
-                && currentDuel.getSelectedCard().isHidden())) {
+                && currentDuel.getSelectedCard().isFaceUp())) {
             PrintResponses.printUnableToFlipSummonCard();
         } else {
             currentDuel.flipSummon();
@@ -243,7 +243,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printUnableToAttack();
         } else if (isNotInBattlePhase()){
             PrintResponses.printAttackInWrongPhase();
-        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTrun()){
+        } else if (((Monster) currentDuel.getSelectedCard()). isHasAttackedOnceInTurn()){
             PrintResponses.printCardAttackedBefore();
         } else if (currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().getCard(currentDuel.getPlaceOfSelectedCard(), 'M') == null){
             PrintResponses.printNoCardToAttackWith();
@@ -274,7 +274,7 @@ public class DuelMenu implements Menuable {
         if (position.equals("attack")) {
             return currentDuel.getSelectedCard().isFaceUp();
         } else {
-            return !currentDuel.getSelectedCard().isFaceUp() && !currentDuel.getSelectedCard().isHidden();
+            return !currentDuel.getSelectedCard().isATK() && !currentDuel.getSelectedCard().isFaceUp();
         }
     }
 

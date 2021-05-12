@@ -9,6 +9,7 @@ import module.card.Monster;
 import java.util.ArrayList;
 
 public class Duel {
+    public ArrayList<Card> specialSummonCards;
     private static final int INITIAL_LIFE_POINTS = 8000;
     private final User FIRST_USER, SECOND_USER;
     private User userWhoPlaysNow;
@@ -139,7 +140,7 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()){
-            if(BattlePhaseStart.run(attackingMonster , monsterToAttack , getUserWhoPlaysNow() , rival))
+            if(BattlePhaseStart.run(attackingMonster , monsterToAttack , getUserWhoPlaysNow() , rival , this))
                 return;
         }
         if (monsterToAttack.isATKPosition()) {
@@ -236,6 +237,14 @@ public class Duel {
 
     public boolean isNoCardSelected(){
         return selectedCard == null;
+    }
+
+    public ArrayList<Card> getSpecialSummonCards() {
+        return specialSummonCards;
+    }
+
+    public void setSpecialSummonCards(ArrayList<Card> specialSummonCards) {
+        this.specialSummonCards = specialSummonCards;
     }
 
     //TODO implement this

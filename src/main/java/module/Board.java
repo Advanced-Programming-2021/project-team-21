@@ -66,19 +66,19 @@ public class Board {
    public void addMonsterFaceUp (int placeInBoard, Card selectedMonsterCard) {
       monsters[placeInBoard - 1] = selectedMonsterCard;
       showMonsters[placeInBoard - 1] = "OO";
-      selectedMonsterCard.setFaceUp(true);
-      selectedMonsterCard.setHidden(false);
+      selectedMonsterCard.setATK(true);
+      selectedMonsterCard.setFaceUp(false);
    }
 
    public void addMonsterFaceDown (int placeInBoard, Card selectedMonsterCard) {
       monsters[placeInBoard - 1] = selectedMonsterCard;
-      if (selectedMonsterCard.isHidden()){
+      if (selectedMonsterCard.isFaceUp()){
          showMonsters[placeInBoard - 1] = "DH";
-         selectedMonsterCard.setHidden(true);
+         selectedMonsterCard.setFaceUp(true);
       }
       else{
          showMonsters[placeInBoard - 1] = "DO";
-         selectedMonsterCard.setHidden(false);
+         selectedMonsterCard.setFaceUp(false);
       }
       selectedMonsterCard.setFaceUp(false);
    }
@@ -86,20 +86,20 @@ public class Board {
    public void addSpellAndTrap (int placeInBoard, Card selectedSpellAndTrapCard) {
       spellsAndTraps[placeInBoard - 1] = selectedSpellAndTrapCard;
       showSpellsAndTraps[placeInBoard - 1] = "H";
-      selectedSpellAndTrapCard.setHidden(true);
-      selectedSpellAndTrapCard.setFaceUp(false);
+      selectedSpellAndTrapCard.setFaceUp(true);
+      selectedSpellAndTrapCard.setATK(false);
    }
 
    public void changeFacePositionToAttack (int placeInBoard) {
       showMonsters[placeInBoard - 1] = "OO";
-      monsters[placeInBoard - 1].setFaceUp(true);
-      monsters[placeInBoard - 1].setHidden(false);
+      monsters[placeInBoard - 1].setATK(true);
+      monsters[placeInBoard - 1].setFaceUp(false);
    }
 
    public void changeFacePositionToDefence (int placeInBoard) {
       showMonsters[placeInBoard - 1] = "DO";
+      monsters[placeInBoard - 1].setATK(false);
       monsters[placeInBoard - 1].setFaceUp(false);
-      monsters[placeInBoard - 1].setHidden(false);
    }
 
    public void putCardToFieldZone (Card card) {
