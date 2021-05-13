@@ -5,6 +5,7 @@ import module.Duel;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
+import module.card.Spell;
 import org.apache.commons.math3.util.Pair;
 import view.PrintResponses;
 import view.Regex;
@@ -53,6 +54,7 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.flipSummon, this::flipSummon);
         commandMap.put(Regex.attack, this::attack);
         commandMap.put(Regex.attackDirectly, this::attackDirectly);
+        commandMap.put(Regex.activateSpell, this::activateSpell);
         return commandMap;
     }
 
@@ -271,6 +273,25 @@ public class DuelMenu implements Menuable {
         }
     }
 
+    private void activateSpell(Matcher matcher){
+        if (currentDuel.isNoCardSelected()){
+            PrintResponses.printNoCardSelected();
+        } else if (!(currentDuel.getSelectedCard() instanceof Spell)){
+            PrintResponses.printNonSpellCardsToActivateEffect();
+        } else if (isNotInMainPhases()){
+            PrintResponses.printUnableToActivateEffectOnTurn();
+        } else if (currentDuel.getSelectedCard().isFaceUp()){
+            PrintResponses.printUnableToActivateCardTwice();
+        } else if (isSpellZoneFullAndNeedsToBeOnBoard()){
+            PrintResponses.printFullnessOfSpellCardZone();
+        } else if (isSpellPreparedToBeActivated()){
+            PrintResponses.printUnfinishedPreparationOfSpell();
+        } else {
+            currentDuel.activateEffects();
+            PrintResponses.printSuccessfulSpellActivation();
+        }
+    }
+
 
     private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
         if (currentDuel.getUserWhoPlaysNow().getBoard().getMonsters().length == requiredCardsAmount) {
@@ -308,6 +329,16 @@ public class DuelMenu implements Menuable {
 
     private boolean isNotInBattlePhase(){
         return !phase.equals(Phases.BATTLE_PHASE);
+    }
+
+    private boolean isSpellZoneFullAndNeedsToBeOnBoard(){
+        //TODO implement if the card **needs** to be on board
+        return currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0;
+    }
+
+    //TODO implement this method
+    private boolean isSpellPreparedToBeActivated(){
+        return true;
     }
 
     private void handleSuccessfulAttack(int address, Monster monsterToAttack){

@@ -1,10 +1,7 @@
 package module;
 
 
-import module.card.BattlePhaseStart;
-import module.card.Card;
-import module.card.CardType;
-import module.card.Monster;
+import module.card.*;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
@@ -111,14 +108,14 @@ public class Duel {
     public void changeToAttackPosition() {
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
-        currentBoard.changeFacePositionToAttack(placeInBoard);
+        currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
         setHasChangedPositionOnce(true);
     }
 
     public void changeToDefensePosition() {
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
-        currentBoard.changeFacePositionToDefence(placeInBoard);
+        currentBoard.changeFacePositionToDefenceForMonsters(placeInBoard);
         setHasChangedPositionOnce(true);
     }
 
@@ -159,7 +156,19 @@ public class Duel {
     }
 
     public void activateEffects() {
-
+        Spell spellToActivate = (Spell) selectedCard;
+        if (spellToActivate.isFieldZone()){
+            if (userWhoPlaysNow.getBoard().getFieldZone() != null) {
+                addCardToGraveyard(userWhoPlaysNow.getBoard().getFieldZone(), 0, userWhoPlaysNow);
+                userWhoPlaysNow.getBoard().removeFieldZone();
+            }
+            userWhoPlaysNow.getBoard().putCardToFieldZone(spellToActivate);
+        }else {
+            int addressToPut = userWhoPlaysNow.getBoard().getAddressToPutSpell();
+            userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
+            flipSetForSpells(addressToPut);
+        }
+        // todo call a function to activate spell
     }
 
     public void changeLP(User player, int amount) {
@@ -171,10 +180,12 @@ public class Duel {
     }
 
     public void addCardToGraveyard(Card card, int placeInBoard, User user) {
-        if (card instanceof Monster)
-            user.getBoard().removeMonster(placeInBoard);
-        else
-            user.getBoard().removeSpellAndTrap(placeInBoard);
+        if (placeInBoard != 0){
+            if (card instanceof Monster)
+                user.getBoard().removeMonster(placeInBoard);
+            else
+                user.getBoard().removeSpellAndTrap(placeInBoard);
+        }
 
         user.getGraveyard().add(card);
     }
@@ -242,6 +253,7 @@ public class Duel {
         int key = 4;
         if (!isFaceUp) {
             key += 3;
+            flipSetForMonsters(placeInBoard);
         }
         int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getDef();
         if (differenceOfATK > 0) {
@@ -271,5 +283,13 @@ public class Duel {
             addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
             return new Pair<>(3, differenceOfATK);
         }
+    }
+
+    public void flipSetForMonsters(int placeOnBoard){
+        getRival(userWhoPlaysNow).getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
+    }
+
+    public void flipSetForSpells(int placeOnBoard){
+        userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOnBoard);
     }
 }

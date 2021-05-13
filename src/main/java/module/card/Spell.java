@@ -46,7 +46,7 @@ public class Spell extends Card implements MainEffects {
     private boolean isDestroyedAfterEndPhase;
     //Harpie’s Feather Duster                                                           //Twin Twisters             //Mystical space typhoon
     private Effect canDestroyOpponentSpell;         //(6 , 0)       in spellActivation              (3 , 0)             (2 . 0)
-    private  Effect canDestroyOpponentTrap;         //(6 , 0)       in spellActivation              (3 , 0)             (2 , 0)
+    private Effect canDestroyOpponentTrap;         //(6 , 0)       in spellActivation              (3 , 0)             (2 , 0)
     //Swords of Revealing Light
     private Effect canChangeFaceOFOpponent;         //(1 , 4)       in spellActivation and mainPhaseEffect
     private Effect canMakeMonstersUndefeatable;     //(1 , 4)       in spellActivation and mainPhaseEffect
@@ -55,7 +55,7 @@ public class Spell extends Card implements MainEffects {
     //Supply Squad
     private Effect canDrawACardWhenAMonsterIsDead;          //(2 , 1)       in deathEffect
     //Spell Absorption
-      private Effect getLPForEverySpellActivation;          //(501 , 1)         in  spellActivation
+    private Effect getLPForEverySpellActivation;          //(501 , 1)         in  spellActivation
     //Messenger of peace
     private Effect MonstersCanNotAttack;                    //(1501 , 1)        in battlePhaseStart
     private Effect costLP;                          //(101 , 1)             in standByPhaseEffect
@@ -63,23 +63,24 @@ public class Spell extends Card implements MainEffects {
     private Effect discardACardToActivate;          //(2 , 0)               in spellActivation
     //Ring of Defense
     private Effect negateAttack;                //(8001 , 0)                in spellActivation
-                                                //Yami                        //Forest                           //UMIIRUKA
+    //Yami                        //Forest                           //UMIIRUKA
     private Effect fieldSpellType1;     //(200 , 200 , "Fiend")           // (200 , 200 , "Insect")             //( 500 , -400 , "Aqua")             in spellActivations
     private Effect fieldSpellType2;     //(200 , 2000 , "SpellCaster")    //(200 , 200 ,"Beast" )                                                    in spellActivation
     private Effect fieldSpellType3;      //(-200 , -200 , "Fairy")         //( 200 , 200, "BeastWarrior")                                            in spellActivation
     private Effect fieldSpellType4;
     private Effect fieldSpellType5;
-                                            //Closed Forest
+    //Closed Forest
     private Effect fieldATKIncreaseGY1;      //(100 , 0 , "BeastWarrior")
     private Effect fieldATKIncreaseGY2;
-                                                //Sword of Dark Destruction                 //Black Pendant
+    //Sword of Dark Destruction                 //Black Pendant
     private Effect equipCardNormal1;        //(400 , -200 , "Fiend")                    //(500 , 0 , "")                 in spellActivation
     private Effect equipCardNormal2;        //(400 , -200 , "SpellCaster")                                               in spellActivation
     private Effect equipCardNormal3;
-                                                    // United We Stand
+    // United We Stand
     private Effect equipBasedMyUpMonsters;        //(800 , 0 , "")              in spellActivation
-                                                    //Magnum Shield
+    //Magnum Shield
     private Effect equipBasedOnPosition;            //(0 , 0 , "Warrior")           in SpellActivation
+
     public Spell(Object[] parameters) {
         setName((String) parameters[0]);
         setSpellTrapIcon(SpellTrapIcon.valueOf(((String) parameters[1]).toUpperCase()));
@@ -156,5 +157,9 @@ public class Spell extends Card implements MainEffects {
     @Override
     public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
 
+    }
+
+    public boolean isFieldZone() {
+        return spellTrapIcon.equals(SpellTrapIcon.FIELD);
     }
 }
