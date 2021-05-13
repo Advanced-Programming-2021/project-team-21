@@ -237,6 +237,7 @@ public class DuelMenu implements Menuable {
 
     private void attack(Matcher matcher){
         int address = Integer.parseInt(matcher.group("number"));
+        Monster monsterToAttack = (Monster) currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
         if (currentDuel.isNoCardSelected()){
             PrintResponses.printNoCardSelected();
         } else if (isSelectedCardNotInMonsterZone()){
@@ -245,9 +246,11 @@ public class DuelMenu implements Menuable {
             PrintResponses.printAttackInWrongPhase();
         } else if (((Monster) currentDuel.getSelectedCard()). isHasAttackedOnceInTurn()){
             PrintResponses.printCardAttackedBefore();
-        } else if (currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().getCard(currentDuel.getPlaceOfSelectedCard(), 'M') == null){
+        } else if (monsterToAttack == null){
             PrintResponses.printNoCardToAttackWith();
-        } //TODO finish implementing errors for attack method
+        } else{
+            currentDuel.attack(address);
+        }
     }
 
 

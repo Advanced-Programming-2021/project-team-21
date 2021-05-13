@@ -41,6 +41,7 @@ public class Duel {
         hasSummonedOnce = false;
     }
 
+
     public User getRival(User user) {
         if (user.equals(FIRST_USER))
             return SECOND_USER;
@@ -54,13 +55,6 @@ public class Duel {
         return currentHand.drawACard();
     }
 
-
-    public void standByPhase() {
-    }
-
-
-    public void endPhase() {
-    }
 
     public void selectCard(int cardAddress, String fromWhere, String ownOrOpponent) {
         if (fromWhere.equals("Hand")) {
@@ -93,10 +87,13 @@ public class Duel {
         hasSummonedOnce = true;
     }
 
-
     public void flipSummon() {
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
+    }
+
+    public void specialSummon(){
+        //TODO implement the body for this function.
     }
 
     public void tribute(int[] placesOnBoard) {
@@ -108,6 +105,8 @@ public class Duel {
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
         hasSummonedOnce = true;
     }
+
+
 
     public void changeToAttackPosition() {
         int placeInBoard = getPlaceOfSelectedCard();

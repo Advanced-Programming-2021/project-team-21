@@ -11,7 +11,6 @@ public class Deck {
     private ArrayList<Card> mainDeckCards;
     private ArrayList<Card> sideDeckCards;
     private String name;
-    private String test;
     private boolean isActive;
 
     {
