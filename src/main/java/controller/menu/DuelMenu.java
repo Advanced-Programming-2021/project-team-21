@@ -5,6 +5,7 @@ import module.Duel;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
+import org.apache.commons.math3.util.Pair;
 import view.PrintResponses;
 import view.Regex;
 
@@ -237,7 +238,8 @@ public class DuelMenu implements Menuable {
 
     private void attack(Matcher matcher){
         int address = Integer.parseInt(matcher.group("number"));
-        Monster monsterToAttack = (Monster) currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
+        Monster monsterToAttack = (Monster) currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().
+                getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
         if (currentDuel.isNoCardSelected()){
             PrintResponses.printNoCardSelected();
         } else if (isSelectedCardNotInMonsterZone()){
@@ -249,7 +251,7 @@ public class DuelMenu implements Menuable {
         } else if (monsterToAttack == null){
             PrintResponses.printNoCardToAttackWith();
         } else{
-            currentDuel.attack(address);
+            handleSuccessfulAttack(address, monsterToAttack);
         }
     }
 
@@ -291,6 +293,36 @@ public class DuelMenu implements Menuable {
 
     private boolean isNotInBattlePhase(){
         return !phase.equals(Phases.BATTLE_PHASE);
+    }
+
+    private void handleSuccessfulAttack(int address, Monster monsterToAttack){
+        Pair<Integer, Integer> pair = currentDuel.attack(address);
+        int key = pair.getKey();
+        if (key > 6){
+            key -= 3;
+            PrintResponses.printCardNameInAttackIfIsDefenceHide(monsterToAttack.getName());
+        }
+        switch (key){
+            case 0:
+                break;
+            case 1:
+                PrintResponses.printOpponentMonsterDestroyedWithDamage(pair.getValue());
+                break;
+            case 2:
+                PrintResponses.printBothCardsDestroyedInAttack();
+                break;
+            case 3:
+                PrintResponses.printOwnMonsterDestroyedInAttackWithDamage(pair.getValue());
+                break;
+            case 4:
+                PrintResponses.printOpponentMonsterInDefenceDestroyed();
+            case 5:
+                PrintResponses.printNoCardDestroyedInDefence();
+                break;
+            case 6:
+                PrintResponses.printNoCardDestroyedButReceivedDamage(pair.getValue());
+                break;
+        }
     }
 
 }

@@ -204,17 +204,14 @@ public class PrintResponses {
         System.out.println(Responses.noCardToAttackWith);
     }
 
-    public static void printDestructionOfTwoSideCards() {
+    public static void printBothCardsDestroyedInAttack() {
         System.out.println(Responses.destructionOfTwoSideCards);
     }
 
-    public static void printDestructionOfDefensePositionMonster() {
+    public static void printOpponentMonsterInDefenceDestroyed() {
         System.out.println(Responses.destructionOfDefensePositionMonster);
     }
 
-    public static void printNoDestruction() {
-        System.out.println(Responses.noDestruction);
-    }
 
     public static void printNonSpellCardsToActivateEffect() {
         System.out.println(Responses.nonSpellCardsToActivateEffect);
@@ -385,23 +382,44 @@ public class PrintResponses {
             System.out.println(ranks[i] + "- " + users.get(i).getNickname() + ": " + users.get(i).getScore());
         }
     }
-    public static void printHasNoActiveDeck(User user){
+
+    public static void printHasNoActiveDeck(User user) {
         System.out.println(user.getUsername() + " has no active deck");
     }
 
-    public static void printInvalidDeck(User user){
+    public static void printInvalidDeck(User user) {
         System.out.println(user.getUsername() + "’s deck is invalid");
     }
 
-    public static void printPhaseName(Phases phase){
+    public static void printPhaseName(Phases phase) {
         System.out.println("phase: " + phase.toString().toLowerCase().replace("_", " "));
     }
 
-    public static void printDrawnCard(Card card){
+    public static void printDrawnCard(Card card) {
         System.out.println("new card added to the hand : " + card.getName());
     }
 
-    public static void showTurn(User user){
+    public static void showTurn(User user) {
         System.out.println("its " + user.getNickname() + "’s turn");
+    }
+
+    public static void printOpponentMonsterDestroyedWithDamage(int damage) {
+        System.out.println("your opponent’s monster is destroyed and your opponent receives " + damage + " battle damage");
+    }
+
+    public static void printOwnMonsterDestroyedInAttackWithDamage(int damage) {
+        System.out.println("Your monster card is destroyed and you received " + damage + " battle damage");
+    }
+
+    public static void printNoCardDestroyedInDefence() {
+        System.out.println(Responses.noDestruction);
+    }
+
+    public static void printNoCardDestroyedButReceivedDamage(int damage) {
+        System.out.println("no card is destroyed and you received " + damage + " battle damage");
+    }
+
+    public static void printCardNameInAttackIfIsDefenceHide(String cardName){
+        System.out.print("opponent’s monster card was "+ cardName +" and ");
     }
 }

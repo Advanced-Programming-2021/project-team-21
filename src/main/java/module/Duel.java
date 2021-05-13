@@ -5,13 +5,14 @@ import module.card.BattlePhaseStart;
 import module.card.Card;
 import module.card.CardType;
 import module.card.Monster;
+import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 
 public class Duel {
-    public ArrayList<Card> specialSummonCards;
     private static final int INITIAL_LIFE_POINTS = 8000;
     private final User FIRST_USER, SECOND_USER;
+    public ArrayList<Card> specialSummonCards;
     private User userWhoPlaysNow;
     private Card selectedCard;
     private int placeOfSelectedCard;
@@ -92,7 +93,7 @@ public class Duel {
         Board currentBoard = userWhoPlaysNow.getBoard();
     }
 
-    public void specialSummon(){
+    public void specialSummon() {
         //TODO implement the body for this function.
     }
 
@@ -105,7 +106,6 @@ public class Duel {
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
         hasSummonedOnce = true;
     }
-
 
 
     public void changeToAttackPosition() {
@@ -133,37 +133,23 @@ public class Duel {
         currentBoard.addSpellAndTrap(placeInBoard, selectedCard);
     }
 
-    public void attack(int placeInBoard) {
+    public Pair<Integer, Integer> attack(int placeInBoard) {
         User rival = getRival(userWhoPlaysNow);
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
-        if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()){
-            if(BattlePhaseStart.run(attackingMonster , monsterToAttack , getUserWhoPlaysNow() , rival , this))
-                return;
-        }
-        if (monsterToAttack.isATKPosition()) {
-            int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
-            if (differenceOfATK > 0) {
-                changeLP(rival, -differenceOfATK);
-                addCardToGraveyard(monsterToAttack, placeInBoard, rival);
-            } else if (differenceOfATK == 0) {
-                addCardToGraveyard(monsterToAttack, placeInBoard, rival);
-                addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
-            } else {
-                changeLP(userWhoPlaysNow, differenceOfATK);
-                addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
-            }
-        } else {
-            int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getDef();
-            if (differenceOfATK > 0) {
-                changeLP(rival, -differenceOfATK);
-                addCardToGraveyard(monsterToAttack, placeInBoard, rival);
-            } else {
-                changeLP(userWhoPlaysNow, differenceOfATK);
-            }
+        if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
+            if (BattlePhaseStart.run(attackingMonster, monsterToAttack, getUserWhoPlaysNow(), rival, this))
+                return new Pair<>(0, 0);
         }
         ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
+        if (monsterToAttack.isATKPosition()) {
+            return handleAttackPositionAttack(attackingMonster, monsterToAttack, placeInBoard, rival);
+        } else if (monsterToAttack.isFaceUp()) {
+            return handleDefencePositionAttack(monsterToAttack, placeInBoard, rival, true);
+        } else {
+            return handleDefencePositionAttack(monsterToAttack, placeInBoard,rival, false);
+        }
     }
 
     public void attackDirectly() {
@@ -234,7 +220,7 @@ public class Duel {
         this.hasChangedPositionOnce = hasChangedPositionOnce;
     }
 
-    public boolean isNoCardSelected(){
+    public boolean isNoCardSelected() {
         return selectedCard == null;
     }
 
@@ -247,7 +233,42 @@ public class Duel {
     }
 
     //TODO implement this
-    public boolean isSelectedCardSummonedInThisTurn(){
+    public boolean isSelectedCardSummonedInThisTurn() {
         return false;
+    }
+
+    private Pair<Integer, Integer> handleDefencePositionAttack(Monster monsterToAttack, int placeInBoard, User rival, boolean isFaceUp) {
+        int key = 4;
+        if (!isFaceUp) {
+            key += 3;
+        }
+        int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getDef();
+        if (differenceOfATK > 0) {
+            changeLP(rival, -differenceOfATK);
+            addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+            return new Pair<>(key, differenceOfATK);
+        } else if (differenceOfATK == 0) {
+            return new Pair<>(key + 1, differenceOfATK);
+        } else {
+            changeLP(userWhoPlaysNow, differenceOfATK);
+            return new Pair<>(key + 2, differenceOfATK);
+        }
+    }
+
+    private Pair<Integer, Integer> handleAttackPositionAttack(Monster attackingMonster, Monster monsterToAttack, int placeInBoard, User rival) {
+        int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
+        if (differenceOfATK > 0) {
+            changeLP(rival, -differenceOfATK);
+            addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+            return new Pair<>(1, differenceOfATK);
+        } else if (differenceOfATK == 0) {
+            addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+            addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
+            return new Pair<>(2, differenceOfATK);
+        } else {
+            changeLP(userWhoPlaysNow, differenceOfATK);
+            addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
+            return new Pair<>(3, differenceOfATK);
+        }
     }
 }
