@@ -79,13 +79,18 @@ public class Duel {
     }
 
     public void summonMonster() {
+        if (((Monster) selectedCard).isSummonEffect())
+        SummonEffects.run((Monster)selectedCard , userWhoPlaysNow , this );
         int placeInBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         hasSummonedOnce = true;
     }
 
+    //TODO implement the changes in flip summon
     public void flipSummon() {
+        if (((Monster) selectedCard).isSummonEffect())
+        SummonEffects.run((Monster) selectedCard ,userWhoPlaysNow , this);
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
     }
@@ -136,7 +141,7 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
-            if (BattlePhaseStart.run(attackingMonster, monsterToAttack, getUserWhoPlaysNow(), rival, this))
+            if (BattlePhaseStart.run( monsterToAttack, rival, this))
                 return new Pair<>(0, 0);
         }
         ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
@@ -186,8 +191,8 @@ public class Duel {
             else
                 user.getBoard().removeSpellAndTrap(placeInBoard);
         }
-
-        user.getGraveyard().add(card);
+        Card cardToAdd  = Card.getCardByName(card.getName());
+        user.getGraveyard().add(cardToAdd);
     }
 
     public Card getSelectedCard() {
@@ -257,6 +262,9 @@ public class Duel {
         }
         int differenceOfATK = ((Monster) selectedCard).getAtk() - monsterToAttack.getDef();
         if (differenceOfATK > 0) {
+            monsterToAttack.setDead(true);
+            if (monsterToAttack.isDeathEffect())
+            DeathEffects.run(((Monster) selectedCard) , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow);
             changeLP(rival, -differenceOfATK);
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             return new Pair<>(key, differenceOfATK);
@@ -271,12 +279,23 @@ public class Duel {
     private Pair<Integer, Integer> handleAttackPositionAttack(Monster attackingMonster, Monster monsterToAttack, int placeInBoard, User rival) {
         int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
         if (differenceOfATK > 0) {
+            monsterToAttack.setDead(true);
+            if (monsterToAttack.isDeathEffect())
+            DeathEffects.run(attackingMonster , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow);
             changeLP(rival, -differenceOfATK);
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             return new Pair<>(1, differenceOfATK);
         } else if (differenceOfATK == 0) {
+            monsterToAttack.setDead(true);
+            attackingMonster.setDead(true);
+            if (monsterToAttack.isDeathEffect())
+                DeathEffects.run(attackingMonster , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow);
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
+            if (userWhoPlaysNow.getBoard().selectOwnMonster(placeInBoard) != null){
+                if (attackingMonster.isDeathEffect())
+                DeathEffects.run(monsterToAttack , attackingMonster , userWhoPlaysNow , this , placeOfSelectedCard , rival);
             addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
+            }
             return new Pair<>(2, differenceOfATK);
         } else {
             changeLP(userWhoPlaysNow, differenceOfATK);
@@ -286,6 +305,9 @@ public class Duel {
     }
 
     public void flipSetForMonsters(int placeOnBoard){
+        Monster monster = (Monster) getRival(userWhoPlaysNow) .getBoard().getCard(placeOnBoard , 'm');
+        if (monster.isSummonEffect())
+        SummonEffects.run(monster , getRival(userWhoPlaysNow) , this);
         getRival(userWhoPlaysNow).getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
     }
 

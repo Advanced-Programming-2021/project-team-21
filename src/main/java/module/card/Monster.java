@@ -8,8 +8,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Monster extends Card implements MainEffects {
+    //for checking death in deathEffects
+    boolean isDead;
     //for summoned effects
     boolean isSummonEffect;
+
+    //for effects needed to be reset in change turn
+    boolean isChangeTurnEffect;
 
     //it should be an if at the first of each attack to monster
     boolean isBattlePhaseEffectStart;
@@ -31,12 +36,12 @@ public class Monster extends Card implements MainEffects {
     private boolean hasAttackedOnceInTurn;
     private boolean isATKPosition;
     //command Knight effect                                                                                       //texchanger
-    private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 0)     in battlePhaseStart
-    private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
+    /* done */ private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 1)     in battlePhaseStart and changeTurnEffect
+    /* done */ private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
     //Yomi ship
-    private Effect canKillTheAttacker;     //( 1 , 0)        in defenseEffect
+    private Effect canKillTheAttacker;     //( 1 , 0)        in deathEffect
     //suijin
-    private Effect canChangeTheAttackersATK;     //(1000001 , 0)
+    private Effect canChangeTheAttackersATK;     //(1000001 , 0)        in defenseEffect
     //crab turtle       skull guardian
     private boolean isRitual;       //in summonEffect
     //man eater bug
@@ -133,10 +138,10 @@ public class Monster extends Card implements MainEffects {
     }
 
 
-    private void increaseAttackOfMonsters(ArrayList<Card> myCards, int amount) {
-        for (Card myCard : myCards) {
-            if (!(myCard instanceof Monster)) continue;
-            Monster monster = (Monster) myCard;
+    public static void changeAttackOfMonsters(ArrayList<Card> monsters, int amount) {
+        for (Card monster1 : monsters) {
+            if (!(monster1 instanceof Monster)) continue;
+            Monster monster = (Monster) monster1;
             monster.setAtk(monster.getAtk() + amount);
         }
     }
@@ -207,5 +212,33 @@ public class Monster extends Card implements MainEffects {
 
     public Effect getSummonACardFromEveryWhere() {
         return summonACardFromEveryWhere;
+    }
+
+    public Effect getCanIncreaseATK() {
+        return canIncreaseATK;
+    }
+
+    public boolean isSummonEffect() {
+        return isSummonEffect;
+    }
+
+    public boolean isDeathEffect() {
+        return isDeathEffect;
+    }
+
+    public Effect getCanKillTheAttacker() {
+        return canKillTheAttacker;
+    }
+
+    public boolean isChangeTurnEffect() {
+        return isChangeTurnEffect;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 }
