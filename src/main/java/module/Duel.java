@@ -152,9 +152,10 @@ public class Duel {
         }
     }
 
-    public void attackDirectly() {
+    public int attackDirectly() {
         User rival = getRival(userWhoPlaysNow);
         changeLP(rival, ((Monster) selectedCard).getAtk());
+        return ((Monster) selectedCard).getAtk();
     }
 
     public void activateEffects() {

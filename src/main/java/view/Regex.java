@@ -41,6 +41,7 @@ public class Regex {
     public static final String setPosition = "set\\s.*--position\\s(?<position>attack|defense)";
     public static final String flipSummon = "^flip-summon$";
     public static final String attack = "attack (?<number>\\d+)";
+    public static final String attackDirectly = "^attack direct$";
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);

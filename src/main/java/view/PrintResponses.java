@@ -422,4 +422,8 @@ public class PrintResponses {
     public static void printCardNameInAttackIfIsDefenceHide(String cardName){
         System.out.print("opponent’s monster card was "+ cardName +" and ");
     }
+
+    public static void printDamageInAttackDirectly(int damage){
+        System.out.println("you opponent receives " + damage + " battle damage");
+    }
 }

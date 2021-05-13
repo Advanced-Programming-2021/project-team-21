@@ -52,6 +52,7 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.setPosition, this::setPosition);
         commandMap.put(Regex.flipSummon, this::flipSummon);
         commandMap.put(Regex.attack, this::attack);
+        commandMap.put(Regex.attackDirectly, this::attackDirectly);
         return commandMap;
     }
 
@@ -246,7 +247,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printUnableToAttack();
         } else if (isNotInBattlePhase()){
             PrintResponses.printAttackInWrongPhase();
-        } else if (((Monster) currentDuel.getSelectedCard()). isHasAttackedOnceInTurn()){
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()){
             PrintResponses.printCardAttackedBefore();
         } else if (monsterToAttack == null){
             PrintResponses.printNoCardToAttackWith();
@@ -255,6 +256,20 @@ public class DuelMenu implements Menuable {
         }
     }
 
+    private void attackDirectly(Matcher matcher){
+        if (currentDuel.isNoCardSelected()){
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()){
+            PrintResponses.printUnableToAttack();
+        } else if (isNotInBattlePhase()){
+            PrintResponses.printAttackInWrongPhase();
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()){
+            PrintResponses.printCardAttackedBefore();
+        } else{
+            int damage = currentDuel.attackDirectly();
+            PrintResponses.printDamageInAttackDirectly(damage);
+        }
+    }
 
 
     private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
@@ -304,6 +319,7 @@ public class DuelMenu implements Menuable {
         }
         switch (key){
             case 0:
+                //print sth if you want!
                 break;
             case 1:
                 PrintResponses.printOpponentMonsterDestroyedWithDamage(pair.getValue());
