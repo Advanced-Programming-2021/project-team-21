@@ -25,11 +25,10 @@ public class Deck {
     }
 
     public Deck(Deck copy) {
-        Deck newDeck = new Deck("copied");
-        newDeck.name = copy.name;
+        Deck newDeck = new Deck(copy.name);
         newDeck.isActive = copy.isActive;
-        newDeck.mainDeckCards.addAll(copy.mainDeckCards);
-        newDeck.sideDeckCards.addAll(copy.sideDeckCards);
+        newDeck.mainDeckCards  = (ArrayList<Card>) copy.mainDeckCards.clone();
+        newDeck.sideDeckCards = (ArrayList<Card>) copy.sideDeckCards.clone();
     }
 
     public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
