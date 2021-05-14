@@ -27,15 +27,22 @@ public class DuelMenu implements Menuable {
     @Override
     public void run(String command) {
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
+        boolean isValidCommand = false;
         for (String string : commandMap.keySet()) {
             Matcher matcher = Regex.getMatcher(command, string);
-            if (matcher.find() && isInGame)
+            if (matcher.find() && isInGame) {
                 commandMap.get(string).accept(matcher);
+                isValidCommand = true;
+            }
             else if(!isInGame){
-                if(command.equals("back"))
+                if(command.equals("back")) {
                     back();
+                    isValidCommand = true;
+                }
             }
         }
+        if (!isValidCommand)
+            PrintResponses.printInvalidFormat();
 
     }
 
