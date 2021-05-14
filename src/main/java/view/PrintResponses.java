@@ -4,6 +4,7 @@ import controller.menu.Phases;
 import module.Deck;
 import module.User;
 import module.card.Card;
+import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 
@@ -425,5 +426,21 @@ public class PrintResponses {
 
     public static void printDamageInAttackDirectly(int damage){
         System.out.println("you opponent receives " + damage + " battle damage");
+    }
+
+    public static void showGraveyard(String graveyardToShow){
+        System.out.println(graveyardToShow);
+    }
+
+    public static void printSelectedCard(String selectedCardToShow){
+        System.out.println(selectedCardToShow);
+    }
+
+    public static void printEndingTheGame(Pair<String, String> pair){
+        System.out.println(pair.getFirst() + " won the game and the score is: " + pair.getSecond());
+    }
+
+    public static void printGameSuccessfullyCreated(){
+        System.out.println(Responses.gameCreation);
     }
 }

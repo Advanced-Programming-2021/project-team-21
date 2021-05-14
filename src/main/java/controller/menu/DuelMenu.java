@@ -12,21 +12,38 @@ import view.Regex;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
 public class DuelMenu implements Menuable {
     private Duel currentDuel;
     private Phases phase;
+    private boolean isInGame;
+
+    {
+        isInGame = true;
+    }
 
     @Override
     public void run(String command) {
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
+        boolean isValidCommand = false;
         for (String string : commandMap.keySet()) {
             Matcher matcher = Regex.getMatcher(command, string);
-            if (matcher.find())
+            if (matcher.find() && isInGame) {
                 commandMap.get(string).accept(matcher);
+                isValidCommand = true;
+            }
+            else if(!isInGame){
+                if(command.equals("back")) {
+                    back();
+                    isValidCommand = true;
+                }
+            }
         }
+        if (!isValidCommand)
+            PrintResponses.printInvalidFormat();
 
     }
 
@@ -55,6 +72,9 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.attack, this::attack);
         commandMap.put(Regex.attackDirectly, this::attackDirectly);
         commandMap.put(Regex.activateSpell, this::activateSpell);
+        commandMap.put(Regex.showGraveyard, this::showGraveyard);
+        commandMap.put(Regex.showSelectedCard, this::showSelectedCard);
+        commandMap.put(Regex.surrender, this::surrender);
         return commandMap;
     }
 
@@ -74,14 +94,7 @@ public class DuelMenu implements Menuable {
         } else if (!(rounds == 1 || rounds == 3)) {
             PrintResponses.printNonSupportiveRound();
         } else {
-            currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
-            phase = Phases.DRAW_PHASE;
-            Card card = currentDuel.drawACard();
-            if (card == null) {
-                endTheGame();
-            } else {
-                PrintResponses.printDrawnCard(card);
-            }
+            handleSuccessfulGameCreation(secondPlayer);
         }
     }
 
@@ -185,19 +198,13 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNoCardSelected();
         } else if (!currentDuel.getUserWhoPlaysNow().getHand().isCardInHand(currentDuel.getSelectedCard())) {
             PrintResponses.printUnableToSetCard();
+        } else if (isNotInMainPhases()) {
+            PrintResponses.printSetCardInWrongPhase();
         } else if (currentDuel.getSelectedCard() instanceof Monster) {
-            if (isNotInMainPhases()) {
-                PrintResponses.printSetCardInWrongPhase();
-            } else if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
-                PrintResponses.printFullnessOfMonsterCardZone();
-            } else if (currentDuel.isHasSummonedOrSetOnce()) {
-                PrintResponses.printUnableToSummonInTurn();
-            } else {
-                currentDuel.setMonster();
-                PrintResponses.printSuccessfulCardSetting();
-            }
-        } //needs to be implemented for Spell and Trap
-
+            handleMonsterSet();
+        } else {
+            handleSpellAndTrapSet();
+        }
     }
 
     private void setPosition(Matcher matcher) {
@@ -239,57 +246,74 @@ public class DuelMenu implements Menuable {
 
     }
 
-    private void attack(Matcher matcher){
+    private void attack(Matcher matcher) {
         int address = Integer.parseInt(matcher.group("number"));
         Monster monsterToAttack = (Monster) currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().
                 getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
-        if (currentDuel.isNoCardSelected()){
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
-        } else if (isSelectedCardNotInMonsterZone()){
+        } else if (isSelectedCardNotInMonsterZone()) {
             PrintResponses.printUnableToAttack();
-        } else if (isNotInBattlePhase()){
+        } else if (isNotInBattlePhase()) {
             PrintResponses.printAttackInWrongPhase();
-        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()){
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.printCardAttackedBefore();
-        } else if (monsterToAttack == null){
+        } else if (monsterToAttack == null) {
             PrintResponses.printNoCardToAttackWith();
-        } else{
+        } else {
             handleSuccessfulAttack(address, monsterToAttack);
         }
     }
 
-    private void attackDirectly(Matcher matcher){
-        if (currentDuel.isNoCardSelected()){
+    private void attackDirectly(Matcher matcher) {
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
-        } else if (isSelectedCardNotInMonsterZone()){
+        } else if (isSelectedCardNotInMonsterZone()) {
             PrintResponses.printUnableToAttack();
-        } else if (isNotInBattlePhase()){
+        } else if (isNotInBattlePhase()) {
             PrintResponses.printAttackInWrongPhase();
-        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()){
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.printCardAttackedBefore();
-        } else{
+        } else {
             int damage = currentDuel.attackDirectly();
             PrintResponses.printDamageInAttackDirectly(damage);
         }
     }
 
-    private void activateSpell(Matcher matcher){
-        if (currentDuel.isNoCardSelected()){
+    private void activateSpell(Matcher matcher) {
+        if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
-        } else if (!(currentDuel.getSelectedCard() instanceof Spell)){
+        } else if (!(currentDuel.getSelectedCard() instanceof Spell)) {
             PrintResponses.printNonSpellCardsToActivateEffect();
-        } else if (isNotInMainPhases()){
+        } else if (isNotInMainPhases()) {
             PrintResponses.printUnableToActivateEffectOnTurn();
-        } else if (currentDuel.getSelectedCard().isFaceUp()){
+        } else if (currentDuel.getSelectedCard().isFaceUp()) {
             PrintResponses.printUnableToActivateCardTwice();
-        } else if (isSpellZoneFullAndNeedsToBeOnBoard()){
+        } else if (isSpellZoneFullAndNeedsToBeOnBoard()) {
             PrintResponses.printFullnessOfSpellCardZone();
-        } else if (isSpellPreparedToBeActivated()){
+        } else if (isSpellPreparedToBeActivated()) {
             PrintResponses.printUnfinishedPreparationOfSpell();
         } else {
             currentDuel.activateEffects();
             PrintResponses.printSuccessfulSpellActivation();
         }
+    }
+
+    private void showGraveyard(Matcher matcher){
+        isInGame = false;
+        PrintResponses.showGraveyard(currentDuel.showGraveyard());
+    }
+
+    private void back(){
+        isInGame = true;
+    }
+
+    private void showSelectedCard(Matcher matcher){
+        PrintResponses.printSelectedCard(currentDuel.showSelectedCard());
+    }
+
+    private void surrender(Matcher matcher){
+        PrintResponses.printEndingTheGame(currentDuel.endTheGame());
     }
 
 
@@ -323,32 +347,50 @@ public class DuelMenu implements Menuable {
         return !(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2));
     }
 
-    private boolean isSelectedCardNotInMonsterZone(){
+    private boolean isSelectedCardNotInMonsterZone() {
         return !currentDuel.getUserWhoPlaysNow().getBoard().isCardOnMonsterZone(currentDuel.getSelectedCard());
     }
 
-    private boolean isNotInBattlePhase(){
+    private boolean isNotInBattlePhase() {
         return !phase.equals(Phases.BATTLE_PHASE);
     }
 
-    private boolean isSpellZoneFullAndNeedsToBeOnBoard(){
+    private boolean isSpellZoneFullAndNeedsToBeOnBoard() {
         //TODO implement if the card **needs** to be on board
         return currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0;
     }
 
     //TODO implement this method
-    private boolean isSpellPreparedToBeActivated(){
+    private boolean isSpellPreparedToBeActivated() {
         return true;
     }
 
-    private void handleSuccessfulAttack(int address, Monster monsterToAttack){
+
+    private void handleSuccessfulGameCreation(User secondPlayer){
+        currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
+        phase = Phases.DRAW_PHASE;
+        PrintResponses.printGameSuccessfullyCreated();
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Card card = currentDuel.drawACard();
+        if (card == null) {
+            endTheGame();
+        } else {
+            PrintResponses.printDrawnCard(card);
+        }
+    }
+
+    private void handleSuccessfulAttack(int address, Monster monsterToAttack) {
         Pair<Integer, Integer> pair = currentDuel.attack(address);
         int key = pair.getKey();
-        if (key > 6){
+        if (key > 6) {
             key -= 3;
             PrintResponses.printCardNameInAttackIfIsDefenceHide(monsterToAttack.getName());
         }
-        switch (key){
+        switch (key) {
             case 0:
                 //print sth if you want!
                 break;
@@ -371,5 +413,32 @@ public class DuelMenu implements Menuable {
                 break;
         }
     }
+
+    private void handleMonsterSet() {
+        if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
+            PrintResponses.printFullnessOfMonsterCardZone();
+        } else if (currentDuel.isHasSummonedOrSetOnce()) {
+            PrintResponses.printUnableToSummonInTurn();
+        } else {
+            currentDuel.setMonster();
+            PrintResponses.printSuccessfulCardSetting();
+        }
+    }
+
+    private void handleSpellAndTrapSet(){
+        if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0) {
+            PrintResponses.printFullnessOfSpellCardZone();
+        } else if (currentDuel.isHasSummonedOrSetOnce()) {
+            PrintResponses.printUnableToSummonInTurn();
+        } else {
+            if(currentDuel.getSelectedCard() instanceof Spell) {
+                currentDuel.setSpell();
+            }else{
+                currentDuel.setTrap();
+            }
+            PrintResponses.printSuccessfulCardSetting();
+        }
+    }
+
 
 }

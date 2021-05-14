@@ -1,5 +1,6 @@
 package module;
 
+import com.rits.cloning.Cloner;
 import controller.DataController;
 import module.card.Card;
 import module.card.Monster;
@@ -24,12 +25,6 @@ public class Deck {
         DataController.saveData(this);
     }
 
-    public Deck(Deck copy) {
-        Deck newDeck = new Deck(copy.name);
-        newDeck.isActive = copy.isActive;
-        newDeck.mainDeckCards  = (ArrayList<Card>) copy.mainDeckCards.clone();
-        newDeck.sideDeckCards = (ArrayList<Card>) copy.sideDeckCards.clone();
-    }
 
     public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
         ArrayList<Deck> sort = new ArrayList<>(decks);
@@ -143,8 +138,8 @@ public class Deck {
         return "invalid";
     }
 
-    public boolean isValid(){
-        return  this.getNumberOfMainDeckCards() > 39 &&
+    public boolean isValid() {
+        return this.getNumberOfMainDeckCards() > 39 &&
                 this.getNumberOfMainDeckCards() < 61 &&
                 this.getNumberOfSideDeckCards() < 16;
     }

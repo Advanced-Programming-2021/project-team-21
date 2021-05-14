@@ -82,4 +82,5 @@ public class Responses {
     public static String activeDeck = "Decks:\n" +
             "Active deck:";
     public static String otherDeck = "Other decks:";
+    public static String gameCreation = "Game has been started! Drawing a card in 3 seconds";
 }
