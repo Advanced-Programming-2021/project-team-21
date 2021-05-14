@@ -57,18 +57,18 @@ public class Duel {
 
 
     public void selectCard(int cardAddress, String fromWhere, String ownOrOpponent) {
-        if (fromWhere.equals("Hand")) {
+        if (fromWhere.equals("hand")) {
             Hand currentHand = userWhoPlaysNow.getHand();
             selectedCard = currentHand.selectACard(cardAddress);
         } else if (ownOrOpponent.equals("own")) {
             isSelectedCardForOpponent = false;
-            if (fromWhere.equals("Monster"))
+            if (fromWhere.equals("monster"))
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
             else
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'S');
         } else if (ownOrOpponent.equals("opponent")) {
             isSelectedCardForOpponent = true;
-            if (fromWhere.equals("Monster"))
+            if (fromWhere.equals("monster"))
                 selectedCard = getRival(userWhoPlaysNow).getBoard().getCard(cardAddress, 'M');
             else
                 selectedCard = getRival(userWhoPlaysNow).getBoard().getCard(cardAddress, 'S');
@@ -103,6 +103,10 @@ public class Duel {
     }
 
     public void tribute(int[] placesOnBoard) {
+        for (int placeOnBoard : placesOnBoard) {
+            Card cardToTribute = userWhoPlaysNow.getBoard().getCard(placeOnBoard, 'M');
+            addCardToGraveyard(cardToTribute, placeOnBoard, userWhoPlaysNow);
+        }
     }
 
     public void setMonster() {
@@ -337,5 +341,10 @@ public class Duel {
 
     public void flipSetForSpells(int placeOnBoard) {
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOnBoard);
+    }
+
+    @Override
+    public String toString() {
+        return "under construction!";
     }
 }
