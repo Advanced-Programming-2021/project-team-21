@@ -439,4 +439,8 @@ public class PrintResponses {
     public static void printEndingTheGame(Pair<String, String> pair){
         System.out.println(pair.getFirst() + " won the game and the score is: " + pair.getSecond());
     }
+
+    public static void printGameSuccessfullyCreated(){
+        System.out.println(Responses.gameCreation);
+    }
 }

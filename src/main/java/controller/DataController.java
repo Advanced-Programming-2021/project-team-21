@@ -84,7 +84,11 @@ public class DataController {
                 String filePath = "src/main/resources/users/" + givenUserFileName;
                 File file = new File(filePath);
                 try {
-                    return new Gson().fromJson(new Scanner(file).nextLine(), User.class);
+                    StringBuilder data = new StringBuilder();
+                    Scanner scanner = new Scanner(file);
+                    while (scanner.hasNextLine())
+                        data.append(scanner.nextLine());
+                    return new Gson().fromJson(data.toString(), User.class);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -111,7 +115,8 @@ public class DataController {
                 , "src/main/resources/cards"};
         for (String directoryName : directoryNames) {
             File directory = new File(directoryName);
-            boolean isCreated = directory.mkdir();
+            //noinspection ResultOfMethodCallIgnored
+            directory.mkdir();
         }
     }
 

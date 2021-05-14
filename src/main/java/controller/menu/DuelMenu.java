@@ -12,6 +12,7 @@ import view.Regex;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
@@ -93,14 +94,7 @@ public class DuelMenu implements Menuable {
         } else if (!(rounds == 1 || rounds == 3)) {
             PrintResponses.printNonSupportiveRound();
         } else {
-            currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
-            phase = Phases.DRAW_PHASE;
-            Card card = currentDuel.drawACard();
-            if (card == null) {
-                endTheGame();
-            } else {
-                PrintResponses.printDrawnCard(card);
-            }
+            handleSuccessfulGameCreation(secondPlayer);
         }
     }
 
@@ -369,6 +363,24 @@ public class DuelMenu implements Menuable {
     //TODO implement this method
     private boolean isSpellPreparedToBeActivated() {
         return true;
+    }
+
+
+    private void handleSuccessfulGameCreation(User secondPlayer){
+        currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
+        phase = Phases.DRAW_PHASE;
+        PrintResponses.printGameSuccessfullyCreated();
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Card card = currentDuel.drawACard();
+        if (card == null) {
+            endTheGame();
+        } else {
+            PrintResponses.printDrawnCard(card);
+        }
     }
 
     private void handleSuccessfulAttack(int address, Monster monsterToAttack) {
