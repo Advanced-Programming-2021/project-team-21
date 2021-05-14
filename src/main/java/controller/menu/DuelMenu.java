@@ -34,9 +34,8 @@ public class DuelMenu implements Menuable {
             if (matcher.find() && isInGame) {
                 commandMap.get(string).accept(matcher);
                 isValidCommand = true;
-            }
-            else if(!isInGame){
-                if(command.equals("back")) {
+            } else if (!isInGame) {
+                if (command.equals("back")) {
                     back();
                     isValidCommand = true;
                 }
@@ -185,6 +184,7 @@ public class DuelMenu implements Menuable {
             int[] cardToTributeAddress = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             if (areCardAddressesEmpty(cardToTributeAddress)) return;
             currentDuel.tribute(cardToTributeAddress);
+            currentDuel.summonMonster();
             PrintResponses.printSuccessfulSummon();
         } else {
             currentDuel.summonMonster();
@@ -299,20 +299,20 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void showGraveyard(Matcher matcher){
+    private void showGraveyard(Matcher matcher) {
         isInGame = false;
         PrintResponses.showGraveyard(currentDuel.showGraveyard());
     }
 
-    private void back(){
+    private void back() {
         isInGame = true;
     }
 
-    private void showSelectedCard(Matcher matcher){
+    private void showSelectedCard(Matcher matcher) {
         PrintResponses.printSelectedCard(currentDuel.showSelectedCard());
     }
 
-    private void surrender(Matcher matcher){
+    private void surrender(Matcher matcher) {
         PrintResponses.printEndingTheGame(currentDuel.endTheGame());
     }
 
@@ -366,7 +366,7 @@ public class DuelMenu implements Menuable {
     }
 
 
-    private void handleSuccessfulGameCreation(User secondPlayer){
+    private void handleSuccessfulGameCreation(User secondPlayer) {
         currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
         phase = Phases.DRAW_PHASE;
         PrintResponses.printGameSuccessfullyCreated();
@@ -425,15 +425,15 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void handleSpellAndTrapSet(){
+    private void handleSpellAndTrapSet() {
         if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0) {
             PrintResponses.printFullnessOfSpellCardZone();
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
         } else {
-            if(currentDuel.getSelectedCard() instanceof Spell) {
+            if (currentDuel.getSelectedCard() instanceof Spell) {
                 currentDuel.setSpell();
-            }else{
+            } else {
                 currentDuel.setTrap();
             }
             PrintResponses.printSuccessfulCardSetting();
