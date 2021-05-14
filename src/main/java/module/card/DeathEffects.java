@@ -8,7 +8,9 @@ import java.util.Collections;
 
 public class DeathEffects {
     //command knight
-     public static void run(Monster attacked , Monster dead , User rival , Duel duel , int attackingPlace , User userNow) {
+    //yami ship
+    // exploder dragon
+     public static boolean run(Monster attacked , Monster dead , User rival , Duel duel , int attackingPlace , User userNow) {
          if (dead.getCanIncreaseATK().hasEffect()) {
              ArrayList<Card> monsters = new ArrayList<>();
              Collections.addAll(monsters, rival.getBoard().getMonsters());
@@ -18,5 +20,11 @@ public class DeathEffects {
              if (attacked.isDeathEffect())DeathEffects.run(dead , attacked , userNow , duel , attackingPlace , rival );
              duel.addCardToGraveyard(attacked , attackingPlace , userNow);
          }
+         if (dead.getCanDestroyBothWithoutLosingLP().hasEffect()){
+             if (attacked.isDeathEffect())DeathEffects.run(dead , attacked , userNow , duel , attackingPlace , rival );
+             duel.addCardToGraveyard(attacked , attackingPlace , userNow);
+             return true;
+         }
+         return false;
      }
 }

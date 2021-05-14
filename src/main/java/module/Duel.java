@@ -91,6 +91,7 @@ public class Duel {
     public void flipSummon() {
         if (((Monster) selectedCard).isSummonEffect())
         SummonEffects.run((Monster) selectedCard ,userWhoPlaysNow , this);
+        if (((Monster) selectedCard).isFlipSummonEffect())FlipSummonEffects.run((Monster) selectedCard , getRival(userWhoPlaysNow) , this , userWhoPlaysNow);
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
     }
@@ -141,7 +142,7 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
-            if (BattlePhaseStart.run( monsterToAttack, rival, this))
+            if (BattlePhaseStart.run(attackingMonster ,  monsterToAttack, rival, this))
                 return new Pair<>(0, 0);
         }
         ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
@@ -264,41 +265,80 @@ public class Duel {
         if (differenceOfATK > 0) {
             monsterToAttack.setDead(true);
             if (monsterToAttack.isDeathEffect())
-            DeathEffects.run(((Monster) selectedCard) , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow);
+            if(DeathEffects.run(((Monster) selectedCard) , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow)){
+                return new Pair<>(0, 0);
+            }
             changeLP(rival, -differenceOfATK);
+            if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()){
+                if (BattlePhaseEnd.run(((Monster) selectedCard) , monsterToAttack , rival , this))
+                    return new Pair<>(0, 0);
+            }
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             return new Pair<>(key, differenceOfATK);
         } else if (differenceOfATK == 0) {
+            if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()){
+                if (BattlePhaseEnd.run(((Monster) selectedCard) , monsterToAttack , rival , this))
+                    return new Pair<>(0, 0);
+            }
             return new Pair<>(key + 1, differenceOfATK);
         } else {
             changeLP(userWhoPlaysNow, differenceOfATK);
+            if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()){
+                if (BattlePhaseEnd.run(((Monster) selectedCard) , monsterToAttack , rival , this))
+                    return new Pair<>(0, 0);
+            }
             return new Pair<>(key + 2, differenceOfATK);
         }
     }
 
     private Pair<Integer, Integer> handleAttackPositionAttack(Monster attackingMonster, Monster monsterToAttack, int placeInBoard, User rival) {
         int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
+        int toBeNotDuplicate = 0;
         if (differenceOfATK > 0) {
             monsterToAttack.setDead(true);
             if (monsterToAttack.isDeathEffect())
-            DeathEffects.run(attackingMonster , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow);
+                if(DeathEffects.run(((Monster) selectedCard) , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow)){
+                    return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
+                }
             changeLP(rival, -differenceOfATK);
+            if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()){
+                if (BattlePhaseEnd.run(((Monster) selectedCard) , monsterToAttack , rival , this))
+                    return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
+            }
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             return new Pair<>(1, differenceOfATK);
         } else if (differenceOfATK == 0) {
             monsterToAttack.setDead(true);
             attackingMonster.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                DeathEffects.run(attackingMonster , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow);
+                if(DeathEffects.run(((Monster) selectedCard) , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow)){
+                    return new Pair<>(0, 0);
+                }
+
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             if (userWhoPlaysNow.getBoard().selectOwnMonster(placeInBoard) != null){
                 if (attackingMonster.isDeathEffect())
-                DeathEffects.run(monsterToAttack , attackingMonster , userWhoPlaysNow , this , placeOfSelectedCard , rival);
+                    if(DeathEffects.run(((Monster) selectedCard) , monsterToAttack , rival , this , placeOfSelectedCard , userWhoPlaysNow)){
+                        return new Pair<>(0, 0);
+                    }
+                if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()){
+                    if (BattlePhaseEnd.run(((Monster) selectedCard) , monsterToAttack , rival , this))
+                        return new Pair<>(0, 0);
+                }
             addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
             }
             return new Pair<>(2, differenceOfATK);
         } else {
+            if (((Monster)selectedCard).isDeathEffect())
+                if(DeathEffects.run( monsterToAttack  ,(Monster) selectedCard , rival , this , placeOfSelectedCard , userWhoPlaysNow)){
+                    return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
+                }
+
             changeLP(userWhoPlaysNow, differenceOfATK);
+            if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()){
+                if (BattlePhaseEnd.run(((Monster) selectedCard) , monsterToAttack , rival , this))
+                    return new Pair<>(0, 0);
+            }
             addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
             return new Pair<>(3, differenceOfATK);
         }
@@ -308,6 +348,7 @@ public class Duel {
         Monster monster = (Monster) getRival(userWhoPlaysNow) .getBoard().getCard(placeOnBoard , 'm');
         if (monster.isSummonEffect())
         SummonEffects.run(monster , getRival(userWhoPlaysNow) , this);
+        if (((Monster) selectedCard).isFlipSummonEffect())FlipSummonEffects.run((Monster) selectedCard , userWhoPlaysNow , this , getRival(userWhoPlaysNow));
         getRival(userWhoPlaysNow).getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
     }
 
