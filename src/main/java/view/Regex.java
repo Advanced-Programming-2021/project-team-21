@@ -43,6 +43,9 @@ public class Regex {
     public static final String attack = "attack (?<number>\\d+)";
     public static final String attackDirectly = "^attack direct$";
     public static final String activateSpell = "^activate effect$";
+    public static final String showGraveyard = "^show graveyard$";
+    public static final String showSelectedCard = "card show .*--selected";
+    public static final String surrender = "^surrender$";
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
