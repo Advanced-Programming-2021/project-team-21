@@ -88,7 +88,23 @@ public class DataController {
                     Scanner scanner = new Scanner(file);
                     while (scanner.hasNextLine())
                         data.append(scanner.nextLine());
-                    return new Gson().fromJson(data.toString(), User.class);
+                    User user =  new Gson().fromJson(data.toString(), User.class);
+                    for (int i = 0; i < user.getDecks().size(); i++) {
+                        Deck deck = user.getDecks().get(i);
+                        ArrayList<Card> newMainDeckCards = new ArrayList<>();
+                        for (int i1 = 0; i1 < deck.getMainDeckCards().size(); i1++) {
+                            String cardName = deck.getMainDeckCards().get(i1).getName();
+                            newMainDeckCards.add(Card.getCardByName(cardName));
+                        }
+                        ArrayList<Card> newSideDeckCards = new ArrayList<>();
+                        for (int i1 = 0; i1 < user.getDecks().get(i).getSideDeckCards().size(); i1++) {
+                            String cardName = deck.getSideDeckCards().get(i1).getName();
+                            newSideDeckCards.add(Card.getCardByName(cardName));
+                        }
+                        deck.setMainDeckCards(newMainDeckCards);
+                        deck.setSideDeckCards(newSideDeckCards);
+                    }
+                    return user; /// fuck you
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }

@@ -95,6 +95,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNonSupportiveRound();
         } else {
             handleSuccessfulGameCreation(secondPlayer);
+            currentDuel.getUserWhoPlaysNow().getActiveDeck();
             PrintResponses.printBoard(currentDuel);
         }
     }
@@ -169,7 +170,7 @@ public class DuelMenu implements Menuable {
     private void summon(Matcher matcher) {
         if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
-        } else if (!currentDuel.canSummonSelectedCard()) {
+        } else if (currentDuel.canNotSummonSelectedCard()) {
             PrintResponses.printUnableToSummonCard();
         } else if (isNotInMainPhases()) {
             PrintResponses.printSummonInWrongPhase();
@@ -193,6 +194,7 @@ public class DuelMenu implements Menuable {
         } else {
             currentDuel.summonMonster();
             PrintResponses.printSuccessfulSummon();
+            PrintResponses.printBoard(currentDuel);
         }
 
     }

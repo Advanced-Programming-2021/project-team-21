@@ -167,8 +167,8 @@ public class Board {
 
     public int getAddressToSummon() {
         for (int i = 0; i < order.size(); i++) {
-            if (monsters[order.get(i)] == null)
-                return i;
+            if (monsters[order.get(i) - 1] == null)
+                return i + 1;
         }
         return 0;
     }

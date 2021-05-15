@@ -267,7 +267,7 @@ public class Duel {
     }
 
 
-    public boolean canSummonSelectedCard() {
+    public boolean canNotSummonSelectedCard() {
         return !(selectedCard instanceof Monster) || !userWhoPlaysNow.getHand().isCardInHand(selectedCard)
                 || !(selectedCard.getCardType().equals(CardType.NORMAL));
     }
