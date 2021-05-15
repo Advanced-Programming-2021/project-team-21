@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class    Hand {
-    private Card[] cardsInHand;
+public class Hand {
+    private final Card[] cardsInHand;
     private User handOwner;
-    private Deck deckToDraw;
+    private final Deck deckToDraw;
     private Boolean canDraw;
-    private ArrayList<Integer> orderInHand;
+    private final ArrayList<Integer> orderInHand;
 
     {
         cardsInHand = new Card[6];
@@ -98,7 +98,6 @@ public class    Hand {
     }
 
 
-
     // to find cards with specific cards from deck (1) and hand(2) and graveYard (4)
     public ArrayList<Card> getCardsWithType(int identifier, String type) {
         ArrayList<Card> found = new ArrayList<>();
@@ -122,7 +121,7 @@ public class    Hand {
             showCardsInHand += "C   ";
         int countCInString = 0;
         for (int i = 0; i < showCardsInHand.length(); i++)
-            if(showCardsInHand.charAt(i) == 'C')
+            if (showCardsInHand.charAt(i) == 'C')
                 countCInString++;
         for (int i = 1; i <= 6 - countCInString; i++)
             showCardsInHand += "    ";
@@ -134,12 +133,12 @@ public class    Hand {
         return reverseString.reverse().toString();
     }
 
-    public int getNumberOfRemainingCardsInDeck(){
+    public int getNumberOfRemainingCardsInDeck() {
         return deckToDraw.getNumberOfMainDeckCards();
     }
 
     //todo implement this method to return the minimum level of monsters with CardType "RITUAL" in hand
-    public int getMinLevelOfRitualMonstersInHand(){
+    public int getMinLevelOfRitualMonstersInHand() {
         return 4;
     }
 }

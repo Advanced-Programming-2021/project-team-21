@@ -4,7 +4,6 @@ package module.card;
 
 import module.User;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Monster extends Card implements MainEffects {
@@ -87,27 +86,34 @@ public class Monster extends Card implements MainEffects {
         setDescription((String) parameters[7]);
     }
 
-    public void setAtkHolder(int atkHolder) {
-        this.atkHolder = atkHolder;
-    }
-
-    public void setDefHolder(int defHolder) {
-        this.defHolder = defHolder;
+    public static void changeAttackOfMonsters(ArrayList<Card> monsters, int amount) {
+        for (Card monster1 : monsters) {
+            if (!(monster1 instanceof Monster)) continue;
+            Monster monster = (Monster) monster1;
+            monster.setAtk(monster.getAtk() + amount);
+        }
     }
 
     public int getAtkHolder() {
         return atkHolder;
     }
 
+    public void setAtkHolder(int atkHolder) {
+        this.atkHolder = atkHolder;
+    }
+
     public int getDefHolder() {
         return defHolder;
+    }
+
+    public void setDefHolder(int defHolder) {
+        this.defHolder = defHolder;
     }
 
     @Override
     public void destroyWithoutLosingLifePoints() {
 
     }
-
 
     public int getLevel() {
         return level;
@@ -145,7 +151,6 @@ public class Monster extends Card implements MainEffects {
         return def;
     }
 
-
     public void setDef(int def) {
         this.def = Math.max(atk, 0);
     }
@@ -157,15 +162,6 @@ public class Monster extends Card implements MainEffects {
                 "\nATK: " + atk +
                 "\nDef: " + def +
                 "\nDescription: " + getDescription();
-    }
-
-
-    public static void changeAttackOfMonsters(ArrayList<Card> monsters, int amount) {
-        for (Card monster1 : monsters) {
-            if (!(monster1 instanceof Monster)) continue;
-            Monster monster = (Monster) monster1;
-            monster.setAtk(monster.getAtk() + amount);
-        }
     }
 
     @Override
@@ -256,12 +252,12 @@ public class Monster extends Card implements MainEffects {
         return isChangeTurnEffect;
     }
 
-    public void setDead(boolean dead) {
-        isDead = dead;
-    }
-
     public boolean isDead() {
         return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 
     public Effect getCanChangeTheAttackersATK() {

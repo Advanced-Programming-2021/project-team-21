@@ -1,6 +1,5 @@
 package module;
 
-import com.rits.cloning.Cloner;
 import controller.DataController;
 import module.card.Card;
 import module.card.Monster;
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    private ArrayList<Card> mainDeckCards;
-    private ArrayList<Card> sideDeckCards;
+    private final ArrayList<Card> mainDeckCards;
+    private final ArrayList<Card> sideDeckCards;
     private String name;
     private boolean isActive;
 

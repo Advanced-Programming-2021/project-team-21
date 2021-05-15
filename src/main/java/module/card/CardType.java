@@ -5,7 +5,7 @@ public enum CardType {
     NORMAL("Normal"),
     EFFECT("Effect"),
     RITUAL("Ritual");
-    private String name;
+    private final String name;
 
     CardType(String name) {
         this.name = name;

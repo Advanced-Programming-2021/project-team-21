@@ -30,8 +30,8 @@ public interface MainEffects {
     void flipSummonEffect(Card card, User firstUser, User secondUser);
 
     // when a spell activates
-    void activateSpell(Spell spell , User firstUser, User secondUser);
+    void activateSpell(Spell spell, User firstUser, User secondUser);
 
     // at the first of main phase 1
-    void mainPhaseEffect(ArrayList<Card>cards , User firstUser , User SecondUser);
+    void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser);
 }

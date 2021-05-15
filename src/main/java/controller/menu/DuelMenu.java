@@ -438,39 +438,38 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void handleSelectionForRitualSummon(){
+    private void handleSelectionForRitualSummon() {
         while (true) {
             Matcher matcher = Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.selectFromOwn);
-            if (matcher.find()){
+            if (matcher.find()) {
                 selectCardFromOwn(Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.selectFromOwn));
                 break;
-            }else{
+            } else {
                 PrintResponses.printEmergencyRitualSummon();
             }
         }
     }
 
-    private void handleSummonForRitualSummon(){
-        while (true){
+    private void handleSummonForRitualSummon() {
+        while (true) {
             Matcher matcher = Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.summon);
-            if (matcher.find()){
-                while(true){
+            if (matcher.find()) {
+                while (true) {
                     int[] cardAddresses = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
                     if (currentDuel.getUserWhoPlaysNow().getBoard().areGivenCardsEnoughForRitualSummon(cardAddresses, currentDuel.getSelectedCard())) {
                         currentDuel.tribute(cardAddresses);
                         break;
-                    }else{
+                    } else {
                         PrintResponses.printInequalityOfLevelsOfSelectedAndRitualMonster();
                     }
                 }
                 boolean isAttacking;
-                while(true){
+                while (true) {
                     String input = ProgramController.scanner.nextLine();
                     if (input.equals("attacking")) {
                         isAttacking = true;
                         break;
-                    }
-                    else if (input.equals("defensive")){
+                    } else if (input.equals("defensive")) {
                         isAttacking = false;
                         break;
                     } else {
@@ -479,13 +478,13 @@ public class DuelMenu implements Menuable {
                 }
                 if (isAttacking)
                     summon(Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.summon));
-                else{
+                else {
                     currentDuel.setMonster();
                     currentDuel.changeToDefensePosition();
                     PrintResponses.printSuccessfulSummon();
                 }
                 break;
-            }else{
+            } else {
                 PrintResponses.printEmergencyRitualSummon();
             }
         }

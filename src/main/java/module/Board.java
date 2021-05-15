@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class Board {
     private User boardOwner;
-    private Card[] monsters;
-    private String[] showMonsters;
-    private Card[] spellsAndTraps;
-    private String[] showSpellsAndTraps;
+    private final Card[] monsters;
+    private final String[] showMonsters;
+    private final Card[] spellsAndTraps;
+    private final String[] showSpellsAndTraps;
     private Card fieldZone;
     private String showFieldZone;
-    private ArrayList<Card> graveyard;
-    private ArrayList<Integer> order;
+    private final ArrayList<Card> graveyard;
+    private final ArrayList<Integer> order;
 
     {
         this.monsters = new Card[5];
@@ -101,7 +101,7 @@ public class Board {
         monsters[placeInBoard - 1].setFaceUp(false);
     }
 
-    public void changeFacePositionToAttackForSpells(int placeOnBoard){
+    public void changeFacePositionToAttackForSpells(int placeOnBoard) {
         showSpellsAndTraps[placeOnBoard - 1] = "O";
         monsters[placeOnBoard - 1].setATK(true);
         monsters[placeOnBoard - 1].setFaceUp(false);
@@ -210,7 +210,8 @@ public class Board {
 
     public String showMonstersToStringReverse() {
         StringBuilder stringShowMonstersReverse = new StringBuilder("   ");
-        for (int i = order.size() - 1; i >= 0; i--) stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
+        for (int i = order.size() - 1; i >= 0; i--)
+            stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
         return stringShowMonstersReverse.toString();
     }
 
@@ -218,17 +219,19 @@ public class Board {
         StringBuilder reverseString = new StringBuilder(showSpellsAndTrapsToString());
         return reverseString.reverse().toString();
     }
+
     // todo implement this method
-    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType){
+    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType) {
         return true;
     }
+
     //todo implement this (page 38 of doc, ritual summon, first error)
-    public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell){
+    public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell) {
         return true;
     }
 
     //todo implement this. the sum of given cards should be greater than or equal to given selected card
-    public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard){
+    public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
         return true;
     }
 
