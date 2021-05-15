@@ -97,14 +97,7 @@ public class    Hand {
         return false;
     }
 
-    // the cards have been compared with reference reminder to change
-    public Boolean isCardOnHand(Card card) {
-        for (int i = 0; i < cardsInHand.length; i++) {
-            if (cardsInHand[i] == card)
-                return true;
-        }
-        return false;
-    }
+
 
     // to find cards with specific cards from deck (1) and hand(2) and graveYard (4)
     public ArrayList<Card> getCardsWithType(int identifier, String type) {
@@ -139,5 +132,9 @@ public class    Hand {
     public String showCardsInHandToStringReverse() {
         StringBuilder reverseString = new StringBuilder(showCardsInHandToString());
         return reverseString.reverse().toString();
+    }
+
+    public int numberOfRemainingCardsInDeck(){
+        return deckToDraw.getNumberOfMainDeckCards();
     }
 }

@@ -178,8 +178,10 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).getLevel() > 4) {
             if (((Monster) currentDuel.getSelectedCard()).getLevel() < 7) {
                 if (isNotEnoughCardsForTribute(1)) return;
-            } else {
+            } else if (((Monster) currentDuel.getSelectedCard()).getLevel() < 10){
                 if (isNotEnoughCardsForTribute(2)) return;
+            } else{
+                if (isNotEnoughCardsForTribute(3))return;
             }
             int[] cardToTributeAddress = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             if (areCardAddressesEmpty(cardToTributeAddress)) return;
