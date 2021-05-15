@@ -8,8 +8,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Monster extends Card implements MainEffects {
+    //for checking death in deathEffects
+    boolean isDead;
     //for summoned effects
     boolean isSummonEffect;
+
+    //for effects needed to be reset in change turn
+    boolean isChangeTurnEffect;
 
     //it should be an if at the first of each attack to monster
     boolean isBattlePhaseEffectStart;
@@ -23,42 +28,46 @@ public class Monster extends Card implements MainEffects {
     //it should be an if at the end of each attack to monster
     boolean isBattlePhaseEffectEnd;
 
+    // it should be called when flip summoned or flip set
+    boolean isFlipSummonEffect;
     private Integer level;
     private Attributes attribute;
     private MonsterTypes monsterType;
     private int atk;
+    private int atkHolder;
     private int def;
+    private int defHolder;
     private boolean hasAttackedOnceInTurn;
     private boolean isATKPosition;
     //command Knight effect                                                                                       //texchanger
-    private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 0)     in battlePhaseStart
-    private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
+    /* done */ private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 1)     in battlePhaseStart and changeTurnEffect
+    /* done */ private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
     //Yomi ship
-    private Effect canKillTheAttacker;     //( 1 , 0)        in defenseEffect
+    /* done */private Effect canKillTheAttacker;     //( 1 , 0)        in deathEffect
     //suijin
-    private Effect canChangeTheAttackersATK;     //(1000001 , 0)
+    /* done */private Effect canChangeTheAttackersATK;     //( -999999 , 0)        in battlePhaseStart and BattlePhaseEnd and changeTurnEffect
     //crab turtle       skull guardian
     private boolean isRitual;       //in summonEffect
     //man eater bug
-    private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
+    /* done */private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
     //Scanner
     private Effect canScan;         //(1 , 2)           in mainPhaseChosen
     //marshmallon
-    private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
-    private Effect canDecreaseLP;        //(1001 , 0)       in flipSummonAttackEffect
+    /* done*/private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
+    /* done */private Effect canDecreaseLP;        //(-999 , 0)       in flipSummonAttackEffect
     // beast king barbaros
     private Effect canBeNotTribute;      //(1101 , 0)        in summonEffect
     private Effect TributeToKillAllMonsterOfOpponent;       //(4 , 1)       in summonEffect
     // TexChanger
-    private Effect summonACardFromEveryWhere;       //(2 , "1" , "Cyberse")       in battlePhaseStart
+    /* done */private Effect summonACardFromEveryWhere;       //(2 , "1" , "Cyberse")       in battlePhaseStart
     //calculator
     private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
     // mirage dragon
-    private Effect disableSpellSummon;      // (1 , 1)          in summonEffect and DeathEffect
+    private Effect disableTrapSummon;      // (1 , 1)          in summonEffect and DeathEffect
     // herald of creation
     private Effect canSummonFromGYByLevel;      //(8 , 0)           in mainPhaseChosen
     // exploder dragon
-    private Effect canDestroyBothWithoutLosingLP;        //(1 , 1)      in battlePhaseEnd
+    /* done */private Effect canDestroyBothWithoutLosingLP;        //(1 , 1)      in battlePhaseEnd
     //Terratiger, the Empowered Warrior
     private Effect canSetFromDeckByMaxLevel;             //(1 , 0)       in summonEffect
     //The Tricky
@@ -72,8 +81,26 @@ public class Monster extends Card implements MainEffects {
         setCardType(CardType.valueOf(((String) parameters[4]).toUpperCase()));
         if (cardType.getName().equals("Effect")) this.setHasEffect(true);
         setAtk((int) parameters[5]);
+        setAtkHolder((int) parameters[5]);
         setDef((int) parameters[6]);
+        setDefHolder((int) parameters[6]);
         setDescription((String) parameters[7]);
+    }
+
+    public void setAtkHolder(int atkHolder) {
+        this.atkHolder = atkHolder;
+    }
+
+    public void setDefHolder(int defHolder) {
+        this.defHolder = defHolder;
+    }
+
+    public int getAtkHolder() {
+        return atkHolder;
+    }
+
+    public int getDefHolder() {
+        return defHolder;
     }
 
     @Override
@@ -133,10 +160,10 @@ public class Monster extends Card implements MainEffects {
     }
 
 
-    private void increaseAttackOfMonsters(ArrayList<Card> myCards, int amount) {
-        for (Card myCard : myCards) {
-            if (!(myCard instanceof Monster)) continue;
-            Monster monster = (Monster) myCard;
+    public static void changeAttackOfMonsters(ArrayList<Card> monsters, int amount) {
+        for (Card monster1 : monsters) {
+            if (!(monster1 instanceof Monster)) continue;
+            Monster monster = (Monster) monster1;
             monster.setAtk(monster.getAtk() + amount);
         }
     }
@@ -207,5 +234,61 @@ public class Monster extends Card implements MainEffects {
 
     public Effect getSummonACardFromEveryWhere() {
         return summonACardFromEveryWhere;
+    }
+
+    public Effect getCanIncreaseATK() {
+        return canIncreaseATK;
+    }
+
+    public boolean isSummonEffect() {
+        return isSummonEffect;
+    }
+
+    public boolean isDeathEffect() {
+        return isDeathEffect;
+    }
+
+    public Effect getCanKillTheAttacker() {
+        return canKillTheAttacker;
+    }
+
+    public boolean isChangeTurnEffect() {
+        return isChangeTurnEffect;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public Effect getCanChangeTheAttackersATK() {
+        return canChangeTheAttackersATK;
+    }
+
+    public boolean isBattlePhaseEffectEnd() {
+        return isBattlePhaseEffectEnd;
+    }
+
+    public Effect getCanDestroyMonster() {
+        return canDestroyMonster;
+    }
+
+    public boolean isFlipSummonEffect() {
+        return isFlipSummonEffect;
+    }
+
+    public Effect getNotDestroyable() {
+        return notDestroyable;
+    }
+
+    public Effect getCanDecreaseLP() {
+        return canDecreaseLP;
+    }
+
+    public Effect getCanDestroyBothWithoutLosingLP() {
+        return canDestroyBothWithoutLosingLP;
     }
 }

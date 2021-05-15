@@ -161,7 +161,7 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
-            if (BattlePhaseStart.run(attackingMonster, monsterToAttack, getUserWhoPlaysNow(), rival, this))
+            if (BattlePhaseStart.run(attackingMonster, monsterToAttack, rival, this))
                 return new Pair<>(0, 0);
         }
         ((Monster) selectedCard).setHasAttackedOnceInTurn(true);

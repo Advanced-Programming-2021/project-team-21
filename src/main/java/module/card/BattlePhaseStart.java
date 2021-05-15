@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class BattlePhaseStart {
     //command Knight
     // texchanger
-    public static boolean run(Monster attacker, Monster defense, User firstUser, User secondUser , Duel duel){
+    // suijin
+    public static boolean run(Monster attack ,  Monster defense, User secondUser , Duel duel){
         Board board = secondUser.getBoard();
         // for summoning with specific type
         if (defense.getSummonACardFromEveryWhere().hasEffect()){
@@ -19,7 +20,14 @@ public class BattlePhaseStart {
         }
         //for undefeatable effect
         else if (defense.getUndefeatable().hasEffect()){
+            if (defense.getUndefeatable().getContinuousNumber() == 1) {
+                defense.getUndefeatable().finishEffect();
+                defense.getUndefeatable().setNeedsToBeReset(true);
+            }
             return board.getMonsters().length > defense.getUndefeatable().getContinuousNumber();
+        }
+        else if (defense.getCanChangeTheAttackersATK().hasEffect()){
+            attack.setAtk(attack.getAtk() - defense.getCanChangeTheAttackersATK().getEffectNumber());
         }
         return false;
     }
