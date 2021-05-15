@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class Hand {
+public class    Hand {
     private Card[] cardsInHand;
     private User handOwner;
     private Deck deckToDraw;

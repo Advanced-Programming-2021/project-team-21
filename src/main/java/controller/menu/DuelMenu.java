@@ -248,7 +248,7 @@ public class DuelMenu implements Menuable {
 
     private void attack(Matcher matcher) {
         int address = Integer.parseInt(matcher.group("number"));
-        Monster monsterToAttack = (Monster) currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().
+        Monster monsterToAttack = (Monster) currentDuel.getRival().getBoard().
                 getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
         if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
