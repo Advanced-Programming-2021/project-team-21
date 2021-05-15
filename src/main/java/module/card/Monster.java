@@ -51,7 +51,7 @@ public class Monster extends Card implements MainEffects {
     //man eater bug
     /* done */private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
     //Scanner
-    private Effect canScan;         //(1 , 2)           in mainPhaseChosen
+    private Effect canScan;         //(1 , 1)           in SelectEffects and changeTurnEffects
     //marshmallon
     /* done*/private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
     /* done */private Effect canDecreaseLP;        //(-999 , 0)       in flipSummonAttackEffect
@@ -290,5 +290,9 @@ public class Monster extends Card implements MainEffects {
 
     public Effect getCanDestroyBothWithoutLosingLP() {
         return canDestroyBothWithoutLosingLP;
+    }
+
+    public Effect getCanScan() {
+        return canScan;
     }
 }

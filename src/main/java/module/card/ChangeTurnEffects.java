@@ -24,6 +24,10 @@ public class ChangeTurnEffects {
                 monster.getCanChangeTheAttackersATK().resetEffect();
                 monster.getCanChangeTheAttackersATK().setNeedsToBeReset(false);
             }
+            if (monster.getUndefeatable().isNeedsToBeReset()){
+                monster.getUndefeatable().resetEffect();
+                monster.getUndefeatable().setNeedsToBeReset(false);
+            }
         }
     }
 }

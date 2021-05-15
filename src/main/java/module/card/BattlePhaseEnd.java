@@ -13,6 +13,11 @@ public class BattlePhaseEnd {
             defense.getCanChangeTheAttackersATK().setNeedsToBeReset(true);
         }
         if (defense.getNotDestroyable().hasEffect()){
+            if (defense.getNotDestroyable().getContinuousNumber()  == 0){
+                defense.getNotDestroyable().finishEffect();
+                defense.getNotDestroyable().setNeedsToBeReset(true);
+            }
+
             return true;
         }
         return false;
