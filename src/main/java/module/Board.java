@@ -208,8 +208,9 @@ public class Board {
     }
 
     public String showMonstersToStringReverse() {
-        StringBuilder reverseString = new StringBuilder(showMonstersToString());
-        return reverseString.reverse().toString();
+        StringBuilder stringShowMonstersReverse = new StringBuilder("   ");
+        for (int i = order.size() - 1; i >= 0; i--) stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
+        return stringShowMonstersReverse.toString();
     }
 
     public String showSpellsAndTrapsToStringReverse() {
