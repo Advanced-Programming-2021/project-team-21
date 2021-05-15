@@ -42,8 +42,8 @@ public class Duel {
     }
 
 
-    public User getRival(User user) {
-        if (user.equals(FIRST_USER))
+    public User getRival() {
+        if (userWhoPlaysNow.equals(FIRST_USER))
             return SECOND_USER;
         else
             return FIRST_USER;
@@ -69,9 +69,9 @@ public class Duel {
         } else if (ownOrOpponent.equals("opponent")) {
             isSelectedCardForOpponent = true;
             if (fromWhere.equals("monster"))
-                selectedCard = getRival(userWhoPlaysNow).getBoard().getCard(cardAddress, 'M');
+                selectedCard = getRival().getBoard().getCard(cardAddress, 'M');
             else
-                selectedCard = getRival(userWhoPlaysNow).getBoard().getCard(cardAddress, 'S');
+                selectedCard = getRival().getBoard().getCard(cardAddress, 'S');
         }
         if (selectedCard != null)
             setPlaceOfSelectedCard(cardAddress);
@@ -147,13 +147,13 @@ public class Duel {
 
 
     public Pair<String, String> endTheGame() {
-        User rival = getRival(userWhoPlaysNow);
+        User rival = getRival();
         return new Pair<>(rival.getUsername(), rival.getScore() + "-" + userWhoPlaysNow.getScore());
     }
 
 
     public Pair<Integer, Integer> attack(int placeInBoard) {
-        User rival = getRival(userWhoPlaysNow);
+        User rival = getRival();
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
@@ -172,7 +172,7 @@ public class Duel {
     }
 
     public int attackDirectly() {
-        User rival = getRival(userWhoPlaysNow);
+        User rival = getRival();
         changeLP(rival, ((Monster) selectedCard).getAtk());
         return ((Monster) selectedCard).getAtk();
     }
@@ -336,7 +336,7 @@ public class Duel {
     }
 
     public void flipSetForMonsters(int placeOnBoard) {
-        getRival(userWhoPlaysNow).getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
+        getRival().getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
     }
 
     public void flipSetForSpells(int placeOnBoard) {

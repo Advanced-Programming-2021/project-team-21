@@ -178,8 +178,10 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).getLevel() > 4) {
             if (((Monster) currentDuel.getSelectedCard()).getLevel() < 7) {
                 if (isNotEnoughCardsForTribute(1)) return;
-            } else {
+            } else if (((Monster) currentDuel.getSelectedCard()).getLevel() < 10){
                 if (isNotEnoughCardsForTribute(2)) return;
+            } else{
+                if (isNotEnoughCardsForTribute(3))return;
             }
             int[] cardToTributeAddress = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             if (areCardAddressesEmpty(cardToTributeAddress)) return;
@@ -248,7 +250,7 @@ public class DuelMenu implements Menuable {
 
     private void attack(Matcher matcher) {
         int address = Integer.parseInt(matcher.group("number"));
-        Monster monsterToAttack = (Monster) currentDuel.getRival(currentDuel.getUserWhoPlaysNow()).getBoard().
+        Monster monsterToAttack = (Monster) currentDuel.getRival().getBoard().
                 getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
         if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();

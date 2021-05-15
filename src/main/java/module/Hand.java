@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class Hand {
+public class    Hand {
     private Card[] cardsInHand;
     private User handOwner;
     private Deck deckToDraw;
@@ -97,14 +97,7 @@ public class Hand {
         return false;
     }
 
-    // the cards have been compared with reference reminder to change
-    public Boolean isCardOnHand(Card card) {
-        for (int i = 0; i < cardsInHand.length; i++) {
-            if (cardsInHand[i] == card)
-                return true;
-        }
-        return false;
-    }
+
 
     // to find cards with specific cards from deck (1) and hand(2) and graveYard (4)
     public ArrayList<Card> getCardsWithType(int identifier, String type) {
@@ -117,5 +110,31 @@ public class Hand {
             if (card.getCardType().getName().equals(type)) found.add(card);
         }
         return found;
+    }
+
+    public String showCardsInHandToString() {
+        int countCardsInHand = 0;
+        for (int i = 0; i < cardsInHand.length; i++)
+            if (cardsInHand[i] != null)
+                countCardsInHand++;
+        String showCardsInHand = "";
+        for (int i = 0; i < countCardsInHand; i++)
+            showCardsInHand += "C   ";
+        int countCInString = 0;
+        for (int i = 0; i < showCardsInHand.length(); i++)
+            if(showCardsInHand.charAt(i) == 'C')
+                countCInString++;
+        for (int i = 1; i <= 6 - countCInString; i++)
+            showCardsInHand += "    ";
+        return showCardsInHand;
+    }
+
+    public String showCardsInHandToStringReverse() {
+        StringBuilder reverseString = new StringBuilder(showCardsInHandToString());
+        return reverseString.reverse().toString();
+    }
+
+    public int numberOfRemainingCardsInDeck(){
+        return deckToDraw.getNumberOfMainDeckCards();
     }
 }

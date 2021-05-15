@@ -13,7 +13,7 @@ public class Board {
     private Card fieldZone;
     private String showFieldZone;
     private ArrayList<Card> graveyard;
-    private ArrayList<Integer> orderToSummon;
+    private ArrayList<Integer> order;
 
     {
         this.monsters = new Card[5];
@@ -22,12 +22,12 @@ public class Board {
         this.showSpellsAndTraps = new String[]{"E", "E", "E", "E", "E"};
         this.showFieldZone = "E";
         this.graveyard = new ArrayList<>();
-        this.orderToSummon = new ArrayList<>();
-        orderToSummon.add(5);
-        orderToSummon.add(3);
-        orderToSummon.add(1);
-        orderToSummon.add(2);
-        orderToSummon.add(4);
+        this.order = new ArrayList<>();
+        order.add(5);
+        order.add(3);
+        order.add(1);
+        order.add(2);
+        order.add(4);
     }
 
     public Board(User boardOwner) {
@@ -99,9 +99,11 @@ public class Board {
         monsters[placeInBoard - 1].setATK(false);
         monsters[placeInBoard - 1].setFaceUp(false);
     }
-    //todo implement the body of this
-    public void changeFacePositionToAttackForSpells(int placeOnBoard){
 
+    public void changeFacePositionToAttackForSpells(int placeOnBoard){
+        showSpellsAndTraps[placeOnBoard - 1] = "O";
+        monsters[placeOnBoard - 1].setATK(true);
+        monsters[placeOnBoard - 1].setFaceUp(false);
     }
 
     public void putCardToFieldZone(Card card) {
@@ -163,15 +165,18 @@ public class Board {
     }
 
     public int getAddressToSummon() {
-        for (int i = 0; i < orderToSummon.size(); i++) {
-            if (monsters[orderToSummon.get(i)] == null)
+        for (int i = 0; i < order.size(); i++) {
+            if (monsters[order.get(i)] == null)
                 return i;
         }
         return 0;
     }
 
-    //TODO implement this like getAddressToSummon()
     public int getAddressToPutSpell() {
+        for (int i = 0; i < order.size(); i++) {
+            if (spellsAndTraps[order.get(i)] == null)
+                return i;
+        }
         return 0;
     }
 
@@ -183,10 +188,35 @@ public class Board {
         return false;
     }
 
-    //checks if the given card is in monster zone
     public boolean isCardOnMonsterZone(Card card) {
-        return true;
+        for (int i = 0; i < monsters.length; i++)
+            if (monsters[i] == card)
+                return true;
+        return false;
     }
 
+    public String showMonstersToString() {
+        String stringShowMonsters = "   ";
+        for (int i = 0; i < order.size(); i++)
+            stringShowMonsters += showMonsters[order.get(i) - 1] + "    ";
+        return stringShowMonsters;
+    }
+
+    public String showSpellsAndTrapsToString() {
+        String stringShowSpellsAndTraps = "   ";
+        for (int i = 0; i < order.size(); i++)
+            stringShowSpellsAndTraps += showSpellsAndTraps[order.get(i) - 1] + "    ";
+        return stringShowSpellsAndTraps;
+    }
+
+    public String showMonstersToStringReverse() {
+        StringBuilder reverseString = new StringBuilder(showMonstersToString());
+        return reverseString.reverse().toString();
+    }
+
+    public String showSpellsAndTrapsToStringReverse() {
+        StringBuilder reverseString = new StringBuilder(showSpellsAndTrapsToString());
+        return reverseString.reverse().toString();
+    }
 
 }
