@@ -118,4 +118,26 @@ public class Hand {
         }
         return found;
     }
+
+    public String showCardsInHandToString() {
+        int countCardsInHand = 0;
+        for (int i = 0; i < cardsInHand.length; i++)
+            if (cardsInHand[i] != null)
+                countCardsInHand++;
+        String showCardsInHand = "";
+        for (int i = 0; i < countCardsInHand; i++)
+            showCardsInHand += "C   ";
+        int countCInString = 0;
+        for (int i = 0; i < showCardsInHand.length(); i++)
+            if(showCardsInHand.charAt(i) == 'C')
+                countCInString++;
+        for (int i = 1; i <= 6 - countCInString; i++)
+            showCardsInHand += "    ";
+        return showCardsInHand;
+    }
+
+    public String showCardsInHandToStringReverse() {
+        StringBuilder reverseString = new StringBuilder(showCardsInHandToString());
+        return reverseString.reverse().toString();
+    }
 }
