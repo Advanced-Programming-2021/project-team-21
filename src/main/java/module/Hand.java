@@ -2,6 +2,7 @@ package module;
 
 import com.rits.cloning.Cloner;
 import module.card.Card;
+import module.card.Monster;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,16 +13,9 @@ public class Hand {
     private User handOwner;
     private final Deck deckToDraw;
     private Boolean canDraw;
-    private final ArrayList<Integer> orderInHand;
 
     {
         cardsInHand = new Card[6];
-        this.orderInHand = new ArrayList<>();
-        orderInHand.add(5);
-        orderInHand.add(3);
-        orderInHand.add(1);
-        orderInHand.add(2);
-        orderInHand.add(4);
     }
 
     public Hand(User handOwner) {
@@ -32,9 +26,9 @@ public class Hand {
 
 
     public void addCardToHand(Card cardToAdd) {
-        for (int i = orderInHand.size() - 1; i >= 0; i--) {
-            if (cardsInHand[orderInHand.get(i)] == null) {
-                cardsInHand[orderInHand.get(i)] = cardToAdd;
+        for (int i = 0; i < cardsInHand.length; i++) {
+            if (cardsInHand[i] == null) {
+                cardsInHand[i] = cardToAdd;
                 break;
             }
         }
@@ -53,9 +47,9 @@ public class Hand {
             // ending game
             return null;
         }
-        for (int i = orderInHand.size() - 1; i >= 0; i--) {
-            if (cardsInHand[orderInHand.get(i)] == null) {
-                cardsInHand[orderInHand.get(i)] = deckToDraw.getMainDeckCards().get(0);
+        for (int i = 0; i < cardsInHand.length; i++) {
+            if (cardsInHand[i] == null) {
+                cardsInHand[i] = deckToDraw.getMainDeckCards().get(0);
                 break;
             }
         }
@@ -121,7 +115,7 @@ public class Hand {
             showCardsInHand += "C   ";
         int countCInString = 0;
         for (int i = 0; i < showCardsInHand.length(); i++)
-            if (showCardsInHand.charAt(i) == 'C')
+            if(showCardsInHand.charAt(i) == 'C')
                 countCInString++;
         for (int i = 1; i <= 6 - countCInString; i++)
             showCardsInHand += "    ";
@@ -133,12 +127,17 @@ public class Hand {
         return reverseString.reverse().toString();
     }
 
-    public int getNumberOfRemainingCardsInDeck() {
+    public int getNumberOfRemainingCardsInDeck(){
         return deckToDraw.getNumberOfMainDeckCards();
     }
 
-    //todo implement this method to return the minimum level of monsters with CardType "RITUAL" in hand
     public int getMinLevelOfRitualMonstersInHand() {
-        return 4;
+        int level = 0;
+        for (int i = 0; i < cardsInHand.length; i++){
+            if(cardsInHand[i].getCardType().equals("Monster") && cardsInHand[i] != null &&
+                    cardsInHand[i].getCardType().equals("RITUAL") && ((Monster) cardsInHand[i]).getLevel() < level)
+                level = ((Monster) cardsInHand[i]).getLevel();
+        }
+        return level;
     }
 }
