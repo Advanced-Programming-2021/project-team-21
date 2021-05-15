@@ -5,6 +5,7 @@ import module.card.*;
 import org.apache.commons.math3.util.Pair;
 import view.Responses;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Duel {
@@ -26,6 +27,8 @@ public class Duel {
         SECOND_USER.setGraveyard(new ArrayList<>());
         FIRST_USER.setHand(new Hand(FIRST_USER));
         SECOND_USER.setHand(new Hand(SECOND_USER));
+        FIRST_USER.setBoard(new Board(FIRST_USER));
+        SECOND_USER.setBoard(new Board(SECOND_USER));
         FIRST_USER.setLifePoints(INITIAL_LIFE_POINTS);
         SECOND_USER.setLifePoints(INITIAL_LIFE_POINTS);
         userWhoPlaysNow = FIRST_USER;
@@ -345,6 +348,15 @@ public class Duel {
 
     @Override
     public String toString() {
-        return "under construction!";
+        return getRival().getHand().showCardsInHandToStringReverse() + "\n" + getRival().getHand().getNumberOfRemainingCardsInDeck() +
+                "\n" + getRival().getBoard().showSpellsAndTrapsToStringReverse() +
+                "\n" + getRival().getBoard().showMonstersToStringReverse() +
+                "\n" + getRival().getGraveyard().size() + "\t\t\t\t\t\t" + getRival().getBoard().getShowFieldZone() +
+                "\n" + "--------------------------\n" +
+                userWhoPlaysNow.getBoard().getShowFieldZone() + "\t\t\t\t\t\t" + userWhoPlaysNow.getGraveyard().size() +
+                "\n" + userWhoPlaysNow.getBoard().showMonstersToString() +
+                "\n" + userWhoPlaysNow.getBoard().showSpellsAndTrapsToString() +
+                "\n\t\t\t\t\t\t" + userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() +
+                "\n" + userWhoPlaysNow.getHand().showCardsInHandToString();
     }
 }
