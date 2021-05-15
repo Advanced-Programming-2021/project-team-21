@@ -134,7 +134,7 @@ public class    Hand {
         return reverseString.reverse().toString();
     }
 
-    public int numberOfRemainingCardsInDeck(){
+    public int getNumberOfRemainingCardsInDeck(){
         return deckToDraw.getNumberOfMainDeckCards();
     }
 }

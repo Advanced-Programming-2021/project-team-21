@@ -4,6 +4,7 @@ import controller.DataController;
 import module.card.Card;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class User {
     private String username;
@@ -68,7 +69,6 @@ public class User {
 
     public void setBoard(Board board) {
         this.board = board;
-        DataController.saveData(this);
     }
 
     public String getUsername() {

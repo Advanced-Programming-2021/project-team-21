@@ -94,6 +94,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNonSupportiveRound();
         } else {
             handleSuccessfulGameCreation(secondPlayer);
+            PrintResponses.printBoard(currentDuel);
         }
     }
 

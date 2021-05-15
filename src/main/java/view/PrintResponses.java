@@ -2,6 +2,7 @@ package view;
 
 import controller.menu.Phases;
 import module.Deck;
+import module.Duel;
 import module.User;
 import module.card.Card;
 import org.apache.commons.math3.util.Pair;
@@ -442,5 +443,9 @@ public class PrintResponses {
 
     public static void printGameSuccessfullyCreated(){
         System.out.println(Responses.gameCreation);
+    }
+
+    public static void printBoard(Duel currentDuel){
+        System.out.println(currentDuel);
     }
 }

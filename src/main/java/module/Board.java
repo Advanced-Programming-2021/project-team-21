@@ -189,24 +189,22 @@ public class Board {
     }
 
     public boolean isCardOnMonsterZone(Card card) {
-        for (int i = 0; i < monsters.length; i++)
-            if (monsters[i] == card)
+        for (Card monster : monsters)
+            if (monster == card)
                 return true;
         return false;
     }
 
     public String showMonstersToString() {
-        String stringShowMonsters = "   ";
-        for (int i = 0; i < order.size(); i++)
-            stringShowMonsters += showMonsters[order.get(i) - 1] + "    ";
-        return stringShowMonsters;
+        StringBuilder stringShowMonsters = new StringBuilder("   ");
+        for (Integer integer : order) stringShowMonsters.append(showMonsters[integer - 1]).append("    ");
+        return stringShowMonsters.toString();
     }
 
     public String showSpellsAndTrapsToString() {
-        String stringShowSpellsAndTraps = "   ";
-        for (int i = 0; i < order.size(); i++)
-            stringShowSpellsAndTraps += showSpellsAndTraps[order.get(i) - 1] + "    ";
-        return stringShowSpellsAndTraps;
+        StringBuilder stringShowSpellsAndTraps = new StringBuilder("   ");
+        for (Integer integer : order) stringShowSpellsAndTraps.append(showSpellsAndTraps[integer - 1]).append("    ");
+        return stringShowSpellsAndTraps.toString();
     }
 
     public String showMonstersToStringReverse() {
