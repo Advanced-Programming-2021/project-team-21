@@ -137,4 +137,9 @@ public class    Hand {
     public int getNumberOfRemainingCardsInDeck(){
         return deckToDraw.getNumberOfMainDeckCards();
     }
+
+    //todo implement this method to return the minimum level of monsters with CardType "RITUAL" in hand
+    public int getMinLevelOfRitualMonstersInHand(){
+        return 4;
+    }
 }

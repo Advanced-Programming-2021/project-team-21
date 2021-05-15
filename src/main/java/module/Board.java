@@ -1,6 +1,7 @@
 package module;
 
 import module.card.Card;
+import module.card.CardType;
 
 import java.util.ArrayList;
 
@@ -216,6 +217,19 @@ public class Board {
     public String showSpellsAndTrapsToStringReverse() {
         StringBuilder reverseString = new StringBuilder(showSpellsAndTrapsToString());
         return reverseString.reverse().toString();
+    }
+    // todo implement this method
+    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType){
+        return true;
+    }
+    //todo implement this (page 38 of doc, ritual summon, first error)
+    public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell){
+        return true;
+    }
+
+    //todo implement this. the sum of given cards should be greater than or equal to given selected card
+    public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard){
+        return true;
     }
 
 }

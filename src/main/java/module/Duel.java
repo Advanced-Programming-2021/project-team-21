@@ -107,10 +107,6 @@ public class Duel {
         //TODO implement the body for this function.
     }
 
-    private void ritualSummon() {
-
-    }
-
     public void tribute(int[] placesOnBoard) {
         for (int placeOnBoard : placesOnBoard) {
             Card cardToTribute = userWhoPlaysNow.getBoard().getCard(placeOnBoard, 'M');
