@@ -54,7 +54,9 @@ public class Duel {
     public Card drawACard() {
         Hand currentHand = userWhoPlaysNow.getHand();
         currentHand.shuffleDeck();
-        return currentHand.drawACard();
+        Card card = currentHand.drawACard();
+        currentHand.addCardToHand(card);
+        return card;
     }
 
 
