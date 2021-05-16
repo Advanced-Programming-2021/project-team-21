@@ -134,7 +134,7 @@ public class Hand {
     public int getMinLevelOfRitualMonstersInHand() {
         int level = 0;
         for (Card card : cardsInHand) {
-            if (card instanceof Monster && card.getCardType().getName().equals("RITUAL") && ((Monster) card).getLevel() < level)
+            if (card instanceof Monster && card.getCardType().getName().equals("Ritual") && ((Monster) card).getLevel() < level)
                 level = ((Monster) card).getLevel();
         }
         return level;
