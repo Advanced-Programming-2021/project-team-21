@@ -15,6 +15,7 @@ public class DeathEffects {
              ArrayList<Card> monsters = new ArrayList<>();
              Collections.addAll(monsters, rival.getBoard().getMonsters());
              Monster.changeAttackOfMonsters(monsters, -dead.getCanIncreaseATK().getEffectNumber());
+             userNow.setIncreaseATK(userNow.getIncreaseATK() -dead.getCanIncreaseATK().getEffectNumber());
          }
          if(dead.getCanKillTheAttacker().hasEffect() && !attacked.isDead()){
              if (attacked.isDeathEffect())DeathEffects.run(dead , attacked , userNow , duel , attackingPlace , rival );
@@ -24,6 +25,13 @@ public class DeathEffects {
              if (attacked.isDeathEffect())DeathEffects.run(dead , attacked , userNow , duel , attackingPlace , rival );
              duel.addCardToGraveyard(attacked , attackingPlace , userNow);
              return true;
+         }
+         if (dead.getDisableTrapSummon().hasEffect()){
+             userNow.setCanSummonTrap(true);
+         }
+         if (dead.getAlteringAttack().hasEffect()){
+             userNow.setAlteringATKPlace(-1);
+             userNow.setHasSummonedAlteringATK(false);
          }
          return false;
      }

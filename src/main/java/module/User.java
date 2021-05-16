@@ -4,6 +4,7 @@ import controller.DataController;
 import module.card.Card;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class User {
     private String username;
@@ -18,7 +19,9 @@ public class User {
     private ArrayList<Card> graveyard;
     private int lifePoints;
     private boolean canSummonMonster, canSummonSpell, canSummonTrap;
-
+    private int increaseATK , increaseDEF;
+    private boolean hasSummonedAlteringATK;
+    private int alteringATKPlace = -1;
     {
         coins = 100000;
         decks = new ArrayList<>();
@@ -68,7 +71,6 @@ public class User {
 
     public void setBoard(Board board) {
         this.board = board;
-        DataController.saveData(this);
     }
 
     public String getUsername() {
@@ -224,5 +226,37 @@ public class User {
 
     public void setCanSummonTrap(boolean canSummonTrap) {
         this.canSummonTrap = canSummonTrap;
+    }
+
+    public int getIncreaseATK() {
+        return increaseATK;
+    }
+
+    public int getIncreaseDEF() {
+        return increaseDEF;
+    }
+
+    public void setIncreaseATK(int increaseATK) {
+        this.increaseATK = increaseATK;
+    }
+
+    public void setIncreaseDEF(int increaseDEF) {
+        this.increaseDEF = increaseDEF;
+    }
+
+    public boolean isHasSummonedAlteringATK() {
+        return hasSummonedAlteringATK;
+    }
+
+    public void setHasSummonedAlteringATK(boolean hasSummonedAlteringATK) {
+        this.hasSummonedAlteringATK = hasSummonedAlteringATK;
+    }
+
+    public int getAlteringATKPlace() {
+        return alteringATKPlace;
+    }
+
+    public void setAlteringATKPlace(int alteringATKPlace) {
+        this.alteringATKPlace = alteringATKPlace;
     }
 }

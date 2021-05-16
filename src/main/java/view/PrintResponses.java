@@ -2,8 +2,12 @@ package view;
 
 import controller.menu.Phases;
 import module.Deck;
+import module.Duel;
 import module.User;
 import module.card.Card;
+import module.card.Monster;
+import module.card.Spell;
+import module.card.Trap;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
@@ -442,5 +446,35 @@ public class PrintResponses {
 
     public static void printGameSuccessfullyCreated(){
         System.out.println(Responses.gameCreation);
+    }
+
+    public static void printBoard(Duel currentDuel){
+        System.out.println(currentDuel);
+    }
+    public static void printSpecialSummonCards(ArrayList<Monster> monsters) {
+        for (int i = 0; i < monsters.size(); i++) {
+            System.out.println(i + ": " + monsters.get(i));
+        }
+    }
+    public static void printWrongChoice(){
+        System.out.println(Responses.wrongChoose);
+    }
+    public static void printChooseTribute(){
+        System.out.println(Responses.choiceOfDifferentTribute);
+    }
+    public static void printWrongTribute(){
+        System.out.println(Responses.wrongChoiceOfTribute);
+    }
+    public static void printDisabledSummonMonster(){
+        System.out.println(Responses.disabledMonsterSummon);
+    }
+    public static void printDisabledSummonSpell(){
+        System.out.println(Responses.disabledSpellSummon);
+    }
+    public static void printDisabledTrapSummon(){
+        System.out.println(Responses.disabledTrapSummon);
+    }
+    public static void printAskForEffectMonster(){
+        System.out.println(Responses.activateEffectMonster);
     }
 }

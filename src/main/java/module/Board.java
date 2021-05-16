@@ -1,6 +1,7 @@
 package module;
 
 import module.card.Card;
+import module.card.Monster;
 
 import java.util.ArrayList;
 
@@ -78,7 +79,7 @@ public class Board {
             showMonsters[placeInBoard - 1] = "DO";
             selectedMonsterCard.setFaceUp(false);
         }
-        selectedMonsterCard.setFaceUp(false);
+        selectedMonsterCard.setATK(false);
     }
 
     public void addSpellAndTrap(int placeInBoard, Card selectedSpellAndTrapCard) {
@@ -189,36 +190,44 @@ public class Board {
     }
 
     public boolean isCardOnMonsterZone(Card card) {
-        for (int i = 0; i < monsters.length; i++)
-            if (monsters[i] == card)
+        for (Card monster : monsters)
+            if (monster == card)
                 return true;
         return false;
     }
 
     public String showMonstersToString() {
-        String stringShowMonsters = "   ";
-        for (int i = 0; i < order.size(); i++)
-            stringShowMonsters += showMonsters[order.get(i) - 1] + "    ";
-        return stringShowMonsters;
+        StringBuilder stringShowMonsters = new StringBuilder("   ");
+        for (Integer integer : order) stringShowMonsters.append(showMonsters[integer - 1]).append("    ");
+        return stringShowMonsters.toString();
     }
 
     public String showSpellsAndTrapsToString() {
-        String stringShowSpellsAndTraps = "   ";
-        for (int i = 0; i < order.size(); i++)
-            stringShowSpellsAndTraps += showSpellsAndTraps[order.get(i) - 1] + "    ";
-        return stringShowSpellsAndTraps;
+        StringBuilder stringShowSpellsAndTraps = new StringBuilder("   ");
+        for (Integer integer : order) stringShowSpellsAndTraps.append(showSpellsAndTraps[integer - 1]).append("    ");
+        return stringShowSpellsAndTraps.toString();
     }
 
     public String showMonstersToStringReverse() {
-        StringBuilder reverseString = new StringBuilder(showMonstersToString());
-        return reverseString.reverse().toString();
+        StringBuilder stringShowMonstersReverse = new StringBuilder("   ");
+        for (int i = order.size() - 1; i >= 0; i--) stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
+        return stringShowMonstersReverse.toString();
     }
 
     public String showSpellsAndTrapsToStringReverse() {
         StringBuilder reverseString = new StringBuilder(showSpellsAndTrapsToString());
         return reverseString.reverse().toString();
     }
-
-
-
+    public void removeFromGY(String cardName){
+        this.graveyard.removeIf(card -> card.getName().equals(cardName));
+    }
+    public ArrayList<Monster> getCardsFromGYByLevel(int minimum){
+        ArrayList<Monster> cards = new ArrayList<>();
+        for (Card card : this.graveyard) {
+            if (!(card instanceof Monster))continue;
+            Monster monster = (Monster)card;
+            if (monster.getLevel() > minimum)cards.add(monster);
+        }
+        return cards;
+    }
 }

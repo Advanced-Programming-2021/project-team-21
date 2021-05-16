@@ -5,28 +5,36 @@ import module.Duel;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
+import module.card.SelectEffect;
 import module.card.Spell;
 import org.apache.commons.math3.util.Pair;
 import view.PrintResponses;
 import view.Regex;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
 public class DuelMenu implements Menuable {
+    public static ArrayList<Monster>specialSummonsedCards;
+    public static boolean isForScan;
+    public static boolean isGetFromGY;
+    public static boolean isGetFromDeck;
+    public static boolean isGetFromHand;
+    public static boolean addToHand;
+    public static boolean isForSet;
     private Duel currentDuel;
     private Phases phase;
     private boolean isInGame;
-
     {
         isInGame = true;
     }
 
     @Override
     public void run(String command) {
+        if (checkSpecialSummon(command))return;
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
         boolean isValidCommand = false;
         for (String string : commandMap.keySet()) {
@@ -45,6 +53,92 @@ public class DuelMenu implements Menuable {
             PrintResponses.printInvalidFormat();
 
     }
+
+    private boolean checkSpecialSummon(String command) {
+        Matcher matcher;
+        if(specialSummonsedCards != null){
+            PrintResponses.printSpecialSummonCards(specialSummonsedCards);
+            if (!(matcher = Regex.getMatcher(command , Regex.specialSummon)).matches()){
+                PrintResponses.printEmergencySpecialSummon();
+                return true;
+            }
+            if (specialSummonsedCards.size() == 0){
+                PrintResponses.printUnableToSpecialSummonMonster();
+                return true;
+            }
+            int number = Integer.parseInt(matcher.group("cardNumber"));
+            if (number < 0 || number > specialSummonsedCards.size()){
+                PrintResponses.printWrongChoice();
+                return true;
+            }
+            Monster monster = specialSummonsedCards.get(number);
+            if (isForScan){
+                if (SelectEffect.scannerHolder.isATK())currentDuel.getUserWhoPlaysNow().getBoard().addMonsterFaceUp(SelectEffect.scannerPlace , monster);
+                else currentDuel.getUserWhoPlaysNow().getBoard().addMonsterFaceDown(SelectEffect.scannerPlace , monster);
+                isForScan = false;
+            }else if (addToHand){
+              currentDuel.getUserWhoPlaysNow().getHand().addCardToHand(monster);
+              addToHand = false;
+              specialSummonsedCards = null;
+            }else if(isForSet){
+                currentDuel.setSelectedCard(monster);
+                if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
+                    PrintResponses.printUnableToSpecialSummonMonster();
+                    return true;
+                }
+                removeTheSpecialSummoned(monster);
+                int place = currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon();
+                currentDuel.setMonster();
+                currentDuel.flipSetForMonsters(place);
+            }else{
+                currentDuel.setSelectedCard(monster);
+                 if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
+                    PrintResponses.printUnableToSpecialSummonMonster();
+                    return true;
+                }
+                removeTheSpecialSummoned(monster);
+                currentDuel.summonMonster();
+            }
+            specialSummonsedCards = null;
+            return true;
+        }
+            return false;
+    }
+
+    private void removeTheSpecialSummoned(Monster monster) {
+        boolean found = false;
+        if (isGetFromGY){
+            for (Card card : currentDuel.getUserWhoPlaysNow().getBoard().getGraveyard()) {
+                if (card.getName().equals(monster.getName())){
+                    currentDuel.getUserWhoPlaysNow().getBoard().removeFromGY(card.getName());
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (isGetFromDeck && !found){
+            for (Card mainDeckCard : currentDuel.getUserWhoPlaysNow().getHand().getDeckToDraw().getMainDeckCards()) {
+                if (mainDeckCard.getName().equals(monster.getName())){
+                    currentDuel.getUserWhoPlaysNow().getHand().removeFromDeck(monster.getName());
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (isGetFromHand && !found){
+            Card [] cards = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
+            for (int i = 0; i < cards.length; i++) {
+                if(cards[i].getName().equals(monster.getName())){
+                    currentDuel.getUserWhoPlaysNow().getHand().removeCardFromHand(i);
+                    break;
+                }
+            }
+        }
+        isGetFromHand = false;
+        isGetFromDeck = false;
+        isGetFromGY = false;
+    }
+
 
     @Override
     public void showCurrentMenu() {
@@ -94,6 +188,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNonSupportiveRound();
         } else {
             handleSuccessfulGameCreation(secondPlayer);
+            PrintResponses.printBoard(currentDuel);
         }
     }
 
@@ -175,17 +270,53 @@ public class DuelMenu implements Menuable {
             PrintResponses.printFullnessOfMonsterCardZone();
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
-        } else if (((Monster) currentDuel.getSelectedCard()).getLevel() > 4) {
-            if (((Monster) currentDuel.getSelectedCard()).getLevel() < 7) {
-                if (isNotEnoughCardsForTribute(1)) return;
-            } else if (((Monster) currentDuel.getSelectedCard()).getLevel() < 10){
-                if (isNotEnoughCardsForTribute(2)) return;
+        }else if(currentDuel.getUserWhoPlaysNow().isCanSummonMonster()){
+            PrintResponses.printDisabledSummonMonster();
+        }else if (((Monster) currentDuel.getSelectedCard()).getLevel() > 4) {
+            Monster monster = (Monster) currentDuel.getSelectedCard();
+            if (monster.isCanHaveDifferentTribute()){
+                PrintResponses.printChooseTribute();
+                int number = Integer.parseInt(ProgramController.scanner.nextLine());
+                if (number > 3 || number < 0){
+                    PrintResponses.printWrongTribute();
+                    return;
+                }
+                if (number == 0 && monster.getCanBeNotTribute().hasEffect()){
+                    monster.setAtk(monster.getAtk() - monster.getCanBeNotTribute().getEffectNumber());
+                    currentDuel.summonMonster();
+                    PrintResponses.printSuccessfulSummon();
+                    return;
+                }
+                if (number == 0 && monster.getDiscardToSpecialSummon().hasEffect()){
+                    Card card = currentDuel.getUserWhoPlaysNow().getHand().selectARandomCardFromHand();
+                    int i;
+                    for ( i = 0; i < currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand().length; i++) {
+                        if (card == currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand()[i])
+                            break;
+                    }
+                    currentDuel.getUserWhoPlaysNow().getHand().discardACard(i);
+                    currentDuel.summonMonster();
+                    PrintResponses.printSuccessfulSummon();
+                    return;
+                }
+                monster.setRequiredCardsFOrTribute(number);
+            }
+            if (monster.getLevel() < 7) {
+                if (isNotEnoughCardsForTribute(monster.getRequiredCardsFOrTribute())) return;
+            } else if (monster.getLevel() < 10){
+                if (isNotEnoughCardsForTribute(monster.getRequiredCardsFOrTribute())) return;
             } else{
-                if (isNotEnoughCardsForTribute(3))return;
+                if (isNotEnoughCardsForTribute(monster.getRequiredCardsFOrTribute()))return;
             }
             int[] cardToTributeAddress = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             if (areCardAddressesEmpty(cardToTributeAddress)) return;
             currentDuel.tribute(cardToTributeAddress);
+            if (monster.getTributeToKillAllMonsterOfOpponent().hasEffect() && monster.getRequiredCardsFOrTribute() == monster.getTributeToKillAllMonsterOfOpponent().getEffectNumber()){
+                for (int i = 1; i < 6; i++) {
+                    Card card = currentDuel.getRival().getBoard().getCard(i , 'm');
+                    if (card != null) currentDuel.addCardToGraveyard(card , i , currentDuel.getRival());
+                }
+            }
             currentDuel.summonMonster();
             PrintResponses.printSuccessfulSummon();
         } else {
@@ -295,7 +426,9 @@ public class DuelMenu implements Menuable {
             PrintResponses.printFullnessOfSpellCardZone();
         } else if (isSpellPreparedToBeActivated()) {
             PrintResponses.printUnfinishedPreparationOfSpell();
-        } else {
+        }else if(currentDuel.getUserWhoPlaysNow().isCanSummonSpell()){
+            PrintResponses.printDisabledSummonSpell();
+        } else{
             currentDuel.activateEffects();
             PrintResponses.printSuccessfulSpellActivation();
         }
@@ -441,6 +574,5 @@ public class DuelMenu implements Menuable {
             PrintResponses.printSuccessfulCardSetting();
         }
     }
-
 
 }

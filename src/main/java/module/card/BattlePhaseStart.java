@@ -1,5 +1,6 @@
 package module.card;
 
+import controller.menu.DuelMenu;
 import module.Board;
 import module.Duel;
 import module.User;
@@ -14,9 +15,12 @@ public class BattlePhaseStart {
         Board board = secondUser.getBoard();
         // for summoning with specific type
         if (defense.getSummonACardFromEveryWhere().hasEffect()){
-           ArrayList<Card> cards =  secondUser.getHand().getCardsWithType( 7 , defense
+           ArrayList<Monster> cards =  secondUser.getHand().getCardsWithType( 7 , defense
                    .getSummonACardFromEveryWhere().getType());
-           duel.specialSummonCards = new ArrayList<>(cards);
+           DuelMenu.isGetFromGY = true;
+           DuelMenu.isGetFromDeck = true;
+           DuelMenu.isGetFromHand = true;
+           DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
         }
         //for undefeatable effect
         else if (defense.getUndefeatable().hasEffect()){

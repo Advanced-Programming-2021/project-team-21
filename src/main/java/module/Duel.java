@@ -1,8 +1,10 @@
 package module;
 
 
+import controller.ProgramController;
 import module.card.*;
 import org.apache.commons.math3.util.Pair;
+import view.PrintResponses;
 import view.Responses;
 
 import java.util.ArrayList;
@@ -10,7 +12,6 @@ import java.util.ArrayList;
 public class Duel {
     private static final int INITIAL_LIFE_POINTS = 8000;
     private final User FIRST_USER, SECOND_USER;
-    public ArrayList<Card> specialSummonCards;
     private User userWhoPlaysNow;
     private Card selectedCard;
     private int placeOfSelectedCard;
@@ -29,6 +30,16 @@ public class Duel {
         FIRST_USER.setLifePoints(INITIAL_LIFE_POINTS);
         SECOND_USER.setLifePoints(INITIAL_LIFE_POINTS);
         userWhoPlaysNow = FIRST_USER;
+        FIRST_USER.setIncreaseATK(0);
+        FIRST_USER.setIncreaseDEF(0);
+        SECOND_USER.setIncreaseATK(0);
+        SECOND_USER.setIncreaseDEF(0);
+        FIRST_USER.setCanSummonTrap(true);
+        FIRST_USER.setCanSummonSpell(true);
+        FIRST_USER.setCanSummonMonster(true);
+        SECOND_USER.setCanSummonMonster(true);
+        SECOND_USER.setCanSummonTrap(true);
+        SECOND_USER.setCanSummonSpell(true);
         setHasSummonedOnce(false);
         setHasChangedPositionOnce(false);
     }
@@ -64,6 +75,12 @@ public class Duel {
             isSelectedCardForOpponent = false;
             if (fromWhere.equals("monster"))
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
+            if (((Monster)selectedCard).isSelectEffect()){
+                PrintResponses.printAskForEffectMonster();
+                if (ProgramController.scanner.nextLine().equals("Yes")){
+                    SelectEffect.run((Monster) selectedCard , getRival() , getUserWhoPlaysNow() , this , cardAddress);
+                }
+            }
             else
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'S');
         } else if (ownOrOpponent.equals("opponent")) {
@@ -86,7 +103,13 @@ public class Duel {
         if (((Monster) selectedCard).isSummonEffect())
             SummonEffects.run((Monster)selectedCard , userWhoPlaysNow , this );
         int placeInBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
+        ((Monster) selectedCard).setAtk(userWhoPlaysNow.getIncreaseATK() + ((Monster)selectedCard).getAtk());
+        ((Monster)selectedCard).setDef(getUserWhoPlaysNow().getIncreaseDEF() + ((Monster)selectedCard).getDef());
         Board currentBoard = userWhoPlaysNow.getBoard();
+        if (userWhoPlaysNow.isHasSummonedAlteringATK()){
+            Monster monster = (Monster) userWhoPlaysNow.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'm');
+            monster.setAtk(monster.getAtk() + 300 * ((Monster)selectedCard).getLevel());
+        }
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         hasSummonedOnce = true;
     }
@@ -98,10 +121,6 @@ public class Duel {
         if (((Monster) selectedCard).isFlipSummonEffect())FlipSummonEffects.run((Monster) selectedCard , getRival() , this , userWhoPlaysNow);
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
-    }
-
-    public void specialSummon() {
-        //TODO implement the body for this function.
     }
 
     public void tribute(int[] placesOnBoard) {
@@ -200,6 +219,10 @@ public class Duel {
             else
                 user.getBoard().removeSpellAndTrap(placeInBoard);
         }
+        if (user.isHasSummonedAlteringATK() && card instanceof  Monster){
+            Monster monster = (Monster)user.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'm');
+            monster.setAtk(monster.getAtk() - 300 * ((Monster) card).getLevel() );
+        }
         Card cardToAdd  = Card.getCardByName(card.getName());
         user.getGraveyard().add(cardToAdd);
     }
@@ -248,14 +271,6 @@ public class Duel {
 
     public boolean isNoCardSelected() {
         return selectedCard == null;
-    }
-
-    public ArrayList<Card> getSpecialSummonCards() {
-        return specialSummonCards;
-    }
-
-    public void setSpecialSummonCards(ArrayList<Card> specialSummonCards) {
-        this.specialSummonCards = specialSummonCards;
     }
 
     //TODO implement this

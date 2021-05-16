@@ -2,12 +2,12 @@ package module.card;
 // must add a method to summon in which decides if the leve is less than five there is 0 tribute if the level is 5 , 6 1tribute
 //if it is 7 8 two tributes and 9 10 11 three tribute
 
+import com.rits.cloning.Cloner;
 import module.User;
 
-import java.awt.*;
 import java.util.ArrayList;
 
-public class Monster extends Card implements MainEffects {
+public class Monster extends Card  {
     //for checking death in deathEffects
     boolean isDead;
     //for summoned effects
@@ -22,14 +22,14 @@ public class Monster extends Card implements MainEffects {
     // when a card is destroyed
     boolean isDeathEffect;
 
-    // main phase effect that are chosen by user
-    boolean isMainPhaseChosen;
-
     //it should be an if at the end of each attack to monster
     boolean isBattlePhaseEffectEnd;
 
     // it should be called when flip summoned or flip set
     boolean isFlipSummonEffect;
+
+    //for some effects that user choose to activate
+    boolean isSelectEffect;
     private Integer level;
     private Attributes attribute;
     private MonsterTypes monsterType;
@@ -39,39 +39,41 @@ public class Monster extends Card implements MainEffects {
     private int defHolder;
     private boolean hasAttackedOnceInTurn;
     private boolean isATKPosition;
+    private boolean canHaveDifferentTribute;
+    private int requiredCardsFOrTribute;
     //command Knight effect                                                                                       //texchanger
     /* done */ private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 1)     in battlePhaseStart and changeTurnEffect
-    /* done */ private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
+     /* done*/private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
     //Yomi ship
     /* done */private Effect canKillTheAttacker;     //( 1 , 0)        in deathEffect
     //suijin
     /* done */private Effect canChangeTheAttackersATK;     //( -999999 , 0)        in battlePhaseStart and BattlePhaseEnd and changeTurnEffect
     //crab turtle       skull guardian
-    private boolean isRitual;       //in summonEffect
+    /* done */private boolean isRitual;       //in summonEffect
     //man eater bug
     /* done */private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
     //Scanner
-    private Effect canScan;         //(1 , 1)           in SelectEffects and changeTurnEffects
+    /* done */private Effect canScan;         //(1 , 1)           in SelectEffects and changeTurnEffects
     //marshmallon
     /* done*/private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
     /* done */private Effect canDecreaseLP;        //(-999 , 0)       in flipSummonAttackEffect
     // beast king barbaros
-    private Effect canBeNotTribute;      //(1101 , 0)        in summonEffect
-    private Effect TributeToKillAllMonsterOfOpponent;       //(4 , 1)       in summonEffect
+    /*done*/private Effect canBeNotTribute;      //( -1099, 0)        in summonEffect
+    /*done */private Effect TributeToKillAllMonsterOfOpponent;       //(4 , 0)       in summonEffect
     // TexChanger
     /* done */private Effect summonACardFromEveryWhere;       //(2 , "1" , "Cyberse")       in battlePhaseStart
     //calculator
-    private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
+    /* done */private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
     // mirage dragon
-    private Effect disableTrapSummon;      // (1 , 1)          in summonEffect and DeathEffect
+    /* done */private Effect disableTrapSummon;      // (1 , 1)          in summonEffect and DeathEffect
     // herald of creation
-    private Effect canSummonFromGYByLevel;      //(8 , 0)           in mainPhaseChosen
+    /* done */private Effect canGetFromGYByLevelToHand;      //(8 , 0)           in mainPhaseChosen
     // exploder dragon
     /* done */private Effect canDestroyBothWithoutLosingLP;        //(1 , 1)      in battlePhaseEnd
     //Terratiger, the Empowered Warrior
-    private Effect canSetFromDeckByMaxLevel;             //(1 , 0)       in summonEffect
+    /* done */private Effect canSetFromDeckByMaxLevel;             //(5 , 0)       in summonEffect
     //The Tricky
-    private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
+   /* done */ private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
 
     public Monster(Object[] parameters) {
         setName((String) parameters[0]);
@@ -85,6 +87,25 @@ public class Monster extends Card implements MainEffects {
         setDef((int) parameters[6]);
         setDefHolder((int) parameters[6]);
         setDescription((String) parameters[7]);
+    }
+    public  Monster copy(Object object){
+        if (object ==null)return null;
+        if (!(object instanceof  Monster))return null;
+        Cloner cloner = new Cloner();
+        Monster monster = (Monster)object;
+        return cloner.deepClone(monster);
+    }
+
+    public boolean isCanHaveDifferentTribute() {
+        return canHaveDifferentTribute;
+    }
+
+    public void setRequiredCardsFOrTribute(int requiredCardsFOrTribute) {
+        this.requiredCardsFOrTribute = requiredCardsFOrTribute;
+    }
+
+    public int getRequiredCardsFOrTribute() {
+        return requiredCardsFOrTribute;
     }
 
     public void setAtkHolder(int atkHolder) {
@@ -167,47 +188,6 @@ public class Monster extends Card implements MainEffects {
             monster.setAtk(monster.getAtk() + amount);
         }
     }
-
-    @Override
-    public void summonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void deathEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseChosen(ArrayList<Card> cards, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public boolean battlePhaseEffectEnd(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
-    public void attackFlipSummon(Monster attacker, Monster defense, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void flipSummonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void activateSpell(Spell spell, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
-
-    }
-
     public boolean isHasAttackedOnceInTurn() {
         return hasAttackedOnceInTurn;
     }
@@ -294,5 +274,37 @@ public class Monster extends Card implements MainEffects {
 
     public Effect getCanScan() {
         return canScan;
+    }
+
+    public Effect getCanBeNotTribute() {
+        return canBeNotTribute;
+    }
+
+    public Effect getTributeToKillAllMonsterOfOpponent() {
+        return TributeToKillAllMonsterOfOpponent;
+    }
+
+    public Effect getDisableTrapSummon() {
+        return disableTrapSummon;
+    }
+
+    public Effect getAlteringAttack() {
+        return alteringAttack;
+    }
+
+    public boolean isSelectEffect() {
+        return isSelectEffect;
+    }
+
+    public Effect getCanGetFromGYByLevelToHand() {
+        return canGetFromGYByLevelToHand;
+    }
+
+    public Effect getCanSetFromDeckByMaxLevel() {
+        return canSetFromDeckByMaxLevel;
+    }
+
+    public Effect getDiscardToSpecialSummon() {
+        return discardToSpecialSummon;
     }
 }

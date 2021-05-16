@@ -4,7 +4,7 @@ import module.User;
 
 import java.util.ArrayList;
  // add user a field named canDraw
-public class Trap extends Card implements MainEffects{
+public class Trap extends Card {
 
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
@@ -64,50 +64,5 @@ public class Trap extends Card implements MainEffects{
     @Override
     public String toString() {
         return "Name: " + name + "\nTrap\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
-    }
-
-    @Override
-    public void flipSummonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void summonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
-
-    }
-
-    @Override
-    public void activateSpell(Spell spell, User firstUser, User secondUser) {
-
-    }
-
-
-    public boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
-    public void deathEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseChosen(ArrayList<Card> cards, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public boolean battlePhaseEffectEnd(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
-    public void attackFlipSummon(Monster attacker, Monster defense, User firstUser, User secondUser) {
-
     }
 }
