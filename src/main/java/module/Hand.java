@@ -85,8 +85,8 @@ public class Hand {
 
     //checks if the given card is in hand
     public boolean isCardInHand(Card card) {
-        for (int i = 0; i < cardsInHand.length; i++)
-            if (cardsInHand[i] == card)
+        for (Card value : cardsInHand)
+            if (value == card)
                 return true;
         return false;
     }
@@ -107,8 +107,8 @@ public class Hand {
 
     public String showCardsInHandToString() {
         int countCardsInHand = 0;
-        for (int i = 0; i < cardsInHand.length; i++)
-            if (cardsInHand[i] != null)
+        for (Card card : cardsInHand)
+            if (card != null)
                 countCardsInHand++;
         String showCardsInHand = "";
         for (int i = 0; i < countCardsInHand; i++)
@@ -133,10 +133,9 @@ public class Hand {
 
     public int getMinLevelOfRitualMonstersInHand() {
         int level = 0;
-        for (int i = 0; i < cardsInHand.length; i++){
-            if(cardsInHand[i].getCardType().equals("Monster") && cardsInHand[i] != null &&
-                    cardsInHand[i].getCardType().equals("RITUAL") && ((Monster) cardsInHand[i]).getLevel() < level)
-                level = ((Monster) cardsInHand[i]).getLevel();
+        for (Card card : cardsInHand) {
+            if (card instanceof Monster && card.getCardType().getName().equals("RITUAL") && ((Monster) card).getLevel() < level)
+                level = ((Monster) card).getLevel();
         }
         return level;
     }
