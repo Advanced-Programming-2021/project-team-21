@@ -217,23 +217,36 @@ public class Board {
     }
 
     public String showSpellsAndTrapsToStringReverse() {
-        StringBuilder reverseString = new StringBuilder(showSpellsAndTrapsToString());
-        return reverseString.reverse().toString();
+        StringBuilder reverseString = new StringBuilder("   ");
+        for (int i = order.size() - 1; i >= 0; i--)
+            reverseString.append(showSpellsAndTraps[order.get(i) - 1]).append("   ");
+        return reverseString.toString();
     }
 
-    // todo implement this method
     public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType) {
-        return true;
+        for (int i = 0; i < order.size(); i++)
+            if (monsters[i].getCardType().getName().equals(cardType.getName()) || spellsAndTraps[i].getCardType().getName().equals(cardType.getName()))
+                return true;
+        return false;
     }
 
-    //todo implement this (page 38 of doc, ritual summon, first error)
     public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell) {
-        return true;
+        int level = 0;
+        for (Card card : monsters)
+            if (((Monster) card).getLevel() < level)
+                level = ((Monster) card).getLevel();
+        int maximumLevelInHand = 0;
+        for (Card card : boardOwner.getHand().getCardsInHand())
+            if(card != null)
+                maximumLevelInHand += ((Monster) card).getLevel();
+        return maximumLevelInHand >= level;
     }
 
-    //todo implement this. the sum of given cards should be greater than or equal to given selected card
     public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
-        return true;
+        int sumOfLevels = 0;
+        for (Integer integer: cardAddresses)
+            sumOfLevels += ((Monster) monsters[integer - 1]).getLevel();
+        return sumOfLevels >= ((Monster) selectedCard).getLevel();
     }
 
 }
