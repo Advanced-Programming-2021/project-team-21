@@ -17,6 +17,7 @@ public class Duel {
     private boolean isSelectedCardForOpponent;
     private boolean hasSummonedOnce;
     private boolean hasChangedPositionOnce;
+    private int numberOfTurnsPlayedUpToNow;
 
 
     public Duel(User first_user, User second_user) {
@@ -33,6 +34,7 @@ public class Duel {
         userWhoPlaysNow = FIRST_USER;
         setHasSummonedOnce(false);
         setHasChangedPositionOnce(false);
+        setNumberOfTurnsPlayedUpToNow(0);
     }
 
     public void changeTurn() {
@@ -91,6 +93,8 @@ public class Duel {
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         hasSummonedOnce = true;
+        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
+        selectedCard = null;
     }
 
     //TODO implement the changes in flip summon
@@ -179,6 +183,7 @@ public class Duel {
     public int attackDirectly() {
         User rival = getRival();
         changeLP(rival, ((Monster) selectedCard).getAtk());
+        ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
         return ((Monster) selectedCard).getAtk();
     }
 
@@ -419,5 +424,13 @@ public class Duel {
                 "\n" + userWhoPlaysNow.getBoard().showSpellsAndTrapsToString() +
                 "\n\t\t\t\t\t\t" + userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() +
                 "\n" + userWhoPlaysNow.getHand().showCardsInHandToString();
+    }
+
+    public int getNumberOfTurnsPlayedUpToNow() {
+        return numberOfTurnsPlayedUpToNow;
+    }
+
+    public void setNumberOfTurnsPlayedUpToNow(int numberOfTurnsPlayedUpToNow) {
+        this.numberOfTurnsPlayedUpToNow = numberOfTurnsPlayedUpToNow;
     }
 }

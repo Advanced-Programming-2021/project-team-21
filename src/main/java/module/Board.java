@@ -2,6 +2,7 @@ package module;
 
 import module.card.Card;
 import module.card.CardType;
+import module.card.Monster;
 
 import java.util.ArrayList;
 
@@ -66,7 +67,7 @@ public class Board {
     public void addMonsterFaceUp(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
         showMonsters[placeInBoard - 1] = "OO";
-        selectedMonsterCard.setATK(true);
+        ((Monster)selectedMonsterCard).setIsATKPosition(true);
         selectedMonsterCard.setFaceUp(false);
     }
 
@@ -135,7 +136,7 @@ public class Board {
 
     // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
     public Card getCard(int placeInBoard, char monsterOrSpell) {
-        if (monsterOrSpell == 'm')
+        if (monsterOrSpell == 'M')
             return monsters[placeInBoard - 1];
         else
             return spellsAndTraps[placeInBoard - 1];

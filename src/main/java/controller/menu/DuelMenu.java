@@ -152,14 +152,19 @@ public class DuelMenu implements Menuable {
         } else if (phase.equals(Phases.STANDBY_PHASE)) {
             phase = Phases.MAIN_PHASE1;
         } else if (phase.equals(Phases.MAIN_PHASE1)) {
-            phase = Phases.BATTLE_PHASE;
+            if (currentDuel.getNumberOfTurnsPlayedUpToNow() != 0)
+                phase = Phases.BATTLE_PHASE;
+            else {
+                handleTransitionFromEndPhaseToDrawPhase();
+                handleDrawingACard(currentDuel.drawACard());
+                return;
+            }
         } else if (phase.equals(Phases.BATTLE_PHASE)) {
             phase = Phases.MAIN_PHASE2;
         } else if (phase.equals(Phases.MAIN_PHASE2)) {
-            phase = Phases.END_PHASE;
-            PrintResponses.printPhaseName(phase);
-            currentDuel.changeTurn();
-            PrintResponses.showTurn(currentDuel.getUserWhoPlaysNow());
+            handleTransitionFromEndPhaseToDrawPhase();
+            handleDrawingACard(currentDuel.drawACard());
+            return;
         }
         PrintResponses.printPhaseName(phase);
     }
@@ -268,6 +273,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNoCardToAttackWith();
         } else {
             handleSuccessfulAttack(address, monsterToAttack);
+            PrintResponses.printBoard(currentDuel);
         }
     }
 
@@ -401,11 +407,25 @@ public class DuelMenu implements Menuable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Card card = currentDuel.drawACard();
+        handleDrawingACard(currentDuel.drawACard());
+    }
+
+    private void handleTransitionFromEndPhaseToDrawPhase() {
+        phase = Phases.END_PHASE;
+        PrintResponses.printPhaseName(phase);
+        currentDuel.changeTurn();
+        currentDuel.setNumberOfTurnsPlayedUpToNow(currentDuel.getNumberOfTurnsPlayedUpToNow() + 1);
+        PrintResponses.showTurn(currentDuel.getUserWhoPlaysNow());
+        phase = Phases.DRAW_PHASE;
+        PrintResponses.printPhaseName(phase);
+    }
+
+    private void handleDrawingACard(Card card) {
         if (card == null) {
             endTheGame();
         } else {
             PrintResponses.printDrawnCard(card);
+            PrintResponses.printBoard(currentDuel);
         }
     }
 
