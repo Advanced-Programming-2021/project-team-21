@@ -448,4 +448,8 @@ public class PrintResponses {
     public static void printBoard(Duel currentDuel) {
         System.out.println(currentDuel);
     }
+
+    public static void printRoundNumber(int remainingRounds) {
+        System.out.println("Round " + (remainingRounds - 3) + " started");
+    }
 }

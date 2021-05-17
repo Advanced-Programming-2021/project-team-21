@@ -104,7 +104,7 @@ public class DataController {
                         deck.setMainDeckCards(newMainDeckCards);
                         deck.setSideDeckCards(newSideDeckCards);
                     }
-                    return user; /// fuck you
+                    return user;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }

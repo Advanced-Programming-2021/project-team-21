@@ -272,7 +272,7 @@ public class Monster extends Card implements MainEffects {
     public Effect getCanDestroyMonster() {
         return canDestroyMonster;
     }
-
+    
     public boolean isFlipSummonEffect() {
         return isFlipSummonEffect;
     }

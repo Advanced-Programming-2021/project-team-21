@@ -19,6 +19,8 @@ public class Card {
 
     public static Card getCardByName(String name) {
         HashMap<String, Card> allCards = ProgramController.allCards;
+        if (allCards == null)
+            return null;
         for (String cardName : allCards.keySet()) {
             if (cardName.equals(name)) return allCards.get(cardName);
         }

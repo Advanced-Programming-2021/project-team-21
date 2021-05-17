@@ -210,5 +210,4 @@ class LoginMenuTest {
         File file = new File("src/main/resources/users/InvalidPasswordToLoginLoginMenuTest.user.json");
         file.delete();
     }
-
 }

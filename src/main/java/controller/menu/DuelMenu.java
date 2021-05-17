@@ -21,6 +21,8 @@ public class DuelMenu implements Menuable {
     private Duel currentDuel;
     private Phases phase;
     private boolean isInGame;
+    private int remainingRounds;
+    private boolean isFirstRound = true;
 
     {
         isInGame = true;
@@ -90,7 +92,7 @@ public class DuelMenu implements Menuable {
 
     private void createNewDuel(Matcher matcher) {
         User secondPlayer = User.getUserByUsername(matcher.group("player2Username"));
-        int rounds = Integer.parseInt(matcher.group("rounds"));
+        remainingRounds = Integer.parseInt(matcher.group("rounds"));
         if (secondPlayer == null) {
             PrintResponses.printNoUserExistToPlayWith();
         } else if (ProgramController.userInGame.getActiveDeck() == null) {
@@ -101,7 +103,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printInvalidDeck(ProgramController.userInGame);
         } else if (!secondPlayer.getActiveDeck().isValid()) {
             PrintResponses.printInvalidDeck(secondPlayer);
-        } else if (!(rounds == 1 || rounds == 3)) {
+        } else if (!(remainingRounds == 1 || remainingRounds == 3)) {
             PrintResponses.printNonSupportiveRound();
         } else {
             handleSuccessfulGameCreation(secondPlayer);
@@ -184,8 +186,13 @@ public class DuelMenu implements Menuable {
     }
 
     private void endTheGame() {
-        PrintResponses.printEndingTheGame(currentDuel.handleEndingGame());
-        currentDuel = null;
+        remainingRounds--;
+        if (remainingRounds == 0) {
+            PrintResponses.printEndingTheGame(currentDuel.handleEndingGame());
+            currentDuel = null;
+        } else {
+            handleSuccessfulGameCreation(currentDuel.getSECOND_USER());
+        }
     }
 
     private void summon(Matcher matcher) {
@@ -417,7 +424,12 @@ public class DuelMenu implements Menuable {
     private void handleSuccessfulGameCreation(User secondPlayer) {
         currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
         phase = Phases.DRAW_PHASE;
-        PrintResponses.printGameSuccessfullyCreated();
+        if (isFirstRound) {
+            PrintResponses.printGameSuccessfullyCreated();
+            isFirstRound = false;
+        } else{
+            PrintResponses.printRoundNumber(remainingRounds);
+        }
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {

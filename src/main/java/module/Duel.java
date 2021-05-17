@@ -296,6 +296,9 @@ public class Duel {
         return userWhoPlaysNow;
     }
 
+    public User getSECOND_USER() {
+        return SECOND_USER;
+    }
 
     public boolean canNotSummonSelectedCard() {
         return !(selectedCard instanceof Monster) || !userWhoPlaysNow.getHand().isCardInHand(selectedCard)
