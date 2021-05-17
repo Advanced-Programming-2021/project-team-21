@@ -110,16 +110,16 @@ public class Hand {
         for (Card card : cardsInHand)
             if (card != null)
                 countCardsInHand++;
-        String showCardsInHand = "";
+        StringBuilder showCardsInHand = new StringBuilder();
         for (int i = 0; i < countCardsInHand; i++)
-            showCardsInHand += "C   ";
+            showCardsInHand.append("C   ");
         int countCInString = 0;
         for (int i = 0; i < showCardsInHand.length(); i++)
             if (showCardsInHand.charAt(i) == 'C')
                 countCInString++;
         for (int i = 1; i <= 6 - countCInString; i++)
-            showCardsInHand += "    ";
-        return showCardsInHand;
+            showCardsInHand.append("    ");
+        return showCardsInHand.toString();
     }
 
     public String showCardsInHandToStringReverse() {
