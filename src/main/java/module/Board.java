@@ -198,38 +198,38 @@ public class Board {
     }
 
     public String showMonstersToString() {
-        StringBuilder stringShowMonsters = new StringBuilder("\t");
+        StringBuilder stringShowMonsters = new StringBuilder("    ");
         for (Integer integer : order) {
             if (showMonsters[integer - 1].length() == 2)
                 stringShowMonsters.append(showMonsters[integer - 1]).append("   ");
             else
-                stringShowMonsters.append(showMonsters[integer - 1]).append("\t");
+                stringShowMonsters.append(showMonsters[integer - 1]).append("    ");
         }
         return stringShowMonsters.toString();
     }
 
     public String showSpellsAndTrapsToString() {
-        StringBuilder stringShowSpellsAndTraps = new StringBuilder("\t");
-        for (Integer integer : order) stringShowSpellsAndTraps.append(showSpellsAndTraps[integer - 1]).append("\t");
+        StringBuilder stringShowSpellsAndTraps = new StringBuilder("    ");
+        for (Integer integer : order) stringShowSpellsAndTraps.append(showSpellsAndTraps[integer - 1]).append("    ");
         return stringShowSpellsAndTraps.toString();
     }
 
     public String showMonstersToStringReverse() {
-        StringBuilder stringShowMonstersReverse = new StringBuilder("\t");
+        StringBuilder stringShowMonstersReverse = new StringBuilder("    ");
         for (int i = order.size() - 1; i >= 0; i--) {
             if (showMonsters[order.get(i) - 1].length() == 2)
                 stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
             else
-                stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("\t");
+                stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("    ");
         }
 
         return stringShowMonstersReverse.toString();
     }
 
     public String showSpellsAndTrapsToStringReverse() {
-        StringBuilder reverseString = new StringBuilder("\t");
+        StringBuilder reverseString = new StringBuilder("    ");
         for (int i = order.size() - 1; i >= 0; i--)
-            reverseString.append(showSpellsAndTraps[order.get(i) - 1]).append("\t");
+            reverseString.append(showSpellsAndTraps[order.get(i) - 1]).append("    ");
         return reverseString.toString();
     }
 
