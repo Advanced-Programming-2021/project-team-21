@@ -6,9 +6,11 @@ import org.apache.commons.math3.util.Pair;
 import view.Responses;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Duel {
-    private static final int INITIAL_LIFE_POINTS = 8000;
+    private static final int INITIAL_LIFE_POINTS = 1300;
     private final User FIRST_USER, SECOND_USER;
     public ArrayList<Card> specialSummonCards;
     private User userWhoPlaysNow;
@@ -38,11 +40,13 @@ public class Duel {
     }
 
     public void changeTurn() {
+        resetCards();
         if (userWhoPlaysNow.equals(FIRST_USER))
             userWhoPlaysNow = SECOND_USER;
         else
             userWhoPlaysNow = FIRST_USER;
         hasSummonedOnce = false;
+        hasChangedPositionOnce = false;
     }
 
 
@@ -155,11 +159,33 @@ public class Duel {
     }
 
 
-    public Pair<String, String> endTheGame() {
+    public Pair<String, String> surrender() {
         User rival = getRival();
-        return new Pair<>(rival.getUsername(), rival.getScore() + "-" + userWhoPlaysNow.getScore());
+        rival.setScore(rival.getScore() + 1000);
+        return new Pair<>(rival.getUsername(), 1000 + "-" + 0);
     }
 
+    public boolean isGameEnded() {
+        return userWhoPlaysNow.getLifePoints() == 0 || getRival().getLifePoints() == 0
+                || userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() == 0
+                || getRival().getHand().getNumberOfRemainingCardsInDeck() == 0;
+
+    }
+
+    public Pair<String, String> handleEndingGame() {
+        User rival = getRival();
+        if (rival.getLifePoints() > userWhoPlaysNow.getLifePoints()) {
+            getUserWhoPlaysNow().setCoins(getUserWhoPlaysNow().getCoins() + 1000 + getUserWhoPlaysNow().getLifePoints());
+            getRival().setCoins(100 + getRival().getCoins());
+            rival.setScore(rival.getLifePoints() + 1000);
+            return new Pair<>(rival.getUsername(), 1000 + "-" + 0);
+        } else {
+            getUserWhoPlaysNow().setCoins(100 + getUserWhoPlaysNow().getCoins());
+            getRival().setCoins(getRival().getCoins() + 1000 + getRival().getLifePoints());
+            userWhoPlaysNow.setScore(userWhoPlaysNow.getLifePoints() + 1000);
+            return new Pair<>(userWhoPlaysNow.getUsername(), 1000 + "-" + 0);
+        }
+    }
 
     public Pair<Integer, Integer> attack(int placeInBoard) {
         User rival = getRival();
@@ -182,7 +208,7 @@ public class Duel {
 
     public int attackDirectly() {
         User rival = getRival();
-        changeLP(rival, ((Monster) selectedCard).getAtk());
+        changeLP(rival, -((Monster) selectedCard).getAtk());
         ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
         return ((Monster) selectedCard).getAtk();
     }
@@ -205,7 +231,7 @@ public class Duel {
 
 
     public void changeLP(User player, int amount) {
-        player.setLifePoints(player.getLifePoints() + amount);
+        player.setLifePoints(Math.max(player.getLifePoints() + amount, 0));
     }
 
 
@@ -414,7 +440,8 @@ public class Duel {
 
     @Override
     public String toString() {
-        return getRival().getHand().showCardsInHandToStringReverse() + "\n" + getRival().getHand().getNumberOfRemainingCardsInDeck() +
+        return userWhoPlaysNow.getNickname() + ":" + userWhoPlaysNow.getLifePoints() +
+                "\n" + getRival().getHand().showCardsInHandToStringReverse() + "\n" + getRival().getHand().getNumberOfRemainingCardsInDeck() +
                 "\n" + getRival().getBoard().showSpellsAndTrapsToStringReverse() +
                 "\n" + getRival().getBoard().showMonstersToStringReverse() +
                 "\n" + getRival().getGraveyard().size() + "\t\t\t\t\t\t" + getRival().getBoard().getShowFieldZone() +
@@ -423,7 +450,8 @@ public class Duel {
                 "\n" + userWhoPlaysNow.getBoard().showMonstersToString() +
                 "\n" + userWhoPlaysNow.getBoard().showSpellsAndTrapsToString() +
                 "\n\t\t\t\t\t\t" + userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() +
-                "\n" + userWhoPlaysNow.getHand().showCardsInHandToString();
+                "\n" + userWhoPlaysNow.getHand().showCardsInHandToString() +
+                "\n" + getRival().getNickname() + ":" + getRival().getLifePoints();
     }
 
     public int getNumberOfTurnsPlayedUpToNow() {
@@ -432,5 +460,11 @@ public class Duel {
 
     public void setNumberOfTurnsPlayedUpToNow(int numberOfTurnsPlayedUpToNow) {
         this.numberOfTurnsPlayedUpToNow = numberOfTurnsPlayedUpToNow;
+    }
+
+
+    private void resetCards() {
+        Card[] cards = userWhoPlaysNow.getBoard().getMonsters();
+        Arrays.stream(cards).filter(Objects::nonNull).forEach(card -> ((Monster) card).setHasAttackedOnceInTurn(false));
     }
 }

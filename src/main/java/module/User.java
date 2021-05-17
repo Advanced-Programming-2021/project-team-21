@@ -6,13 +6,13 @@ import module.card.Card;
 import java.util.ArrayList;
 
 public class User {
+    private final ArrayList<Deck> decks;
+    private final ArrayList<Card> cards;
     private String username;
     private String password;
     private String nickname;
     private int score;
     private int coins;
-    private final ArrayList<Deck> decks;
-    private final ArrayList<Card> cards;
     private Board board;
     private Hand hand;
     private ArrayList<Card> graveyard;

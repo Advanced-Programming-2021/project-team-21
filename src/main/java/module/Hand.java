@@ -10,8 +10,8 @@ import java.util.Collections;
 
 public class Hand {
     private final Card[] cardsInHand;
-    private User handOwner;
     private final Deck deckToDraw;
+    private User handOwner;
     private Boolean canDraw;
 
     {
@@ -115,7 +115,7 @@ public class Hand {
             showCardsInHand += "C   ";
         int countCInString = 0;
         for (int i = 0; i < showCardsInHand.length(); i++)
-            if(showCardsInHand.charAt(i) == 'C')
+            if (showCardsInHand.charAt(i) == 'C')
                 countCInString++;
         for (int i = 1; i <= 6 - countCInString; i++)
             showCardsInHand += "    ";
@@ -127,7 +127,7 @@ public class Hand {
         return reverseString.reverse().toString();
     }
 
-    public int getNumberOfRemainingCardsInDeck(){
+    public int getNumberOfRemainingCardsInDeck() {
         return deckToDraw.getNumberOfMainDeckCards();
     }
 

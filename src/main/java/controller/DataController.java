@@ -88,7 +88,7 @@ public class DataController {
                     Scanner scanner = new Scanner(file);
                     while (scanner.hasNextLine())
                         data.append(scanner.nextLine());
-                    User user =  new Gson().fromJson(data.toString(), User.class);
+                    User user = new Gson().fromJson(data.toString(), User.class);
                     for (int i = 0; i < user.getDecks().size(); i++) {
                         Deck deck = user.getDecks().get(i);
                         ArrayList<Card> newMainDeckCards = new ArrayList<>();

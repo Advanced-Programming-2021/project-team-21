@@ -7,15 +7,15 @@ import module.card.Monster;
 import java.util.ArrayList;
 
 public class Board {
-    private User boardOwner;
     private final Card[] monsters;
     private final String[] showMonsters;
     private final Card[] spellsAndTraps;
     private final String[] showSpellsAndTraps;
-    private Card fieldZone;
-    private String showFieldZone;
     private final ArrayList<Card> graveyard;
     private final ArrayList<Integer> order;
+    private User boardOwner;
+    private Card fieldZone;
+    private String showFieldZone;
 
     {
         this.monsters = new Card[5];
@@ -67,7 +67,7 @@ public class Board {
     public void addMonsterFaceUp(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
         showMonsters[placeInBoard - 1] = "OO";
-        ((Monster)selectedMonsterCard).setIsATKPosition(true);
+        ((Monster) selectedMonsterCard).setIsATKPosition(true);
         selectedMonsterCard.setFaceUp(false);
     }
 
@@ -237,14 +237,14 @@ public class Board {
                 level = ((Monster) card).getLevel();
         int maximumLevelInHand = 0;
         for (Card card : boardOwner.getHand().getCardsInHand())
-            if(card != null)
+            if (card != null)
                 maximumLevelInHand += ((Monster) card).getLevel();
         return maximumLevelInHand >= level;
     }
 
     public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
         int sumOfLevels = 0;
-        for (Integer integer: cardAddresses)
+        for (Integer integer : cardAddresses)
             sumOfLevels += ((Monster) monsters[integer - 1]).getLevel();
         return sumOfLevels >= ((Monster) selectedCard).getLevel();
     }

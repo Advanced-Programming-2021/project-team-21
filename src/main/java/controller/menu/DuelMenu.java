@@ -30,21 +30,31 @@ public class DuelMenu implements Menuable {
     public void run(String command) {
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
         boolean isValidCommand = false;
-        for (String string : commandMap.keySet()) {
-            Matcher matcher = Regex.getMatcher(command, string);
-            if (matcher.find() && isInGame) {
-                commandMap.get(string).accept(matcher);
-                isValidCommand = true;
-            } else if (!isInGame) {
-                if (command.equals("back")) {
-                    back();
+
+        try {
+            for (String string : commandMap.keySet()) {
+                if (command.equals(Regex.menuExit)) {
+                    exitMenu();
+                    return;
+                }
+                Matcher matcher = Regex.getMatcher(command, string);
+                if (currentDuel != null && currentDuel.isGameEnded()) {
+                    endTheGame();
+                    return;
+                } else if (matcher.find() && isInGame) {
+                    commandMap.get(string).accept(matcher);
                     isValidCommand = true;
+                } else if (!isInGame) {
+                    if (command.equals("back")) {
+                        back();
+                        isValidCommand = true;
+                    }
                 }
             }
+        } catch (Exception ignored) {
         }
         if (!isValidCommand)
             PrintResponses.printInvalidFormat();
-
     }
 
     @Override
@@ -147,6 +157,10 @@ public class DuelMenu implements Menuable {
     }
 
     private void goToNextPhase(Matcher matcher) {
+        if (currentDuel == null) {
+            PrintResponses.printInvalidFormat();
+            return;
+        }
         if (phase.equals(Phases.DRAW_PHASE)) {
             phase = Phases.STANDBY_PHASE;
         } else if (phase.equals(Phases.STANDBY_PHASE)) {
@@ -170,6 +184,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void endTheGame() {
+        PrintResponses.printEndingTheGame(currentDuel.handleEndingGame());
+        currentDuel = null;
     }
 
     private void summon(Matcher matcher) {
@@ -332,7 +348,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void surrender(Matcher matcher) {
-        PrintResponses.printEndingTheGame(currentDuel.endTheGame());
+        PrintResponses.printEndingTheGame(currentDuel.surrender());
     }
 
 

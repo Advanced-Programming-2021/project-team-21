@@ -84,6 +84,7 @@ public class Monster extends Card implements MainEffects {
         setDef((int) parameters[6]);
         setDefHolder((int) parameters[6]);
         setDescription((String) parameters[7]);
+        setHasAttackedOnceInTurn(false);
     }
 
     public static void changeAttackOfMonsters(ArrayList<Card> monsters, int amount) {
@@ -208,8 +209,8 @@ public class Monster extends Card implements MainEffects {
         return hasAttackedOnceInTurn;
     }
 
-    public void setHasAttackedOnceInTurn(boolean hasAttackedOnceInTrun) {
-        this.hasAttackedOnceInTurn = hasAttackedOnceInTrun;
+    public void setHasAttackedOnceInTurn(boolean hasAttackedOnceInTurn) {
+        this.hasAttackedOnceInTurn = hasAttackedOnceInTurn;
     }
 
     public void setIsATKPosition(boolean isATKPosition) {
