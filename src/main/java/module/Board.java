@@ -168,16 +168,16 @@ public class Board {
 
     public int getAddressToSummon() {
         for (int i = 0; i < order.size(); i++) {
-            if (monsters[order.get(i) - 1] == null)
-                return order.get(i);
+            if (monsters[i] == null)
+                return i + 1;
         }
         return 0;
     }
 
     public int getAddressToPutSpell() {
         for (int i = 0; i < order.size(); i++) {
-            if (spellsAndTraps[order.get(i)] == null)
-                return order.get(i);
+            if (spellsAndTraps[i] == null)
+                return i + 1;
         }
         return 0;
     }
@@ -198,28 +198,38 @@ public class Board {
     }
 
     public String showMonstersToString() {
-        StringBuilder stringShowMonsters = new StringBuilder("   ");
-        for (Integer integer : order) stringShowMonsters.append(showMonsters[integer - 1]).append("    ");
+        StringBuilder stringShowMonsters = new StringBuilder("\t");
+        for (Integer integer : order) {
+            if (showMonsters[integer - 1].length() == 2)
+                stringShowMonsters.append(showMonsters[integer - 1]).append("   ");
+            else
+                stringShowMonsters.append(showMonsters[integer - 1]).append("\t");
+        }
         return stringShowMonsters.toString();
     }
 
     public String showSpellsAndTrapsToString() {
-        StringBuilder stringShowSpellsAndTraps = new StringBuilder("   ");
-        for (Integer integer : order) stringShowSpellsAndTraps.append(showSpellsAndTraps[integer - 1]).append("    ");
+        StringBuilder stringShowSpellsAndTraps = new StringBuilder("\t");
+        for (Integer integer : order) stringShowSpellsAndTraps.append(showSpellsAndTraps[integer - 1]).append("\t");
         return stringShowSpellsAndTraps.toString();
     }
 
     public String showMonstersToStringReverse() {
-        StringBuilder stringShowMonstersReverse = new StringBuilder("   ");
-        for (int i = order.size() - 1; i >= 0; i--)
-            stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
+        StringBuilder stringShowMonstersReverse = new StringBuilder("\t");
+        for (int i = order.size() - 1; i >= 0; i--) {
+            if (showMonsters[order.get(i) - 1].length() == 2)
+                stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("   ");
+            else
+                stringShowMonstersReverse.append(showMonsters[order.get(i) - 1]).append("\t");
+        }
+
         return stringShowMonstersReverse.toString();
     }
 
     public String showSpellsAndTrapsToStringReverse() {
-        StringBuilder reverseString = new StringBuilder("   ");
+        StringBuilder reverseString = new StringBuilder("\t");
         for (int i = order.size() - 1; i >= 0; i--)
-            reverseString.append(showSpellsAndTraps[order.get(i) - 1]).append("   ");
+            reverseString.append(showSpellsAndTraps[order.get(i) - 1]).append("\t");
         return reverseString.toString();
     }
 
