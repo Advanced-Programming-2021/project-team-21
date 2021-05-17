@@ -447,11 +447,11 @@ public class Duel {
                 "\n" + getRival().getBoard().showSpellsAndTrapsToStringReverse() +
                 "\n" + getRival().getBoard().showMonstersToStringReverse() +
                 "\n" + getRival().getGraveyard().size() + "\t\t\t\t\t\t" + getRival().getBoard().getShowFieldZone() +
-                "\n" + "--------------------------\n" +
+                "\n" + "------------------------------\n" +
                 userWhoPlaysNow.getBoard().getShowFieldZone() + "\t\t\t\t\t\t" + userWhoPlaysNow.getGraveyard().size() +
                 "\n" + userWhoPlaysNow.getBoard().showMonstersToString() +
                 "\n" + userWhoPlaysNow.getBoard().showSpellsAndTrapsToString() +
-                "\n\t\t\t\t\t\t" + userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() +
+                "\n\t\t\t\t\t\t\t" + userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() +
                 "\n" + userWhoPlaysNow.getHand().showCardsInHandToString() +
                 "\n" + getRival().getNickname() + ":" + getRival().getLifePoints();
     }

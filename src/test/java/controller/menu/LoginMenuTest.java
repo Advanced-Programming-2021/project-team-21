@@ -197,17 +197,27 @@ class LoginMenuTest {
     void invalidPasswordToLoginLoginMenuTest() {
         new LoginMenu().run("user create --username InvalidPasswordToLoginLoginMenuTest --nickname InvalidPasswordToLoginLoginMenuTest --password ali");
         new LoginMenu().run("user login --username InvalidPasswordToLoginLoginMenuTest --nickname InvalidPasswordToLoginLoginMenuTest --password ali2");
-        assertEquals("Username and password didn’t match!\n", outputStreamCaptor.toString());
         File file = new File("src/main/resources/users/InvalidPasswordToLoginLoginMenuTest.user.json");
         file.delete();
+        assertEquals("Username and password didn’t match!\n", outputStreamCaptor.toString());
     }
+
 
     @Test
     void invalidPasswordToLoginAbbreviationLoginMenuTest() {
         new LoginMenu().run("user create -u InvalidPasswordToLoginLoginMenuTest -n InvalidPasswordToLoginLoginMenuTest -p ali");
-        new LoginMenu().run("user login -u InvalidPasswordToLoginLoginMenuTest -n InvalidPasswordToLoginLoginMenuTest -p ali2");
-        assertEquals("Username and password didn’t match!\n", outputStreamCaptor.toString());
+        new LoginMenu().run("user login -u InvalidPasswordToLoginLoginMenuTest -p ali2");
         File file = new File("src/main/resources/users/InvalidPasswordToLoginLoginMenuTest.user.json");
         file.delete();
+        assertEquals("user created successfully!\nUsername and password didn’t match!\n", outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void repetitiousUsernameUserCreation() {
+        new LoginMenu().run("user create --username repetitiousUsernameUserCreation --nickname repetitiousUsernameUserCreation --password 1234");
+        new LoginMenu().run("user create --username repetitiousUsernameUserCreation --nickname repetitiousUsernameUserCreation2 --password 1234");
+        File file = new File("src/main/resources/users/repetitiousUsernameUserCreation.user.json");
+        file.delete();
+        assertEquals("user created successfully!" + System.lineSeparator() + "user with username repetitiousUsernameUserCreation already exists" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 }
