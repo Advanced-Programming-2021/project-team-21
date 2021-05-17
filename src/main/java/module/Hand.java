@@ -8,21 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class    Hand {
-    private Card[] cardsInHand;
+public class Hand {
+    private final Card[] cardsInHand;
     private User handOwner;
-    private Deck deckToDraw;
+    private final Deck deckToDraw;
     private Boolean canDraw;
-    private ArrayList<Integer> orderInHand;
 
     {
         cardsInHand = new Card[6];
-        this.orderInHand = new ArrayList<>();
-        orderInHand.add(5);
-        orderInHand.add(3);
-        orderInHand.add(1);
-        orderInHand.add(2);
-        orderInHand.add(4);
     }
 
     public Hand(User handOwner) {
@@ -33,9 +26,9 @@ public class    Hand {
 
 
     public void addCardToHand(Card cardToAdd) {
-        for (int i = orderInHand.size() - 1; i >= 0; i--) {
-            if (cardsInHand[orderInHand.get(i)] == null) {
-                cardsInHand[orderInHand.get(i)] = cardToAdd;
+        for (int i = 0; i < cardsInHand.length; i++) {
+            if (cardsInHand[i] == null) {
+                cardsInHand[i] = cardToAdd;
                 break;
             }
         }
@@ -54,9 +47,9 @@ public class    Hand {
             // ending game
             return null;
         }
-        for (int i = orderInHand.size() - 1; i >= 0; i--) {
-            if (cardsInHand[orderInHand.get(i)] == null) {
-                cardsInHand[orderInHand.get(i)] = deckToDraw.getMainDeckCards().get(0);
+        for (int i = 0; i < cardsInHand.length; i++) {
+            if (cardsInHand[i] == null) {
+                cardsInHand[i] = deckToDraw.getMainDeckCards().get(0);
                 break;
             }
         }
@@ -95,12 +88,11 @@ public class    Hand {
 
     //checks if the given card is in hand
     public boolean isCardInHand(Card card) {
-        for (int i = 0; i < cardsInHand.length; i++)
-            if (cardsInHand[i] == card)
+        for (Card value : cardsInHand)
+            if (value == card)
                 return true;
         return false;
     }
-
 
 
     // to find cards with specific cards from deck (1) and hand(2) and graveYard (4)
@@ -121,8 +113,8 @@ public class    Hand {
 
     public String showCardsInHandToString() {
         int countCardsInHand = 0;
-        for (int i = 0; i < cardsInHand.length; i++)
-            if (cardsInHand[i] != null)
+        for (Card card : cardsInHand)
+            if (card != null)
                 countCardsInHand++;
         String showCardsInHand = "";
         for (int i = 0; i < countCardsInHand; i++)
@@ -147,5 +139,14 @@ public class    Hand {
 
     public int getNumberOfRemainingCardsInDeck(){
         return deckToDraw.getNumberOfMainDeckCards();
+    }
+
+    public int getMinLevelOfRitualMonstersInHand() {
+        int level = 0;
+        for (Card card : cardsInHand) {
+            if (card instanceof Monster && card.getCardType().getName().equals("Ritual") && ((Monster) card).getLevel() < level)
+                level = ((Monster) card).getLevel();
+        }
+        return level;
     }
 }

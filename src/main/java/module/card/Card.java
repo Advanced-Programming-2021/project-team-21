@@ -87,13 +87,12 @@ public class Card {
         return hasEffect;
     }
 
+    public boolean isATK() {
+        return isATK;
+    }
 
     public void setATK(boolean ATK) {
         isATK = ATK;
-    }
-
-    public boolean isATK() {
-        return isATK;
     }
 
     //for searching a card on board or deck or graveYard

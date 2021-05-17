@@ -424,31 +424,31 @@ public class PrintResponses {
         System.out.println("no card is destroyed and you received " + damage + " battle damage");
     }
 
-    public static void printCardNameInAttackIfIsDefenceHide(String cardName){
-        System.out.print("opponent’s monster card was "+ cardName +" and ");
+    public static void printCardNameInAttackIfIsDefenceHide(String cardName) {
+        System.out.print("opponent’s monster card was " + cardName + " and ");
     }
 
-    public static void printDamageInAttackDirectly(int damage){
+    public static void printDamageInAttackDirectly(int damage) {
         System.out.println("you opponent receives " + damage + " battle damage");
     }
 
-    public static void showGraveyard(String graveyardToShow){
+    public static void showGraveyard(String graveyardToShow) {
         System.out.println(graveyardToShow);
     }
 
-    public static void printSelectedCard(String selectedCardToShow){
+    public static void printSelectedCard(String selectedCardToShow) {
         System.out.println(selectedCardToShow);
     }
 
-    public static void printEndingTheGame(Pair<String, String> pair){
+    public static void printEndingTheGame(Pair<String, String> pair) {
         System.out.println(pair.getFirst() + " won the game and the score is: " + pair.getSecond());
     }
 
-    public static void printGameSuccessfullyCreated(){
+    public static void printGameSuccessfullyCreated() {
         System.out.println(Responses.gameCreation);
     }
 
-    public static void printBoard(Duel currentDuel){
+    public static void printBoard(Duel currentDuel) {
         System.out.println(currentDuel);
     }
     public static void printSpecialSummonCards(ArrayList<Monster> monsters) {

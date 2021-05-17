@@ -11,6 +11,7 @@ public class Effect {
     private int attack;
     private int defense;
     private boolean needsToBeReset;
+
     public Effect(int isEffect, int isContinuous) {
         this.isContinuous = isContinuous;
         this.isEffect = isEffect;
@@ -20,19 +21,22 @@ public class Effect {
         if (isContinuous != 0) continuousNumber = isContinuous - 1;
         needsToBeReset = false;
     }
+
     // for field and equip cards
-    public Effect (int attack , int defense , String type ){
+    public Effect(int attack, int defense, String type) {
         this.attack = attack;
         this.defense = defense;
         this.type = type;
         this.isEffect = 1;
     }
-    public Effect (int isEffect , String isContinuous , String monsterType ){
+
+    public Effect(int isEffect, String isContinuous, String monsterType) {
         this.isEffect = isEffect;
         this.isContinuous = Integer.parseInt(isContinuous);
         this.type = monsterType;
         this.isEffect = 1;
     }
+
     public int getContinuousNumber() {
         return continuousNumber;
     }
@@ -45,13 +49,13 @@ public class Effect {
         return isEffect;
     }
 
-    public int getIsContinuous() {
-        return isContinuous;
-    }
-
     public void setIsEffect(int isEffect) {
         this.isEffect = isEffect;
         this.effectNumber = isEffect - 1;
+    }
+
+    public int getIsContinuous() {
+        return isContinuous;
     }
 
     public void setIsContinuous(int isContinuous) {
@@ -70,8 +74,9 @@ public class Effect {
     public String getType() {
         return type;
     }
-    public boolean hasEffect(){
-        return this.isEffect != 0 ;
+
+    public boolean hasEffect() {
+        return this.isEffect != 0;
     }
 
     public int getIsContinuousHolder() {
@@ -81,19 +86,21 @@ public class Effect {
     public int getIsEffectHolder() {
         return isEffectHolder;
     }
-    public void finishEffect(){
+
+    public void finishEffect() {
         this.isEffect = 0;
         this.isContinuous = 0;
+    }
+
+    public boolean isNeedsToBeReset() {
+        return needsToBeReset;
     }
 
     public void setNeedsToBeReset(boolean needsToBeReset) {
         this.needsToBeReset = needsToBeReset;
     }
 
-    public boolean isNeedsToBeReset() {
-        return needsToBeReset;
-    }
-    public void resetEffect(){
+    public void resetEffect() {
         this.isEffect = isEffectHolder;
         this.isContinuous = isContinuousHolder;
     }

@@ -4,7 +4,6 @@ import controller.DataController;
 import module.card.Card;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class User {
     private String username;
@@ -12,8 +11,8 @@ public class User {
     private String nickname;
     private int score;
     private int coins;
-    private ArrayList<Deck> decks;
-    private ArrayList<Card> cards;
+    private final ArrayList<Deck> decks;
+    private final ArrayList<Card> cards;
     private Board board;
     private Hand hand;
     private ArrayList<Card> graveyard;

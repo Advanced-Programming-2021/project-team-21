@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    private ArrayList<Card> mainDeckCards;
-    private ArrayList<Card> sideDeckCards;
+    private  ArrayList<Card> mainDeckCards;
+    private  ArrayList<Card> sideDeckCards;
     private String name;
     private boolean isActive;
 
@@ -69,6 +69,14 @@ public class Deck {
 
     public ArrayList<Card> getMainDeckCards() {
         return mainDeckCards;
+    }
+
+    public void setMainDeckCards(ArrayList<Card> mainDeckCards) {
+        this.mainDeckCards = mainDeckCards;
+    }
+
+    public void setSideDeckCards(ArrayList<Card> sideDeckCards) {
+        this.sideDeckCards = sideDeckCards;
     }
 
     public void addCardToMainDeck(Card newCard) {
