@@ -169,7 +169,7 @@ public class Board {
     public int getAddressToSummon() {
         for (int i = 0; i < order.size(); i++) {
             if (monsters[order.get(i) - 1] == null)
-                return i + 1;
+                return order.get(i);
         }
         return 0;
     }
@@ -177,7 +177,7 @@ public class Board {
     public int getAddressToPutSpell() {
         for (int i = 0; i < order.size(); i++) {
             if (spellsAndTraps[order.get(i)] == null)
-                return i;
+                return order.get(i);
         }
         return 0;
     }
@@ -247,6 +247,20 @@ public class Board {
         for (Integer integer : cardAddresses)
             sumOfLevels += ((Monster) monsters[integer - 1]).getLevel();
         return sumOfLevels >= ((Monster) selectedCard).getLevel();
+    }
+
+    public int getAddressByCard(Card card) {
+        if(card instanceof Monster){
+            for (int i = 0; i < order.size(); i++)
+                if (monsters[i] == card)
+                    return i + 1;
+        }
+        else {
+            for (int i = 0; i < order.size(); i++)
+                if (spellsAndTraps[i] == card)
+                    return i + 1;
+        }
+        return 0;
     }
 
 }
