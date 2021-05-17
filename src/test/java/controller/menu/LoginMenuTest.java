@@ -1,14 +1,17 @@
 package controller.menu;
 
 
+import controller.ProgramController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sun.rmi.runtime.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class LoginMenuTest {
 
@@ -21,195 +24,88 @@ class LoginMenuTest {
     }
 
     @Test
-    public void showCurrentMenuTest() {
-        new LoginMenu().showCurrentMenu();
-        assertEquals("Login Menu\n", outputStreamCaptor.toString());
+    public void successfulUserCreation1() {
+        new LoginMenu().run("user create --username successfulUserCreation1 --nickname successfulUserCreation1 --password 1234");
+        new File("src/main/resources/users/successfulUserCreation1.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
 
     @Test
-    void userWithThisNameExistsLoginMenuTest() {
-        new LoginMenu().run("user create --username UserExistsLoginMenuTest --nickname UserExistsLoginMenuTest --password ali");
-        new LoginMenu().run("user create --username UserExistsLoginMenuTest --nickname UserExistsLoginMenuTest2 --password ali");
-        File file = new File("src/main/resources/users/UserExistsLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nuser with username UserExistsLoginMenuTest already exists\n", outputStreamCaptor.toString());
+    public void successfulUserCreation2() {
+        new LoginMenu().run("user create --username successfulUserCreation2 --password 1234 --nickname successfulUserCreation2");
+        new File("src/main/resources/users/successfulUserCreation2.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void userWithThisNameExistsAbbreviationLoginMenuTest() {
-        new LoginMenu().run("user create -u UserExistsLoginMenuTest -n UserExistsLoginMenuTest -p ali");
-        new LoginMenu().run("user create -u UserExistsLoginMenuTest -n UserExistsLoginMenuTest2 -p ali");
-        File file = new File("src/main/resources/users/UserExistsLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nuser with username UserExistsLoginMenuTest already exists\n", outputStreamCaptor.toString());
+    public void successfulUserCreation3() {
+        new LoginMenu().run("user create --nickname successfulUserCreation3 --username successfulUserCreation3 --password 1234");
+        new File("src/main/resources/users/successfulUserCreation3.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void userWithThisNicknameExistsLoginMenuTest() {
-        new LoginMenu().run("user create --username NicknameExistsLoginMenuTest --nickname NicknameExistsLoginMenuTest --password ali");
-        new LoginMenu().run("user create --username NicknameExistsLoginMenuTest2 --nickname NicknameExistsLoginMenuTest --password ali");
-        File file = new File("src/main/resources/users/NicknameExistsLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nuser with nickname NicknameExistsLoginMenuTest already exists\n", outputStreamCaptor.toString());
+    public void successfulUserCreation4() {
+        new LoginMenu().run("user create --nickname successfulUserCreation4 --password 1234 --username successfulUserCreation4");
+        new File("src/main/resources/users/successfulUserCreation4.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void userWithThisNicknameExistsAbbreviationLoginMenuTest() {
-        new LoginMenu().run("user create -u NicknameExistsLoginMenuTest -n NicknameExistsLoginMenuTest -p ali");
-        new LoginMenu().run("user create -u NicknameExistsLoginMenuTest2 -n NicknameExistsLoginMenuTest -p ali");
-        File file = new File("src/main/resources/users/NicknameExistsLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nuser with nickname NicknameExistsLoginMenuTest already exists\n", outputStreamCaptor.toString());
-    }
-
-    // Begin test 6 combination of username, nickname and password for successful user creation
-    @Test
-    void successfulUserCreationLoginMenuTest() {
-        new LoginMenu().run("user create --username SuccessfulUserCreationLoginMenuTest --nickname SuccessfulUserCreationLoginMenuTest --password ali");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreation5() {
+        new LoginMenu().run("user create --password 1234 --nickname successfulUserCreation5 --username successfulUserCreation5");
+        new File("src/main/resources/users/successfulUserCreation5.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationLoginMenuTest2() {
-        new LoginMenu().run("user create --username SuccessfulUserCreationLoginMenuTest --password ali --nickname SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreation6() {
+        new LoginMenu().run("user create --password 1234 --username successfulUserCreation6 --nickname successfulUserCreation6");
+        new File("src/main/resources/users/successfulUserCreation6.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationLoginMenuTest3() {
-        new LoginMenu().run("user create --nickname SuccessfulUserCreationLoginMenuTest --username SuccessfulUserCreationLoginMenuTest --password ali");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreationAbbreviation1() {
+        new LoginMenu().run("user create -u successfulUserCreationAbbreviation1 -n successfulUserCreationAbbreviation1 -p 1234");
+        new File("src/main/resources/users/successfulUserCreationAbbreviation1.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationLoginMenuTest4() {
-        new LoginMenu().run("user create --nickname SuccessfulUserCreationLoginMenuTest --password ali --username SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreationAbbreviation2() {
+        new LoginMenu().run("user create -u successfulUserCreationAbbreviation2 -p 1234 -n successfulUserCreationAbbreviation2");
+        new File("src/main/resources/users/successfulUserCreationAbbreviation2.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationLoginMenuTest5() {
-        new LoginMenu().run("user create --password ali --nickname SuccessfulUserCreationLoginMenuTest --username SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreationAbbreviation3() {
+        new LoginMenu().run("user create -n successfulUserCreationAbbreviation3 -u successfulUserCreationAbbreviation3 -p 1234");
+        new File("src/main/resources/users/successfulUserCreationAbbreviation3.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationLoginMenuTest6() {
-        new LoginMenu().run("user create --password ali --username SuccessfulUserCreationLoginMenuTest --nickname SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationLoginMenuTest.user.json");
-        file.delete();
-    }
-    // End test 6 combination of username, nickname and password for successful user creation
-
-    // Begin test 6 combination of abbreviation of username, nickname and password for successful user creation
-    @Test
-    void successfulUserCreationAbbreviationLoginMenuTest() {
-        new LoginMenu().run("user create -u SuccessfulUserCreationAbbreviationLoginMenuTest -n SuccessfulUserCreationAbbreviationLoginMenuTest -p ali");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationAbbreviationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreationAbbreviation4() {
+        new LoginMenu().run("user create -n successfulUserCreationAbbreviation4 -p 1234 -u successfulUserCreationAbbreviation4");
+        new File("src/main/resources/users/successfulUserCreationAbbreviation4.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationAbbreviationLoginMenuTest2() {
-        new LoginMenu().run("user create -u SuccessfulUserCreationLoginMenuTest -p ali -n SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationAbbreviationLoginMenuTest.user.json");
-        file.delete();
+    public void successfulUserCreationAbbreviation5() {
+        new LoginMenu().run("user create -p 1234 -n successfulUserCreationAbbreviation5 -u successfulUserCreationAbbreviation5");
+        new File("src/main/resources/users/successfulUserCreationAbbreviation5.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
-    void successfulUserCreationAbbreviationLoginMenuTest3() {
-        new LoginMenu().run("user create -n SuccessfulUserCreationLoginMenuTest -u SuccessfulUserCreationLoginMenuTest -p ali");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationAbbreviationLoginMenuTest.user.json");
-        file.delete();
-    }
-
-    @Test
-    void successfulUserCreationAbbreviationLoginMenuTest4() {
-        new LoginMenu().run("user create -n SuccessfulUserCreationLoginMenuTest -p ali -u SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationAbbreviationLoginMenuTest.user.json");
-        file.delete();
-    }
-
-    @Test
-    void successfulUserCreationAbbreviationLoginMenuTest5() {
-        new LoginMenu().run("user create -p ali --nickname SuccessfulUserCreationLoginMenuTest -u SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationAbbreviationLoginMenuTest.user.json");
-        file.delete();
-    }
-
-    @Test
-    void successfulUserCreationAbbreviationLoginMenuTest6() {
-        new LoginMenu().run("user create -p ali -u SuccessfulUserCreationLoginMenuTest -n SuccessfulUserCreationLoginMenuTest");
-        assertEquals("user created successfully!\n", outputStreamCaptor.toString());
-        File file = new File("src/main/resources/users/SuccessfulUserCreationAbbreviationLoginMenuTest.user.json");
-        file.delete();
-    }
-    // End test 6 combination of abbreviation of username, nickname and password for successful user creation
-
-    @Test
-    void successfulLoginNewUserLoginMenuTest() {
-        new LoginMenu().run("user create --username SuccessfulLoginNewUserLoginMenuTest --nickname SuccessfulLoginNewUserLoginMenuTest --password ali");
-        new LoginMenu().run("user login --username SuccessfulLoginNewUserLoginMenuTest --nickname SuccessfulLoginNewUserLoginMenuTest --password ali");
-        File file = new File("src/main/resources/users/SuccessfulLoginNewUserLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nuser logged in successfully!\n", outputStreamCaptor.toString());
-    }
-
-    @Test
-    void successfulLoginNewUserAbbreviationLoginMenuTest() {
-        new LoginMenu().run("user create -u SuccessfulLoginNewUserLoginMenuTest -n SuccessfulLoginNewUserLoginMenuTest -p ali");
-        new LoginMenu().run("user login -u SuccessfulLoginNewUserLoginMenuTest -n SuccessfulLoginNewUserLoginMenuTest -p ali");
-        File file = new File("src/main/resources/users/SuccessfulLoginNewUserLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nuser logged in successfully!\n", outputStreamCaptor.toString());
-    }
-
-    @Test
-    void UserDoesNotExistToLoginLoginMenuTest() {
-        new LoginMenu().run("user login --username UserDoesNotExistToLoginLoginMenuTest --nickname UserDoesNotExistToLoginLoginMenuTest --password ali");
-        assertEquals("Username and password didn’t match!\n", outputStreamCaptor.toString());
-    }
-
-    @Test
-    void UserDoesNotExistToLoginAbbreviationLoginMenuTest() {
-        new LoginMenu().run("user login -u UserDoesNotExistToLoginLoginMenuTest -n UserDoesNotExistToLoginLoginMenuTest -p ali");
-        assertEquals("Username and password didn’t match!\n", outputStreamCaptor.toString());
-    }
-
-    @Test
-    void invalidPasswordToLoginLoginMenuTest() {
-        new LoginMenu().run("user create --username InvalidPasswordToLoginLoginMenuTest --nickname InvalidPasswordToLoginLoginMenuTest --password ali");
-        new LoginMenu().run("user login --username InvalidPasswordToLoginLoginMenuTest --nickname InvalidPasswordToLoginLoginMenuTest --password ali2");
-        File file = new File("src/main/resources/users/InvalidPasswordToLoginLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("Username and password didn’t match!\n", outputStreamCaptor.toString());
-    }
-
-
-    @Test
-    void invalidPasswordToLoginAbbreviationLoginMenuTest() {
-        new LoginMenu().run("user create -u InvalidPasswordToLoginLoginMenuTest -n InvalidPasswordToLoginLoginMenuTest -p ali");
-        new LoginMenu().run("user login -u InvalidPasswordToLoginLoginMenuTest -p ali2");
-        File file = new File("src/main/resources/users/InvalidPasswordToLoginLoginMenuTest.user.json");
-        file.delete();
-        assertEquals("user created successfully!\nUsername and password didn’t match!\n", outputStreamCaptor.toString());
+    public void successfulUserCreationAbbreviation6() {
+        new LoginMenu().run("user create -p 1234 -u successfulUserCreationAbbreviation6 -n successfulUserCreationAbbreviation6");
+        new File("src/main/resources/users/successfulUserCreationAbbreviation6.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test
@@ -220,4 +116,59 @@ class LoginMenuTest {
         file.delete();
         assertEquals("user created successfully!" + System.lineSeparator() + "user with username repetitiousUsernameUserCreation already exists" + System.lineSeparator(), outputStreamCaptor.toString());
     }
+
+    @Test
+    public void repetitiousNicknameUserCreation() {
+        new LoginMenu().run("user create --username repetitiousUsernameUserCreation --nickname repetitiousUsernameUserCreation --password 1234");
+        new LoginMenu().run("user create --username repetitiousUsernameUserCreation2 --nickname repetitiousUsernameUserCreation --password 1234");
+        new File("src/main/resources/users/repetitiousUsernameUserCreation.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator() + "user with nickname repetitiousUsernameUserCreation already exists" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void successfulLogin() {
+        new LoginMenu().run("user create --username successfulLogin --nickname successfulLogin --password 1234");
+        new LoginMenu().run("user login --username successfulLogin --nickname successfulLogin --password 1234");
+        new File("src/main/resources/users/successfulLogin.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator() + "user logged in successfully!" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void noUserExistsToLogin() {
+        new LoginMenu().run("user login --username noUserExistsToLogin --nickname noUserExistsToLogin --password 1234");
+        assertEquals("Username and password didn’t match!" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void wrongPasswordToLogin() {
+        new LoginMenu().run("user create --username wrongPasswordToLogin --nickname wrongPasswordToLogin --password 1234");
+        new LoginMenu().run("user login --username wrongPasswordToLogin --nickname wrongPasswordToLogin --password 12345");
+        new File("src/main/resources/users/wrongPasswordToLogin.user.json").delete();
+        assertEquals("user created successfully!" + System.lineSeparator() + "Username and password didn’t match!" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void invalidCommand() {
+        new LoginMenu().run("user craaaaaaaaaaate --username invalidCommand --nickname invalidCommand --password 1234");
+        assertEquals("invalid command" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void showCurrentMenu() {
+        new LoginMenu().run("menu show-current");
+        assertEquals("Login Menu" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void noLoginYet() {
+        new LoginMenu().run("menu enter Main Menu");
+        assertEquals("please login first" + System.lineSeparator(), outputStreamCaptor.toString());
+    }
+
+    @Test
+    public void menuExit() {
+        new LoginMenu().run("menu exit");
+        assertFalse(ProgramController.gameOn);
+    }
+
 }
