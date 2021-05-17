@@ -545,11 +545,7 @@ public class DuelMenu implements Menuable {
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
         } else {
-            if (currentDuel.getSelectedCard() instanceof Spell) {
-                currentDuel.setSpell();
-            } else {
-                currentDuel.setTrap();
-            }
+            currentDuel.setSpellOrTrap();
             PrintResponses.printSuccessfulCardSetting();
         }
     }

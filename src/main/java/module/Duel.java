@@ -10,14 +10,14 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Duel {
-    private static final int INITIAL_LIFE_POINTS = 1300;
+    private static final int INITIAL_LIFE_POINTS = 8000;
     private final User FIRST_USER, SECOND_USER;
     public ArrayList<Card> specialSummonCards;
     private User userWhoPlaysNow;
     private Card selectedCard;
     private int placeOfSelectedCard;
     private boolean isSelectedCardForOpponent;
-    private boolean hasSummonedOnce;
+    private boolean hasSummonedOrSetOnce;
     private boolean hasChangedPositionOnce;
     private int numberOfTurnsPlayedUpToNow;
 
@@ -34,7 +34,7 @@ public class Duel {
         FIRST_USER.setLifePoints(INITIAL_LIFE_POINTS);
         SECOND_USER.setLifePoints(INITIAL_LIFE_POINTS);
         userWhoPlaysNow = FIRST_USER;
-        setHasSummonedOnce(false);
+        setHasSummonedOrSetOnce(false);
         setHasChangedPositionOnce(false);
         setNumberOfTurnsPlayedUpToNow(0);
     }
@@ -45,7 +45,7 @@ public class Duel {
             userWhoPlaysNow = SECOND_USER;
         else
             userWhoPlaysNow = FIRST_USER;
-        hasSummonedOnce = false;
+        hasSummonedOrSetOnce = false;
         hasChangedPositionOnce = false;
     }
 
@@ -96,7 +96,7 @@ public class Duel {
         int placeInBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
-        hasSummonedOnce = true;
+        hasSummonedOrSetOnce = true;
         userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
         selectedCard = null;
     }
@@ -126,15 +126,14 @@ public class Duel {
         int placeOnBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
-        hasSummonedOnce = true;
+        hasSummonedOrSetOnce = true;
     }
 
-    public void setSpell() {
-
-    }
-
-    public void setTrap() {
-
+    public void setSpellOrTrap() {
+        int placeOnBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
+        Board currentBoard = userWhoPlaysNow.getBoard();
+        currentBoard.addSpellAndTrap(placeOnBoard, selectedCard);
+        hasSummonedOrSetOnce = true;
     }
 
 
@@ -304,11 +303,11 @@ public class Duel {
     }
 
     public boolean isHasSummonedOrSetOnce() {
-        return hasSummonedOnce;
+        return hasSummonedOrSetOnce;
     }
 
-    public void setHasSummonedOnce(boolean hasSummonedOnce) {
-        this.hasSummonedOnce = hasSummonedOnce;
+    public void setHasSummonedOrSetOnce(boolean hasSummonedOrSetOnce) {
+        this.hasSummonedOrSetOnce = hasSummonedOrSetOnce;
     }
 
     public boolean isHasChangedPositionOnce() {
