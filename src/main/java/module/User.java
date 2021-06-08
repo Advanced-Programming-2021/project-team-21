@@ -18,6 +18,7 @@ public class User {
     private ArrayList<Card> graveyard;
     private int lifePoints;
     private boolean canSummonMonster, canSummonSpell, canSummonTrap;
+    private int winsInAMatch;
 
     {
         coins = 100000;
@@ -223,5 +224,13 @@ public class User {
 
     public void setCanSummonTrap(boolean canSummonTrap) {
         this.canSummonTrap = canSummonTrap;
+    }
+
+    public int getWinsInAMatch() {
+        return winsInAMatch;
+    }
+
+    public void setWinsInAMatch(int winsInAMatch) {
+        this.winsInAMatch = winsInAMatch;
     }
 }

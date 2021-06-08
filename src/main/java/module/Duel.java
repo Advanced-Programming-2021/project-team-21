@@ -161,6 +161,7 @@ public class Duel {
     public Pair<String, String> surrender() {
         User rival = getRival();
         rival.setScore(rival.getScore() + 1000);
+        rival.setWinsInAMatch(rival.getWinsInAMatch() + 1);
         return new Pair<>(rival.getUsername(), 1000 + "-" + 0);
     }
 
@@ -177,16 +178,36 @@ public class Duel {
             getUserWhoPlaysNow().setCoins(getUserWhoPlaysNow().getCoins() + 1000 + getUserWhoPlaysNow().getLifePoints());
             getRival().setCoins(100 + getRival().getCoins());
             rival.setScore(rival.getLifePoints() + 1000);
+            rival.setWinsInAMatch(rival.getWinsInAMatch() + 1);
             return new Pair<>(rival.getUsername(), 1000 + "-" + 0);
         } else {
             getUserWhoPlaysNow().setCoins(100 + getUserWhoPlaysNow().getCoins());
             getRival().setCoins(getRival().getCoins() + 1000 + getRival().getLifePoints());
             userWhoPlaysNow.setScore(userWhoPlaysNow.getLifePoints() + 1000);
+            userWhoPlaysNow.setWinsInAMatch(userWhoPlaysNow.getWinsInAMatch() + 1);
             return new Pair<>(userWhoPlaysNow.getUsername(), 1000 + "-" + 0);
         }
     }
 
-    public Pair<Integer, Integer> attack(int placeInBoard) {
+    public Pair<String, String> handleEndingTheWholeMatch(){
+        User rival = getRival();
+        if (rival.getLifePoints() > userWhoPlaysNow.getLifePoints()) {
+//            getUserWhoPlaysNow().setCoins(getUserWhoPlaysNow().getCoins() + 3000 + 3 * getUserWhoPlaysNow().getMaxLifePoints());
+            getRival().setCoins(300 + getRival().getCoins());
+            rival.setScore(rival.getLifePoints() + 3000);
+            return new Pair<>(rival.getUsername(), 3000 + "-" + 0);
+        } else {
+            getUserWhoPlaysNow().setCoins(100 + getUserWhoPlaysNow().getCoins());
+            getRival().setCoins(getRival().getCoins() + 1000 + getRival().getLifePoints());
+//            userWhoPlaysNow.setScore(userWhoPlaysNow.getMaxLifePoints() * 3 + 3000);
+            return new Pair<>(userWhoPlaysNow.getUsername(), 3000 + "-" + 0);
+        }
+    }
+
+//    public Pair<String, String> handleEndingARound() {
+//    }
+
+        public Pair<Integer, Integer> attack(int placeInBoard) {
         User rival = getRival();
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
@@ -298,6 +319,10 @@ public class Duel {
 
     public User getSECOND_USER() {
         return SECOND_USER;
+    }
+
+    public User getFIRST_USER() {
+        return FIRST_USER;
     }
 
     public boolean canNotSummonSelectedCard() {

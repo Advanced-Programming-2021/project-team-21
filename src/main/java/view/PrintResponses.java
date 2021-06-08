@@ -441,6 +441,10 @@ public class PrintResponses {
         System.out.println(pair.getFirst() + " won the game and the score is: " + pair.getSecond());
     }
 
+    public static void printEndingTheWholeMatch(Pair<String, String> pair) {
+        System.out.println(pair.getFirst() + " won the whole match with score: " + pair.getSecond());
+    }
+
     public static void printGameSuccessfullyCreated() {
         System.out.println(Responses.gameCreation);
     }

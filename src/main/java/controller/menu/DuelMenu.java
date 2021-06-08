@@ -22,6 +22,7 @@ public class DuelMenu implements Menuable {
     private Phases phase;
     private boolean isInGame;
     private int remainingRounds;
+    private int initialRounds;
     private boolean isFirstRound = true;
 
     {
@@ -93,6 +94,7 @@ public class DuelMenu implements Menuable {
     private void createNewDuel(Matcher matcher) {
         User secondPlayer = User.getUserByUsername(matcher.group("player2Username"));
         remainingRounds = Integer.parseInt(matcher.group("rounds"));
+        initialRounds = remainingRounds;
         if (secondPlayer == null) {
             PrintResponses.printNoUserExistToPlayWith();
         } else if (ProgramController.userInGame.getActiveDeck() == null) {
@@ -107,7 +109,6 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNonSupportiveRound();
         } else {
             handleSuccessfulGameCreation(secondPlayer);
-            currentDuel.getUserWhoPlaysNow().getActiveDeck();
             PrintResponses.printBoard(currentDuel);
         }
     }
@@ -188,9 +189,13 @@ public class DuelMenu implements Menuable {
     private void endTheGame() {
         remainingRounds--;
         if (remainingRounds == 0) {
-            PrintResponses.printEndingTheGame(currentDuel.handleEndingGame());
+            if (initialRounds == 1)
+                PrintResponses.printEndingTheGame(currentDuel.handleEndingGame());
+            else
+                PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingTheWholeMatch());
             currentDuel = null;
         } else {
+
             handleSuccessfulGameCreation(currentDuel.getSECOND_USER());
         }
     }
@@ -427,7 +432,9 @@ public class DuelMenu implements Menuable {
         if (isFirstRound) {
             PrintResponses.printGameSuccessfullyCreated();
             isFirstRound = false;
-        } else{
+            currentDuel.getSECOND_USER().setWinsInAMatch(0);
+            currentDuel.getFIRST_USER().setWinsInAMatch(0);
+        } else {
             PrintResponses.printRoundNumber(remainingRounds);
         }
         try {

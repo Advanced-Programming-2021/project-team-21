@@ -22,11 +22,12 @@ class MainMenuTest {
 
     @Test
     public void menuExit() {
-        new LoginMenu().run("user create -u ali -n ali -p 1234");
-        new LoginMenu().run("user login -u ali -n ali -p 1234");
+        new LoginMenu().run("user create -u menuExitTest -n menuExitTest -p 1234");
+        new LoginMenu().run("user login -u menuExitTest -n menuExitTest -p 1234");
         ProgramController.currentMenu.run("menu exit");
         ProgramController.currentMenu.showCurrentMenu();
-        new File("src/main/resources/users/ali.user.json").delete();
+        File file = new File("src/main/resources/users/menuExitTest.user.json");
+        file.deleteOnExit();
         assertEquals("user created successfully!" + System.lineSeparator() + "user logged in successfully!" + System.lineSeparator() + "Login Menu" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
@@ -87,10 +88,6 @@ class MainMenuTest {
         ProgramController.currentMenu.showCurrentMenu();
         File file = new File("src/main/resources/users/ali.user.json");
         file.deleteOnExit();
-        if (file.exists())
-            System.out.println("yyyyyyyyyyyyyyyyyyyy");
-        if (file.delete());
-        System.out.println("xxxxxxxxxxxx");
         assertEquals("user created successfully!" + System.lineSeparator() + "user logged in successfully!" + System.lineSeparator() + "Export/Import Menu" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 

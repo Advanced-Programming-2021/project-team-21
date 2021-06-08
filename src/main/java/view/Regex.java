@@ -46,6 +46,8 @@ public class Regex {
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
 
+    public static final String parseTwoNumberEffects = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)";
+    public static final String parseOneNumberTwoStrings = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_\"(?<stringNumber>-?\\d+)\"_\"(?<string>\\w+)\"";
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);

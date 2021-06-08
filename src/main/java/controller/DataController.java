@@ -3,19 +3,19 @@ package controller;
 import com.google.gson.Gson;
 import module.Deck;
 import module.User;
-import module.card.Card;
-import module.card.Monster;
-import module.card.Spell;
-import module.card.Trap;
+import module.card.*;
 import tech.tablesaw.api.Table;
+import view.Regex;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
 
 public class DataController {
 
@@ -89,21 +89,7 @@ public class DataController {
                     while (scanner.hasNextLine())
                         data.append(scanner.nextLine());
                     User user = new Gson().fromJson(data.toString(), User.class);
-                    for (int i = 0; i < user.getDecks().size(); i++) {
-                        Deck deck = user.getDecks().get(i);
-                        ArrayList<Card> newMainDeckCards = new ArrayList<>();
-                        for (int i1 = 0; i1 < deck.getMainDeckCards().size(); i1++) {
-                            String cardName = deck.getMainDeckCards().get(i1).getName();
-                            newMainDeckCards.add(Card.getCardByName(cardName));
-                        }
-                        ArrayList<Card> newSideDeckCards = new ArrayList<>();
-                        for (int i1 = 0; i1 < user.getDecks().get(i).getSideDeckCards().size(); i1++) {
-                            String cardName = deck.getSideDeckCards().get(i1).getName();
-                            newSideDeckCards.add(Card.getCardByName(cardName));
-                        }
-                        deck.setMainDeckCards(newMainDeckCards);
-                        deck.setSideDeckCards(newSideDeckCards);
-                    }
+                    addCardsToDeck(user);
                     return user;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -163,4 +149,64 @@ public class DataController {
         File file = new File(USER_PATH);
         return file.list();
     }
+
+
+    private static void addCardsToDeck(User user) {
+        for (int i = 0; i < user.getDecks().size(); i++) {
+            Deck deck = user.getDecks().get(i);
+            ArrayList<Card> newMainDeckCards = new ArrayList<>();
+            for (int i1 = 0; i1 < deck.getMainDeckCards().size(); i1++) {
+                String cardName = deck.getMainDeckCards().get(i1).getName();
+                newMainDeckCards.add(Card.getCardByName(cardName));
+            }
+            ArrayList<Card> newSideDeckCards = new ArrayList<>();
+            for (int i1 = 0; i1 < user.getDecks().get(i).getSideDeckCards().size(); i1++) {
+                String cardName = deck.getSideDeckCards().get(i1).getName();
+                newSideDeckCards.add(Card.getCardByName(cardName));
+            }
+            deck.setMainDeckCards(newMainDeckCards);
+            deck.setSideDeckCards(newSideDeckCards);
+        }
+    }
+
+    public static void monsterEffectParser(String information, Monster monster) {
+        if (information.isEmpty())
+            return;
+        String[] effects = information.split("-");
+        Arrays.stream(effects).forEach(effect -> monster.getBooleanMap().get(effect).accept(true));
+    }
+
+    public static void monsterPairsParser(String information, Monster monster) {
+        if (information.isEmpty())
+            return;
+        String[] pairs = information.split("\\*");
+        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings};
+        Arrays.stream(pairs).forEach(pair -> Arrays.stream(parserRegexes).forEach(parserRegex -> {
+            Matcher matcher = Regex.getMatcher(pair, parserRegex);
+            if (matcher.find()) {
+                if (parserRegex.equals(Regex.parseTwoNumberEffects))
+                    monster.getEffectsMap().get(pair.replaceAll("=.*", ""))
+                            .accept(getEffectForTwoNumberPairs(matcher));
+                else
+                    monster.getEffectsMap().get(pair.replaceAll("=.*", ""))
+                            .accept(getEffectForOneNumberTwoStringPairs(matcher));
+            }
+        }));
+    }
+
+
+    private static Effect getEffectForTwoNumberPairs(Matcher matcher) {
+        int firstNumber = Integer.parseInt(matcher.group("firstNumber")),
+                secondNumber = Integer.parseInt(matcher.group("secondNumber"));
+        return new Effect(firstNumber, secondNumber);
+    }
+
+    private static Effect getEffectForOneNumberTwoStringPairs(Matcher matcher) {
+        int firstNumber = Integer.parseInt(matcher.group("firstNumber"));
+        String secondNumber = matcher.group("stringNumber"),
+                string = matcher.group("string");
+        return new Effect(firstNumber, secondNumber, string);
+    }
+
+
 }
