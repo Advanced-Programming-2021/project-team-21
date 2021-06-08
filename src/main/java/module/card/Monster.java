@@ -4,6 +4,11 @@ package module.card;
 
 import controller.DataController;
 import module.User;
+import module.card.effects.Effect;
+import module.card.effects.MainEffects;
+import module.card.enums.Attributes;
+import module.card.enums.CardType;
+import module.card.enums.MonsterTypes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

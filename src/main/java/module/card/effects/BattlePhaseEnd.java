@@ -1,7 +1,8 @@
-package module.card;
+package module.card.effects;
 
 import module.Duel;
 import module.User;
+import module.card.Monster;
 
 public class BattlePhaseEnd {
     //suijin

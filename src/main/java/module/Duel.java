@@ -2,6 +2,8 @@ package module;
 
 
 import module.card.*;
+import module.card.effects.*;
+import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.Responses;
 

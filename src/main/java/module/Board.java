@@ -1,7 +1,7 @@
 package module;
 
 import module.card.Card;
-import module.card.CardType;
+import module.card.enums.CardType;
 import module.card.Monster;
 
 import java.util.ArrayList;

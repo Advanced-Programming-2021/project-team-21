@@ -1,8 +1,10 @@
-package module.card;
+package module.card.effects;
 
 import module.Board;
 import module.Duel;
 import module.User;
+import module.card.Card;
+import module.card.Monster;
 
 import java.util.ArrayList;
 

@@ -4,7 +4,7 @@ import controller.ProgramController;
 import module.Duel;
 import module.User;
 import module.card.Card;
-import module.card.CardType;
+import module.card.enums.CardType;
 import module.card.Monster;
 import module.card.Spell;
 import org.apache.commons.math3.util.Pair;

@@ -3,6 +3,7 @@ package module.card;
 // a problem is when there are multiple cards in print
 
 import controller.ProgramController;
+import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Collections;

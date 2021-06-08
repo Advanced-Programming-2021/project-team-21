@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import module.Deck;
 import module.User;
 import module.card.*;
+import module.card.effects.Effect;
 import tech.tablesaw.api.Table;
 import view.Regex;
 

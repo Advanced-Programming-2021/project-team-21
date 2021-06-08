@@ -1,4 +1,4 @@
-package module.card;
+package module.card.effects;
 
 public class Effect {
     private int isEffect;

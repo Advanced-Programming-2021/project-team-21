@@ -1,6 +1,10 @@
 package module.card;
 
 import module.User;
+import module.card.effects.Effect;
+import module.card.effects.MainEffects;
+import module.card.enums.SpellTrapIcon;
+import module.card.enums.SpellTrapStatus;
 
 import java.util.ArrayList;
 

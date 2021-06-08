@@ -1,6 +1,9 @@
-package module.card;
+package module.card.effects;
 
 import module.User;
+import module.card.Card;
+import module.card.Monster;
+import module.card.Spell;
 
 import java.util.ArrayList;
 
