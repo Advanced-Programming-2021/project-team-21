@@ -454,6 +454,10 @@ public class PrintResponses {
     }
 
     public static void printRoundNumber(int remainingRounds) {
-        System.out.println("Round " + (remainingRounds - 3) + " started");
+        System.out.println("Round " + (4 - remainingRounds) + " started");
+    }
+
+    public static void printWinnerInRound(User winner){
+        System.out.println("Round ended. \"" + winner.getUsername() + "\" is the winner.");
     }
 }

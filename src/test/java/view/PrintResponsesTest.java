@@ -2,8 +2,6 @@ package view;
 
 import controller.menu.LoginMenu;
 import controller.menu.Phases;
-import javafx.util.Pair;
-import module.Board;
 import module.Deck;
 import module.Duel;
 import module.User;

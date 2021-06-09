@@ -4,9 +4,9 @@ import controller.ProgramController;
 import module.Duel;
 import module.User;
 import module.card.Card;
-import module.card.enums.CardType;
 import module.card.Monster;
 import module.card.Spell;
+import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.PrintResponses;
 import view.Regex;
@@ -195,7 +195,7 @@ public class DuelMenu implements Menuable {
                 PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingTheWholeMatch());
             currentDuel = null;
         } else {
-
+            PrintResponses.printWinnerInRound(currentDuel.handleEndingARound());
             handleSuccessfulGameCreation(currentDuel.getSECOND_USER());
         }
     }
@@ -317,6 +317,7 @@ public class DuelMenu implements Menuable {
         } else {
             int damage = currentDuel.attackDirectly();
             PrintResponses.printDamageInAttackDirectly(damage);
+            currentDuel.deselectACard();
         }
     }
 

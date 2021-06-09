@@ -4,7 +4,6 @@ package controller.menu;
 import controller.ProgramController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sun.rmi.runtime.Log;
 import view.Regex;
 import view.Responses;
 

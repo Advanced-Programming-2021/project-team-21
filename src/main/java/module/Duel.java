@@ -1,7 +1,9 @@
 package module;
 
 
-import module.card.*;
+import module.card.Card;
+import module.card.Monster;
+import module.card.Spell;
 import module.card.effects.*;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
@@ -12,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Duel {
-    private static final int INITIAL_LIFE_POINTS = 8000;
+    private static final int INITIAL_LIFE_POINTS = 1000;
     private final User FIRST_USER, SECOND_USER;
     public ArrayList<Card> specialSummonCards;
     private User userWhoPlaysNow;
@@ -191,25 +193,32 @@ public class Duel {
         }
     }
 
-    public Pair<String, String> handleEndingTheWholeMatch(){
+    public Pair<String, String> handleEndingTheWholeMatch() {
         User rival = getRival();
-        if (rival.getLifePoints() > userWhoPlaysNow.getLifePoints()) {
-//            getUserWhoPlaysNow().setCoins(getUserWhoPlaysNow().getCoins() + 3000 + 3 * getUserWhoPlaysNow().getMaxLifePoints());
-            getRival().setCoins(300 + getRival().getCoins());
-            rival.setScore(rival.getLifePoints() + 3000);
-            return new Pair<>(rival.getUsername(), 3000 + "-" + 0);
-        } else {
-            getUserWhoPlaysNow().setCoins(100 + getUserWhoPlaysNow().getCoins());
-            getRival().setCoins(getRival().getCoins() + 1000 + getRival().getLifePoints());
-//            userWhoPlaysNow.setScore(userWhoPlaysNow.getMaxLifePoints() * 3 + 3000);
+        if (rival.getLifePoints() < userWhoPlaysNow.getLifePoints()) {
+            userWhoPlaysNow.setMaxLifePoint(userWhoPlaysNow.getLifePoints());
+            userWhoPlaysNow.setCoins(userWhoPlaysNow.getCoins() + 3000 + 3 * userWhoPlaysNow.getMaxLifePoint());
+            userWhoPlaysNow.setScore(userWhoPlaysNow.getLifePoints() + 3000);
+            rival.setCoins(300 + rival.getCoins());
             return new Pair<>(userWhoPlaysNow.getUsername(), 3000 + "-" + 0);
+        } else {
+            rival.setMaxLifePoint(rival.getLifePoints());
+            rival.setCoins(rival.getCoins() + 3000 + 3 * rival.getLifePoints());
+            rival.setScore(rival.getScore() + 3000);
+            userWhoPlaysNow.setCoins(100 + userWhoPlaysNow.getCoins());
+            return new Pair<>(rival.getUsername(), 3000 + "-" + 0);
         }
     }
 
-//    public Pair<String, String> handleEndingARound() {
-//    }
+    public User handleEndingARound() {
+        User winner = (getUserWhoPlaysNow().getLifePoints()
+                > getRival().getLifePoints()) ?
+                getUserWhoPlaysNow() : getRival();
+        winner.setMaxLifePoint(winner.getLifePoints());
+        return winner;
+    }
 
-        public Pair<Integer, Integer> attack(int placeInBoard) {
+    public Pair<Integer, Integer> attack(int placeInBoard) {
         User rival = getRival();
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');

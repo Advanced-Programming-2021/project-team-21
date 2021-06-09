@@ -17,6 +17,7 @@ public class User {
     private Hand hand;
     private ArrayList<Card> graveyard;
     private int lifePoints;
+    private int maxLifePoint = 0;
     private boolean canSummonMonster, canSummonSpell, canSummonTrap;
     private int winsInAMatch;
 
@@ -232,5 +233,13 @@ public class User {
 
     public void setWinsInAMatch(int winsInAMatch) {
         this.winsInAMatch = winsInAMatch;
+    }
+
+    public int getMaxLifePoint() {
+        return maxLifePoint;
+    }
+
+    public void setMaxLifePoint(int maxLifePoint) {
+        this.maxLifePoint = Math.max(maxLifePoint, this.maxLifePoint);
     }
 }
