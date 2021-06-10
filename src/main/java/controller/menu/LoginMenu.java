@@ -1,15 +1,28 @@
 package controller.menu;
 
 import controller.ProgramController;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import module.User;
 import view.PrintResponses;
 import view.Regex;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class LoginMenu implements Menuable {
+
+    public TextField usernameSignUp = new TextField();
+    public TextField nicknameSignUp = new TextField();
+    public PasswordField passwordSignUp = new PasswordField();
+    public CheckBox agreeToPolicies = new CheckBox();
+
     @Override
-    public void run(String command) {
+    public void run(String command) throws IOException {
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.userLogin)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.userLoginShort)).find()) {
@@ -28,11 +41,15 @@ public class LoginMenu implements Menuable {
         }
     }
 
-    private void createNewUser(Matcher matcher) {
+    private void createNewUser(Matcher matcher) throws IOException {
         String username = matcher.group("username"), password = matcher.group("password"),
                 nickname = matcher.group("nickname");
+        System.out.println(username);
         if (User.getUserByUsername(username) != null) {
-            PrintResponses.printUserExistsWithUsername(username);
+            ProgramController.createNewScene(getClass().getResource("/fxmls/signup.fxml"));
+            ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("This username already exists!");
+            ((Label) ProgramController.currentScene.lookup("#errorUsernameSignUp")).setText("*");
+            ProgramController.stage.show();
             return;
         }
         if (User.getUserByNickname(nickname) != null) {
@@ -41,6 +58,7 @@ public class LoginMenu implements Menuable {
         }
         new User(username, password, nickname);
         PrintResponses.printSuccessfulUserCreation();
+        ProgramController.stage.show();
     }
 
     private void loginNewUser(Matcher matcher) {
@@ -71,4 +89,28 @@ public class LoginMenu implements Menuable {
     }
 
 
+    public void goToLogin() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/fxmls/login.fxml"));
+        ProgramController.stage.show();
+    }
+
+    public void goToSignup() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/fxmls/signup.fxml"));
+        ProgramController.stage.show();
+    }
+
+    public void exitProgram() {
+        System.exit(0);
+    }
+
+    public void passSignupInformationToCheck() throws IOException {
+        if (!agreeToPolicies.isSelected()) {
+            ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("You must agree to policies!");
+            ((Label) ProgramController.currentScene.lookup("#errorPoliciesSignUp")).setText("*");
+            ProgramController.stage.show();
+            return;
+        }
+        String commandSignup = "user create --username " + usernameSignUp.getText() + " --nickname " + nicknameSignUp.getText() + " --password " + passwordSignUp.getText();
+        run(commandSignup);
+    }
 }

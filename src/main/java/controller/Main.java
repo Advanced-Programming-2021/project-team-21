@@ -1,8 +1,39 @@
 package controller;
 
-public class Main {
+import javafx.animation.FadeTransition;
+import javafx.animation.Transition;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.IOException;
+
+public class Main extends Application {
     public static void main(String[] args) {
-        ProgramController programController = new ProgramController();
-        programController.run();
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setResizable(false);
+        ProgramController.stage = primaryStage;
+        Scene scene = ProgramController.createNewScene(getClass().getResource("/fxmls/welcome.fxml"));
+        FadeTransition textTransition = new FadeTransition(Duration.seconds(0.75), ((Label) scene.lookup("#pressKey")));
+        textTransition.setAutoReverse(true);
+        textTransition.setFromValue(0);
+        textTransition.setToValue(1);
+        textTransition.setCycleCount(Transition.INDEFINITE);
+        textTransition.play();
+        ProgramController.stage.show();
+        scene.setOnKeyPressed(keyEvent -> {
+            ProgramController programController = new ProgramController();
+            try {
+                programController.run();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
