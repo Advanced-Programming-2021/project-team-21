@@ -3,7 +3,10 @@ package controller;
 import com.google.gson.Gson;
 import module.Deck;
 import module.User;
-import module.card.*;
+import module.card.Card;
+import module.card.Monster;
+import module.card.Spell;
+import module.card.Trap;
 import module.card.effects.Effect;
 import tech.tablesaw.api.Table;
 import view.Regex;
@@ -12,10 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class DataController {
@@ -114,7 +114,7 @@ public class DataController {
 
     //creates necessary directories for storing data
     public static void createDirectories() {
-        String[] directoryNames = {"src/main/resources/users", "src/main/resources/decks"
+        String[] directoryNames = {"src/main/resources/users", "src/main/resources/exported cards"
                 , "src/main/resources/cards"};
         for (String directoryName : directoryNames) {
             File directory = new File(directoryName);
@@ -123,27 +123,47 @@ public class DataController {
         }
     }
 
-    //is called for saving User and Deck objects as json
+    //is called for saving User and Card objects as json
     public static void saveData(Object object) {
         String dataToWrite = new Gson().toJson(object);
-        if (object instanceof User) {
-            try {
-                FileWriter fileWriter = new FileWriter("src/main/resources/users/" + ((User) object).getUsername()
-                        + ".user.json");
-                fileWriter.write(dataToWrite);
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (object instanceof Deck) {
-            try {
-                FileWriter fileWriter = new FileWriter("src/main/resources/decks/" + ((Deck) object).getName() + ".json");
-                fileWriter.write(dataToWrite);
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        String fileName = "";
+        if (object instanceof User)
+            fileName = "src/main/resources/users/" + ((User) object).getUsername() + ".user.json";
+        else if (object instanceof Card)
+            fileName = "src/main/resources/exported cards/" + ((Card) object).getName() + "." + object.getClass()
+                    .toString().replaceAll("class module\\.card\\.", "") + ".json";
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            fileWriter.write(dataToWrite);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Card importCardFromJson(String cardName) {
+        File file = new File("src/main/resources/exported cards");
+        for (String fileName : Objects.requireNonNull(file.list())) {
+            String[] fileInfo = fileName.split("\\.");
+            if (fileInfo[0].equals(cardName)) {
+                try {
+                    file = new File("src/main/resources/exported cards/" + fileName);
+                    StringBuilder data = new StringBuilder();
+                    Scanner scanner = new Scanner(file);
+                    while (scanner.hasNextLine())
+                        data.append(scanner.nextLine());
+                    if (fileInfo[1].equals("Monster"))
+                        return new Gson().fromJson(data.toString(), Monster.class);
+                    else if (fileInfo[1].equals("Spell"))
+                        return new Gson().fromJson(data.toString(), Spell.class);
+                    else
+                        new Gson().fromJson(data.toString(), Trap.class);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
+        return null;
     }
 
     private static String[] getAllUserFileNames() {

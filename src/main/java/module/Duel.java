@@ -1,7 +1,6 @@
 package module;
 
 
-import com.sun.org.apache.xml.internal.dtm.ref.sax2dtm.SAX2DTM2;
 import module.card.Card;
 import module.card.Monster;
 import module.card.Spell;
@@ -181,7 +180,6 @@ public class Duel {
         User rival = getRival();
         if (rival.getLifePoints() > userWhoPlaysNow.getLifePoints()) {
             return handleEndingOneRoundGames(rival, userWhoPlaysNow);
-//             rival.setWinsInAMatch(rival.getWinsInAMatch() + 1);
         } else {
             return handleEndingOneRoundGames(userWhoPlaysNow, rival);
         }

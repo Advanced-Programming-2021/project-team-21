@@ -1,6 +1,7 @@
 package module;
 
 import controller.DataController;
+import controller.ProgramController;
 import module.card.Card;
 import module.card.Monster;
 
@@ -21,7 +22,7 @@ public class Deck {
 
     public Deck(String name) {
         setName(name);
-        DataController.saveData(this);
+        DataController.saveData(ProgramController.userInGame);
     }
 
 

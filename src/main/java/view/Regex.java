@@ -46,6 +46,8 @@ public class Regex {
     public static final String showGraveyard = "^show graveyard$";
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
+    public static final String importCard = "import card (?<cardName>\\S+)";
+    public static final String exportCard = "export card (?<cardName>\\S+)";
     //These are for extracting data for card effects.
     public static final String parseTwoNumberEffects = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)";
     public static final String parseOneNumberTwoStrings = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_\"(?<stringNumber>-?\\d+)\"_\"(?<string>\\w+)\"";

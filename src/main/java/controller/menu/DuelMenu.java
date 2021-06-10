@@ -391,6 +391,8 @@ public class DuelMenu implements Menuable {
             PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
         else
             PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
+        currentDuel = null;
+
     }
 
 
