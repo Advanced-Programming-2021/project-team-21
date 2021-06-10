@@ -1,6 +1,7 @@
 package module;
 
 
+import com.sun.org.apache.xml.internal.dtm.ref.sax2dtm.SAX2DTM2;
 import module.card.Card;
 import module.card.Monster;
 import module.card.Spell;
@@ -179,18 +180,18 @@ public class Duel {
     public Pair<String, String> handleEndingGame() {
         User rival = getRival();
         if (rival.getLifePoints() > userWhoPlaysNow.getLifePoints()) {
-            getUserWhoPlaysNow().setCoins(getUserWhoPlaysNow().getCoins() + 1000 + getUserWhoPlaysNow().getLifePoints());
-            getRival().setCoins(100 + getRival().getCoins());
-            rival.setScore(rival.getLifePoints() + 1000);
-            rival.setWinsInAMatch(rival.getWinsInAMatch() + 1);
-            return new Pair<>(rival.getUsername(), 1000 + "-" + 0);
+            return handleEndingOneRoundGames(rival, userWhoPlaysNow);
+//             rival.setWinsInAMatch(rival.getWinsInAMatch() + 1);
         } else {
-            getUserWhoPlaysNow().setCoins(100 + getUserWhoPlaysNow().getCoins());
-            getRival().setCoins(getRival().getCoins() + 1000 + getRival().getLifePoints());
-            userWhoPlaysNow.setScore(userWhoPlaysNow.getLifePoints() + 1000);
-            userWhoPlaysNow.setWinsInAMatch(userWhoPlaysNow.getWinsInAMatch() + 1);
-            return new Pair<>(userWhoPlaysNow.getUsername(), 1000 + "-" + 0);
+            return handleEndingOneRoundGames(userWhoPlaysNow, rival);
         }
+    }
+
+    public Pair<String, String> handleEndingOneRoundGames(User winner, User loser){
+        winner.setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
+        winner.setScore(winner.getLifePoints() + 1000);
+        loser.setCoins(100 + loser.getCoins());
+        return new Pair<>(winner.getUsername(), 1000 + "-" + 0);
     }
 
     public Pair<String, String> handleEndingTheWholeMatch() {
@@ -210,11 +211,21 @@ public class Duel {
         }
     }
 
+    public Pair<String, String> handleEndingThreeRoundGames(User winner, User loser){
+        winner.setMaxLifePoint(userWhoPlaysNow.getLifePoints());
+        winner.setCoins(winner.getCoins() + 3000 + 3 * winner.getMaxLifePoint());
+        winner.setScore(winner.getLifePoints() + 3000);
+        loser.setCoins(300 + loser.getCoins());
+        return new Pair<>(winner.getUsername(), 3000 + "-" + 0);
+    }
+
+
     public User handleEndingARound() {
         User winner = (getUserWhoPlaysNow().getLifePoints()
                 > getRival().getLifePoints()) ?
                 getUserWhoPlaysNow() : getRival();
         winner.setMaxLifePoint(winner.getLifePoints());
+        winner.setWinsInAMatch(winner.getWinsInAMatch() + 1);
         return winner;
     }
 
@@ -478,7 +489,7 @@ public class Duel {
 
     @Override
     public String toString() {
-        return userWhoPlaysNow.getNickname() + ":" + userWhoPlaysNow.getLifePoints() +
+        return getRival().getNickname() + ":" + getRival().getLifePoints() +
                 "\n" + getRival().getHand().showCardsInHandToStringReverse() + "\n" + getRival().getHand().getNumberOfRemainingCardsInDeck() +
                 "\n" + getRival().getBoard().showSpellsAndTrapsToStringReverse() +
                 "\n" + getRival().getBoard().showMonstersToStringReverse() +
@@ -489,7 +500,7 @@ public class Duel {
                 "\n" + userWhoPlaysNow.getBoard().showSpellsAndTrapsToString() +
                 "\n\t\t\t\t\t\t\t" + userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() +
                 "\n" + userWhoPlaysNow.getHand().showCardsInHandToString() +
-                "\n" + getRival().getNickname() + ":" + getRival().getLifePoints();
+                "\n" + userWhoPlaysNow.getNickname() + ":" + userWhoPlaysNow.getLifePoints();
     }
 
     public int getNumberOfTurnsPlayedUpToNow() {

@@ -10,6 +10,7 @@ import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.PrintResponses;
 import view.Regex;
+import view.Responses;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -88,6 +89,8 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.showGraveyard, this::showGraveyard);
         commandMap.put(Regex.showSelectedCard, this::showSelectedCard);
         commandMap.put(Regex.surrender, this::surrender);
+        commandMap.put(Regex.increaseLP, this::increaseLP);
+        commandMap.put(Regex.setWinner, this::setWinner);
         return commandMap;
     }
 
@@ -109,7 +112,6 @@ public class DuelMenu implements Menuable {
             PrintResponses.printNonSupportiveRound();
         } else {
             handleSuccessfulGameCreation(secondPlayer);
-            PrintResponses.printBoard(currentDuel);
         }
     }
 
@@ -195,8 +197,12 @@ public class DuelMenu implements Menuable {
                 PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingTheWholeMatch());
             currentDuel = null;
         } else {
-            PrintResponses.printWinnerInRound(currentDuel.handleEndingARound());
-            handleSuccessfulGameCreation(currentDuel.getSECOND_USER());
+            User winner = currentDuel.handleEndingARound();
+            PrintResponses.printWinnerInRound(winner);
+            if (winner.getWinsInAMatch() == 2) {
+                endTheGame();
+            } else
+                handleSuccessfulGameCreation(currentDuel.getSECOND_USER());
         }
     }
 
@@ -362,6 +368,29 @@ public class DuelMenu implements Menuable {
 
     private void surrender(Matcher matcher) {
         PrintResponses.printEndingTheGame(currentDuel.surrender());
+        currentDuel = null;
+    }
+
+    private void increaseLP(Matcher matcher) {
+        int amount = Integer.parseInt(matcher.group("amount"));
+        currentDuel.getUserWhoPlaysNow().setLifePoints(currentDuel.getUserWhoPlaysNow().getLifePoints() + amount);
+        PrintResponses.print(Responses.increaseLP);
+    }
+
+    private void setWinner(Matcher matcher) {
+        String nickname = matcher.group("nickname");
+        User winner, loser;
+        if (currentDuel.getUserWhoPlaysNow().getNickname().equals(nickname)) {
+            winner = currentDuel.getUserWhoPlaysNow();
+            loser = currentDuel.getRival();
+        } else {
+            winner = currentDuel.getRival();
+            loser = currentDuel.getUserWhoPlaysNow();
+        }
+        if (initialRounds == 1)
+            PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
+        else
+            PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
     }
 
 
@@ -422,10 +451,10 @@ public class DuelMenu implements Menuable {
     }
 
     //TODO implement this method
+
     private boolean isSpellPreparedToBeActivated() {
         return true;
     }
-
 
     private void handleSuccessfulGameCreation(User secondPlayer) {
         currentDuel = new Duel(ProgramController.userInGame, secondPlayer);

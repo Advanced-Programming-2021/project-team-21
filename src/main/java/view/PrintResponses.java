@@ -460,4 +460,8 @@ public class PrintResponses {
     public static void printWinnerInRound(User winner){
         System.out.println("Round ended. \"" + winner.getUsername() + "\" is the winner.");
     }
+
+    public static void print(String string){
+        System.out.println(string);
+    }
 }

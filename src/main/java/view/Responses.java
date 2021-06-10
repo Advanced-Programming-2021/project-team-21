@@ -79,8 +79,9 @@ public class Responses {
     public static String exportAndImportMenu = "Export/Import Menu";
     public static String scoreBoard = "ScoreBoard";
     public static String shopMenu = "Shop Menu";
-    public static String activeDeck = "Decks:\n" +
-            "Active deck:";
+    public static String activeDeck = "Decks:\n" + "Active deck:";
     public static String otherDeck = "Other decks:";
     public static String gameCreation = "Game has been started! Drawing a card in 3 seconds";
+    public static String moneyIncreased = "CHEAT: Money increased successfully!";
+    public static String increaseLP = "CHEAT: LP increased successfully!";
 }

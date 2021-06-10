@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regex {
+    // These are doc commands.
     public static final String userLogin = "user login (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))";
     public static final String userLoginShort = "user login (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))";
     public static final String menuEnter = "menu enter (?<menuName>\\S+)";
@@ -45,9 +46,15 @@ public class Regex {
     public static final String showGraveyard = "^show graveyard$";
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
-
+    //These are for extracting data for card effects.
     public static final String parseTwoNumberEffects = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)";
     public static final String parseOneNumberTwoStrings = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_\"(?<stringNumber>-?\\d+)\"_\"(?<string>\\w+)\"";
+    //These are some commands that are not in the doc, including cheat-commands.
+    public static final String increaseMoney = "increase --money (?<amount>\\d+)";
+    public static final String increaseLP = "increase --LP (?<amount>\\d+)";
+    public static final String setWinner = "duel set-winner (?<nickname>\\S+)";
+
+
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);
