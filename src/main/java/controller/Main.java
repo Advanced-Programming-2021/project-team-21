@@ -26,6 +26,7 @@ public class Main extends Application {
         textTransition.setToValue(1);
         textTransition.setCycleCount(Transition.INDEFINITE);
         textTransition.play();
+        ProgramController.stage.setTitle("Yu-Gi-Oh!");
         ProgramController.stage.show();
         scene.setOnKeyPressed(keyEvent -> {
             ProgramController programController = new ProgramController();

@@ -18,6 +18,16 @@
     -fx-background-size: cover;
 }
 
+.backgroundSuccessfulSignup {
+    -fx-background-image: url("/images/successfulSignup.png");
+    -fx-background-size: cover;
+}
+
+.backgroundPolicies {
+    -fx-background-image: url("/images/policies.jpg");
+    -fx-background-size: cover;
+}
+
 .buttonEntrance:hover {
      -fx-background-color: white;
      -fx-text-fill: red;

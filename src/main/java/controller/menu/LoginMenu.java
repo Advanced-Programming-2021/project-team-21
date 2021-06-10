@@ -1,17 +1,25 @@
 package controller.menu;
 
 import controller.ProgramController;
+import javafx.animation.PauseTransition;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import module.User;
 import view.PrintResponses;
 import view.Regex;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 
 public class LoginMenu implements Menuable {
@@ -44,21 +52,30 @@ public class LoginMenu implements Menuable {
     private void createNewUser(Matcher matcher) throws IOException {
         String username = matcher.group("username"), password = matcher.group("password"),
                 nickname = matcher.group("nickname");
-        System.out.println(username);
         if (User.getUserByUsername(username) != null) {
-            ProgramController.createNewScene(getClass().getResource("/fxmls/signup.fxml"));
+            clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("This username already exists!");
             ((Label) ProgramController.currentScene.lookup("#errorUsernameSignUp")).setText("*");
             ProgramController.stage.show();
             return;
         }
         if (User.getUserByNickname(nickname) != null) {
-            PrintResponses.printUserExistsWithNickname(nickname);
+            clearPreviousErrorsInSignup();
+            ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("This nickname already exists!");
+            ((Label) ProgramController.currentScene.lookup("#errorNicknameSignUp")).setText("*");
             return;
         }
         new User(username, password, nickname);
-        PrintResponses.printSuccessfulUserCreation();
-        ProgramController.stage.show();
+        Parent pane = FXMLLoader.load(getClass().getResource("/fxmls/succussfulSignup.fxml"));
+        Scene scene = new Scene(pane);
+        Stage stagePopUp = new Stage();
+        stagePopUp.setScene(scene);
+        stagePopUp.setTitle("Successful sign up");
+        stagePopUp.setResizable(false);
+        stagePopUp.show();
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+        delay.setOnFinished( event -> stagePopUp.close() );
+        delay.play();
     }
 
     private void loginNewUser(Matcher matcher) {
@@ -105,6 +122,7 @@ public class LoginMenu implements Menuable {
 
     public void passSignupInformationToCheck() throws IOException {
         if (!agreeToPolicies.isSelected()) {
+            clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("You must agree to policies!");
             ((Label) ProgramController.currentScene.lookup("#errorPoliciesSignUp")).setText("*");
             ProgramController.stage.show();
@@ -112,5 +130,28 @@ public class LoginMenu implements Menuable {
         }
         String commandSignup = "user create --username " + usernameSignUp.getText() + " --nickname " + nicknameSignUp.getText() + " --password " + passwordSignUp.getText();
         run(commandSignup);
+    }
+
+    public void clearPreviousErrorsInSignup() {
+        ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("");
+        ((Label) ProgramController.currentScene.lookup("#errorUsernameSignUp")).setText("");
+        ((Label) ProgramController.currentScene.lookup("#errorNicknameSignUp")).setText("");
+        ((Label) ProgramController.currentScene.lookup("#errorPasswordSignUp")).setText("");
+        ((Label) ProgramController.currentScene.lookup("#errorPoliciesSignUp")).setText("");
+    }
+
+    public void backToEntrance(MouseEvent mouseEvent) throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/fxmls/entrance.fxml"));
+        ProgramController.stage.show();
+    }
+
+    public void policies(MouseEvent mouseEvent) throws IOException {
+        Parent pane = FXMLLoader.load(getClass().getResource("/fxmls/policies.fxml"));
+        Scene scene = new Scene(pane);
+        Stage stagePopUp = new Stage();
+        stagePopUp.setScene(scene);
+        stagePopUp.setTitle("Policies");
+        stagePopUp.setResizable(false);
+        stagePopUp.show();
     }
 }

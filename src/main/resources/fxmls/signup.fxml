@@ -89,7 +89,7 @@
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="buttonEntrance" text="Policies">
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#policies" text="Policies">
                <font>
                   <Font size="20.0" />
                </font>
@@ -105,7 +105,7 @@
                   <Insets right="3.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="buttonEntrance" text="Back">
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#backToEntrance" text="Back">
                <font>
                   <Font size="20.0" />
                </font>
@@ -127,7 +127,7 @@
                   <Font size="35.0" />
                </font>
             </Label>
-            <Label id="errorPasswordSignUp" textFill="RED">
+            <Label id="errorNicknameSignUp" textFill="RED">
                <font>
                   <Font size="35.0" />
                </font>
