@@ -23,7 +23,7 @@
                <Insets left="200.0" />
             </VBox.margin>
          </Label>
-         <Label prefHeight="18.0" prefWidth="146.0" text="Yu-Gi-Oh! version 1.0" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT">
+         <Label prefHeight="18.0" prefWidth="146.0" text="Yu-Gi-Oh! version 2.0" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT">
             <BorderPane.margin>
                <Insets />
             </BorderPane.margin>

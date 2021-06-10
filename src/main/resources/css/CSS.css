@@ -28,6 +28,11 @@
     -fx-background-size: cover;
 }
 
+.backgroundMainMenu {
+    -fx-background-image: url("/images/mainMenu.png");
+    -fx-background-size: cover;
+}
+
 .buttonEntrance:hover {
      -fx-background-color: white;
      -fx-text-fill: red;

@@ -4,6 +4,7 @@ import controller.ProgramController;
 import view.PrintResponses;
 import view.Regex;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class MainMenu implements Menuable {
@@ -52,6 +53,11 @@ public class MainMenu implements Menuable {
     @Override
     public void showCurrentMenu() {
         PrintResponses.printMainMenuShow();
+    }
+
+    public void showMainMenu() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/fxmls/mainMenu.fxml"));
+        ProgramController.stage.show();
     }
 
 }
