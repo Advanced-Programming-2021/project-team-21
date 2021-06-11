@@ -86,4 +86,6 @@ public class Responses {
     public static String increaseLP = "CHEAT: LP increased successfully!";
     public static String cardExportedSuccessfully = "Card exported successfully.";
     public static String cardImportedSuccessfully = "Card imported successfully.";
+    public static String unableToAttackDirectly = "you can’t attack the opponent directly";
+    public static String alreadyInGame = "You are already in a game!";
 }

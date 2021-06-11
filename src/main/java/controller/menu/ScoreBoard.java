@@ -13,7 +13,7 @@ public class ScoreBoard implements Menuable {
     public void run(String command) {
         if (Regex.getMatcher(command, Regex.menuExit).find()) exitMenu();
         else if (Regex.getMatcher(command, Regex.menuShow).find()) showCurrentMenu();
-        else if (Regex.getMatcher(command, Regex.scoreBoard).matches()) scoreBoardShow();
+        else if (Regex.getMatcher(command, Regex.scoreBoard).find()) scoreBoardShow();
         else PrintResponses.printInvalidFormat();
     }
 

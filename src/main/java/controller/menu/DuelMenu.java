@@ -46,8 +46,8 @@ public class DuelMenu implements Menuable {
                     endTheGame();
                     return;
                 } else if (matcher.find() && isInGame) {
-                    commandMap.get(string).accept(matcher);
                     isValidCommand = true;
+                    commandMap.get(string).accept(matcher);
                 } else if (!isInGame) {
                     if (command.equals("back")) {
                         back();
@@ -95,6 +95,10 @@ public class DuelMenu implements Menuable {
     }
 
     private void createNewDuel(Matcher matcher) {
+        if (currentDuel != null){
+            PrintResponses.print(Responses.alreadyInGame);
+            return;
+        }
         User secondPlayer = User.getUserByUsername(matcher.group("player2Username"));
         remainingRounds = Integer.parseInt(matcher.group("rounds"));
         initialRounds = remainingRounds;
@@ -320,6 +324,8 @@ public class DuelMenu implements Menuable {
             PrintResponses.printAttackInWrongPhase();
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.printCardAttackedBefore();
+        } else if (currentDuel.getRival().getBoard().getMonsters().length != 0) {
+            PrintResponses.print(Responses.unableToAttackDirectly);
         } else {
             int damage = currentDuel.attackDirectly();
             PrintResponses.printDamageInAttackDirectly(damage);

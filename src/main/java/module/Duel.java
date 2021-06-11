@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Duel {
-    private static final int INITIAL_LIFE_POINTS = 1000;
+    private static final int INITIAL_LIFE_POINTS = 8000;
     private final User FIRST_USER, SECOND_USER;
     public ArrayList<Card> specialSummonCards;
     private User userWhoPlaysNow;
@@ -102,7 +102,7 @@ public class Duel {
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         hasSummonedOrSetOnce = true;
         userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
-        selectedCard = null;
+        deselectACard();
     }
 
     //TODO implement the changes in flip summon
@@ -131,6 +131,8 @@ public class Duel {
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
         hasSummonedOrSetOnce = true;
+        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
+        deselectACard();
     }
 
     public void setSpellOrTrap() {
