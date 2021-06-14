@@ -6,6 +6,7 @@ import module.User;
 import view.PrintResponses;
 import view.Regex;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ScoreBoard implements Menuable {
@@ -47,5 +48,10 @@ public class ScoreBoard implements Menuable {
     @Override
     public void showCurrentMenu() {
         PrintResponses.printScoreboardShow();
+    }
+
+    public void showScoreBoard() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/fxmls/scoreboard.fxml"));
+        ProgramController.stage.show();
     }
 }

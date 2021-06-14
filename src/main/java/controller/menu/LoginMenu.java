@@ -91,7 +91,7 @@ public class LoginMenu implements Menuable {
         String username = matcher.group("username"), password = matcher.group("password");
         User user = User.getUserByUsername(username);
         if (user == null || !user.getPassword().equals(password)) {
-            ((Label) ProgramController.currentScene.lookup("#errorLogin")).setText("Any user with this information didn't find!");
+            ((Label) ProgramController.currentScene.lookup("#errorLogin")).setText("Username and password didn't match!");
             ((Label) ProgramController.currentScene.lookup("#errorLogin")).setStyle("-fx-border-color: red; -fx-background-color: white;");
             ProgramController.stage.show();
             return;

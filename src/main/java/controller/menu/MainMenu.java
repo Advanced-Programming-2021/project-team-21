@@ -1,6 +1,7 @@
 package controller.menu;
 
 import controller.ProgramController;
+import javafx.scene.input.MouseEvent;
 import view.PrintResponses;
 import view.Regex;
 
@@ -27,10 +28,10 @@ public class MainMenu implements Menuable {
                 ProgramController.currentMenu = new DeckMenu();
                 break;
             case "Scoreboard":
-                ProgramController.currentMenu = new ScoreBoard();
+
                 break;
             case "Profile":
-                ProgramController.currentMenu = new ProfileMenu();
+
                 break;
             case "Shop":
                 ProgramController.currentMenu = new ShopMenu();
@@ -47,7 +48,7 @@ public class MainMenu implements Menuable {
 
     @Override
     public void exitMenu() {
-        ProgramController.currentMenu = new LoginMenu();
+
     }
 
     @Override
@@ -60,4 +61,23 @@ public class MainMenu implements Menuable {
         ProgramController.stage.show();
     }
 
+    public void logout(MouseEvent mouseEvent) throws IOException {
+        ProgramController.currentMenu = new LoginMenu();
+        ProgramController.userInGame = null;
+        ((LoginMenu) ProgramController.currentMenu).backToEntrance();
+    }
+
+    public void goToShopMenu(MouseEvent mouseEvent) {
+
+    }
+
+    public void goToScoreboard(MouseEvent mouseEvent) throws IOException {
+        ProgramController.currentMenu = new ScoreBoard();
+        ((ScoreBoard) ProgramController.currentMenu).showScoreBoard();
+    }
+
+    public void goToProfileMenu(MouseEvent mouseEvent) throws IOException {
+        ProgramController.currentMenu = new ProfileMenu();
+        ((ProfileMenu) ProgramController.currentMenu).showProfileMenu();
+    }
 }
