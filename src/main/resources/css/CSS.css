@@ -1,0 +1,51 @@
+.backgroundWelcome {
+    -fx-background-image: url("/images/welcomeBackground.gif");
+    -fx-background-size: cover;
+}
+
+.backgroundEntrance {
+    -fx-background-image: url("/images/entranceBackground.gif");
+    -fx-background-size: cover;
+}
+
+.backgroundSignup {
+    -fx-background-image: url("/images/signup.gif");
+    -fx-background-size: cover;
+}
+
+.backgroundLogin {
+    -fx-background-image: url("/images/login.gif");
+    -fx-background-size: cover;
+}
+
+.backgroundSuccessfulSignup {
+    -fx-background-image: url("/images/successfulSignup.png");
+    -fx-background-size: cover;
+}
+
+.backgroundPolicies {
+    -fx-background-image: url("/images/policies.jpg");
+    -fx-background-size: cover;
+}
+
+.backgroundMainMenu {
+    -fx-background-image: url("/images/mainMenu.png");
+    -fx-background-size: cover;
+}
+
+.backgroundProfileMenu {
+    -fx-background-image: url("/images/profileMenu.gif");
+    -fx-background-size: cover;
+}
+
+.buttonEntrance:hover {
+     -fx-background-color: white;
+     -fx-text-fill: red;
+     -fx-cursor: hand;
+}
+
+.buttonProfileMenu:hover {
+     -fx-background-color: white;
+     -fx-text-fill: purple;
+     -fx-cursor: hand;
+}

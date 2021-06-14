@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <VBox prefHeight="354.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="Rank">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;" text="Nickname">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="1">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="2">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="3">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="4">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="5">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="6">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="7">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="8">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="9">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="10">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </left>
+   <right>
+      <VBox prefHeight="354.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="Rank">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;" text="Nickname">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;" text="Score">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="11">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="12">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="13">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="14">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="15">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="16">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="17">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="18">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="19">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="50.0" style="-fx-border-color: black;" text="20">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="150.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefWidth="95.0" style="-fx-border-color: black;">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </right>
+   <top>
+      <HBox prefHeight="34.0" prefWidth="600.0" spacing="130.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="10.0" prefWidth="90.0" style="-fx-background-color: white;">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="29.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/backArrow.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Scoreboard">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>
