@@ -1,11 +1,17 @@
 package controller.menu;
 
+import controller.DataController;
 import controller.ProgramController;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import module.card.Card;
 import view.PrintResponses;
 import view.Regex;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class MainMenu implements Menuable {
@@ -67,8 +73,9 @@ public class MainMenu implements Menuable {
         ((LoginMenu) ProgramController.currentMenu).backToEntrance();
     }
 
-    public void goToShopMenu(MouseEvent mouseEvent) {
-
+    public void goToShopMenu(MouseEvent mouseEvent) throws IOException {
+        ProgramController.currentMenu = new ShopMenu();
+        ((ShopMenu) ProgramController.currentMenu).showShopMenu();
     }
 
     public void goToScoreboard(MouseEvent mouseEvent) throws IOException {
