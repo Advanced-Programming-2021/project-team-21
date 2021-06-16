@@ -8,8 +8,6 @@ public class Trap extends Card {
 
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
-     //Magic Jammer              //Negate Attack            Solemn Warning
-    private boolean canActivateInOpponentTurn;
     //Magic Cylinder                                            //Negate Attack
     private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)                in battlePhaseStart
      private Effect canAttackLP;                //(1 , 0)           in battlePhaseStart
@@ -65,4 +63,44 @@ public class Trap extends Card {
     public String toString() {
         return "Name: " + name + "\nTrap\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
     }
-}
+
+     public Effect getCanAttackLP() {
+         return canAttackLP;
+     }
+
+     public Effect getCanNegateWholeAttack() {
+         return canNegateWholeAttack;
+     }
+
+     public Effect getDestroyAttackMonsters() {
+         return destroyAttackMonsters;
+     }
+
+     public Effect getCanDestroyAll() {
+         return canDestroyAll;
+     }
+
+     public Effect getCanDestroyMonsterSummonWithATK() {
+         return canDestroyMonsterSummonWithATK;
+     }
+
+     public Effect getNegateASummon() {
+         return negateASummon;
+     }
+
+     public Effect getNegateSpellActivation() {
+         return negateSpellActivation;
+     }
+
+     public Effect getCostLP() {
+         return costLP;
+     }
+
+     public Effect getDiscardACard() {
+         return discardACard;
+     }
+
+     public Effect getCanDestroyFromDeckAndHand() {
+         return canDestroyFromDeckAndHand;
+     }
+ }

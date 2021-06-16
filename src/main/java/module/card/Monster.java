@@ -7,7 +7,7 @@ import module.User;
 
 import java.util.ArrayList;
 
-public class Monster extends Card  {
+public class Monster extends Card {
     //for checking death in deathEffects
     boolean isDead;
     //for summoned effects
@@ -30,6 +30,7 @@ public class Monster extends Card  {
 
     //for some effects that user choose to activate
     boolean isSelectEffect;
+    boolean isFlipSetEffect;
     private Integer level;
     private Attributes attribute;
     private MonsterTypes monsterType;
@@ -40,16 +41,15 @@ public class Monster extends Card  {
     private boolean hasAttackedOnceInTurn;
     private boolean isATKPosition;
     private boolean canHaveDifferentTribute;
+    private boolean canAttack = true;
     private int requiredCardsFOrTribute;
     //command Knight effect                                                                                       //texchanger
     /* done */ private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 1)     in battlePhaseStart and changeTurnEffect
-     /* done*/private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
+    /* done*/private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
     //Yomi ship
     /* done */private Effect canKillTheAttacker;     //( 1 , 0)        in deathEffect
     //suijin
     /* done */private Effect canChangeTheAttackersATK;     //( -999999 , 0)        in battlePhaseStart and BattlePhaseEnd and changeTurnEffect
-    //crab turtle       skull guardian
-    /* done */private boolean isRitual;       //in summonEffect
     //man eater bug
     /* done */private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
     //Scanner
@@ -73,7 +73,7 @@ public class Monster extends Card  {
     //Terratiger, the Empowered Warrior
     /* done */private Effect canSetFromDeckByMaxLevel;             //(5 , 0)       in summonEffect
     //The Tricky
-   /* done */ private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
+    /* done */ private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
 
     public Monster(Object[] parameters) {
         setName((String) parameters[0]);
@@ -88,11 +88,12 @@ public class Monster extends Card  {
         setDefHolder((int) parameters[6]);
         setDescription((String) parameters[7]);
     }
-    public  Monster copy(Object object){
-        if (object ==null)return null;
-        if (!(object instanceof  Monster))return null;
+
+    public Monster copy(Object object) {
+        if (object == null) return null;
+        if (!(object instanceof Monster)) return null;
         Cloner cloner = new Cloner();
-        Monster monster = (Monster)object;
+        Monster monster = (Monster) object;
         return cloner.deepClone(monster);
     }
 
@@ -188,6 +189,7 @@ public class Monster extends Card  {
             monster.setAtk(monster.getAtk() + amount);
         }
     }
+
     public boolean isHasAttackedOnceInTurn() {
         return hasAttackedOnceInTurn;
     }
@@ -306,5 +308,17 @@ public class Monster extends Card  {
 
     public Effect getDiscardToSpecialSummon() {
         return discardToSpecialSummon;
+    }
+
+    public boolean isFlipSetEffect() {
+        return isFlipSetEffect;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 }

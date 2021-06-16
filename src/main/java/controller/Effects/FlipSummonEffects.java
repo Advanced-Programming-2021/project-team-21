@@ -1,8 +1,10 @@
-package module.card;
+package controller.Effects;
 
 import module.Board;
 import module.Duel;
 import module.User;
+import module.card.Card;
+import module.card.Monster;
 
 public class FlipSummonEffects {
     // man eater bug
@@ -20,19 +22,18 @@ public class FlipSummonEffects {
         Card[] monsters = board.getMonsters();
         Monster monster = findTheDead(monsters);
         if (monster == null) return;
+        index = board.getAddressByCard(monster);
         duel.addCardToGraveyard(monster, index, userNow);
     }
 
     private static Monster findTheDead(Card[] monsters) {
         if (monsters == null || monsters.length == 0) return null;
         Monster monster = (Monster) monsters[0];
-        index = 1;
         for (int i = 1; i < monsters.length; i++) {
             if (!(monsters[i] instanceof Monster)) continue;
             Monster search = (Monster) monsters[i];
             if (monster.getAtk() + monster.getDef() < search.getAtk() + search.getDef()) {
                 monster = search;
-                index = i + 1;
             }
         }
         return monster;

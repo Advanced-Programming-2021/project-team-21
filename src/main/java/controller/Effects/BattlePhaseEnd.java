@@ -1,7 +1,8 @@
-package module.card;
+package controller.Effects;
 
 import module.Duel;
 import module.User;
+import module.card.Monster;
 
 public class BattlePhaseEnd {
     //suijin
@@ -12,6 +13,14 @@ public class BattlePhaseEnd {
             defense.getCanChangeTheAttackersATK().finishEffect();
             defense.getCanChangeTheAttackersATK().setNeedsToBeReset(true);
         }
-        return defense.getNotDestroyable().hasEffect();
+        if (defense.getNotDestroyable().hasEffect()) {
+            if (defense.getNotDestroyable().getContinuousNumber() == 0) {
+                defense.getNotDestroyable().finishEffect();
+                defense.getNotDestroyable().setNeedsToBeReset(true);
+            }
+
+            return true;
+        }
+        return false;
     }
 }

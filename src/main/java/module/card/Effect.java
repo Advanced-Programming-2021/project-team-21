@@ -104,4 +104,12 @@ public class Effect {
         this.isEffect = isEffectHolder;
         this.isContinuous = isContinuousHolder;
     }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
 }

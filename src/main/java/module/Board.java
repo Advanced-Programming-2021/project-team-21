@@ -67,7 +67,7 @@ public class Board {
     public void addMonsterFaceUp(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
         showMonsters[placeInBoard - 1] = "OO";
-        ((Monster)selectedMonsterCard).setIsATKPosition(true);
+        ((Monster) selectedMonsterCard).setIsATKPosition(true);
         selectedMonsterCard.setFaceUp(false);
     }
 
@@ -80,7 +80,7 @@ public class Board {
             showMonsters[placeInBoard - 1] = "DO";
             selectedMonsterCard.setFaceUp(false);
         }
-        selectedMonsterCard.setFaceUp(false);
+        selectedMonsterCard.setATK(false);
     }
 
     public void addSpellAndTrap(int placeInBoard, Card selectedSpellAndTrapCard) {
@@ -136,7 +136,7 @@ public class Board {
 
     // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
     public Card getCard(int placeInBoard, char monsterOrSpell) {
-        if (monsterOrSpell == 'M')
+        if (monsterOrSpell == 'M' || monsterOrSpell == 'm')
             return monsters[placeInBoard - 1];
         else
             return spellsAndTraps[placeInBoard - 1];
@@ -237,16 +237,43 @@ public class Board {
                 level = ((Monster) card).getLevel();
         int maximumLevelInHand = 0;
         for (Card card : boardOwner.getHand().getCardsInHand())
-            if(card != null)
+            if (card != null)
                 maximumLevelInHand += ((Monster) card).getLevel();
         return maximumLevelInHand >= level;
     }
 
     public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
         int sumOfLevels = 0;
-        for (Integer integer: cardAddresses)
+        for (Integer integer : cardAddresses)
             sumOfLevels += ((Monster) monsters[integer - 1]).getLevel();
         return sumOfLevels >= ((Monster) selectedCard).getLevel();
     }
 
+    public void removeFromGY(String cardName) {
+        this.graveyard.removeIf(card -> card.getName().equals(cardName));
+    }
+
+    public ArrayList<Monster> getCardsFromGYByLevel(int minimum) {
+        ArrayList<Monster> cards = new ArrayList<>();
+        for (Card card : this.graveyard) {
+            if (!(card instanceof Monster)) continue;
+            Monster monster = (Monster) card;
+            if (monster.getLevel() > minimum) cards.add(monster);
+        }
+        return cards;
+    }
+
+    public int getAddressByCard(Card card) {
+        if (card instanceof Monster) {
+            for (int i = 0; i < order.size(); i++)
+                if (monsters[i] == card)
+                    return i + 1;
+        } else {
+            for (int i = 0; i < order.size(); i++)
+                if (spellsAndTraps[i] == card)
+                    return i + 1;
+        }
+        return 0;
+    }
 }
+

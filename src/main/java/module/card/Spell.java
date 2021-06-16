@@ -1,12 +1,9 @@
 package module.card;
 
-import module.User;
-
-import java.util.ArrayList;
-
 public class Spell extends Card {
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
+    private int equippedPlace;
 
     //quickPlay Spells
     //Ring of Defense               Mystical space typhoon          Twin Twisters
@@ -31,55 +28,51 @@ public class Spell extends Card {
 
     //Advanced Ritual Art
     boolean isRitual;
-    // it should be called when you attack a face down monster
-    boolean isAttackFlipSummon;
     // monster reborn
-    private Effect canSummonFromGY;     //(3 , 0)        in spellActivation
+    /* done */private Effect canSummonFromGY;     //(2 , 0)
     //Terraforming
-    private Effect canAddFieldSpellFromDeck;        //(1 , 0)       in spellActivation
+    /* done */private Effect canAddFieldSpellFromDeck;        //(2 , 0)
     //Pot of Greed
-    private Effect canAddFromDeckToHand;            //(3 , 0)       in spellActivation
+    /* done */private Effect canAddFromDeckToHand;            //(3 , 0)
     //Raigeki           //dark hole
-    private Effect canDestroyOpponentMonster;       //(6 , 0)       in spellActivation
+    /* done*/private Effect canDestroyOpponentMonster;       //(6 , 0)
     //Change of Heart
-    private Effect canControlOpponentMonster;       //(1 , 0)       in spellActivation
-    private boolean isDestroyedAfterEndPhase;
+    /* done */private Effect canControlOpponentMonster;       //(1 , 0)        and changeTurnEffect
     //Harpie’s Feather Duster                                                           //Twin Twisters             //Mystical space typhoon
-    private Effect canDestroyOpponentSpell;         //(6 , 0)       in spellActivation              (3 , 0)             (2 . 0)
-    private Effect canDestroyOpponentTrap;         //(6 , 0)       in spellActivation              (3 , 0)             (2 , 0)
+    /* done */private Effect canDestroyOpponentSpellAndTrap;         //(6 , 0)                  (3 , 0)             (2 . 0)
     //Swords of Revealing Light
-    private Effect canChangeFaceOFOpponent;         //(1 , 4)       in spellActivation and mainPhaseEffect
-    private Effect canMakeMonstersUndefeatable;     //(1 , 4)       in spellActivation and mainPhaseEffect
+    /*done*/private Effect canChangeFaceOFOpponent;         //(1 , 4)        summonEffects and changeTurnEffects
+    /*done*/private Effect canMakeMonstersUndefeatable;     //(1 , 4)        changeTurnEffects
     //dark hole
-    private Effect canDestroyMyMonster;             //(6 , 0)       in spell activation
+    /* done */private Effect canDestroyMyMonster;             //(6 , 0)
     //Supply Squad
-    private Effect canDrawACardWhenAMonsterIsDead;          //(2 , 1)       in deathEffect
+    /*done*/private Effect canDrawACardWhenAMonsterIsDead;          //(2 , 1)       in deathEffect
     //Spell Absorption
-    private Effect getLPForEverySpellActivation;          //(501 , 1)         in  spellActivation
+    /*done*/private Effect getLPForEverySpellActivation;          //(501 , 1)
     //Messenger of peace
-    private Effect MonstersCanNotAttack;                    //(1501 , 1)        in battlePhaseStart
-    private Effect costLP;                          //(101 , 1)             in standByPhaseEffect
+    /*done*/private Effect MonstersCanNotAttack;                    //(1501 , 1)    in battlePhaseStart
+    /*done*/private Effect costLP;                          //(101 , 1)             in  standByPhaseEffect
     //Twin Twisters
-    private Effect discardACardToActivate;          //(2 , 0)               in spellActivation
+    /* done*/private Effect discardACardToActivate;          //(2 , 0)
     //Ring of Defense
-    private Effect negateAttack;                //(8001 , 0)                in spellActivation
+    private Effect negateAttack;                //(8001 , 0)
     //Yami                        //Forest                           //UMIIRUKA
-    private Effect fieldSpellType1;     //(200 , 200 , "Fiend")           // (200 , 200 , "Insect")             //( 500 , -400 , "Aqua")             in spellActivations
-    private Effect fieldSpellType2;     //(200 , 2000 , "SpellCaster")    //(200 , 200 ,"Beast" )                                                    in spellActivation
-    private Effect fieldSpellType3;      //(-200 , -200 , "Fairy")         //( 200 , 200, "BeastWarrior")                                            in spellActivation
-    private Effect fieldSpellType4;
-    private Effect fieldSpellType5;
+    /*done*/private Effect fieldSpellType1;     //(200 , 200 , "Fiend")           // (200 , 200 , "Insect")             //( 500 , -400 , "Aqua")
+    /*done*/private Effect fieldSpellType2;     //(200 , 2000 , "SpellCaster")    //(200 , 200 ,"Beast" )
+    /*done*/private Effect fieldSpellType3;      //(-200 , -200 , "Fairy")         //( 200 , 200, "BeastWarrior")
+    /*done*/private Effect fieldSpellType4;
+    /*done*/private Effect fieldSpellType5;
     //Closed Forest
-    private Effect fieldATKIncreaseGY1;      //(100 , 0 , "BeastWarrior")
-    private Effect fieldATKIncreaseGY2;
+    /*done*/private Effect fieldATKIncreaseGY1;      //(100 , 0 , "BeastWarrior")
+    /*done*/private Effect fieldATKIncreaseGY2;
     //Sword of Dark Destruction                 //Black Pendant
-    private Effect equipCardNormal1;        //(400 , -200 , "Fiend")                    //(500 , 0 , "")                 in spellActivation
-    private Effect equipCardNormal2;        //(400 , -200 , "SpellCaster")                                               in spellActivation
-    private Effect equipCardNormal3;
+    /*done*/private Effect equipCardNormal1;        //(400 , -200 , "Fiend")                    //(500 , 0 , "")
+    /*done*/private Effect equipCardNormal2;        //(400 , -200 , "SpellCaster")
+    /*done*/private Effect equipCardNormal3;
     // United We Stand
-    private Effect equipBasedMyUpMonsters;        //(800 , 0 , "")              in spellActivation
+    /*done*/private Effect equipBasedMyUpMonsters;        //(800 , 0 , "")
     //Magnum Shield
-    private Effect equipBasedOnPosition;            //(0 , 0 , "Warrior")           in SpellActivation
+    /*done*/private Effect equipBasedOnPosition;            //(0 , 0 , "Warrior")
 
     public Spell(Object[] parameters) {
         setName((String) parameters[0]);
@@ -118,5 +111,125 @@ public class Spell extends Card {
 
     public boolean isFieldZone() {
         return spellTrapIcon.equals(SpellTrapIcon.FIELD);
+    }
+
+    public Effect getCanSummonFromGY() {
+        return canSummonFromGY;
+    }
+
+    public Effect getCanAddFieldSpellFromDeck() {
+        return canAddFieldSpellFromDeck;
+    }
+
+    public Effect getCanAddFromDeckToHand() {
+        return canAddFromDeckToHand;
+    }
+
+    public Effect getCanDestroyOpponentMonster() {
+        return canDestroyOpponentMonster;
+    }
+
+    public Effect getCanDestroyMyMonster() {
+        return canDestroyMyMonster;
+    }
+
+    public Effect getCanControlOpponentMonster() {
+        return canControlOpponentMonster;
+    }
+
+    public Effect getCanDestroyOpponentSpellAndTrap() {
+        return canDestroyOpponentSpellAndTrap;
+    }
+
+    public Effect getCanChangeFaceOFOpponent() {
+        return canChangeFaceOFOpponent;
+    }
+
+    public Effect getCanDrawACardWhenAMonsterIsDead() {
+        return canDrawACardWhenAMonsterIsDead;
+    }
+
+    public Effect getCanMakeMonstersUndefeatable() {
+        return canMakeMonstersUndefeatable;
+    }
+
+    public Effect getGetLPForEverySpellActivation() {
+        return getLPForEverySpellActivation;
+    }
+
+    public Effect getMonstersCanNotAttack() {
+        return MonstersCanNotAttack;
+    }
+
+    public Effect getCostLP() {
+        return costLP;
+    }
+
+    public Effect getFieldSpellType1() {
+        return fieldSpellType1;
+    }
+
+    public Effect getFieldSpellType2() {
+        return fieldSpellType2;
+    }
+
+    public Effect getFieldSpellType3() {
+        return fieldSpellType3;
+    }
+
+    public Effect getFieldSpellType4() {
+        return fieldSpellType4;
+    }
+
+    public Effect getFieldSpellType5() {
+        return fieldSpellType5;
+    }
+
+    public Effect getFieldATKIncreaseGY1() {
+        return fieldATKIncreaseGY1;
+    }
+
+    public Effect getFieldATKIncreaseGY2() {
+        return fieldATKIncreaseGY2;
+    }
+
+    public Effect getEquipCardNormal1() {
+        return equipCardNormal1;
+    }
+
+    public Effect getEquipCardNormal2() {
+        return equipCardNormal2;
+    }
+
+    public Effect getEquipCardNormal3() {
+        return equipCardNormal3;
+    }
+
+    public boolean isEquipSPell() {
+        return spellTrapIcon.equals(SpellTrapIcon.EQUIP);
+    }
+
+    public void setEquippedPlace(int equippedPlace) {
+        this.equippedPlace = equippedPlace;
+    }
+
+    public int getEquippedPlace() {
+        return equippedPlace;
+    }
+
+    public Effect getEquipBasedMyUpMonsters() {
+        return equipBasedMyUpMonsters;
+    }
+
+    public Effect getEquipBasedOnPosition() {
+        return equipBasedOnPosition;
+    }
+
+    public Effect getDiscardACardToActivate() {
+        return discardACardToActivate;
+    }
+
+    public Effect getNegateAttack() {
+        return negateAttack;
     }
 }

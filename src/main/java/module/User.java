@@ -17,10 +17,11 @@ public class User {
     private Hand hand;
     private ArrayList<Card> graveyard;
     private int lifePoints;
-    private boolean canSummonMonster, canSummonSpell, canSummonTrap;
-    private int increaseATK , increaseDEF;
+    private boolean canSummonMonster, canSummonSpell, canSummonTrap, canAttack;
+    private int increaseATK, increaseDEF;
     private boolean hasSummonedAlteringATK;
     private int alteringATKPlace = -1;
+
     {
         coins = 100000;
         decks = new ArrayList<>();
@@ -257,5 +258,13 @@ public class User {
 
     public void setAlteringATKPlace(int alteringATKPlace) {
         this.alteringATKPlace = alteringATKPlace;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 }
