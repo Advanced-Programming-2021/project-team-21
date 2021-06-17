@@ -84,6 +84,7 @@ public class Responses {
     public static String gameCreation = "Game has been started! Drawing a card in 3 seconds";
     public static String moneyIncreased = "CHEAT: Money increased successfully!";
     public static String increaseLP = "CHEAT: LP increased successfully!";
+    public static String forceSelectHand = "CHEAT: Given card successfully summoned!";
     public static String cardExportedSuccessfully = "Card exported successfully.";
     public static String cardImportedSuccessfully = "Card imported successfully.";
     public static String unableToAttackDirectly = "you can’t attack the opponent directly";

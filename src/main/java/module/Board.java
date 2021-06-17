@@ -1,8 +1,8 @@
 package module;
 
 import module.card.Card;
-import module.card.enums.CardType;
 import module.card.Monster;
+import module.card.enums.CardType;
 
 import java.util.ArrayList;
 
@@ -73,13 +73,8 @@ public class Board {
 
     public void addMonsterFaceDown(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
-        if (selectedMonsterCard.isFaceUp()) {
-            showMonsters[placeInBoard - 1] = "DH";
-            selectedMonsterCard.setFaceUp(true);
-        } else {
-            showMonsters[placeInBoard - 1] = "DO";
-            selectedMonsterCard.setFaceUp(false);
-        }
+        showMonsters[placeInBoard - 1] = "DH";
+        selectedMonsterCard.setATK(false);
         selectedMonsterCard.setFaceUp(false);
     }
 
@@ -260,12 +255,11 @@ public class Board {
     }
 
     public int getAddressByCard(Card card) {
-        if(card instanceof Monster){
+        if (card instanceof Monster) {
             for (int i = 0; i < order.size(); i++)
                 if (monsters[i] == card)
                     return i + 1;
-        }
-        else {
+        } else {
             for (int i = 0; i < order.size(); i++)
                 if (spellsAndTraps[i] == card)
                     return i + 1;

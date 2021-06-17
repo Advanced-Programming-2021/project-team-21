@@ -55,6 +55,7 @@ public class Regex {
     public static final String increaseMoney = "increase --money (?<amount>\\d+)";
     public static final String increaseLP = "increase --LP (?<amount>\\d+)";
     public static final String setWinner = "duel set-winner (?<nickname>\\S+)";
+    public static final String forceSelectHand = "select (?=.*--hand (?<cardName>\\S+))(?=.*--force)";
 
 
     public static Matcher getMatcher(String input, String regex) {

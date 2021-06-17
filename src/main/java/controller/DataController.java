@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
+import module.AI;
 import module.Deck;
 import module.User;
 import module.card.Card;
@@ -127,6 +128,8 @@ public class DataController {
     public static void saveData(Object object) {
         String dataToWrite = new Gson().toJson(object);
         String fileName = "";
+        if (object instanceof AI)
+            return;
         if (object instanceof User)
             fileName = "src/main/resources/users/" + ((User) object).getUsername() + ".user.json";
         else if (object instanceof Card)

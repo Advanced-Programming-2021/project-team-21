@@ -164,11 +164,15 @@ public class Duel {
     }
 
 
-    public Pair<String, String> surrender() {
-        User rival = getRival();
-        rival.setScore(rival.getScore() + 1000);
-        rival.setWinsInAMatch(rival.getWinsInAMatch() + 1);
-        return new Pair<>(rival.getUsername(), 1000 + "-" + 0);
+    public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
+        if (initialRounds == 1){
+            return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
+        } else{
+            if (remainingRounds == 1)
+                return handleEndingThreeRoundGames(getRival(), userWhoPlaysNow);
+            else
+                return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
+        }
     }
 
     public boolean isGameEnded() {
@@ -476,6 +480,8 @@ public class Duel {
 
     public void flipSetForMonsters(int placeOnBoard) {
         Monster monster = (Monster) getRival().getBoard().getCard(placeOnBoard, 'm');
+        if (monster == null)
+            return;
         if (monster.isSummonEffect())
             SummonEffects.run(monster, getRival(), this);
         if (((Monster) selectedCard).isFlipSummonEffect())
