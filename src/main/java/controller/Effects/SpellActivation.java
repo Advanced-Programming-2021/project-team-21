@@ -5,10 +5,7 @@ import controller.menu.DuelMenu;
 import module.Board;
 import module.Duel;
 import module.User;
-import module.card.Card;
-import module.card.Effect;
-import module.card.Monster;
-import module.card.Spell;
+import module.card.*;
 import view.PrintResponses;
 
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ public class SpellActivation {
     public static int newPlaceHolder = -1;
     public static int changeSpellPlace;
 
-    public static void run(Spell spell, User userNow, User rival, Duel duel, int place, boolean fieldAndEquipSpellAdd, Monster equipped) {
+    public static void run(Spell spell, User userNow, User rival, Duel duel, int place, boolean fieldAndEquipSpellAdd, Monster equipped, Chain chain) {
         ArrayList<Card> deckCards = userNow.getHand().getDeckToDraw().getMainDeckCards();
         if (spell.getCanSummonFromGY().hasEffect()) {
             handleSummonFromGY(spell, userNow, rival, duel, place);
@@ -45,7 +42,7 @@ public class SpellActivation {
             handleControl(spell, userNow, rival, duel, place);
         }
         if (spell.getCanDestroyOpponentSpellAndTrap().hasEffect()) {
-            handleDestroySpell(spell, rival, duel, userNow, place);
+            handleDestroySpell(spell, rival, duel, userNow, place, chain);
         }
         if (spell.getCanChangeFaceOFOpponent().hasEffect()) {
             handleFaceChange(spell, userNow, rival, duel);
@@ -188,7 +185,7 @@ public class SpellActivation {
         }
     }
 
-    private static void handleDestroySpell(Spell spell, User rival, Duel duel, User userNow, int place) {
+    private static void handleDestroySpell(Spell spell, User rival, Duel duel, User userNow, int place, Chain chain) {
         int number = spell.getCanDestroyOpponentSpellAndTrap().getEffectNumber();
         Card[] spellsAndTraps = rival.getBoard().getSpellsAndTraps();
         if (spellsAndTraps.length <= number) {
@@ -197,11 +194,20 @@ public class SpellActivation {
             }
         } else {
             while (number > 0) {
-                int selected = getPlace(spellsAndTraps);
-                if (selected == -1) continue;
-                Card card = spellsAndTraps[selected];
+                int selected;
+                Card card;
+                if (chain == null) {
+                    selected = getPlace(spellsAndTraps);
+                    if (selected == -1) continue;
+                    card = spellsAndTraps[selected];
+                } else {
+                    ArrayList<Card> cards = chain.getDestroySpellOrTrap();
+                    card = cards.get(0);
+                    cards.remove(cards.get(0));
+                    chain.setDestroySpellOrTrap(cards);
+                }
                 duel.addCardToGraveyard(card, rival.getBoard().getAddressByCard(card), rival);
-                spellsAndTraps[selected] = null;
+                spellsAndTraps[rival.getBoard().getAddressByCard(card)] = null;
                 number--;
             }
         }

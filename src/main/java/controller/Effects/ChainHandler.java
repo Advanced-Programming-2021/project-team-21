@@ -13,9 +13,44 @@ public class ChainHandler {
     public static Duel currentDuel;
 
     public static boolean run(Duel duel, String choose, User user, User rival
-            , Card card, WhereToChain where) {
+            , Chain card, WhereToChain where) {
         ArrayList<Chain> chainCards = getChain(duel, choose, user, rival, card, where);
+        for (int i = chainCards.size() - 1; i >= 0; i--) {
+            Chain chain = chainCards.get(i);
+            if (chain.getCard() instanceof Spell) {
+                Spell spell = (Spell) chain.getCard();
+                checkForSpellNegate(spell, chainCards, i);
+                SpellActivation.run(spell, getUserNow(user, rival, i, card),
+                        getRival(user, rival, i, card), duel,
+                        getUserNow(user, rival, i, card).getBoard().getAddressByCard(spell),
+                        false, null, chain);
+            }
+        }
         return false;
+    }
+
+    private static void checkForSpellNegate(Spell spell, ArrayList<Chain> chainCards, int i) {
+        if (spell.getNegateTrap().hasEffect()) {
+            Trap trap = (Trap) chainCards.get(i - 1).getCard();
+            Effect effect = trap.getCanAttackLP();
+            effect.resetEffect();
+            trap.setCanAttackLP(effect);
+            Effect effect1 = trap.getCanNegateWholeAttack();
+            effect1.resetEffect();
+            trap.setCanNegateWholeAttack(effect1);
+            chainCards.get(i - 1).setCard(trap);
+        }
+    }
+
+    private static User getRival(User user, User rival, int i, Chain card) {
+        if (getUserNow(user, rival, i, card) == user) return rival;
+        else return user;
+    }
+
+    private static User getUserNow(User user, User rival, int i, Chain card) {
+        if (card.getCard() instanceof Spell || card.getCard() instanceof Trap) i++;
+        if (i % 2 == 1) return rival;
+        else return user;
     }
 
     public static String getChainCommand(User user) {
@@ -29,42 +64,45 @@ public class ChainHandler {
     }
 
     public static ArrayList<module.card.Chain> getChain(Duel duel, String choose, User user, User rival
-            , Card card, WhereToChain where) {
+            , Chain firstCard, WhereToChain where) {
         currentDuel = duel;
         int chainCount = 0;
         int speed = 2;
         ArrayList<module.card.Chain> chainCards = new ArrayList<>();
-        if (card != null)
-            while (!choose.equals("no")) {
-                chainCount++;
-                Card spellOrTrap;
-                User userNow = user;
-                User otherUser = rival;
-                if (chainCount % 2 == 1) {
-                    userNow = rival;
-                    otherUser = user;
-                }
+        if (firstCard.getCard() instanceof Spell || firstCard.getCard() instanceof Trap) {
+            chainCards.add(firstCard);
+        }
+        while (!choose.equals("no")) {
+            chainCount++;
+            Card spellOrTrap;
+            User userNow = user;
+            User otherUser = rival;
+            if (chainCount % 2 == 1) {
+                userNow = rival;
+                otherUser = user;
+            }
+            choose = getNumber(choose, userNow);
+            spellOrTrap = getSpellOrTrap(choose, userNow);
+            while (spellOrTrap == null || checkSpell(speed, spellOrTrap)
+                    || !checkIsRightPlace(chainCards, where, spellOrTrap, firstCard.getCard(), userNow)) {
+                PrintResponses.printWrongSpell();
                 choose = getNumber(choose, userNow);
                 spellOrTrap = getSpellOrTrap(choose, userNow);
-                while (spellOrTrap == null || checkSpell(speed, spellOrTrap)
-                        || !checkIsRightPlace(chainCards, where, spellOrTrap, card, userNow)) {
-                    PrintResponses.printWrongSpell();
-                    choose = getNumber(choose, userNow);
-                    spellOrTrap = getSpellOrTrap(choose, userNow);
-                }
-                if ((spellOrTrap instanceof Trap) && ((Trap) spellOrTrap).getSpellTrapIcon().getName().equals("Counter"))
-                    speed = 3;
-                PrintResponses.printChainComplete(chainCount);
-                module.card.Chain chain = getOtherInputs(spellOrTrap, userNow, otherUser, card);
-                choose = getChainCommand(otherUser);
             }
+            if ((spellOrTrap instanceof Trap) && ((Trap) spellOrTrap).getSpellTrapIcon().getName().equals("Counter"))
+                speed = 3;
+            PrintResponses.printChainComplete(chainCount);
+            module.card.Chain chain = getOtherInputs(spellOrTrap, userNow, otherUser, firstCard);
+            chainCards.add(chain);
+            choose = getChainCommand(otherUser);
+        }
         return chainCards;
     }
 
-    private static Chain getOtherInputs(Card spellOrTrap, User userNow, User rival, Card card) {
+    private static Chain getOtherInputs(Card spellOrTrap, User userNow, User rival, Chain firstCard) {
         getDiscardCards(spellOrTrap, userNow);
-        return new Chain(spellOrTrap, getMonsterCancelSummon(userNow, rival, card, spellOrTrap),
-                getDestroyedCards(rival, spellOrTrap, card), getCardName(spellOrTrap));
+        return new Chain(spellOrTrap,
+                getDestroyedCards(rival, spellOrTrap, firstCard.getCard()), getCardName(spellOrTrap));
     }
 
     private static String getCardName(Card spellOrTrap) {
@@ -145,22 +183,16 @@ public class ChainHandler {
         }
     }
 
-    private static Monster getMonsterCancelSummon(User userNow, User rival, Card card, Card spellOrTrap) {
-        if (!(spellOrTrap instanceof Trap)) return null;
-        Trap trap = (Trap) spellOrTrap;
-        if (trap.getCanDestroyMonsterSummonWithATK().hasEffect() || trap.getNegateASummon().hasEffect())
-            return (Monster) card;
-        return null;
-    }
 
-    private static boolean checkIsRightPlace(ArrayList<module.card.Chain> chainCards, WhereToChain where, Card spellOrTrap, Card card, User userNow) {
+    private static boolean checkIsRightPlace(ArrayList<module.card.Chain> chainCards, WhereToChain where,
+                                             Card spellOrTrap, Card card, User userNow) {
         if (chainCards.size() != 0) card = chainCards.get(chainCards.size() - 1).getCard();
         if (spellOrTrap instanceof Spell) {
             Spell spell = (Spell) spellOrTrap;
             if (spell.getDiscardACardToActivate().hasEffect() &&
                     userNow.getHand().getCardsInHand().length > spell.getDiscardACardToActivate().getEffectNumber())
                 return true;
-            return spell.getNegateAttack().hasEffect() &&
+            return spell.getNegateTrap().hasEffect() &&
                     where.getPlace().equals("effect") &&
                     (card instanceof Trap &&
                             (((Trap) card).getCanAttackLP().hasEffect()));

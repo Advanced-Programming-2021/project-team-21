@@ -3,14 +3,15 @@ package module.card;
 import module.User;
 
 import java.util.ArrayList;
- // add user a field named canDraw
+
+// add user a field named canDraw
 public class Trap extends Card {
 
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
     //Magic Cylinder                                            //Negate Attack
     private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)                in battlePhaseStart
-     private Effect canAttackLP;                //(1 , 0)           in battlePhaseStart
+    private Effect canAttackLP;                //(1 , 0)           in battlePhaseStart
     //Mirror Force
     private Effect destroyAttackMonsters;       //(6 , 0)           in battlePhaseStart
     //Mind Crush
@@ -20,16 +21,17 @@ public class Trap extends Card {
     //Torrential Tribute
     private Effect canDestroyAll;                   //(11 , 0)          in summonEffect anf FlipSummon
     //Time Seal
-     private Effect canNotDraw;                     //(2 , 0)           in spellAndTrapActivation
-     //Magic Jammer
-     private Effect discardACard;           //(2 , 0)                   in spellAndTrapActivation
-     private Effect negateSpellActivation;          //(2 , 0)               in spellAndTrapActivation
-     //Solemn Warning
-     private Effect costLP;             //(2001 , 0)                in summonEffects and flipSummon
-     private Effect negateASummon;          //(2 , 0)               in summonEffects and flipSummon
-     //Call of the Haunted
-     private Effect canSummonFromGY;            //( 2 , 1)          in spellActivation
-     private Effect killTheSummoned;            //(2 , 1)           in spellActivation
+    private Effect canNotDraw;                     //(2 , 0)           in spellAndTrapActivation
+    //Magic Jammer
+    private Effect discardACard;           //(2 , 0)                   in spellAndTrapActivation
+    private Effect negateSpellActivation;          //(2 , 0)               in spellAndTrapActivation
+    //Solemn Warning
+    private Effect costLP;             //(2001 , 0)                in summonEffects and flipSummon
+    private Effect negateASummon;          //(2 , 0)               in summonEffects and flipSummon
+    //Call of the Haunted
+    private Effect canSummonFromGY;            //( 2 , 1)          in spellActivation
+    private Effect killTheSummoned;            //(2 , 1)           in spellActivation
+
     public Trap(Object[] parameters) {
         setName((String) parameters[0]);
         setSpellTrapIcon(SpellTrapIcon.valueOf(((String) parameters[1]).toUpperCase()));
@@ -64,43 +66,51 @@ public class Trap extends Card {
         return "Name: " + name + "\nTrap\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
     }
 
-     public Effect getCanAttackLP() {
-         return canAttackLP;
-     }
+    public Effect getCanAttackLP() {
+        return canAttackLP;
+    }
 
-     public Effect getCanNegateWholeAttack() {
-         return canNegateWholeAttack;
-     }
+    public Effect getCanNegateWholeAttack() {
+        return canNegateWholeAttack;
+    }
 
-     public Effect getDestroyAttackMonsters() {
-         return destroyAttackMonsters;
-     }
+    public Effect getDestroyAttackMonsters() {
+        return destroyAttackMonsters;
+    }
 
-     public Effect getCanDestroyAll() {
-         return canDestroyAll;
-     }
+    public Effect getCanDestroyAll() {
+        return canDestroyAll;
+    }
 
-     public Effect getCanDestroyMonsterSummonWithATK() {
-         return canDestroyMonsterSummonWithATK;
-     }
+    public Effect getCanDestroyMonsterSummonWithATK() {
+        return canDestroyMonsterSummonWithATK;
+    }
 
-     public Effect getNegateASummon() {
-         return negateASummon;
-     }
+    public Effect getNegateASummon() {
+        return negateASummon;
+    }
 
-     public Effect getNegateSpellActivation() {
-         return negateSpellActivation;
-     }
+    public Effect getNegateSpellActivation() {
+        return negateSpellActivation;
+    }
 
-     public Effect getCostLP() {
-         return costLP;
-     }
+    public Effect getCostLP() {
+        return costLP;
+    }
 
-     public Effect getDiscardACard() {
-         return discardACard;
-     }
+    public Effect getDiscardACard() {
+        return discardACard;
+    }
 
-     public Effect getCanDestroyFromDeckAndHand() {
-         return canDestroyFromDeckAndHand;
-     }
- }
+    public Effect getCanDestroyFromDeckAndHand() {
+        return canDestroyFromDeckAndHand;
+    }
+
+    public void setCanAttackLP(Effect canAttackLP) {
+        this.canAttackLP = canAttackLP;
+    }
+
+    public void setCanNegateWholeAttack(Effect canNegateWholeAttack) {
+        this.canNegateWholeAttack = canNegateWholeAttack;
+    }
+}

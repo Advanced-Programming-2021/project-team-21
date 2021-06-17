@@ -4,30 +4,6 @@ public class Spell extends Card {
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
     private int equippedPlace;
-
-    //quickPlay Spells
-    //Ring of Defense               Mystical space typhoon          Twin Twisters
-    boolean isQuickPlay;
-    //for summoned effects
-    boolean isSummonEffect;
-
-    //it should be an if at the first of each attack to monster
-    boolean isBattlePhaseEffectStart;
-
-    // when a card is destroyed
-    boolean isDeathEffect;
-
-    // main phase effect that are chosen by user
-    boolean isMainPhaseChosen;
-
-    //it should be an if at the end of each attack to monster
-    boolean isBattlePhaseEffectEnd;
-
-    //Yami          //Forest            //Closed Forest         //UMIIRUKA      //Sword of Dark Destruction         //Black Pendant
-    boolean isFieldSpellOrEquip;
-
-    //Advanced Ritual Art
-    boolean isRitual;
     // monster reborn
     /* done */private Effect canSummonFromGY;     //(2 , 0)
     //Terraforming
@@ -37,25 +13,25 @@ public class Spell extends Card {
     //Raigeki           //dark hole
     /* done*/private Effect canDestroyOpponentMonster;       //(6 , 0)
     //Change of Heart
-    /* done */private Effect canControlOpponentMonster;       //(1 , 0)        and changeTurnEffect
+    /* done */private Effect canControlOpponentMonster;       //(1 , 0)
     //Harpie’s Feather Duster                                                           //Twin Twisters             //Mystical space typhoon
-    /* done */private Effect canDestroyOpponentSpellAndTrap;         //(6 , 0)                  (3 , 0)             (2 . 0)
+    /* done */private Effect canDestroyOpponentSpellAndTrap;         //(6 , 0)                  (3 , 0)             (2 , 0)
     //Swords of Revealing Light
-    /*done*/private Effect canChangeFaceOFOpponent;         //(1 , 4)        summonEffects and changeTurnEffects
-    /*done*/private Effect canMakeMonstersUndefeatable;     //(1 , 4)        changeTurnEffects
+    /*done*/private Effect canChangeFaceOFOpponent;         //(1 , 4)
+    /*done*/private Effect canMakeMonstersUndefeatable;     //(1 , 4)
     //dark hole
     /* done */private Effect canDestroyMyMonster;             //(6 , 0)
     //Supply Squad
-    /*done*/private Effect canDrawACardWhenAMonsterIsDead;          //(2 , 1)       in deathEffect
+    /*done*/private Effect canDrawACardWhenAMonsterIsDead;          //(2 , 1)
     //Spell Absorption
     /*done*/private Effect getLPForEverySpellActivation;          //(501 , 1)
     //Messenger of peace
-    /*done*/private Effect MonstersCanNotAttack;                    //(1501 , 1)    in battlePhaseStart
-    /*done*/private Effect costLP;                          //(101 , 1)             in  standByPhaseEffect
+    /*done*/private Effect MonstersCanNotAttack;                    //(1501 , 1)
+    /*done*/private Effect costLP;                          //(101 , 1)
     //Twin Twisters
     /* done*/private Effect discardACardToActivate;          //(2 , 0)
     //Ring of Defense
-    private Effect negateAttack;                //(8001 , 0)
+    /*done*/private Effect negateTrap;                //(1 , 0)
     //Yami                        //Forest                           //UMIIRUKA
     /*done*/private Effect fieldSpellType1;     //(200 , 200 , "Fiend")           // (200 , 200 , "Insect")             //( 500 , -400 , "Aqua")
     /*done*/private Effect fieldSpellType2;     //(200 , 2000 , "SpellCaster")    //(200 , 200 ,"Beast" )
@@ -229,7 +205,7 @@ public class Spell extends Card {
         return discardACardToActivate;
     }
 
-    public Effect getNegateAttack() {
-        return negateAttack;
+    public Effect getNegateTrap() {
+        return negateTrap;
     }
 }
