@@ -2,74 +2,42 @@ package controller.menu;
 
 import controller.DataController;
 import controller.ProgramController;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import module.User;
 import module.card.Card;
-import view.PrintResponses;
 import view.Regex;
-
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class ShopMenu implements Menuable {
     public static int currentPage = 1;
-    public static int cardsShowed = 5;
+    public static int cardsShowed = 6;
     public static ArrayList<String> cardsName;
-    @Override
+
     public void run(String command) {
         Matcher matcher;
-        if ((matcher = Regex.getMatcher(command, Regex.buyACard)).find()) {
+        if ((matcher = Regex.getMatcher(command, Regex.buyACard)).find())
             buyCard(matcher);
-        } else if (Regex.getMatcher(command, Regex.showCardShop).matches()) {
-            printCardsShop();
-        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
-            showCurrentMenu();
-        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
-            exitMenu();
-        } else if ((matcher = Regex.getMatcher(command, Regex.showACard)).find()) {
-            String cardName = matcher.group("cardName");
-            PrintResponses.printACard(Card.getCardByName(cardName));
-        } else PrintResponses.printInvalidFormat();
     }
 
-    private void printCardsShop() {
-        HashMap<String, Card> allCards = ProgramController.allCards;
-        ArrayList<String> names = new ArrayList<>(allCards.keySet());
-        Collections.sort(names);
-        for (String name : names) {
-            PrintResponses.printCardsInShop(name, allCards.get(name).getPrice());
-        }
-    }
 
     private void buyCard(Matcher matcher) {
         String cardName = matcher.group("name");
         Card card = Card.getCardByName(cardName);
         User user = ProgramController.userInGame;
         ProgramController.userInGame.addCard(card);
-        user.setCoins(user.getCoins() - card.getPrice());
+        user.setCoins(user.getCoins() - (card != null ? card.getPrice() : 0));
         ((Label) ProgramController.currentScene.lookup("#money")).setText(String.valueOf(ProgramController.userInGame.getCoins()));
         ProgramController.stage.show();
     }
 
-    @Override
-    public void showCurrentMenu() {
-        PrintResponses.printShopMenuShow();
-    }
 
-    @Override
-    public void exitMenu() {
-        ProgramController.currentMenu = new MainMenu();
-    }
 
-    public void showShopMenu() throws IOException {
+    public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/fxmls/shopMenu.fxml"));
         ((Label) ProgramController.currentScene.lookup("#page")).setText(String.valueOf(currentPage));
         ((Label) ProgramController.currentScene.lookup("#money")).setText(String.valueOf(ProgramController.userInGame.getCoins()));
@@ -80,32 +48,72 @@ public class ShopMenu implements Menuable {
         ((ImageView) ProgramController.currentScene.lookup("#card3")).setImage(new Image("/images/cards/" + cardsName.get(2) + ".jpg"));
         ((ImageView) ProgramController.currentScene.lookup("#card4")).setImage(new Image("/images/cards/" + cardsName.get(3) + ".jpg"));
         ((ImageView) ProgramController.currentScene.lookup("#card5")).setImage(new Image("/images/cards/" + cardsName.get(4) + ".jpg"));
+        ProgramController.currentScene.lookup("#previousPage").setDisable(true);
+        ProgramController.currentScene.lookup("#previousPage").setStyle("-fx-background-color: gray;");
         ProgramController.stage.show();
     }
 
-    public void back(MouseEvent mouseEvent) throws IOException {
+    public void back() throws IOException {
         ProgramController.currentMenu = new MainMenu();
-        ((MainMenu) ProgramController.currentMenu).showMainMenu();
+        ProgramController.currentMenu.showMenu();
     }
 
-    public void nextPage(MouseEvent mouseEvent) { // bugs should be fixed
-            currentPage++;
+    public void nextPage() { // bugs should be fixed
+        if (ProgramController.currentScene.lookup("#previousPage").isDisable()) {
+            ProgramController.currentScene.lookup("#previousPage").setDisable(false);
+            ProgramController.currentScene.lookup("#previousPage").setStyle("");
+        }
+        currentPage++;
+        if (currentPage == 16) {
+            ProgramController.currentScene.lookup("#nextPage").setDisable(false);
+            ProgramController.currentScene.lookup("#nextPage").setStyle("-fx-background-color: gray;");
             ((Label) ProgramController.currentScene.lookup("#page")).setText(String.valueOf(currentPage));
-            for (int i = cardsShowed, j = 1; j <= 5 || cardsShowed <= 76; j++,cardsShowed++)
-                ((ImageView) ProgramController.currentScene.lookup("#card" + j)).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed) + ".jpg"));
+            ((ImageView) ProgramController.currentScene.lookup("#card1")).setImage(new Image("/images/cards/" + cardsName.get(75) + ".jpg"));
+            ProgramController.stage.show();
+            return;
+        }
+        ((Label) ProgramController.currentScene.lookup("#page")).setText(String.valueOf(currentPage));
+        ((ImageView) ProgramController.currentScene.lookup("#card1")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed++;
+        ((ImageView) ProgramController.currentScene.lookup("#card2")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed++;
+        ((ImageView) ProgramController.currentScene.lookup("#card3")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed++;
+        ((ImageView) ProgramController.currentScene.lookup("#card4")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed++;
+        ((ImageView) ProgramController.currentScene.lookup("#card5")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed++;
         ProgramController.stage.show();
     }
 
-    public void previousPage(MouseEvent mouseEvent) { // bugs should be fixed
-            currentPage--;
-            ((Label) ProgramController.currentScene.lookup("#page")).setText(String.valueOf(currentPage));
-            for (int i = cardsShowed, j = 5; j >= 1 || cardsShowed >= 1; j--,cardsShowed--)
-                ((ImageView) ProgramController.currentScene.lookup("#card" + j)).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed) + ".jpg"));
+    public void previousPage() { // bugs should be fixed
+        if (ProgramController.currentScene.lookup("#nextPage").isDisable()) {
+            ProgramController.currentScene.lookup("#nextPage").setDisable(false);
+            ProgramController.currentScene.lookup("#nextPage").setStyle("-fx-background-color: white;");
+        }
+        currentPage--;
+        if (currentPage == 1) {
+            ProgramController.currentScene.lookup("#previousPage").setDisable(true);
+            ProgramController.currentScene.lookup("#previousPage").setStyle("-fx-background-color: gray;");
+        }
+        if (currentPage != 15)
+            cardsShowed -= 6;
+        ((Label) ProgramController.currentScene.lookup("#page")).setText(String.valueOf(currentPage));
+        ((ImageView) ProgramController.currentScene.lookup("#card5")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed--;
+        ((ImageView) ProgramController.currentScene.lookup("#card4")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed--;
+        ((ImageView) ProgramController.currentScene.lookup("#card3")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed--;
+        ((ImageView) ProgramController.currentScene.lookup("#card2")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed--;
+        ((ImageView) ProgramController.currentScene.lookup("#card1")).setImage(new Image("/images/cards/" + cardsName.get(cardsShowed - 1) + ".jpg"));
+        cardsShowed += 5;
         ProgramController.stage.show();
     }
 
-    public void buyFirstCard(MouseEvent mouseEvent) {
-        String cardName = null;
+    public void buyFirstCard() {
+        String cardName;
         if (cardsShowed < 16) {
             cardName = cardsName.get(currentPage * 5 - 5);
         }
@@ -115,23 +123,23 @@ public class ShopMenu implements Menuable {
         run(commandBuyCard);
     }
 
-    public void buySecondCard(MouseEvent mouseEvent) { // bugs should be fixed
-        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 4);;
+    public void buySecondCard() { // bugs should be fixed
+        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 4);
         run(commandBuyCard);
     }
 
-    public void buyThirdCard(MouseEvent mouseEvent) { // bugs should be fixed
-        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 3);;
+    public void buyThirdCard() { // bugs should be fixed
+        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 3);
         run(commandBuyCard);
     }
 
-    public void buyFourthCard(MouseEvent mouseEvent) { // bugs should be fixed
-        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 2);;
+    public void buyFourthCard() { // bugs should be fixed
+        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 2);
         run(commandBuyCard);
     }
 
-    public void buyFifthCard(MouseEvent mouseEvent) { // bugs should be fixed
-        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 1);;
+    public void buyFifthCard() { // bugs should be fixed
+        String commandBuyCard = "shop buy " + cardsName.get(currentPage * 5 - 1);
         System.out.println(commandBuyCard);
         run(commandBuyCard);
     }

@@ -28,7 +28,6 @@ public class DuelMenu implements Menuable {
         isInGame = true;
     }
 
-    @Override
     public void run(String command) {
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
         boolean isValidCommand = false;
@@ -60,11 +59,10 @@ public class DuelMenu implements Menuable {
     }
 
     @Override
-    public void showCurrentMenu() {
+    public void showMenu() {
         PrintResponses.printDuelMenuShow();
     }
 
-    @Override
     public void exitMenu() {
         ProgramController.currentMenu = new MainMenu();
     }

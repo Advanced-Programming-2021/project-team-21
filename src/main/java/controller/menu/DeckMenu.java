@@ -14,16 +14,13 @@ import java.util.regex.Matcher;
 public class DeckMenu implements Menuable {
     User user = ProgramController.userInGame;
 
-    @Override
     public void run(String command) {
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.deckCreate)).find()) {
             createDeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.deckDelete)).find()) {
             deleteDeck(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
-            showCurrentMenu();
-        } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
+        }else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
             activateDeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.addCardMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.addCardSide)).find()) {
@@ -31,8 +28,6 @@ public class DeckMenu implements Menuable {
         } else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.removeCardSide)).find()) {
             removeCard(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
-            exitMenu();
         } else if (Regex.getMatcher(command, Regex.showAllDeck).matches()) {
             showAllDeck();
         } else if ((matcher = Regex.getMatcher(command, Regex.showDeckMain)).find() ||
@@ -189,14 +184,9 @@ public class DeckMenu implements Menuable {
         PrintResponses.printSuccessfulDeckCreation();
     }
 
-    @Override
-    public void exitMenu() {
-        ProgramController.currentMenu = new MainMenu();
-        DataController.saveData(user);
-    }
 
     @Override
-    public void showCurrentMenu() {
+    public void showMenu() {
         PrintResponses.printDeckMenuShow();
     }
 }

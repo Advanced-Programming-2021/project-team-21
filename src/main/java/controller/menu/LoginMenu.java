@@ -9,19 +9,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import module.User;
-import view.PrintResponses;
 import view.Regex;
-
-import java.awt.*;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Matcher;
-
 public class LoginMenu implements Menuable {
 
     public TextField usernameSignUp = new TextField();
@@ -31,7 +24,6 @@ public class LoginMenu implements Menuable {
     public TextField usernameLogin = new TextField();
     public PasswordField passwordLogin = new PasswordField();
 
-    @Override
     public void run(String command) throws IOException {
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.userLogin)).find() ||
@@ -45,14 +37,10 @@ public class LoginMenu implements Menuable {
     }
 
     @Override
-    public void showCurrentMenu() {
+    public void showMenu() {
 
     }
 
-    @Override
-    public void exitMenu() {
-
-    }
 
     private void createNewUser(Matcher matcher) throws IOException {
         String username = matcher.group("username"), password = matcher.group("password"),
@@ -60,7 +48,7 @@ public class LoginMenu implements Menuable {
         if (User.getUserByUsername(username) != null) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : This username already exists!");
-            ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setStyle("-fx-border-color: red; -fx-background-color: white;");
+            ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
             ((Label) ProgramController.currentScene.lookup("#errorUsernameSignUp")).setText("*");
             ProgramController.stage.show();
             return;
@@ -68,13 +56,17 @@ public class LoginMenu implements Menuable {
         if (User.getUserByNickname(nickname) != null) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : This nickname already exists!");
-            ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setStyle("-fx-border-color: red; -fx-background-color: white;");
+            ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
             ((Label) ProgramController.currentScene.lookup("#errorNicknameSignUp")).setText("*");
             ProgramController.stage.show();
             return;
         }
         new User(username, password, nickname);
         backToEntrance();
+        showPopUpSuccessfulSignUp();
+    }
+
+    private void showPopUpSuccessfulSignUp() throws IOException {
         Parent pane = FXMLLoader.load(getClass().getResource("/fxmls/succussfulSignup.fxml"));
         Scene scene = new Scene(pane);
         Stage stagePopUp = new Stage();
@@ -92,13 +84,13 @@ public class LoginMenu implements Menuable {
         User user = User.getUserByUsername(username);
         if (user == null || !user.getPassword().equals(password)) {
             ((Label) ProgramController.currentScene.lookup("#errorLogin")).setText("Username and password didn't match!");
-            ((Label) ProgramController.currentScene.lookup("#errorLogin")).setStyle("-fx-border-color: red; -fx-background-color: white;");
+            ProgramController.currentScene.lookup("#errorLogin").setStyle("-fx-border-color: red; -fx-background-color: white;");
             ProgramController.stage.show();
             return;
         }
         ProgramController.userInGame = user;
         ProgramController.currentMenu = new MainMenu();
-        ((MainMenu) ProgramController.currentMenu).showMainMenu();
+        ProgramController.currentMenu.showMenu();
     }
 
 
@@ -120,7 +112,7 @@ public class LoginMenu implements Menuable {
         if (!agreeToPolicies.isSelected()) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : You must agree to policies!");
-            ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setStyle("-fx-border-color: red; -fx-background-color: white;");
+            ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
             ((Label) ProgramController.currentScene.lookup("#errorPoliciesSignUp")).setText("*");
             ProgramController.stage.show();
             return;
@@ -142,7 +134,7 @@ public class LoginMenu implements Menuable {
         ProgramController.stage.show();
     }
 
-    public void policies(MouseEvent mouseEvent) throws IOException {
+    public void policies() throws IOException {
         Parent pane = FXMLLoader.load(getClass().getResource("/fxmls/policies.fxml"));
         Scene scene = new Scene(pane);
         Stage stagePopUp = new Stage();
