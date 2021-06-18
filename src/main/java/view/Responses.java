@@ -79,8 +79,33 @@ public class Responses {
     public static String exportAndImportMenu = "Export/Import Menu";
     public static String scoreBoard = "ScoreBoard";
     public static String shopMenu = "Shop Menu";
-    public static String activeDeck = "Decks:\n" +
-            "Active deck:";
+    public static String activeDeck = "Decks:\n" + "Active deck:";
     public static String otherDeck = "Other decks:";
     public static String gameCreation = "Game has been started! Drawing a card in 3 seconds";
+    public static String moneyIncreased = "CHEAT: Money increased successfully!";
+    public static String increaseLP = "CHEAT: LP increased successfully!";
+    public static String forceSelectHand = "CHEAT: Given card successfully summoned!";
+    public static String cardExportedSuccessfully = "Card exported successfully.";
+    public static String cardImportedSuccessfully = "Card imported successfully.";
+    public static String unableToAttackDirectly = "you can’t attack the opponent directly";
+    public static String alreadyInGame = "You are already in a game!";
+    public static String wrongChoose = "choose a right number from the shown cards to special summon";
+    public static String choiceOfDifferentTribute = "Pick a number to choose how many monsters to tribute";
+    public static String wrongChoiceOfTribute = "choose a suitable number for tribute";
+    public static String disabledMonsterSummon = "You can not summon due to an Effect";
+    public static String disabledTrapSummon = "You can not activate due to an Effect";
+    public static String disabledSpellSummon = "you can not activate due to an Effect";
+    public static String activateEffectMonster = "Do you want to activate the Effect?";
+    public static String changeOfHeart = "choose the monster you want to control";
+    public static String wrongChoiceControl = "you did not choose the monster correctly";
+    public static String canNotControl = "you can Not control any thing";
+    public static String noSpellFound = "no spell found on this location";
+    public static String disabledAttack = "You can not attack due to effect of an card";
+    public static String chooseEquip = "Choose a Monster to Equip it with this Spell";
+    public static String askForChain = "do you want to activate your trap and spell?";
+    public static String wrongSpell = "you have chosen a wrong place or a spell that can not be chained right now";
+    public static String wrongSpellFormat = "you have to enter a number";
+    public static String askToDiscard = "select the cards in your hand to discard";
+    public static String askToGetCardName = "enter a card name";
+    public static String wrongCardName = "there is no card with this name";
 }

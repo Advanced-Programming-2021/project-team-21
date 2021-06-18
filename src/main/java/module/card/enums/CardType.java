@@ -1,4 +1,4 @@
-package module.card;
+package module.card.enums;
 
 //added name to check which is which
 public enum CardType {

@@ -1,38 +1,37 @@
 package module.card;
 
-import module.User;
 
-import java.util.ArrayList;
+import module.card.effects.Effect;
+import module.card.enums.SpellTrapIcon;
+import module.card.enums.SpellTrapStatus;
 
 // add user a field named canDraw
-public class Trap extends Card implements MainEffects {
+public class Trap extends Card {
 
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
-    //Magic Jammer              //Negate Attack            Solemn Warning
-    private boolean canActivateInOpponentTurn;
     //Magic Cylinder                                            //Negate Attack
-    private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)                in battlePhaseStart
-    private Effect canAttackLP;                //(1 , 0)           in battlePhaseStart
+    /*done*/private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)
+    /*done*/private Effect canAttackLP;                //(1 , 0)
     //Mirror Force
-    private Effect destroyAttackMonsters;       //(6 , 0)           in battlePhaseStart
+    /*done*/private Effect destroyAttackMonsters;       //(6 , 0)
     //Mind Crush
-    private Effect canDestroyFromDeckAndHand;    //(4 , 0)          in spellActivation
+    /*done*/private Effect canDestroyFromDeckAndHand;    //(4 , 0)
     //Trap Hole
-    private Effect canDestroyMonsterSummonWithATK;           //(1001 , 0)             in summonEffect and flipSummon
+    /*done*/private Effect canDestroyMonsterSummonWithATK;           //(1001 , 0)
     //Torrential Tribute
-    private Effect canDestroyAll;                   //(11 , 0)          in summonEffect anf FlipSummon
+    /*done*/private Effect canDestroyAll;                   //(1 , 0)
     //Time Seal
-    private Effect canNotDraw;                     //(2 , 0)           in spellAndTrapActivation
+    /*done*/private Effect canNotDraw;                     //(2 , 0)
     //Magic Jammer
-    private Effect discardACard;           //(2 , 0)                   in spellAndTrapActivation
-    private Effect negateSpellActivation;          //(2 , 0)               in spellAndTrapActivation
+    /*done*/private Effect discardACard;           //(2 , 0)
+    /*done*/private Effect negateSpellActivation;          //(2 , 0)
     //Solemn Warning
-    private Effect costLP;             //(2001 , 0)                in summonEffects and flipSummon
-    private Effect negateASummon;          //(2 , 0)               in summonEffects and flipSummon
+    /*done*/private Effect costLP;             //(2001 , 0)
+    /*done*/private Effect negateASummon;          //(2 , 0)
     //Call of the Haunted
-    private Effect canSummonFromGY;            //( 2 , 1)          in spellActivation
-    private Effect killTheSummoned;            //(2 , 1)           in spellActivation
+    private Effect canSummonFromGY;            //( 2 , 1)
+    private Effect killTheSummoned;            //(2 , 1)
 
     public Trap(Object[] parameters) {
         setName((String) parameters[0]);
@@ -42,10 +41,6 @@ public class Trap extends Card implements MainEffects {
         setPrice((int) parameters[4]);
     }
 
-    @Override
-    public void destroyWithoutLosingLifePoints() {
-
-    }
 
     public SpellTrapIcon getSpellTrapIcon() {
         return spellTrapIcon;
@@ -68,48 +63,55 @@ public class Trap extends Card implements MainEffects {
         return "Name: " + name + "\nTrap\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
     }
 
-    @Override
-    public void flipSummonEffect(Card card, User firstUser, User secondUser) {
-
+    public Effect getCanAttackLP() {
+        return canAttackLP;
     }
 
-    @Override
-    public void summonEffect(Card card, User firstUser, User secondUser) {
-
+    public Effect getCanNegateWholeAttack() {
+        return canNegateWholeAttack;
     }
 
-    @Override
-    public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
-
+    public Effect getDestroyAttackMonsters() {
+        return destroyAttackMonsters;
     }
 
-    @Override
-    public void activateSpell(Spell spell, User firstUser, User secondUser) {
-
+    public Effect getCanDestroyAll() {
+        return canDestroyAll;
     }
 
-
-    public boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
+    public Effect getCanDestroyMonsterSummonWithATK() {
+        return canDestroyMonsterSummonWithATK;
     }
 
-    @Override
-    public void deathEffect(Card card, User firstUser, User secondUser) {
-
+    public Effect getNegateASummon() {
+        return negateASummon;
     }
 
-    @Override
-    public void mainPhaseChosen(ArrayList<Card> cards, User firstUser, User secondUser) {
-
+    public Effect getNegateSpellActivation() {
+        return negateSpellActivation;
     }
 
-    @Override
-    public boolean battlePhaseEffectEnd(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
+    public Effect getCostLP() {
+        return costLP;
     }
 
-    @Override
-    public void attackFlipSummon(Monster attacker, Monster defense, User firstUser, User secondUser) {
+    public Effect getDiscardACard() {
+        return discardACard;
+    }
 
+    public Effect getCanDestroyFromDeckAndHand() {
+        return canDestroyFromDeckAndHand;
+    }
+
+    public void setCanAttackLP(Effect canAttackLP) {
+        this.canAttackLP = canAttackLP;
+    }
+
+    public Effect getCanNotDraw() {
+        return canNotDraw;
+    }
+
+    public Effect getCanSummonFromGY() {
+        return canSummonFromGY;
     }
 }

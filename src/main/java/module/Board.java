@@ -1,7 +1,8 @@
 package module;
 
 import module.card.Card;
-import module.card.CardType;
+import module.card.Monster;
+import module.card.enums.CardType;
 import module.card.Monster;
 
 import java.util.ArrayList;
@@ -73,13 +74,8 @@ public class Board {
 
     public void addMonsterFaceDown(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
-        if (selectedMonsterCard.isFaceUp()) {
-            showMonsters[placeInBoard - 1] = "DH";
-            selectedMonsterCard.setFaceUp(true);
-        } else {
-            showMonsters[placeInBoard - 1] = "DO";
-            selectedMonsterCard.setFaceUp(false);
-        }
+        showMonsters[placeInBoard - 1] = "DH";
+        selectedMonsterCard.setATK(false);
         selectedMonsterCard.setFaceUp(false);
     }
 
@@ -136,7 +132,7 @@ public class Board {
 
     // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
     public Card getCard(int placeInBoard, char monsterOrSpell) {
-        if (monsterOrSpell == 'M')
+        if (monsterOrSpell == 'M' || monsterOrSpell == 'm')
             return monsters[placeInBoard - 1];
         else
             return spellsAndTraps[placeInBoard - 1];
@@ -260,12 +256,11 @@ public class Board {
     }
 
     public int getAddressByCard(Card card) {
-        if(card instanceof Monster){
+        if (card instanceof Monster) {
             for (int i = 0; i < order.size(); i++)
                 if (monsters[i] == card)
                     return i + 1;
-        }
-        else {
+        } else {
             for (int i = 0; i < order.size(); i++)
                 if (spellsAndTraps[i] == card)
                     return i + 1;
@@ -273,4 +268,17 @@ public class Board {
         return 0;
     }
 
+    public void removeFromGY(String cardName) {
+        this.graveyard.removeIf(card -> card.getName().equals(cardName));
+    }
+
+    public ArrayList<Monster> getCardsFromGYByLevel(int minimum) {
+        ArrayList<Monster> cards = new ArrayList<>();
+        for (Card card : this.graveyard) {
+            if (!(card instanceof Monster))continue;
+            Monster monster = (Monster)card;
+            if (monster.getLevel() > minimum)cards.add(monster);
+        }
+        return cards;
+    }
 }

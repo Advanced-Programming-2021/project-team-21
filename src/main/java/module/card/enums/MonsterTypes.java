@@ -1,4 +1,4 @@
-package module.card;
+package module.card.enums;
 
 public enum MonsterTypes {
     WARRIOR("Warrior"),

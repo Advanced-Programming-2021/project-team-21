@@ -20,8 +20,14 @@ public class User {
     private Hand hand;
     private ArrayList<Card> graveyard;
     private int lifePoints;
-    private boolean canSummonMonster, canSummonSpell, canSummonTrap;
+    private int maxLifePoint = 0;
+    private boolean canSummonMonster, canSummonSpell, canSummonTrap, canAttack;
+    private int winsInAMatch;
+    private int CanNotDrawRounds;
 
+    private int increaseATK , increaseDEF;
+    private boolean hasSummonedAlteringATK;
+    private int alteringATKPlace = -1;
     {
         coins = 100000;
         decks = new ArrayList<>();
@@ -241,5 +247,69 @@ public class User {
 
     public void setCanSummonTrap(boolean canSummonTrap) {
         this.canSummonTrap = canSummonTrap;
+    }
+
+    public int getWinsInAMatch() {
+        return winsInAMatch;
+    }
+
+    public void setWinsInAMatch(int winsInAMatch) {
+        this.winsInAMatch = winsInAMatch;
+    }
+
+    public int getMaxLifePoint() {
+        return maxLifePoint;
+    }
+
+    public void setMaxLifePoint(int maxLifePoint) {
+        this.maxLifePoint = Math.max(maxLifePoint, this.maxLifePoint);
+    }
+
+    public int getIncreaseATK() {
+        return increaseATK;
+    }
+
+    public int getIncreaseDEF() {
+        return increaseDEF;
+    }
+
+    public void setIncreaseATK(int increaseATK) {
+        this.increaseATK = increaseATK;
+    }
+
+    public void setIncreaseDEF(int increaseDEF) {
+        this.increaseDEF = increaseDEF;
+    }
+
+    public boolean isHasSummonedAlteringATK() {
+        return hasSummonedAlteringATK;
+    }
+
+    public void setHasSummonedAlteringATK(boolean hasSummonedAlteringATK) {
+        this.hasSummonedAlteringATK = hasSummonedAlteringATK;
+    }
+
+    public int getAlteringATKPlace() {
+        return alteringATKPlace;
+    }
+
+    public void setAlteringATKPlace(int alteringATKPlace) {
+        this.alteringATKPlace = alteringATKPlace;
+    }
+
+    public int getCanNotDrawRounds() {
+        return CanNotDrawRounds;
+    }
+
+    public void setCanNotDrawRounds(int canNotDrawRounds) {
+        CanNotDrawRounds = canNotDrawRounds;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 }

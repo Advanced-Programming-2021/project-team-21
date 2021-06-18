@@ -14,13 +14,14 @@ import java.util.regex.Matcher;
 public class DeckMenu implements Menuable {
     User user = ProgramController.userInGame;
 
+
     public void run(String command) {
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.deckCreate)).find()) {
             createDeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.deckDelete)).find()) {
             deleteDeck(matcher);
-        }else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
             activateDeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.addCardMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.addCardSide)).find()) {
@@ -28,7 +29,7 @@ public class DeckMenu implements Menuable {
         } else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.removeCardSide)).find()) {
             removeCard(matcher);
-        } else if (Regex.getMatcher(command, Regex.showAllDeck).matches()) {
+        }else if (Regex.getMatcher(command, Regex.showAllDeck).find()) {
             showAllDeck();
         } else if ((matcher = Regex.getMatcher(command, Regex.showDeckMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.showDeckSide)).find()) {
@@ -36,7 +37,7 @@ public class DeckMenu implements Menuable {
         } else if ((matcher = Regex.getMatcher(command, Regex.showACard)).find()) {
             String cardName = matcher.group("cardName").trim();
             PrintResponses.printACard(Card.getCardByName(cardName));
-        } else if (Regex.getMatcher(command, Regex.deckShowCard).matches()) {
+        } else if (Regex.getMatcher(command, Regex.deckShowCard).find()) {
             showAllCards();
         } else PrintResponses.printInvalidFormat();
     }
@@ -183,7 +184,6 @@ public class DeckMenu implements Menuable {
         user.addDeck(deck);
         PrintResponses.printSuccessfulDeckCreation();
     }
-
 
     @Override
     public void showMenu() {

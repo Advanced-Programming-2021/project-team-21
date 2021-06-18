@@ -2,7 +2,9 @@ package module.card;
 
 // a problem is when there are multiple cards in print
 
+import com.rits.cloning.Cloner;
 import controller.ProgramController;
+import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +24,7 @@ public class Card {
         if (allCards == null)
             return null;
         for (String cardName : allCards.keySet()) {
-            if (cardName.equals(name)) return allCards.get(cardName);
+            if (cardName.equals(name)) return new Cloner().deepClone(allCards.get(cardName));
         }
         return null;
     }

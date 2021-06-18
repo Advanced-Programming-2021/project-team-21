@@ -1,5 +1,6 @@
 package view;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,8 +46,18 @@ public class Regex {
     public static final String showGraveyard = "^show graveyard$";
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
+    public static final String specialSummon = "Special Summon Card number (?<cardNumber>\\d+)";
     public static final String importCard = "import card (?<cardName>\\S+)";
     public static final String exportCard = "export card (?<cardName>\\S+)";
+    //These are for extracting data for card effects.
+    public static final String parseTwoNumberEffects = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)";
+    public static final String parseOneNumberTwoStrings = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_\"(?<stringNumber>-?\\d+)\"_\"(?<string>\\w+)\"";
+    //These are some commands that are not in the doc, including cheat-commands.
+    public static final String increaseMoney = "increase --money (?<amount>\\d+)";
+    public static final String increaseLP = "increase --LP (?<amount>\\d+)";
+    public static final String setWinner = "duel set-winner (?<nickname>\\S+)";
+    public static final String forceSelectHand = "select (?=.*--hand (?<cardName>\\S+))(?=.*--force)";
+
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
