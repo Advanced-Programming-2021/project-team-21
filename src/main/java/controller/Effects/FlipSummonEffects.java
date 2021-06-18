@@ -1,4 +1,4 @@
-package module.card.effects;
+package controller.Effects;
 
 import module.Board;
 import module.Duel;

@@ -1,11 +1,11 @@
 package controller.menu;
 
+import controller.Effects.SelectEffect;
 import controller.ProgramController;
 import module.Duel;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
-import module.card.SelectEffect;
 import module.card.Spell;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
