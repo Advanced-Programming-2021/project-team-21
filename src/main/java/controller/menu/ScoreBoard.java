@@ -2,21 +2,18 @@ package controller.menu;
 
 import controller.DataController;
 import controller.ProgramController;
+import javafx.scene.control.Label;
 import module.User;
-import view.PrintResponses;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class ScoreBoard implements Menuable {
 
-    private void scoreBoardShow() {
+    private ArrayList<User> scoreBoardShow() {
         ArrayList<User> users = DataController.getAllUsers();
-        if (users == null)
-            return;
+        assert users != null;
         users.sort(new ScoreSorter());
-        int[] ranks = getRanks(users);
-        PrintResponses.printScoreboard(ranks, users);
+        return users;
     }
 
     private int[] getRanks(ArrayList<User> users) {
@@ -35,6 +32,36 @@ public class ScoreBoard implements Menuable {
     @Override
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/fxmls/scoreboard.fxml"));
+        ArrayList<ArrayList<Label>> columnInformation = getLabels();
+        ArrayList<User> users = scoreBoardShow();
+        int[] ranks = getRanks(users);
+        for (int i = 0; i < Math.min(20, users.size()); i++) {
+            columnInformation.get(i).get(0).setText(String.valueOf(ranks[i]));
+            columnInformation.get(i).get(1).setText(users.get(i).getNickname());
+            columnInformation.get(i).get(2).setText(String.valueOf(users.get(i).getScore()));
+            if (users.get(i).getNickname().equals(ProgramController.userInGame.getNickname())) {
+                columnInformation.get(i).get(0).setStyle("-fx-text-fill: red; -fx-border-color: black;");
+                columnInformation.get(i).get(1).setStyle("-fx-text-fill: red; -fx-border-color: black;");
+                columnInformation.get(i).get(2).setStyle("-fx-text-fill: red; -fx-border-color: black;");
+            }
+        }
         ProgramController.stage.show();
+    }
+
+    private ArrayList<ArrayList<Label>> getLabels() {
+        ArrayList<ArrayList<Label>> columnInformation = new ArrayList<>();
+        for (int i = 1; i <= 20; i++) {
+            ArrayList<Label> column = new ArrayList<>();
+            column.add((Label) ProgramController.currentScene.lookup("#rank" + i));
+            column.add((Label) ProgramController.currentScene.lookup("#nickname" + i));
+            column.add((Label) ProgramController.currentScene.lookup("#score" + i));
+            columnInformation.add(column);
+        }
+        return columnInformation;
+    }
+
+    public void back() throws IOException {
+        ProgramController.currentMenu = new MainMenu();
+        ProgramController.currentMenu.showMenu();
     }
 }
