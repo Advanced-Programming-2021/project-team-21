@@ -1,10 +1,10 @@
 package view;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regex {
-    // These are doc commands.
     public static final String userLogin = "user login (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))";
     public static final String userLoginShort = "user login (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))";
     public static final String menuEnter = "menu enter (?<menuName>\\S+)";
@@ -46,6 +46,7 @@ public class Regex {
     public static final String showGraveyard = "^show graveyard$";
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
+    public static final String specialSummon = "Special Summon Card number (?<cardNumber>\\d+)";
     public static final String importCard = "import card (?<cardName>\\S+)";
     public static final String exportCard = "export card (?<cardName>\\S+)";
     //These are for extracting data for card effects.

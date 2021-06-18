@@ -1,18 +1,25 @@
-package module.card.effects;
+package module.card;
 
 import module.Duel;
 import module.User;
-import module.card.Monster;
 
 public class BattlePhaseEnd {
     //suijin
     //mardhmallon
-    public static boolean run(Monster attack, Monster defense, User secondUser, Duel duel) {
-        if (defense.getCanChangeTheAttackersATK().hasEffect()) {
+    public static boolean run(Monster attack , Monster defense, User secondUser , Duel duel){
+        if (defense.getCanChangeTheAttackersATK().hasEffect()){
             attack.setAtk(attack.getAtkHolder());
             defense.getCanChangeTheAttackersATK().finishEffect();
             defense.getCanChangeTheAttackersATK().setNeedsToBeReset(true);
         }
-        return defense.getNotDestroyable().hasEffect();
+        if (defense.getNotDestroyable().hasEffect()){
+            if (defense.getNotDestroyable().getContinuousNumber()  == 0){
+                defense.getNotDestroyable().finishEffect();
+                defense.getNotDestroyable().setNeedsToBeReset(true);
+            }
+
+            return true;
+        }
+        return false;
     }
 }

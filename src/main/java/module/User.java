@@ -21,6 +21,9 @@ public class User {
     private boolean canSummonMonster, canSummonSpell, canSummonTrap;
     private int winsInAMatch;
 
+    private int increaseATK , increaseDEF;
+    private boolean hasSummonedAlteringATK;
+    private int alteringATKPlace = -1;
     {
         coins = 100000;
         decks = new ArrayList<>();
@@ -241,5 +244,37 @@ public class User {
 
     public void setMaxLifePoint(int maxLifePoint) {
         this.maxLifePoint = Math.max(maxLifePoint, this.maxLifePoint);
+    }
+
+    public int getIncreaseATK() {
+        return increaseATK;
+    }
+
+    public int getIncreaseDEF() {
+        return increaseDEF;
+    }
+
+    public void setIncreaseATK(int increaseATK) {
+        this.increaseATK = increaseATK;
+    }
+
+    public void setIncreaseDEF(int increaseDEF) {
+        this.increaseDEF = increaseDEF;
+    }
+
+    public boolean isHasSummonedAlteringATK() {
+        return hasSummonedAlteringATK;
+    }
+
+    public void setHasSummonedAlteringATK(boolean hasSummonedAlteringATK) {
+        this.hasSummonedAlteringATK = hasSummonedAlteringATK;
+    }
+
+    public int getAlteringATKPlace() {
+        return alteringATKPlace;
+    }
+
+    public void setAlteringATKPlace(int alteringATKPlace) {
+        this.alteringATKPlace = alteringATKPlace;
     }
 }

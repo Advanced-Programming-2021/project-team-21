@@ -8,7 +8,7 @@ import module.card.enums.SpellTrapStatus;
 
 import java.util.ArrayList;
 
-public class Spell extends Card implements MainEffects {
+public class Spell extends Card {
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
 
@@ -119,49 +119,6 @@ public class Spell extends Card implements MainEffects {
         return "Name: " + name + "\nSpell\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
     }
 
-    @Override
-    public void summonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void attackFlipSummon(Monster attacker, Monster defense, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public boolean battlePhaseEffectEnd(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
-    public void mainPhaseChosen(ArrayList<Card> cards, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void deathEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    public boolean battlePhaseEffectStart(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
-    public void activateSpell(Spell spell, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void flipSummonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
-
-    }
 
     public boolean isFieldZone() {
         return spellTrapIcon.equals(SpellTrapIcon.FIELD);

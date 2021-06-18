@@ -57,6 +57,9 @@ public class Hand {
         return deckToDraw.getMainDeckCards().get(0);
     }
 
+    public void  removeFromDeck(String name){
+        deckToDraw.getMainDeckCards().removeIf(mainDeckCard -> mainDeckCard.getName().equals(name));
+    }
     public void shuffleDeck() {
         Collections.shuffle(deckToDraw.getMainDeckCards());
     }
@@ -93,14 +96,17 @@ public class Hand {
 
 
     // to find cards with specific cards from deck (1) and hand(2) and graveYard (4)
-    public ArrayList<Card> getCardsWithType(int identifier, String type) {
-        ArrayList<Card> found = new ArrayList<>();
+    public ArrayList<Monster> getCardsWithType(int identifier, String type) {
+        ArrayList<Monster> found = new ArrayList<>();
         ArrayList<Card> lookingCards = new ArrayList<>();
         if (identifier >= 4) lookingCards.addAll(handOwner.getBoard().getGraveyard());
         if (identifier % 4 >= 2) lookingCards.addAll(Arrays.asList(this.cardsInHand));
         else if (identifier % 2 == 1) lookingCards.addAll(this.deckToDraw.getMainDeckCards());
         for (Card card : lookingCards) {
-            if (card.getCardType().getName().equals(type)) found.add(card);
+            if (card.getCardType().getName().equals(type) && card instanceof Monster) {
+                Monster monster = (Monster)card;
+                found.add(monster);
+            }
         }
         return found;
     }
@@ -128,6 +134,11 @@ public class Hand {
     }
 
     public int getNumberOfRemainingCardsInDeck() {
+    public Deck getDeckToDraw() {
+        return deckToDraw;
+    }
+
+    public int getNumberOfRemainingCardsInDeck(){
         return deckToDraw.getNumberOfMainDeckCards();
     }
 

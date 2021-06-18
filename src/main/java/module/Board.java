@@ -3,6 +3,7 @@ package module;
 import module.card.Card;
 import module.card.Monster;
 import module.card.enums.CardType;
+import module.card.Monster;
 
 import java.util.ArrayList;
 
@@ -266,5 +267,16 @@ public class Board {
         }
         return 0;
     }
-
+    public void removeFromGY(String cardName){
+        this.graveyard.removeIf(card -> card.getName().equals(cardName));
+    }
+    public ArrayList<Monster> getCardsFromGYByLevel(int minimum){
+        ArrayList<Monster> cards = new ArrayList<>();
+        for (Card card : this.graveyard) {
+            if (!(card instanceof Monster))continue;
+            Monster monster = (Monster)card;
+            if (monster.getLevel() > minimum)cards.add(monster);
+        }
+        return cards;
+    }
 }

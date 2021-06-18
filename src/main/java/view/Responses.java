@@ -89,4 +89,11 @@ public class Responses {
     public static String cardImportedSuccessfully = "Card imported successfully.";
     public static String unableToAttackDirectly = "you can’t attack the opponent directly";
     public static String alreadyInGame = "You are already in a game!";
+    public static String wrongChoose = "choose a right number from the shown cards to special summon";
+    public static String choiceOfDifferentTribute = "Pick a number to choose how many monsters to tribute";
+    public static String wrongChoiceOfTribute = "choose a suitable number for tribute";
+    public static String disabledMonsterSummon = "You can not summon due to an Effect";
+    public static String disabledTrapSummon = "You can not activate due to an Effect";
+    public static String disabledSpellSummon = "you can not activate due to an Effect";
+    public static String activateEffectMonster = "Do you want to activate the Effect?";
 }
