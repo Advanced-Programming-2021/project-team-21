@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class DataController {
@@ -134,6 +135,31 @@ public class DataController {
             //noinspection ResultOfMethodCallIgnored
             directory.mkdir();
         }
+    }
+
+    public static Card importCardFromJson(String cardName) {
+        File file = new File("src/main/resources/exported cards");
+        for (String fileName : Objects.requireNonNull(file.list())) {
+            String[] fileInfo = fileName.split("\\.");
+            if (fileInfo[0].equals(cardName)) {
+                try {
+                    file = new File("src/main/resources/exported cards/" + fileName);
+                    StringBuilder data = new StringBuilder();
+                    Scanner scanner = new Scanner(file);
+                    while (scanner.hasNextLine())
+                        data.append(scanner.nextLine());
+                    if (fileInfo[1].equals("Monster"))
+                        return new Gson().fromJson(data.toString(), Monster.class);
+                    else if (fileInfo[1].equals("Spell"))
+                        return new Gson().fromJson(data.toString(), Spell.class);
+                    else
+                        new Gson().fromJson(data.toString(), Trap.class);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
     //is called for saving User and Deck objects as json

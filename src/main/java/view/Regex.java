@@ -45,6 +45,8 @@ public class Regex {
     public static final String showGraveyard = "^show graveyard$";
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
+    public static final String importCard = "import card (?<cardName>\\S+)";
+    public static final String exportCard = "export card (?<cardName>\\S+)";
 
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);

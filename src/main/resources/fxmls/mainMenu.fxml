@@ -44,7 +44,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" text="Import/Export">
+            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToImportAndExport" text="Import/Export">
                <font>
                   <Font size="20.0" />
                </font>

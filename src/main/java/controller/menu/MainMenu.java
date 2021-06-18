@@ -1,6 +1,8 @@
 package controller.menu;
 
 import controller.ProgramController;
+import javafx.scene.input.MouseEvent;
+
 import java.io.IOException;
 
 public class MainMenu implements Menuable {
@@ -28,6 +30,11 @@ public class MainMenu implements Menuable {
 
     public void goToProfileMenu() throws IOException {
         ProgramController.currentMenu = new ProfileMenu();
+        ProgramController.currentMenu.showMenu();
+    }
+
+    public void goToImportAndExport(MouseEvent mouseEvent) throws IOException {
+        ProgramController.currentMenu = new ImportAndExport();
         ProgramController.currentMenu.showMenu();
     }
 }
