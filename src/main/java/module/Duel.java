@@ -4,10 +4,8 @@ package module;
 import controller.Effects.*;
 import controller.ProgramController;
 import controller.menu.DuelMenu;
-import module.card.Card;
-import module.card.Chain;
-import module.card.Monster;
-import module.card.Spell;
+import module.card.*;
+import module.card.BattlePhaseEnd;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.PrintResponses;
@@ -276,7 +274,7 @@ public class Duel {
         }
         checkForDisabledAttack();
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
-            if (BattlePhaseStart.run(attackingMonster, monsterToAttack, rival, userWhoPlaysNow))
+            if (BattlePhaseStart.run(attackingMonster, monsterToAttack, rival, this))
                 return new Pair<>(0, 0);
         }
         if (!attackingMonster.isCanAttack()) return new Pair<>(0, 0);

@@ -11,6 +11,7 @@ import module.card.Trap;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PrintResponses {
     public static void printInvalidFormat() {
@@ -493,4 +494,67 @@ public class PrintResponses {
     public static void print(Object object){
         System.out.println(object);
     }
+
+    public static void printAskToChain(User user, Duel duel) {
+        System.out.println("now it will be " + user.getUsername() + "’s turn\n");
+        printBoard(duel);
+        System.out.println(Responses.askForChain);
+    }
+    public static void printChainComplete(int chainCount) {
+        System.out.println("chain Count: " + chainCount);
+    }
+
+    public static void printWrongSpell() {
+        System.out.println(Responses.wrongSpell);
+    }
+
+    public static void printWrongSpellFormat() {
+        System.out.println(Responses.wrongSpellFormat);
+    }
+
+
+    public static void printAskToDiscard() {
+        System.out.println(Responses.askToDiscard);
+    }
+
+    public static void printAskTpGetCardName() {
+        System.out.println(Responses.askToGetCardName);
+    }
+
+    public static void printWrongCardName() {
+        System.out.println(Responses.wrongCardName);
+    }
+
+    public static void printChooseEquip() {
+        System.out.println(Responses.chooseEquip);
+    }
+
+
+    public static void printSpellsToDestroy(List<Card> cards) {
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i) == null) continue;
+            System.out.println(i + ": " + cards.get(i));
+        }
+    }
+
+    public static void printChangeOfHeart() {
+        System.out.println(Responses.changeOfHeart);
+    }
+
+    public static void printWrongControl() {
+        System.out.println(Responses.wrongChoiceControl);
+    }
+
+    public static void printCanNotControl() {
+        System.out.println(Responses.canNotControl);
+    }
+
+    public static void printNoSpellFound() {
+        System.out.println(Responses.noSpellFound);
+    }
+
+    public static void printDisabledAttack() {
+        System.out.println(Responses.disabledAttack);
+    }
+
 }

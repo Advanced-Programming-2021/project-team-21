@@ -1,9 +1,10 @@
-package module.card;
+package controller.Effects;
 
 import controller.menu.DuelMenu;
 import module.Board;
 import module.Duel;
 import module.User;
+import module.card.Monster;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class BattlePhaseStart {
     //command Knight
     // texchanger
     // suijin
-    public static boolean run(Monster attack ,  Monster defense, User secondUser , Duel duel){
+    public static boolean run(Monster attack , Monster defense, User secondUser , Duel duel){
         Board board = secondUser.getBoard();
         // for summoning with specific type
         if (defense.getSummonACardFromEveryWhere().hasEffect()){

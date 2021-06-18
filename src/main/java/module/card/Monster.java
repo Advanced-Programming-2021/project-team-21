@@ -49,6 +49,7 @@ public class Monster extends Card  {
     private int defHolder;
     private boolean hasAttackedOnceInTurn;
     private boolean isATKPosition;
+    private boolean canAttack = true;
     //command Knight effect +                                                                                      //texchanger
     private boolean canHaveDifferentTribute;
     private int requiredCardsFOrTribute;
@@ -168,6 +169,9 @@ public class Monster extends Card  {
 
     }
 
+    public boolean isFlipSetEffect() {
+        return isFlipSetEffect;
+    }
 
     public int getLevel() {
         return level;
@@ -479,4 +483,11 @@ public class Monster extends Card  {
     }
 
 
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
+    }
 }

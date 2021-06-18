@@ -28,6 +28,7 @@ public class DuelMenu implements Menuable {
     public static boolean isGetFromHand;
     public static boolean addToHand;
     public static boolean isForSet;
+    public static boolean isGetFroOpponentGY;
     private Duel currentDuel;
     private Phases phase;
     private boolean isInGame;
@@ -39,9 +40,30 @@ public class DuelMenu implements Menuable {
         isInGame = true;
     }
 
+    public static Monster getMonsterForEquip(Duel duel, Spell spell) {
+        PrintResponses.printChooseEquip();
+        int number;
+        while (true) {
+            try {
+                number = Integer.parseInt(ProgramController.scanner.nextLine());
+                if (number > 5 || number < 1) {
+                    PrintResponses.printWrongChoice();
+                    continue;
+                }
+                if (duel.getUserWhoPlaysNow().getBoard().getCard(number, 'm') == null) continue;
+            } catch (Exception e) {
+                PrintResponses.printWrongChoice();
+                continue;
+            }
+            break;
+        }
+        spell.setEquippedPlace(number);
+        return (Monster) duel.getUserWhoPlaysNow().getBoard().getCard(number, 'm');
+    }
+
     @Override
     public void run(String command) {
-        if (checkSpecialSummon(command)) return;
+        if (checkSpecialSummon(command, currentDuel)) return;
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
         boolean isValidCommand = false;
 
@@ -71,7 +93,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printInvalidFormat();
     }
 
-    private boolean checkSpecialSummon(String command) {
+    public static boolean checkSpecialSummon(String command, Duel currentDuel) {
         Matcher matcher;
         if (specialSummonsedCards != null) {
             PrintResponses.printSpecialSummonCards(specialSummonsedCards);
@@ -104,7 +126,7 @@ public class DuelMenu implements Menuable {
                     PrintResponses.printUnableToSpecialSummonMonster();
                     return true;
                 }
-                removeTheSpecialSummoned(monster);
+                removeTheSpecialSummoned(monster, currentDuel);
                 int place = currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon();
                 currentDuel.setMonster();
                 currentDuel.flipSetForMonsters(place);
@@ -114,7 +136,7 @@ public class DuelMenu implements Menuable {
                     PrintResponses.printUnableToSpecialSummonMonster();
                     return true;
                 }
-                removeTheSpecialSummoned(monster);
+                removeTheSpecialSummoned(monster, currentDuel);
                 currentDuel.summonMonster();
             }
             specialSummonsedCards = null;
@@ -123,7 +145,7 @@ public class DuelMenu implements Menuable {
         return false;
     }
 
-    private void removeTheSpecialSummoned(Monster monster) {
+    public static void removeTheSpecialSummoned(Monster monster, Duel currentDuel) {
         boolean found = false;
         if (isGetFromGY) {
             for (Card card : currentDuel.getUserWhoPlaysNow().getBoard().getGraveyard()) {

@@ -18,8 +18,9 @@ public class User {
     private ArrayList<Card> graveyard;
     private int lifePoints;
     private int maxLifePoint = 0;
-    private boolean canSummonMonster, canSummonSpell, canSummonTrap;
+    private boolean canSummonMonster, canSummonSpell, canSummonTrap, canAttack;
     private int winsInAMatch;
+    private int CanNotDrawRounds;
 
     private int increaseATK , increaseDEF;
     private boolean hasSummonedAlteringATK;
@@ -276,5 +277,21 @@ public class User {
 
     public void setAlteringATKPlace(int alteringATKPlace) {
         this.alteringATKPlace = alteringATKPlace;
+    }
+
+    public int getCanNotDrawRounds() {
+        return CanNotDrawRounds;
+    }
+
+    public void setCanNotDrawRounds(int canNotDrawRounds) {
+        CanNotDrawRounds = canNotDrawRounds;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 }
