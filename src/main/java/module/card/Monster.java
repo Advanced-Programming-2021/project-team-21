@@ -4,9 +4,7 @@ package module.card;
 
 import controller.DataController;
 import com.rits.cloning.Cloner;
-import module.User;
 import module.card.effects.Effect;
-import module.card.effects.MainEffects;
 import module.card.enums.Attributes;
 import module.card.enums.CardType;
 import module.card.enums.MonsterTypes;
@@ -58,8 +56,6 @@ public class Monster extends Card  {
     /* done */ private Effect undefeatable;     //(1 , 2)       in battlePhaseStart                                      (1 , 1)     in battlePhaseStart and changeTurnEffect
     /* done */ private Effect canIncreaseATK;   //  (401 , 0)     in summonEffects and deathEffect
     //Yomi ship +
-     /* done*/private Effect canIncreaseATK;   //(401 , 0)     in summonEffects and deathEffect
-    //Yomi ship
     /* done */private Effect canKillTheAttacker;     //( 1 , 0)        in deathEffect
     //suijin +
     /* done */private Effect canChangeTheAttackersATK;     //( -999999 , 0)        in battlePhaseStart and BattlePhaseEnd and changeTurnEffect
@@ -72,18 +68,12 @@ public class Monster extends Card  {
     //Scanner +
     private Effect canScan;         //(1 , 2)           in mainPhaseChosen
     //marshmallon +
-    //Scanner
-    /* done */private Effect canScan;         //(1 , 1)           in SelectEffects and changeTurnEffects
-    //marshmallon
     /* done*/private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
     /* done */private Effect canDecreaseLP;        //(-999 , 0)       in flipSetEffect
     // beast king barbaros +
     private Effect canBeNotTribute;      //(1101 , 0)        in summonEffect
     private Effect tributeToKillAllMonsterOfOpponent;       //(4 , 1)       in summonEffect
     // TexChanger +
-    /* done */private Effect canDecreaseLP;        //(-999 , 0)       in flipSummonAttackEffect
-    // beast king barbaros
-    /*done*/private Effect canBeNotTribute;      //( -1099, 0)        in summonEffect
     /*done */private Effect TributeToKillAllMonsterOfOpponent;       //(4 , 0)       in summonEffect
     // TexChanger
     /* done */private Effect summonACardFromEveryWhere;       //(2 , "1" , "Cyberse")       in battlePhaseStart
@@ -94,10 +84,6 @@ public class Monster extends Card  {
     // herald of creation +
     private Effect canSummonFromGYByLevel;      //(8 , 0)           in mainPhaseChosen
     // exploder dragon +
-    //calculator
-    /* done */private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
-    // mirage dragon
-    /* done */private Effect disableTrapSummon;      // (1 , 1)          in summonEffect and DeathEffect
     // herald of creation
     /* done */private Effect canGetFromGYByLevelToHand;      //(8 , 0)           in mainPhaseChosen
     // exploder dragon
@@ -106,10 +92,6 @@ public class Monster extends Card  {
     private Effect canSetFromDeckByMaxLevel;             //(1 , 0)       in summonEffect
     //The Tricky +
     private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
-    //Terratiger, the Empowered Warrior
-    /* done */private Effect canSetFromDeckByMaxLevel;             //(5 , 0)       in summonEffect
-    //The Tricky
-   /* done */ private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
 
     public Monster(Object[] parameters) {
         setName((String) parameters[0]);
@@ -138,9 +120,6 @@ public class Monster extends Card  {
     }
 
 
-    public void setMainPhaseChosen(boolean mainPhaseChosen) {
-        isMainPhaseChosen = mainPhaseChosen;
-    }
 
     public void setFlipSetEffect(boolean flipSetEffect) {
         isFlipSetEffect = flipSetEffect;
@@ -177,17 +156,12 @@ public class Monster extends Card  {
         this.defHolder = defHolder;
     }
 
-    public int getAtkHolder() {
-        return atkHolder;
-    }
 
     public int getDefHolder() {
         return defHolder;
     }
 
-    public void setDefHolder(int defHolder) {
-        this.defHolder = defHolder;
-    }
+
 
     @Override
     public void destroyWithoutLosingLifePoints() {
@@ -245,54 +219,8 @@ public class Monster extends Card  {
                 "\nDescription: " + getDescription();
     }
 
-    @Override
-    public void summonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void deathEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseChosen(ArrayList<Card> cards, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public boolean battlePhaseEffectEnd(Monster attacker, Monster defense, User firstUser, User secondUser) {
-        return false;
-    }
-
-    @Override
-    public void attackFlipSummon(Monster attacker, Monster defense, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void flipSummonEffect(Card card, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void activateSpell(Spell spell, User firstUser, User secondUser) {
-
-    }
-
-    @Override
-    public void mainPhaseEffect(ArrayList<Card> cards, User firstUser, User SecondUser) {
-
-    }
 
 
-    public static void changeAttackOfMonsters(ArrayList<Card> monsters, int amount) {
-        for (Card monster1 : monsters) {
-            if (!(monster1 instanceof Monster)) continue;
-            Monster monster = (Monster) monster1;
-            monster.setAtk(monster.getAtk() + amount);
-        }
-    }
     public boolean isHasAttackedOnceInTurn() {
         return hasAttackedOnceInTurn;
     }
@@ -509,7 +437,6 @@ public class Monster extends Card  {
         booleanMap.put("isChangeTurnEffect", this::setChangeTurnEffect);
         booleanMap.put("isBattlePhaseEffectStart", this::setBattlePhaseEffectStart);
         booleanMap.put("isDeathEffect", this::setDeathEffect);
-        booleanMap.put("isMainPhaseChosen", this::setMainPhaseChosen);
         booleanMap.put("isBattlePhaseEffectEnd", this::setBattlePhaseEffectEnd);
         booleanMap.put("isFlipSummonEffect", this::setFlipSummonEffect);
         booleanMap.put("isFlipSetEffect", this::setFlipSetEffect);
@@ -539,25 +466,9 @@ public class Monster extends Card  {
     }
 
 
-    public Effect getCanScan() {
-        return canScan;
-    }
 
-    public Effect getCanBeNotTribute() {
-        return canBeNotTribute;
-    }
 
-    public Effect getTributeToKillAllMonsterOfOpponent() {
-        return TributeToKillAllMonsterOfOpponent;
-    }
 
-    public Effect getDisableTrapSummon() {
-        return disableTrapSummon;
-    }
-
-    public Effect getAlteringAttack() {
-        return alteringAttack;
-    }
 
     public boolean isSelectEffect() {
         return isSelectEffect;
@@ -567,11 +478,5 @@ public class Monster extends Card  {
         return canGetFromGYByLevelToHand;
     }
 
-    public Effect getCanSetFromDeckByMaxLevel() {
-        return canSetFromDeckByMaxLevel;
-    }
 
-    public Effect getDiscardToSpecialSummon() {
-        return discardToSpecialSummon;
-    }
 }

@@ -57,9 +57,10 @@ public class Hand {
         return deckToDraw.getMainDeckCards().get(0);
     }
 
-    public void  removeFromDeck(String name){
+    public void removeFromDeck(String name) {
         deckToDraw.getMainDeckCards().removeIf(mainDeckCard -> mainDeckCard.getName().equals(name));
     }
+
     public void shuffleDeck() {
         Collections.shuffle(deckToDraw.getMainDeckCards());
     }
@@ -104,7 +105,7 @@ public class Hand {
         else if (identifier % 2 == 1) lookingCards.addAll(this.deckToDraw.getMainDeckCards());
         for (Card card : lookingCards) {
             if (card.getCardType().getName().equals(type) && card instanceof Monster) {
-                Monster monster = (Monster)card;
+                Monster monster = (Monster) card;
                 found.add(monster);
             }
         }
@@ -133,12 +134,8 @@ public class Hand {
         return reverseString.reverse().toString();
     }
 
-    public int getNumberOfRemainingCardsInDeck() {
-    public Deck getDeckToDraw() {
-        return deckToDraw;
-    }
 
-    public int getNumberOfRemainingCardsInDeck(){
+    public int getNumberOfRemainingCardsInDeck() {
         return deckToDraw.getNumberOfMainDeckCards();
     }
 
@@ -149,5 +146,9 @@ public class Hand {
                 level = ((Monster) card).getLevel();
         }
         return level;
+    }
+
+    public Deck getDeckToDraw() {
+        return deckToDraw;
     }
 }

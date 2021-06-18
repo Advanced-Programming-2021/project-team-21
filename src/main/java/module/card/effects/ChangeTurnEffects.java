@@ -4,6 +4,7 @@ import module.Duel;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
+import module.card.SelectEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;

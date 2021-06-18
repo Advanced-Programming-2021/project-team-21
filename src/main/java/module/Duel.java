@@ -1,6 +1,7 @@
 package module;
 
 
+import module.card.BattlePhaseStart;
 import module.card.Card;
 import module.card.Monster;
 import module.card.Spell;
@@ -51,7 +52,7 @@ public class Duel {
         SECOND_USER.setCanSummonMonster(true);
         SECOND_USER.setCanSummonTrap(true);
         SECOND_USER.setCanSummonSpell(true);
-        setHasSummonedOnce(false);
+        setHasSummonedOrSetOnce(false);
         setHasChangedPositionOnce(false);
         setNumberOfTurnsPlayedUpToNow(0);
     }
