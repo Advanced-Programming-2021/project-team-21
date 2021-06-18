@@ -1,10 +1,10 @@
-package module.card;
+package module;
 
 public enum WhereToChain {
     ATTACK("attack"),
     EFFECT_ACTIVATE("effect"),
     SUMMON("summon");
-    String place;
+    private final String place;
 
     WhereToChain(String place) {
         this.place = place;

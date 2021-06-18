@@ -5,6 +5,7 @@ import module.Board;
 import module.Duel;
 import module.User;
 import module.card.Monster;
+import view.PrintResponses;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class BattlePhaseStart {
             DuelMenu.isGetFromDeck = true;
             DuelMenu.isGetFromHand = true;
             DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
+            PrintResponses.printSpecialSummonCards(cards);
         }
         //for undefeatable effect
         else if (defense.getUndefeatable().hasEffect()) {

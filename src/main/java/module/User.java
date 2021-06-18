@@ -21,6 +21,7 @@ public class User {
     private int increaseATK, increaseDEF;
     private boolean hasSummonedAlteringATK;
     private int alteringATKPlace = -1;
+    private int CanNotDrawRounds;
 
     {
         coins = 100000;
@@ -266,5 +267,13 @@ public class User {
 
     public void setCanAttack(boolean canAttack) {
         this.canAttack = canAttack;
+    }
+
+    public void setCanNotDrawRounds(int canNotDrawRounds) {
+        CanNotDrawRounds = canNotDrawRounds;
+    }
+
+    public int getCanNotDrawRounds() {
+        return CanNotDrawRounds;
     }
 }

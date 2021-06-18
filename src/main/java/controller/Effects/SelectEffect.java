@@ -5,6 +5,7 @@ import module.Duel;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
+import view.PrintResponses;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class SelectEffect {
     public static void run(Monster selected, User rival, User player, Duel duel, int selectedPlace) {
         if (selected.getCanScan().hasEffect()) {
             DuelMenu.specialSummonsedCards = selectMonstersFromGY(rival);
+            PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
             DuelMenu.isForScan = true;
             scannerPlace = selectedPlace;
             scannerHolder = scannerHolder.copy(selected);

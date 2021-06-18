@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Chain {
     private Card card;
-    private Effect cancelEffect;
     private ArrayList<Card> destroySpellOrTrap;
     private String cardName;
 
@@ -26,15 +25,12 @@ public class Chain {
         this.destroySpellOrTrap = destroySpellOrTrap;
     }
 
-    public void setCancelEffect(Effect cancelEffect) {
-        this.cancelEffect = cancelEffect;
-    }
-
-    public Effect getCancelEffect() {
-        return cancelEffect;
-    }
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public String getCardName() {
+        return cardName;
     }
 }

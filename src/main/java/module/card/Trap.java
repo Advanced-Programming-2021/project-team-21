@@ -1,8 +1,5 @@
 package module.card;
 
-import module.User;
-
-import java.util.ArrayList;
 
 // add user a field named canDraw
 public class Trap extends Card {
@@ -10,27 +7,27 @@ public class Trap extends Card {
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
     //Magic Cylinder                                            //Negate Attack
-    private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)                in battlePhaseStart
-    private Effect canAttackLP;                //(1 , 0)           in battlePhaseStart
+    /*done*/private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)
+    /*done*/private Effect canAttackLP;                //(1 , 0)
     //Mirror Force
-    private Effect destroyAttackMonsters;       //(6 , 0)           in battlePhaseStart
+    /*done*/private Effect destroyAttackMonsters;       //(6 , 0)
     //Mind Crush
-    private Effect canDestroyFromDeckAndHand;    //(4 , 0)          in spellActivation
+    /*done*/private Effect canDestroyFromDeckAndHand;    //(4 , 0)
     //Trap Hole
-    private Effect canDestroyMonsterSummonWithATK;           //(1001 , 0)             in summonEffect and flipSummon
+    /*done*/private Effect canDestroyMonsterSummonWithATK;           //(1001 , 0)
     //Torrential Tribute
-    private Effect canDestroyAll;                   //(11 , 0)          in summonEffect anf FlipSummon
+    /*done*/private Effect canDestroyAll;                   //(1 , 0)
     //Time Seal
-    private Effect canNotDraw;                     //(2 , 0)           in spellAndTrapActivation
+    /*done*/private Effect canNotDraw;                     //(2 , 0)
     //Magic Jammer
-    private Effect discardACard;           //(2 , 0)                   in spellAndTrapActivation
-    private Effect negateSpellActivation;          //(2 , 0)               in spellAndTrapActivation
+    /*done*/private Effect discardACard;           //(2 , 0)
+    /*done*/private Effect negateSpellActivation;          //(2 , 0)
     //Solemn Warning
-    private Effect costLP;             //(2001 , 0)                in summonEffects and flipSummon
-    private Effect negateASummon;          //(2 , 0)               in summonEffects and flipSummon
+    /*done*/private Effect costLP;             //(2001 , 0)
+    /*done*/private Effect negateASummon;          //(2 , 0)
     //Call of the Haunted
-    private Effect canSummonFromGY;            //( 2 , 1)          in spellActivation
-    private Effect killTheSummoned;            //(2 , 1)           in spellActivation
+    private Effect canSummonFromGY;            //( 2 , 1)
+    private Effect killTheSummoned;            //(2 , 1)
 
     public Trap(Object[] parameters) {
         setName((String) parameters[0]);
@@ -40,10 +37,6 @@ public class Trap extends Card {
         setPrice((int) parameters[4]);
     }
 
-    @Override
-    public void destroyWithoutLosingLifePoints() {
-
-    }
 
     public SpellTrapIcon getSpellTrapIcon() {
         return spellTrapIcon;
@@ -110,7 +103,11 @@ public class Trap extends Card {
         this.canAttackLP = canAttackLP;
     }
 
-    public void setCanNegateWholeAttack(Effect canNegateWholeAttack) {
-        this.canNegateWholeAttack = canNegateWholeAttack;
+    public Effect getCanNotDraw() {
+        return canNotDraw;
+    }
+
+    public Effect getCanSummonFromGY() {
+        return canSummonFromGY;
     }
 }

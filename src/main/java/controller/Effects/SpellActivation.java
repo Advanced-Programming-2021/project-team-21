@@ -18,7 +18,7 @@ public class SpellActivation {
     public static int newPlaceHolder = -1;
     public static int changeSpellPlace;
 
-    public static void run(Spell spell, User userNow, User rival, Duel duel, int place, boolean fieldAndEquipSpellAdd, Monster equipped, Chain chain) {
+    public static boolean run(Spell spell, User userNow, User rival, Duel duel, int place, boolean fieldAndEquipSpellAdd, Monster equipped, Chain chain) {
         ArrayList<Card> deckCards = userNow.getHand().getDeckToDraw().getMainDeckCards();
         if (spell.getCanSummonFromGY().hasEffect()) {
             handleSummonFromGY(spell, userNow, rival, duel, place);
@@ -40,9 +40,6 @@ public class SpellActivation {
         }
         if (spell.getCanControlOpponentMonster().hasEffect()) {
             handleControl(spell, userNow, rival, duel, place);
-        }
-        if (spell.getCanDestroyOpponentSpellAndTrap().hasEffect()) {
-            handleDestroySpell(spell, rival, duel, userNow, place, chain);
         }
         if (spell.getCanChangeFaceOFOpponent().hasEffect()) {
             handleFaceChange(spell, userNow, rival, duel);
@@ -68,8 +65,13 @@ public class SpellActivation {
         if (spell.getEquipBasedOnPosition().hasEffect()) {
             thirdEquipSpell(equipped, spell, fieldAndEquipSpellAdd);
         }
+        if (spell.getCanDestroyOpponentSpellAndTrap().hasEffect()) {
+            handleDestroySpell(spell, rival, duel, userNow, place, chain);
+            return true;
+        }
         checkSpells(userNow, duel);
         checkSpells(rival, duel);
+        return false;
     }
 
     private static void thirdEquipSpell(Monster equipped, Spell spell, boolean fieldAndEquipSpellAdd) {
@@ -294,6 +296,7 @@ public class SpellActivation {
         }
         DuelMenu.specialSummonsedCards = cards;
         DuelMenu.isGetFroOpponentGY = true;
+        PrintResponses.printSpecialSummonCards(cards);
         duel.addCardToGraveyard(spell, place, userNow);
     }
 

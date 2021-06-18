@@ -7,6 +7,7 @@ import module.User;
 import module.card.Card;
 import module.card.Monster;
 import module.card.Spell;
+import view.PrintResponses;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +49,7 @@ public class SummonEffects {
                     handSpecial.add(monster);
             }
             DuelMenu.specialSummonsedCards = handSpecial;
+            PrintResponses.printSpecialSummonCards(handSpecial);
         }
         checkHasContinuousSpell(summoned, rival, user, duel);
     }
@@ -67,7 +69,7 @@ public class SummonEffects {
                 if (continuous.getEquipBasedMyUpMonsters().hasEffect() && continuous.isFaceUp()) {
                     SpellActivation.run(continuous, userNow, rival, duel,
                             userNow.getBoard().getAddressByCard(continuous), true,
-                            (Monster) userNow.getBoard().getCard(continuous.getEquippedPlace(), 'm'));
+                            (Monster) userNow.getBoard().getCard(continuous.getEquippedPlace(), 'm'), null);
                 }
             }
         }
