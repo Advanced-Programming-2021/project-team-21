@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class Monster extends Card  {
+public class Monster extends Card {
     //for checking death in deathEffects
     boolean isDead;
     //for summoned effects
@@ -62,9 +62,6 @@ public class Monster extends Card  {
     /* done */private Effect canChangeTheAttackersATK;     //( -999999 , 0)        in battlePhaseStart and BattlePhaseEnd and changeTurnEffect
     //crab turtle +       skull guardian +
     //man eater bug +
-    //crab turtle       skull guardian
-    /* done */private boolean isRitual;       //in summonEffect
-    //man eater bug
     /* done */private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
     //Scanner +
     private Effect canScan;         //(1 , 2)           in mainPhaseChosen
@@ -121,7 +118,6 @@ public class Monster extends Card  {
     }
 
 
-
     public void setFlipSetEffect(boolean flipSetEffect) {
         isFlipSetEffect = flipSetEffect;
     }
@@ -129,11 +125,12 @@ public class Monster extends Card  {
     public int getAtkHolder() {
         return atkHolder;
     }
-    public  Monster copy(Object object){
-        if (object ==null)return null;
-        if (!(object instanceof  Monster))return null;
+
+    public Monster copy(Object object) {
+        if (object == null) return null;
+        if (!(object instanceof Monster)) return null;
         Cloner cloner = new Cloner();
-        Monster monster = (Monster)object;
+        Monster monster = (Monster) object;
         return cloner.deepClone(monster);
     }
 
@@ -161,7 +158,6 @@ public class Monster extends Card  {
     public int getDefHolder() {
         return defHolder;
     }
-
 
 
     @Override
@@ -211,7 +207,7 @@ public class Monster extends Card  {
 
 
     public void setDef(int def) {
-        this.def = Math.max(atk, 0);
+        this.def = Math.max(def, 0);
     }
 
     @Override
@@ -222,7 +218,6 @@ public class Monster extends Card  {
                 "\nDef: " + def +
                 "\nDescription: " + getDescription();
     }
-
 
 
     public boolean isHasAttackedOnceInTurn() {
@@ -468,10 +463,6 @@ public class Monster extends Card  {
         effectsMap.put("discardToSpecialSummon", this::setDiscardToSpecialSummon);
         return effectsMap;
     }
-
-
-
-
 
 
     public boolean isSelectEffect() {

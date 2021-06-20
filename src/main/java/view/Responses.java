@@ -108,4 +108,5 @@ public class Responses {
     public static String askToDiscard = "select the cards in your hand to discard";
     public static String askToGetCardName = "enter a card name";
     public static String wrongCardName = "there is no card with this name";
+    public static String noSelect = "There is no selected card";
 }

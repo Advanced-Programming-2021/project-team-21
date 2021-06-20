@@ -18,13 +18,14 @@ public class User {
     private ArrayList<Card> graveyard;
     private int lifePoints;
     private int maxLifePoint = 0;
-    private boolean canSummonMonster, canSummonSpell, canSummonTrap, canAttack;
+    private boolean canSummonMonster = true, canSummonSpell = true, canSummonTrap = true, canAttack = true;
     private int winsInAMatch;
     private int CanNotDrawRounds;
 
-    private int increaseATK , increaseDEF;
+    private int increaseATK, increaseDEF;
     private boolean hasSummonedAlteringATK;
     private int alteringATKPlace = -1;
+
     {
         coins = 100000;
         decks = new ArrayList<>();

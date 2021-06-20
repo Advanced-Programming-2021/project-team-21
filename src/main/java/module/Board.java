@@ -275,10 +275,18 @@ public class Board {
     public ArrayList<Monster> getCardsFromGYByLevel(int minimum) {
         ArrayList<Monster> cards = new ArrayList<>();
         for (Card card : this.graveyard) {
-            if (!(card instanceof Monster))continue;
-            Monster monster = (Monster)card;
-            if (monster.getLevel() > minimum)cards.add(monster);
+            if (!(card instanceof Monster)) continue;
+            Monster monster = (Monster) card;
+            if (monster.getLevel() > minimum) cards.add(monster);
         }
         return cards;
+    }
+
+    public int getMonsterNumber() {
+        int number = 0;
+        for (Card monster : this.getMonsters()) {
+            if (monster != null) number++;
+        }
+        return number;
     }
 }

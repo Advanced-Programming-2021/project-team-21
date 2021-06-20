@@ -205,6 +205,10 @@ public class DataController {
             return;
         String[] pairs = information.split("\\*");
         String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings};
+        Set<String> keys = monster.getEffectsMap().keySet();
+        for (String key : keys) {
+            monster.getEffectsMap().get(key).accept(new Effect(0, 0));
+        }
         Arrays.stream(pairs).forEach(pair -> Arrays.stream(parserRegexes).forEach(parserRegex -> {
             Matcher matcher = Regex.getMatcher(pair, parserRegex);
             if (matcher.find()) {

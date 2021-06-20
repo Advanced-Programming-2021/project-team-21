@@ -74,7 +74,7 @@ public class DeckMenu implements Menuable {
         PrintResponses.printActive();
         ArrayList<Deck> show = Deck.deckSort(user.getDecks());
         int index = 0;
-        if (show.get(index).isActive()) {
+        if (show.size() > 0 && show.get(index).isActive()) {
             PrintResponses.printDeckShow(show.get(index));
             index++;
         }
@@ -145,7 +145,7 @@ public class DeckMenu implements Menuable {
     }
 
     private boolean invalidAdd(String cardName, String deckName, Deck deck) {
-        if (deck.getCardNumber(cardName) == 3) {
+        if (deck.getCardNumber(cardName) == 50) {
             PrintResponses.printInvalidAdd(cardName, deckName);
             return true;
         }
