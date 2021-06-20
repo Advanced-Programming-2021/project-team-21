@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 public class Regex {
     public static final String userLogin = "user login (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))";
     public static final String userLoginShort = "user login (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))";
+    public static final String logout = "logout";
     public static final String menuEnter = "menu enter (?<menuName>\\S+)";
     public static final String menuExit = "menu exit";
     public static final String menuShow = "menu show-current";
@@ -27,7 +28,7 @@ public class Regex {
     public static final String removeCardSide = removeCardMain + "(?=.*--(?<side>side))";
     public static final String showAllDeck = "deck show --all";
     public static final String showDeckMain = "deck show --deck-name (?<deckName>\\S+)";
-    public static final String showDeckSide = "deck show (?=.*--deck-name (?<deckName>\\S+)) (?=.*--(?<side>side))";
+    public static final String showDeckSide = "deck show (?=.*--deck-name (?<deckName>\\S+))(?=.*--(?<side>side))";
     public static final String deckShowCard = "deck show --cards";
     public static final String scoreBoard = "scoreboard show";
     public static final String createNewDuel = "duel\\s(?=.*--new)(?=.*--second-player\\s(?<player2Username>\\S+))(?=.*--rounds\\s(?<rounds>\\d+))";

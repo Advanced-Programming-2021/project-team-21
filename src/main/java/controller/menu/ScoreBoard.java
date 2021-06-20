@@ -7,6 +7,7 @@ import view.PrintResponses;
 import view.Regex;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ScoreBoard implements Menuable {
     @Override
@@ -21,7 +22,9 @@ public class ScoreBoard implements Menuable {
         ArrayList<User> users = DataController.getAllUsers();
         if (users == null)
             return;
-        users.sort(new ScoreSorter());
+        Comparator<User> comparator = Comparator.comparing(User::getScore, Comparator.reverseOrder())
+                .thenComparing(User::getUsername);
+        users.sort(comparator);
         int[] ranks = getRanks(users);
         PrintResponses.printScoreboard(ranks, users);
     }
@@ -33,7 +36,7 @@ public class ScoreBoard implements Menuable {
             if (users.get(i).getScore() == users.get(i - 1).getScore()) {
                 ranks[i] = ranks[i - 1];
             } else {
-                ranks[i] = i;
+                ranks[i] = i + 1;
             }
         }
         return ranks;
@@ -49,3 +52,4 @@ public class ScoreBoard implements Menuable {
         PrintResponses.printScoreboardShow();
     }
 }
+
