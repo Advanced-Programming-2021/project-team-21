@@ -116,7 +116,7 @@ class MainMenuTest {
         ProgramController.currentMenu.showCurrentMenu();
         File file = new File("src/main/resources/users/menuEnterScoreboardT1yl0rSw1ftW4$B0rnIn1989.user.json");
         file.deleteOnExit();
-        assertEquals(Responses.successfulUserCreation + System.lineSeparator() + Responses.successfulLogin + System.lineSeparator() + "Scoreboard" + System.lineSeparator(), outputStreamCaptor.toString());
+        assertEquals(Responses.successfulUserCreation + System.lineSeparator() + Responses.successfulLogin + System.lineSeparator() + "ScoreBoard" + System.lineSeparator(), outputStreamCaptor.toString());
     }
 
     @Test

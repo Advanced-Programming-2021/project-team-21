@@ -25,8 +25,8 @@ public class DeckMenu implements Menuable {
             showCurrentMenu();
         } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
             activateDeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.addCardMain)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.addCardSide)).find()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.addCardSide)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.addCardMain)).find()) {
             addCard(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.removeCardSide)).find()) {
@@ -35,8 +35,8 @@ public class DeckMenu implements Menuable {
             exitMenu();
         } else if (Regex.getMatcher(command, Regex.showAllDeck).find()) {
             showAllDeck();
-        } else if ((matcher = Regex.getMatcher(command, Regex.showDeckMain)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.showDeckSide)).find()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.showDeckSide)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.showDeckMain)).find()) {
             showADeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.showACard)).find()) {
             String cardName = matcher.group("cardName").trim();
@@ -145,7 +145,7 @@ public class DeckMenu implements Menuable {
     }
 
     private boolean invalidAdd(String cardName, String deckName, Deck deck) {
-        if (deck.getCardNumber(cardName) == 50) {
+        if (deck.getCardNumber(cardName) >= 3) {
             PrintResponses.printInvalidAdd(cardName, deckName);
             return true;
         }

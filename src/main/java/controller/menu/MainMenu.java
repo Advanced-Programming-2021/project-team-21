@@ -3,6 +3,7 @@ package controller.menu;
 import controller.ProgramController;
 import view.PrintResponses;
 import view.Regex;
+import view.Responses;
 
 import java.util.regex.Matcher;
 
@@ -10,7 +11,7 @@ public class MainMenu implements Menuable {
     @Override
     public void run(String command) {
         Matcher matcher;
-        if (Regex.getMatcher(command, Regex.menuExit).find()) exitMenu();
+        if (Regex.getMatcher(command, Regex.menuExit).find() || Regex.getMatcher(command, Regex.logout).find()) exitMenu();
         else if (Regex.getMatcher(command, Regex.menuShow).find()) showCurrentMenu();
         else if ((matcher = Regex.getMatcher(command, Regex.menuEnter)).find()) menuEnter(matcher);
         else PrintResponses.printInvalidFormat();
@@ -46,6 +47,7 @@ public class MainMenu implements Menuable {
 
     @Override
     public void exitMenu() {
+        PrintResponses.print(Responses.successfulLogout);
         ProgramController.currentMenu = new LoginMenu();
     }
 
