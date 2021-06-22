@@ -53,6 +53,7 @@ public class Regex {
     //These are for extracting data for card effects.
     public static final String parseTwoNumberEffects = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)";
     public static final String parseOneNumberTwoStrings = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_\"(?<stringNumber>-?\\d+)\"_\"(?<string>\\w+)\"";
+    public static final String parseTwoNumberOneString = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)_\"(?<string>\\w+)\"";
     //These are some commands that are not in the doc, including cheat-commands.
     public static final String increaseMoney = "increase --money (?<amount>\\d+)";
     public static final String increaseLP = "increase --LP (?<amount>\\d+)";

@@ -1,8 +1,13 @@
 package module.card;
 
+import controller.DataController;
 import module.card.effects.Effect;
 import module.card.enums.SpellTrapIcon;
 import module.card.enums.SpellTrapStatus;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class Spell extends Card {
     SpellTrapIcon spellTrapIcon;
@@ -60,6 +65,7 @@ public class Spell extends Card {
         setDescription((String) parameters[2]);
         setSpellTrapStatus(SpellTrapStatus.valueOf(((String) parameters[3]).toUpperCase()));
         setPrice((int) parameters[4]);
+        DataController.cardPairsParser((String) parameters[5], this);
     }
 
     @Override
@@ -97,119 +103,261 @@ public class Spell extends Card {
         return canSummonFromGY;
     }
 
+    public void setCanSummonFromGY(Effect canSummonFromGY) {
+        this.canSummonFromGY = canSummonFromGY;
+    }
+
     public Effect getCanAddFieldSpellFromDeck() {
         return canAddFieldSpellFromDeck;
+    }
+
+    public void setCanAddFieldSpellFromDeck(Effect canAddFieldSpellFromDeck) {
+        this.canAddFieldSpellFromDeck = canAddFieldSpellFromDeck;
     }
 
     public Effect getCanAddFromDeckToHand() {
         return canAddFromDeckToHand;
     }
 
+    public void setCanAddFromDeckToHand(Effect canAddFromDeckToHand) {
+        this.canAddFromDeckToHand = canAddFromDeckToHand;
+    }
+
     public Effect getCanDestroyOpponentMonster() {
         return canDestroyOpponentMonster;
+    }
+
+    public void setCanDestroyOpponentMonster(Effect canDestroyOpponentMonster) {
+        this.canDestroyOpponentMonster = canDestroyOpponentMonster;
     }
 
     public Effect getCanDestroyMyMonster() {
         return canDestroyMyMonster;
     }
 
+    public void setCanDestroyMyMonster(Effect canDestroyMyMonster) {
+        this.canDestroyMyMonster = canDestroyMyMonster;
+    }
+
     public Effect getCanControlOpponentMonster() {
         return canControlOpponentMonster;
+    }
+
+    public void setCanControlOpponentMonster(Effect canControlOpponentMonster) {
+        this.canControlOpponentMonster = canControlOpponentMonster;
     }
 
     public Effect getCanDestroyOpponentSpellAndTrap() {
         return canDestroyOpponentSpellAndTrap;
     }
 
+    public void setCanDestroyOpponentSpellAndTrap(Effect canDestroyOpponentSpellAndTrap) {
+        this.canDestroyOpponentSpellAndTrap = canDestroyOpponentSpellAndTrap;
+    }
+
     public Effect getCanChangeFaceOFOpponent() {
         return canChangeFaceOFOpponent;
+    }
+
+    public void setCanChangeFaceOFOpponent(Effect canChangeFaceOFOpponent) {
+        this.canChangeFaceOFOpponent = canChangeFaceOFOpponent;
     }
 
     public Effect getCanDrawACardWhenAMonsterIsDead() {
         return canDrawACardWhenAMonsterIsDead;
     }
 
+    public void setCanDrawACardWhenAMonsterIsDead(Effect canDrawACardWhenAMonsterIsDead) {
+        this.canDrawACardWhenAMonsterIsDead = canDrawACardWhenAMonsterIsDead;
+    }
+
     public Effect getCanMakeMonstersUndefeatable() {
         return canMakeMonstersUndefeatable;
+    }
+
+    public void setCanMakeMonstersUndefeatable(Effect canMakeMonstersUndefeatable) {
+        this.canMakeMonstersUndefeatable = canMakeMonstersUndefeatable;
     }
 
     public Effect getGetLPForEverySpellActivation() {
         return getLPForEverySpellActivation;
     }
 
+    public void setGetLPForEverySpellActivation(Effect getLPForEverySpellActivation) {
+        this.getLPForEverySpellActivation = getLPForEverySpellActivation;
+    }
+
     public Effect getMonstersCanNotAttack() {
         return MonstersCanNotAttack;
+    }
+
+    public void setMonstersCanNotAttack(Effect monstersCanNotAttack) {
+        MonstersCanNotAttack = monstersCanNotAttack;
     }
 
     public Effect getCostLP() {
         return costLP;
     }
 
+    public void setCostLP(Effect costLP) {
+        this.costLP = costLP;
+    }
+
     public Effect getFieldSpellType1() {
         return fieldSpellType1;
+    }
+
+    public void setFieldSpellType1(Effect fieldSpellType1) {
+        this.fieldSpellType1 = fieldSpellType1;
     }
 
     public Effect getFieldSpellType2() {
         return fieldSpellType2;
     }
 
+    public void setFieldSpellType2(Effect fieldSpellType2) {
+        this.fieldSpellType2 = fieldSpellType2;
+    }
+
     public Effect getFieldSpellType3() {
         return fieldSpellType3;
+    }
+
+    public void setFieldSpellType3(Effect fieldSpellType3) {
+        this.fieldSpellType3 = fieldSpellType3;
     }
 
     public Effect getFieldSpellType4() {
         return fieldSpellType4;
     }
 
+    public void setFieldSpellType4(Effect fieldSpellType4) {
+        this.fieldSpellType4 = fieldSpellType4;
+    }
+
     public Effect getFieldSpellType5() {
         return fieldSpellType5;
+    }
+
+    public void setFieldSpellType5(Effect fieldSpellType5) {
+        this.fieldSpellType5 = fieldSpellType5;
     }
 
     public Effect getFieldATKIncreaseGY1() {
         return fieldATKIncreaseGY1;
     }
 
+    public void setFieldATKIncreaseGY1(Effect fieldATKIncreaseGY1) {
+        this.fieldATKIncreaseGY1 = fieldATKIncreaseGY1;
+    }
+
     public Effect getFieldATKIncreaseGY2() {
         return fieldATKIncreaseGY2;
+    }
+
+    public void setFieldATKIncreaseGY2(Effect fieldATKIncreaseGY2) {
+        this.fieldATKIncreaseGY2 = fieldATKIncreaseGY2;
     }
 
     public Effect getEquipCardNormal1() {
         return equipCardNormal1;
     }
 
+    public void setEquipCardNormal1(Effect equipCardNormal1) {
+        this.equipCardNormal1 = equipCardNormal1;
+    }
+
     public Effect getEquipCardNormal2() {
         return equipCardNormal2;
+    }
+
+    public void setEquipCardNormal2(Effect equipCardNormal2) {
+        this.equipCardNormal2 = equipCardNormal2;
     }
 
     public Effect getEquipCardNormal3() {
         return equipCardNormal3;
     }
 
-    public boolean isEquipSPell() {
-        return spellTrapIcon.equals(SpellTrapIcon.EQUIP);
+    public void setEquipCardNormal3(Effect equipCardNormal3) {
+        this.equipCardNormal3 = equipCardNormal3;
     }
 
-    public void setEquippedPlace(int equippedPlace) {
-        this.equippedPlace = equippedPlace;
+    public boolean isEquipSPell() {
+        return spellTrapIcon.equals(SpellTrapIcon.EQUIP);
     }
 
     public int getEquippedPlace() {
         return equippedPlace;
     }
 
+    public void setEquippedPlace(int equippedPlace) {
+        this.equippedPlace = equippedPlace;
+    }
+
     public Effect getEquipBasedMyUpMonsters() {
         return equipBasedMyUpMonsters;
+    }
+
+    public void setEquipBasedMyUpMonsters(Effect equipBasedMyUpMonsters) {
+        this.equipBasedMyUpMonsters = equipBasedMyUpMonsters;
     }
 
     public Effect getEquipBasedOnPosition() {
         return equipBasedOnPosition;
     }
 
+    public void setEquipBasedOnPosition(Effect equipBasedOnPosition) {
+        this.equipBasedOnPosition = equipBasedOnPosition;
+    }
+
     public Effect getDiscardACardToActivate() {
         return discardACardToActivate;
     }
 
+    public void setDiscardACardToActivate(Effect discardACardToActivate) {
+        this.discardACardToActivate = discardACardToActivate;
+    }
+
     public Effect getNegateTrap() {
         return negateTrap;
+    }
+
+    public void setNegateTrap(Effect negateTrap) {
+        this.negateTrap = negateTrap;
+    }
+
+    @Override
+    public Map<String, Consumer<Effect>> getEffectsMap() {
+        Map<String, Consumer<Effect>> effectsMap = new HashMap<>();
+        effectsMap.put("canSummonFromGY", this::setCanSummonFromGY);
+        effectsMap.put("canAddFieldSpellFromDeck", this::setCanAddFieldSpellFromDeck);
+        effectsMap.put("canAddFromDeckToHand", this::setCanAddFromDeckToHand);
+        effectsMap.put("canDestroyOpponentMonster", this::setCanDestroyOpponentMonster);
+        effectsMap.put("canControlOpponentMonster", this::setCanControlOpponentMonster);
+        effectsMap.put("canDestroyOpponentSpellAndTrap", this::setCanDestroyOpponentSpellAndTrap);
+        effectsMap.put("canChangeFaceOFOpponent", this::setCanChangeFaceOFOpponent);
+        effectsMap.put("canMakeMonstersUndefeatable", this::setCanMakeMonstersUndefeatable);
+        effectsMap.put("canDestroyMyMonster", this::setCanDestroyMyMonster);
+        effectsMap.put("canDrawACardWhenAMonsterIsDead", this::setCanDrawACardWhenAMonsterIsDead);
+        effectsMap.put("getLPForEverySpellActivation", this::setGetLPForEverySpellActivation);
+        effectsMap.put("monstersCanNotAttack", this::setMonstersCanNotAttack);
+        effectsMap.put("costLP", this::setCostLP);
+        effectsMap.put("discardACardToActivate", this::setDiscardACardToActivate);
+        effectsMap.put("negateTrap", this::setNegateTrap);
+        effectsMap.put("fieldSpellType1", this::setFieldSpellType1);
+        effectsMap.put("fieldSpellType2", this::setFieldSpellType2);
+        effectsMap.put("fieldSpellType3", this::setFieldSpellType3);
+        effectsMap.put("fieldSpellType4", this::setFieldSpellType4);
+        effectsMap.put("fieldSpellType5", this::setFieldSpellType5);
+        effectsMap.put("fieldATKIncreaseGY1", this::setFieldATKIncreaseGY1);
+        effectsMap.put("fieldATKIncreaseGY2", this::setFieldATKIncreaseGY2);
+        effectsMap.put("equipCardNormal1", this::setEquipCardNormal1);
+        effectsMap.put("equipCardNormal2", this::setEquipCardNormal2);
+        effectsMap.put("equipCardNormal3", this::setEquipCardNormal3);
+        effectsMap.put("equipBasedMyUpMonsters", this::setEquipBasedMyUpMonsters);
+        effectsMap.put("equipBasedOnPosition", this::setEquipBasedOnPosition);
+
+        return effectsMap;
     }
 }

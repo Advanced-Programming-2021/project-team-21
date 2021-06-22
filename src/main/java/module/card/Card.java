@@ -4,11 +4,14 @@ package module.card;
 
 import com.rits.cloning.Cloner;
 import controller.ProgramController;
+import module.card.effects.Effect;
 import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class Card {
     protected String name;
@@ -104,6 +107,10 @@ public class Card {
         for (Card card : cards) {
             if (card.getName().equals(name)) return card;
         }
+        return null;
+    }
+
+    public Map<String, Consumer<Effect>> getEffectsMap() {
         return null;
     }
 }

@@ -200,24 +200,27 @@ public class DataController {
         Arrays.stream(effects).forEach(effect -> monster.getBooleanMap().get(effect).accept(true));
     }
 
-    public static void monsterPairsParser(String information, Monster monster) {
+    public static void cardPairsParser(String information, Card card) {
         if (information.isEmpty())
             return;
         String[] pairs = information.split("\\*");
-        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings};
-        Set<String> keys = monster.getEffectsMap().keySet();
+        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings, Regex.parseTwoNumberOneString};
+        Set<String> keys = card.getEffectsMap().keySet();
         for (String key : keys) {
-            monster.getEffectsMap().get(key).accept(new Effect(0, 0));
+            card.getEffectsMap().get(key).accept(new Effect(0, 0));
         }
         Arrays.stream(pairs).forEach(pair -> Arrays.stream(parserRegexes).forEach(parserRegex -> {
             Matcher matcher = Regex.getMatcher(pair, parserRegex);
             if (matcher.find()) {
                 if (parserRegex.equals(Regex.parseTwoNumberEffects))
-                    monster.getEffectsMap().get(pair.replaceAll("=.*", ""))
+                    card.getEffectsMap().get(pair.replaceAll("=.*", ""))
                             .accept(getEffectForTwoNumberPairs(matcher));
-                else
-                    monster.getEffectsMap().get(pair.replaceAll("=.*", ""))
+                else if (parserRegex.equals(Regex.parseOneNumberTwoStrings))
+                    card.getEffectsMap().get(pair.replaceAll("=.*", ""))
                             .accept(getEffectForOneNumberTwoStringPairs(matcher));
+                else
+                    card.getEffectsMap().get(pair.replaceAll("=.*", ""))
+                            .accept(getEffectForTwoNumberOneStringPairs(matcher));
             }
         }));
     }
@@ -233,6 +236,13 @@ public class DataController {
         int firstNumber = Integer.parseInt(matcher.group("firstNumber"));
         String secondNumber = matcher.group("stringNumber"),
                 string = matcher.group("string");
+        return new Effect(firstNumber, secondNumber, string);
+    }
+
+    private static Effect getEffectForTwoNumberOneStringPairs(Matcher matcher) {
+        int firstNumber = Integer.parseInt(matcher.group("firstNumber")),
+                secondNumber = Integer.parseInt(matcher.group("stringNumber"));
+        String string = matcher.group("string");
         return new Effect(firstNumber, secondNumber, string);
     }
 
