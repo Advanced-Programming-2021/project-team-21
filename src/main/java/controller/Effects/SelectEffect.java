@@ -25,7 +25,7 @@ public class SelectEffect {
             DuelMenu.isForScan = true;
             scannerPlace = selectedPlace;
             scannerHolder = Monster.copy(selected);
-            scannerHolder.setIsATKPosition(selected.isATKPosition());
+            scannerHolder.setATK(selected.isATK());
         } else if (selected.getCanGetFromGYByLevelToHand().hasEffect()) {
             Card card = player.getHand().selectARandomCardFromHand();
             int i;

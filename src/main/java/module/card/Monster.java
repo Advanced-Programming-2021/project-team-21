@@ -49,7 +49,6 @@ public class Monster extends Card {
     private int def;
     private int defHolder;
     private boolean hasAttackedOnceInTurn;
-    private boolean isATKPosition;
     private boolean canAttack = true;
     //command Knight effect +                                                                                      //texchanger
     private boolean canHaveDifferentTribute;
@@ -231,14 +230,6 @@ public class Monster extends Card {
 
     public void setHasAttackedOnceInTurn(boolean hasAttackedOnceInTurn) {
         this.hasAttackedOnceInTurn = hasAttackedOnceInTurn;
-    }
-
-    public void setIsATKPosition(boolean isATKPosition) {
-        this.isATKPosition = isATKPosition;
-    }
-
-    public boolean isATKPosition() {
-        return this.isATKPosition;
     }
 
     public boolean isBattlePhaseEffectStart() {

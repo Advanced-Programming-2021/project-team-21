@@ -102,7 +102,7 @@ public class TrapActivation {
     private static void handleDestroyAttackMonsters(User rival, Duel duel) {
         for (Card card1 : rival.getBoard().getMonsters()) {
             Monster monster = (Monster) card1;
-            if (monster.isATKPosition()) {
+            if (monster.isATK()) {
                 rival.getBoard().removeMonster(rival.getBoard().getAddressByCard(monster));
                 duel.addCardToGraveyard(monster, rival.getBoard().getAddressByCard(monster), rival);
             }

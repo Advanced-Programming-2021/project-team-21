@@ -78,7 +78,7 @@ public class SpellActivation {
     private static void thirdEquipSpell(Monster equipped, Spell spell, boolean fieldAndEquipSpellAdd) {
         Effect effect = spell.getEquipBasedMyUpMonsters();
         if (equipped.getMonsterType().getName().equals(spell.getEquipBasedOnPosition().getType())) {
-            if (equipped.isATKPosition()) effect.setAttack(equipped.getDef());
+            if (equipped.isATK()) effect.setAttack(equipped.getDef());
             else effect.setDefense(equipped.getAtk());
         }
         setChanges(fieldAndEquipSpellAdd, effect, equipped);

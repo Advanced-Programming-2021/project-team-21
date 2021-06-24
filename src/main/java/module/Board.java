@@ -63,7 +63,8 @@ public class Board {
     public void addMonsterFaceUp(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
         showMonsters[placeInBoard - 1] = "OO";
-        ((Monster) selectedMonsterCard).setIsATKPosition(true);
+//        ((Monster) selectedMonsterCard).setIsATKPosition(true);
+        selectedMonsterCard.setATK(true);
         selectedMonsterCard.setFaceUp(true);
     }
 
@@ -90,7 +91,7 @@ public class Board {
     public void changeFacePositionToDefenceForMonsters(int placeInBoard) {
         showMonsters[placeInBoard - 1] = "DO";
         monsters[placeInBoard - 1].setATK(false);
-        monsters[placeInBoard - 1].setFaceUp(false);
+        monsters[placeInBoard - 1].setFaceUp(true);
     }
 
     public void changeFacePositionToAttackForSpells(int placeOnBoard) {

@@ -79,7 +79,7 @@ public class DuelMenu implements Menuable {
             }
             Monster monster = specialSummonsedCards.get(number);
             if (isForScan) {
-                if (SelectEffect.scannerHolder.isATKPosition())
+                if (SelectEffect.scannerHolder.isATK())
                     currentDuel.getUserWhoPlaysNow().getBoard().addMonsterFaceUp(SelectEffect.scannerPlace, monster);
                 else currentDuel.getUserWhoPlaysNow().getBoard().addMonsterFaceDown(SelectEffect.scannerPlace, monster);
                 isForScan = false;
@@ -451,6 +451,7 @@ public class DuelMenu implements Menuable {
                 currentDuel.changeToDefensePosition();
             }
             PrintResponses.printSuccessfulMonsterCardPositionChange();
+            PrintResponses.print(currentDuel);
         }
     }
 
@@ -572,7 +573,7 @@ public class DuelMenu implements Menuable {
     // when we want to summon unconditionally.
 
     private void forceSelectHand(Matcher matcher) {
-        String cardName = matcher.group("cardName");
+        String cardName = matcher.group("cardName").trim();
         Card[] cardsInHand = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
         int i = 0, cardsInHandLength = cardsInHand.length;
         while (true) {
@@ -727,6 +728,7 @@ public class DuelMenu implements Menuable {
                 break;
             case 4:
                 PrintResponses.printOpponentMonsterInDefenceDestroyed();
+                break;
             case 5:
                 PrintResponses.printNoCardDestroyedInDefence();
                 break;

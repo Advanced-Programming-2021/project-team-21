@@ -113,7 +113,7 @@ public class Duel {
     }
 
     public void summonMonster() {
-        addCardToGraveyard(selectedCard, 10, userWhoPlaysNow);
+//        addCardToGraveyard(selectedCard, 10, userWhoPlaysNow);
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
@@ -170,8 +170,7 @@ public class Duel {
 
     private void handleSuccessfulSummonOrSet() {
         hasSummonedOrSetOnce = true;
-//        if (placeOfSelectedCard != 0)
-            userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
+        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
         deselectACard();
     }
 
@@ -189,7 +188,6 @@ public class Duel {
         currentBoard.changeFacePositionToDefenceForMonsters(placeInBoard);
         setHasChangedPositionOnce(true);
     }
-
 
 
     public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
@@ -274,7 +272,7 @@ public class Duel {
         }
         if (!attackingMonster.isCanAttack()) return new Pair<>(0, 0);
         ((Monster) selectedCard).setHasAttackedOnceInTurn(true);
-        if (monsterToAttack.isATKPosition()) {
+        if (monsterToAttack.isATK()) {
             return handleAttackPositionAttack(attackingMonster, monsterToAttack, placeInBoard, rival);
         } else if (monsterToAttack.isFaceUp()) {
             return handleDefencePositionAttack(monsterToAttack, placeInBoard, rival, true);
@@ -468,7 +466,6 @@ public class Duel {
                 if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
                     return new Pair<>(0, 0);
                 }
-            changeLP(rival, -differenceOfATK);
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
                 if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))
                     return new Pair<>(0, 0);
