@@ -53,6 +53,7 @@ public class Duel {
     }
 
     public void changeTurn() {
+        deselectACard();
         summonedOrSetPlace = -1;
         resetCards();
         ChangeTurnEffects.run(userWhoPlaysNow, getRival(), this);
@@ -87,7 +88,7 @@ public class Duel {
             isSelectedCardForOpponent = false;
             if (fromWhere.equals("monster")) {
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
-                if (selectedCard == null)return;
+                if (selectedCard == null) return;
                 if (((Monster) selectedCard).isSelectEffect()) {
                     if (DuelMenu.askForEffectMonster().equals("Yes")) {
                         SelectEffect.run((Monster) selectedCard, getRival(), getUserWhoPlaysNow(), this, cardAddress);
@@ -112,7 +113,7 @@ public class Duel {
     }
 
     public void summonMonster() {
-        addCardToGraveyard(selectedCard , 10 , userWhoPlaysNow);
+        addCardToGraveyard(selectedCard, 10, userWhoPlaysNow);
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
@@ -127,10 +128,8 @@ public class Duel {
             monster.setAtk(monster.getAtk() + 300 * ((Monster) selectedCard).getLevel());
         }
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
-        hasSummonedOrSetOnce = true;
         summonedOrSetPlace = placeInBoard;
-        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
-        deselectACard();
+        handleSuccessfulSummonOrSet();
     }
 
     public void flipSummon() {
@@ -146,6 +145,7 @@ public class Duel {
         summonedOrSetPlace = placeInBoard;
         currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
     }
+
     public void tribute(int[] placesOnBoard) {
         for (int placeOnBoard : placesOnBoard) {
             Card cardToTribute = userWhoPlaysNow.getBoard().getCard(placeOnBoard, 'M');
@@ -158,16 +158,20 @@ public class Duel {
         Board currentBoard = userWhoPlaysNow.getBoard();
         summonedOrSetPlace = placeOnBoard;
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
-        hasSummonedOrSetOnce = true;
-        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
-        deselectACard();
+        handleSuccessfulSummonOrSet();
     }
 
     public void setSpellOrTrap() {
-        int placeOnBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
+        int placeOnBoard = userWhoPlaysNow.getBoard().getAddressToPutSpell();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.addSpellAndTrap(placeOnBoard, selectedCard);
+        handleSuccessfulSummonOrSet();
+    }
+
+    private void handleSuccessfulSummonOrSet() {
         hasSummonedOrSetOnce = true;
+        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
+        deselectACard();
     }
 
 
@@ -187,7 +191,7 @@ public class Duel {
 
 
 
-        public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
+    public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
         if (initialRounds == 1) {
             return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
         } else {
@@ -363,6 +367,7 @@ public class Duel {
             return selectedCard.toString();
         }
     }
+
     public void addCardToGraveyard(Card card, int placeInBoard, User user) {
         if (placeInBoard == 10) {
             Card cardToAdd = Card.getCardByName(card.getName());

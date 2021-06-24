@@ -204,7 +204,7 @@ public class DataController {
         if (information.isEmpty())
             return;
         String[] pairs = information.split("\\*");
-        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings};
+        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings, Regex.parseTwoNumberOneString};
         Arrays.stream(pairs).forEach(pair -> Arrays.stream(parserRegexes).forEach(parserRegex -> {
             Matcher matcher = Regex.getMatcher(pair, parserRegex);
             if (matcher.find()) {

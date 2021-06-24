@@ -1,6 +1,8 @@
 package module;
 
 import com.rits.cloning.Cloner;
+import controller.ProgramController;
+import controller.menu.DuelMenu;
 import module.card.Card;
 import module.card.Monster;
 
@@ -36,6 +38,18 @@ public class Hand {
 
     public void removeCardFromHand(int cardAddress) {
         cardsInHand[cardAddress - 1] = null;
+        shift();
+    }
+
+    private void shift(){
+        for (int i = 0; i < cardsInHand.length; i++) {
+            if (cardsInHand[i] == null){
+                if (i + 1 < cardsInHand.length){
+                    cardsInHand[i] = cardsInHand[i+1];
+                    cardsInHand[i + 1] = null;
+                }
+            }
+        }
     }
 
     public Card[] getCardsInHand() {
@@ -44,7 +58,7 @@ public class Hand {
 
     public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0) {
-            // ending game
+            ((DuelMenu) ProgramController.currentMenu).endTheGame();
             return null;
         }
         for (int i = 0; i < cardsInHand.length; i++) {

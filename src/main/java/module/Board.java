@@ -77,7 +77,7 @@ public class Board {
     public void addSpellAndTrap(int placeInBoard, Card selectedSpellAndTrapCard) {
         spellsAndTraps[placeInBoard - 1] = selectedSpellAndTrapCard;
         showSpellsAndTraps[placeInBoard - 1] = "H";
-        selectedSpellAndTrapCard.setFaceUp(true);
+        selectedSpellAndTrapCard.setFaceUp(false);
         selectedSpellAndTrapCard.setATK(false);
     }
 

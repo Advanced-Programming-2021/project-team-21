@@ -8,6 +8,7 @@ import module.card.enums.SpellTrapStatus;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 // add user a field named canDraw
@@ -44,6 +45,10 @@ public class Trap extends Card {
         setDescription((String) parameters[2]);
         setSpellTrapStatus(SpellTrapStatus.valueOf(((String) parameters[3]).toUpperCase()));
         setPrice((int) parameters[4]);
+        Set<String> keys = this.getEffectsMap().keySet();
+        for (String key : keys) {
+            this.getEffectsMap().get(key).accept(new Effect(0, 0));
+        }
         DataController.cardPairsParser((String) parameters[5], this);
     }
 

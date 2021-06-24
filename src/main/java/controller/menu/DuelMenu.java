@@ -61,40 +61,6 @@ public class DuelMenu implements Menuable {
         return (Monster) duel.getUserWhoPlaysNow().getBoard().getCard(number, 'm');
     }
 
-    @Override
-    public void run(String command) {
-        if (checkSpecialSummon(command, currentDuel)) return;
-        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
-        boolean isValidCommand = false;
-
-        try {
-            for (String string : commandMap.keySet()) {
-                if (command.equals(Regex.menuExit)) {
-                    exitMenu();
-                    return;
-                }
-                Matcher matcher = Regex.getMatcher(command, string);
-                if (currentDuel != null && currentDuel.isGameEnded()) {
-                    endTheGame();
-                    return;
-                } else if (matcher.find() && isInGame) {
-                    isValidCommand = true;
-                    commandMap.get(string).accept(matcher);
-                } else if (!isInGame) {
-                    if (command.equals("back")) {
-                        back();
-                        isValidCommand = true;
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-
-        }
-        if (!isValidCommand)
-            PrintResponses.printInvalidFormat();
-
-    }
-
     public static boolean checkSpecialSummon(String command, Duel currentDuel) {
         Matcher matcher;
         if (specialSummonsedCards != null) {
@@ -180,6 +146,44 @@ public class DuelMenu implements Menuable {
         isGetFromGY = false;
     }
 
+    public static String askForEffectMonster() {
+        PrintResponses.printAskForEffectMonster();
+        return ProgramController.scanner.nextLine();
+    }
+
+    @Override
+    public void run(String command) {
+        if (checkSpecialSummon(command, currentDuel)) return;
+        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
+        boolean isValidCommand = false;
+
+        try {
+            for (String string : commandMap.keySet()) {
+                if (command.equals(Regex.menuExit)) {
+                    exitMenu();
+                    return;
+                }
+                Matcher matcher = Regex.getMatcher(command, string);
+                if (currentDuel != null && currentDuel.isGameEnded()) {
+                    endTheGame();
+                    return;
+                } else if (matcher.find() && isInGame) {
+                    isValidCommand = true;
+                    commandMap.get(string).accept(matcher);
+                } else if (!isInGame) {
+                    if (command.equals("back")) {
+                        back();
+                        isValidCommand = true;
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        if (!isValidCommand)
+            PrintResponses.printInvalidFormat();
+
+    }
+
     private void back() {
         isInGame = true;
     }
@@ -216,13 +220,13 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.setWinner, this::setWinner);
         commandMap.put(Regex.forceSelectHand, this::forceSelectHand);
         commandMap.put(Regex.showHand, this::showHand);
+        commandMap.put(Regex.showACard, this::showCard);
         return commandMap;
     }
 
     private void showHand(Matcher matcher) {
         PrintResponses.printHandShow(currentDuel.getUserWhoPlaysNow().getHand());
     }
-
 
     private void createNewDuel(Matcher matcher) {
         if (currentDuel != null) {
@@ -258,7 +262,11 @@ public class DuelMenu implements Menuable {
         int cardAddress = Integer.parseInt(matcher.group("number"));
         if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
                 || whereToSelectFrom.equals("field")
-                || whereToSelectFrom.equals("hand"))) {
+                || whereToSelectFrom.equals("hand"))
+                || cardAddress > 6) {
+            PrintResponses.printInvalidSelection();
+        } else if ((whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell"))
+                && cardAddress > 5) {
             PrintResponses.printInvalidSelection();
         } else {
             currentDuel.selectCard(cardAddress, whereToSelectFrom, "own");
@@ -322,7 +330,7 @@ public class DuelMenu implements Menuable {
         PrintResponses.printPhaseName(phase);
     }
 
-    private void endTheGame() {
+    public void endTheGame() {
         remainingRounds--;
         if (remainingRounds == 0) {
             if (initialRounds == 1)
@@ -364,8 +372,7 @@ public class DuelMenu implements Menuable {
                 }
                 if (number == 0 && monster.getCanBeNotTribute().hasEffect()) {
                     monster.setAtk(monster.getAtk() - monster.getCanBeNotTribute().getEffectNumber());
-                    currentDuel.summonMonster();
-                    PrintResponses.printSuccessfulSummon();
+                    handleSuccessfulSummon();
                     return;
                 }
                 if (number == 0 && monster.getDiscardToSpecialSummon().hasEffect()) {
@@ -376,8 +383,7 @@ public class DuelMenu implements Menuable {
                             break;
                     }
                     currentDuel.getUserWhoPlaysNow().getHand().discardACard(i);
-                    currentDuel.summonMonster();
-                    PrintResponses.printSuccessfulSummon();
+                    handleSuccessfulSummon();
                     return;
                 }
                 monster.setRequiredCardsFOrTribute(number);
@@ -398,11 +404,9 @@ public class DuelMenu implements Menuable {
                     if (card != null) currentDuel.addCardToGraveyard(card, i, currentDuel.getRival());
                 }
             }
-            currentDuel.summonMonster();
-            PrintResponses.printSuccessfulSummon();
+            handleSuccessfulSummon();
         } else {
-            currentDuel.summonMonster();
-            PrintResponses.printSuccessfulSummon();
+            handleSuccessfulSummon();
         }
     }
 
@@ -418,6 +422,11 @@ public class DuelMenu implements Menuable {
         } else {
             handleSpellAndTrapSet();
         }
+    }
+
+    private void showCard(Matcher matcher){
+        String cardName = matcher.group("cardName").trim();
+        PrintResponses.printACard(Card.getCardByName(cardName));
     }
 
     private void setPosition(Matcher matcher) {
@@ -534,7 +543,6 @@ public class DuelMenu implements Menuable {
         currentDuel = null;
     }
 
-
     private void increaseLP(Matcher matcher) {
         int amount = Integer.parseInt(matcher.group("amount"));
         currentDuel.getUserWhoPlaysNow().setLifePoints(currentDuel.getUserWhoPlaysNow().getLifePoints() + amount);
@@ -591,7 +599,6 @@ public class DuelMenu implements Menuable {
         return true;
     }
 
-
     private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
         if (currentDuel.getUserWhoPlaysNow().getBoard().getMonsters().length == requiredCardsAmount) {
             PrintResponses.printNoCardToTribute();
@@ -638,6 +645,12 @@ public class DuelMenu implements Menuable {
     //TODO implement this method
     private boolean isSpellPreparedToBeActivated() {
         return true;
+    }
+
+    private void handleSuccessfulSummon() {
+        currentDuel.summonMonster();
+        PrintResponses.printSuccessfulSummon();
+        PrintResponses.print(currentDuel);
     }
 
     private void handleSuccessfulGameCreation(User secondPlayer) {
@@ -784,10 +797,6 @@ public class DuelMenu implements Menuable {
             PrintResponses.printSuccessfulCardSetting();
             PrintResponses.print(currentDuel);
         }
-    }
-    public static String askForEffectMonster(){
-        PrintResponses.printAskForEffectMonster();
-        return ProgramController.scanner.nextLine();
     }
 
 }

@@ -142,6 +142,7 @@ public class DeckMenu implements Menuable {
             if (invalidAdd(cardName, deckName, deck)) return;
             deck.addCardToMainDeck(card);
         }
+        DataController.saveData(user);
         PrintResponses.printSuccessfulCardAddition();
     }
 
@@ -188,12 +189,12 @@ public class DeckMenu implements Menuable {
         Deck deck = new Deck(name);
         user.addDeck(deck);
         PrintResponses.printSuccessfulDeckCreation();
+        DataController.saveData(user);
     }
 
     @Override
     public void exitMenu() {
         ProgramController.currentMenu = new MainMenu();
-        DataController.saveData(user);
     }
 
     @Override
