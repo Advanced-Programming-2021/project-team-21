@@ -1,23 +1,68 @@
 package module;
 
+import controller.ProgramController;
+import module.card.Card;
+import module.card.Monster;
+import module.card.enums.CardType;
+
+import java.util.Iterator;
+import java.util.stream.IntStream;
+
 public class AI extends User {
 
-    private static final AI ai = new AI("AI", "AI", "AI");
 
-    private AI(String username, String password, String nickname) {
+    private Duel currentDuel;
+    public AI(String username, String password, String nickname) {
         super(username, password, nickname);
+        createDeck();
     }
 
-    public static AI getInstance() {
-        return ai;
-    }
 
     /*
      * There is going to be a while (aiTurn) in this function.
      * It will call DuelMenu's run() with a string as a parameter.
      * The parameter will be the command we want to execute.
      */
-    public void run() {
 
+    public void setCurrentDuel(Duel currentDuel) {
+        this.currentDuel = currentDuel;
+    }
+
+    public void run() {
+        startStrategy();
+    }
+
+    private void createDeck() {
+        Deck deck = new Deck("AI Deck");
+        int counter = 0;
+        for (Iterator<Card> iterator = ProgramController.allCards.values().iterator(); iterator.hasNext(); ) {
+            Card card = iterator.next();
+            if (card instanceof Monster && card.getCardType().equals(CardType.NORMAL)
+                    && ((Monster) card).getLevel() < 5) {
+                for (int i = 0; i < 3; i++) {
+                    deck.addCardToMainDeck(Card.getCardByName(card.getName()));
+                    counter++;
+                }
+            }
+            if (counter == 40)
+                break;
+        }
+        getDecks().add(deck);
+        deck.setActive(true);
+    }
+
+    private void startStrategy(){
+        IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
+        if (getHand().getNumberOfCardsInHand() > 0 && getBoard().getMonsterNumber() < 4) {
+            ProgramController.currentMenu.run("select --hand 1");
+            ProgramController.currentMenu.run("summon");
+            ProgramController.currentMenu.run("next phase");
+            ProgramController.currentMenu.run("select --monster 1");
+            if (currentDuel.getRival().getBoard().getMonsterNumber() > 0)
+                ProgramController.currentMenu.run("attack 1");
+            else
+                ProgramController.currentMenu.run("attack direct");
+            IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
+        }
     }
 }

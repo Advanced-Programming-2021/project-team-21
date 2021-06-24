@@ -2,6 +2,7 @@ package controller.menu;
 
 import controller.Effects.SelectEffect;
 import controller.ProgramController;
+import module.AI;
 import module.Duel;
 import module.User;
 import module.card.Card;
@@ -61,7 +62,7 @@ public class DuelMenu implements Menuable {
         return (Monster) duel.getUserWhoPlaysNow().getBoard().getCard(number, 'm');
     }
 
-    public static boolean checkSpecialSummon(String command, Duel currentDuel , boolean isInRivalTurn) {
+    public static boolean checkSpecialSummon(String command, Duel currentDuel, boolean isInRivalTurn) {
         Matcher matcher;
         if (specialSummonsedCards != null) {
             Card card = currentDuel.getSelectedCard();
@@ -105,9 +106,9 @@ public class DuelMenu implements Menuable {
                     return true;
                 }
                 removeTheSpecialSummoned(monster, currentDuel);
-                if (isInRivalTurn)changeTurnTemp(currentDuel);
+                if (isInRivalTurn) changeTurnTemp(currentDuel);
                 currentDuel.summonMonster();
-                if (isInRivalTurn)changeTurnTemp(currentDuel);
+                if (isInRivalTurn) changeTurnTemp(currentDuel);
             }
             specialSummonsedCards = null;
             currentDuel.setSelectedCard(card);
@@ -117,7 +118,7 @@ public class DuelMenu implements Menuable {
     }
 
     private static void changeTurnTemp(Duel currentDuel) {
-        currentDuel.setUserWhoPlaysNow( currentDuel.getRival());
+        currentDuel.setUserWhoPlaysNow(currentDuel.getRival());
 
     }
 
@@ -145,7 +146,7 @@ public class DuelMenu implements Menuable {
         if (isGetFromHand && !found) {
             Card[] cards = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
             for (int i = 0; i < cards.length; i++) {
-                if (cards[i] == null)continue;
+                if (cards[i] == null) continue;
                 if (cards[i].getName().equals(monster.getName())) {
                     currentDuel.getUserWhoPlaysNow().getHand().removeCardFromHand(i);
                     break;
@@ -164,7 +165,7 @@ public class DuelMenu implements Menuable {
 
     @Override
     public void run(String command) {
-        if (checkSpecialSummon(command, currentDuel , false)) return;
+        if (checkSpecialSummon(command, currentDuel, false)) return;
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
         boolean isValidCommand = false;
 
@@ -191,8 +192,7 @@ public class DuelMenu implements Menuable {
         } catch (Exception ignored) {
             ignored.printStackTrace();
         }
-        if (!isValidCommand)
-        {
+        if (!isValidCommand) {
             PrintResponses.printInvalidFormat();
         }
 
@@ -269,7 +269,18 @@ public class DuelMenu implements Menuable {
     }
 
     private void createNewDuelWithAI(Matcher matcher) {
-
+        remainingRounds = Integer.parseInt(matcher.group("rounds"));
+        initialRounds = remainingRounds;
+        if (ProgramController.userInGame.getActiveDeck() == null) {
+            PrintResponses.printHasNoActiveDeck(ProgramController.userInGame);
+        } else if (!ProgramController.userInGame.getActiveDeck().isValid()) {
+            PrintResponses.printInvalidDeck(ProgramController.userInGame);
+        } else if (!(remainingRounds == 1 || remainingRounds == 3)) {
+            PrintResponses.printNonSupportiveRound();
+        } else {
+            handleSuccessfulGameCreation(new AI("AI", "AI", "AI"));
+            ((AI) currentDuel.getSECOND_USER()).setCurrentDuel(currentDuel);
+        }
     }
 
     private void selectCardFromOwn(Matcher matcher) {
@@ -439,7 +450,7 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void showCard(Matcher matcher){
+    private void showCard(Matcher matcher) {
         String cardName = matcher.group("cardName").trim();
         PrintResponses.printACard(Card.getCardByName(cardName));
     }
@@ -513,7 +524,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printAttackInWrongPhase();
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.printCardAttackedBefore();
-        } else if (currentDuel.getRival().getBoard().getMonsters().length != 0) {
+        } else if (currentDuel.getRival().getBoard().getMonsterNumber() != 0) {
             PrintResponses.print(Responses.unableToAttackDirectly);
         } else {
             int damage = currentDuel.attackDirectly();
@@ -533,7 +544,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printUnableToActivateCardTwice();
         } else if (isSpellZoneFullAndNeedsToBeOnBoard()) {
             PrintResponses.printFullnessOfSpellCardZone();
-        } else if (isSpellPreparedToBeActivated()) {
+        } else if (isSpellNotPreparedToBeActivated()) {
             PrintResponses.printUnfinishedPreparationOfSpell();
         } else if (currentDuel.getUserWhoPlaysNow().isCanSummonSpell()) {
             PrintResponses.printDisabledSummonSpell();
@@ -668,8 +679,8 @@ public class DuelMenu implements Menuable {
     }
 
     //TODO implement this method
-    private boolean isSpellPreparedToBeActivated() {
-        return true;
+    private boolean isSpellNotPreparedToBeActivated() {
+        return false;
     }
 
     private void handleSuccessfulSummon() {
@@ -713,6 +724,9 @@ public class DuelMenu implements Menuable {
         } else {
             PrintResponses.printDrawnCard(card);
             PrintResponses.printBoard(currentDuel);
+            if (currentDuel.getUserWhoPlaysNow() instanceof AI) {
+                ((AI) currentDuel.getUserWhoPlaysNow()).run();
+            }
         }
     }
 

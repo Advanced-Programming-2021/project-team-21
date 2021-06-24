@@ -63,6 +63,7 @@ public class Duel {
             userWhoPlaysNow = FIRST_USER;
         hasSummonedOrSetOnce = false;
         hasChangedPositionOnce = false;
+
     }
 
 
