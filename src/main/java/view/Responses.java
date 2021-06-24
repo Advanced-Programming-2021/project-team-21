@@ -110,4 +110,6 @@ public class Responses {
     public static String wrongCardName = "there is no card with this name";
     public static String noSelect = "There is no selected card";
     public static String noSpecialEffect = "You can not use this Effect now";
+    public static String addACardToHand = "CHEAT: Given card added to your hand!";
+    public static String handIsFull = "CHEAT: Your hand is full. Could not add the card.";
 }

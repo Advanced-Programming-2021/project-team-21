@@ -170,7 +170,8 @@ public class Duel {
 
     private void handleSuccessfulSummonOrSet() {
         hasSummonedOrSetOnce = true;
-        userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
+//        if (placeOfSelectedCard != 0)
+            userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
         deselectACard();
     }
 

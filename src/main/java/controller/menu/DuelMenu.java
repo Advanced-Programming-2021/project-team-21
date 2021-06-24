@@ -178,6 +178,7 @@ public class DuelMenu implements Menuable {
                 }
             }
         } catch (Exception ignored) {
+            ignored.printStackTrace();
         }
         if (!isValidCommand)
             PrintResponses.printInvalidFormat();
@@ -221,6 +222,7 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.forceSelectHand, this::forceSelectHand);
         commandMap.put(Regex.showHand, this::showHand);
         commandMap.put(Regex.showACard, this::showCard);
+        commandMap.put(Regex.addCardToHand, this::addCardToHand);
         return commandMap;
     }
 
@@ -568,6 +570,7 @@ public class DuelMenu implements Menuable {
     }
 
     // when we want to summon unconditionally.
+
     private void forceSelectHand(Matcher matcher) {
         String cardName = matcher.group("cardName");
         Card[] cardsInHand = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
@@ -585,6 +588,16 @@ public class DuelMenu implements Menuable {
         currentDuel.summonMonster();
         PrintResponses.print(Responses.forceSelectHand);
         PrintResponses.print(currentDuel);
+    }
+
+    private void addCardToHand(Matcher matcher) {
+        Card card = Card.getCardByName(matcher.group("cardName"));
+        if (currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() != 6) {
+            currentDuel.getUserWhoPlaysNow().getHand().addCardToHand(card);
+            PrintResponses.print(Responses.addACardToHand);
+            PrintResponses.print(currentDuel);
+        } else
+            PrintResponses.print(Responses.handIsFull);
     }
 
     private boolean isRitualSummon() {

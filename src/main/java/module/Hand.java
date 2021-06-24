@@ -9,6 +9,7 @@ import module.card.Monster;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 public class Hand {
     private final Card[] cardsInHand;
@@ -160,6 +161,10 @@ public class Hand {
                 level = ((Monster) card).getLevel();
         }
         return level;
+    }
+
+    public int getNumberOfCardsInHand(){
+        return (int) Arrays.stream(cardsInHand).filter(Objects::nonNull).count();
     }
 
     public Deck getDeckToDraw() {

@@ -59,6 +59,8 @@ public class Regex {
     public static final String increaseLP = "increase --LP (?<amount>\\d+)";
     public static final String setWinner = "duel set-winner (?<nickname>\\S+)";
     public static final String forceSelectHand = "select (?=.*--hand (?<cardName>\\S+))(?=.*--force)";
+    public static final String summonACardYouDoNotHave = "summon (?<cardName>.+)";
+    public static final String addCardToHand = "add-to-hand (?<cardName>.+)";
     public static final String showHand = "^hand-show$";
     // TODO
     // return the 3 limit to the cards in a deck
