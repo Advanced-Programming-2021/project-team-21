@@ -178,7 +178,7 @@ public class Board {
 
     public boolean isCardOnMonsterZone(Card card) {
         for (Card monster : monsters) {
-            if (monster != null && monster.getName().equals(card.getName()))return true;
+            if (monster != null && monster.equals(card))return true;
         }    return false;
     }
 

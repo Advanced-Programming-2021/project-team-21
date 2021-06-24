@@ -436,7 +436,6 @@ public class DuelMenu implements Menuable {
         if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
         } else if (isSelectedCardNotInMonsterZone()) {
-
             PrintResponses.printUnableToChangePositionOfCard();
         } else if (isNotInMainPhases()) {
             PrintResponses.printSetCardInWrongPhase();
@@ -463,8 +462,7 @@ public class DuelMenu implements Menuable {
         } else if (isNotInMainPhases()) {
             PrintResponses.printFlipSummonInWrongPhase();
         } else if (currentDuel.isSelectedCardSummonedInThisTurn() || (currentDuel.getSelectedCard().isFaceUp()
-                && currentDuel.getSelectedCard().isATK())) {
-            System.out.println(currentDuel.getSelectedCard().isFaceUp());
+                || currentDuel.getSelectedCard().isATK())) {
             PrintResponses.printUnableToFlipSummonCard();
         } else {
             currentDuel.flipSummon();
@@ -633,9 +631,9 @@ public class DuelMenu implements Menuable {
 
     private boolean isPositionTheSameAsBefore(String position) {
         if (position.equals("attack")) {
-            return currentDuel.getSelectedCard().isFaceUp();
+            return currentDuel.getSelectedCard().isATK();
         } else {
-            return !currentDuel.getSelectedCard().isATK() && !currentDuel.getSelectedCard().isFaceUp();
+            return !currentDuel.getSelectedCard().isATK();
         }
     }
 
