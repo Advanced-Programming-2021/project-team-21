@@ -32,7 +32,7 @@ public class Card {
         return null;
     }
 
-    public static ArrayList<Card> sort(ArrayList<Card> cards) {
+    public static void sort(ArrayList<Card> cards) {
         ArrayList<Card> sort = new ArrayList<>(cards);
         for (int i = 0; i < sort.size(); i++) {
             for (int j = i + 1; j < sort.size(); j++) {
@@ -40,7 +40,6 @@ public class Card {
                     Collections.swap(sort, i, j);
             }
         }
-        return sort;
     }
 
     public String getName() {

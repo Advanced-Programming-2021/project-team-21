@@ -448,6 +448,7 @@ public class Monster extends Card {
         return booleanMap;
     }
 
+    @Override
     public Map<String, Consumer<Effect>> getEffectsMap() {
         Map<String, Consumer<Effect>> effectsMap = new HashMap<>();
         effectsMap.put("undefeatable", this::setUndefeatable);
