@@ -15,8 +15,6 @@ public class Hand {
     private final Card[] cardsInHand;
     private final Deck deckToDraw;
     private User handOwner;
-    private Boolean canDraw;
-
     {
         cardsInHand = new Card[6];
     }
@@ -24,6 +22,7 @@ public class Hand {
     public Hand(User handOwner) {
         Cloner cloner = new Cloner();
         handOwner.setHand(this);
+        this.handOwner = handOwner;
         deckToDraw = cloner.deepClone(handOwner.getActiveDeck());
     }
 
@@ -119,7 +118,7 @@ public class Hand {
         if (identifier % 4 >= 2) lookingCards.addAll(Arrays.asList(this.cardsInHand));
         else if (identifier % 2 == 1) lookingCards.addAll(this.deckToDraw.getMainDeckCards());
         for (Card card : lookingCards) {
-            if (card.getCardType().getName().equals(type) && card instanceof Monster) {
+            if (card instanceof Monster && ((Monster)card).getMonsterType().getName().equals(type)) {
                 Monster monster = (Monster) card;
                 found.add(monster);
             }

@@ -68,8 +68,8 @@ public class Regex {
     // add a feature that is not necessary to type next phase and you can go directly from phases to another
     // add a feature to print something to ask for tribute
     //decks are not saved if you exit the program exactly after adding card
-    // add a feature that you can activate traps in your turn tooo without chain
-    // remove adding a card to GY in summon in duel
+    // add a feature that you can activate traps in your turn too without chain
+    // add tribute set
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);

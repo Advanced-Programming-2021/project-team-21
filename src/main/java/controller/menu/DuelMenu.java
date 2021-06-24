@@ -61,9 +61,10 @@ public class DuelMenu implements Menuable {
         return (Monster) duel.getUserWhoPlaysNow().getBoard().getCard(number, 'm');
     }
 
-    public static boolean checkSpecialSummon(String command, Duel currentDuel) {
+    public static boolean checkSpecialSummon(String command, Duel currentDuel , boolean isInRivalTurn) {
         Matcher matcher;
         if (specialSummonsedCards != null) {
+            Card card = currentDuel.getSelectedCard();
             if (!(matcher = Regex.getMatcher(command, Regex.specialSummon)).matches()) {
                 PrintResponses.printEmergencySpecialSummon();
                 return true;
@@ -104,13 +105,22 @@ public class DuelMenu implements Menuable {
                     return true;
                 }
                 removeTheSpecialSummoned(monster, currentDuel);
+                if (isInRivalTurn)changeTurnTemp(currentDuel);
                 currentDuel.summonMonster();
+                if (isInRivalTurn)changeTurnTemp(currentDuel);
             }
             specialSummonsedCards = null;
+            currentDuel.setSelectedCard(card);
             return true;
         }
         return false;
     }
+
+    private static void changeTurnTemp(Duel currentDuel) {
+        currentDuel.setUserWhoPlaysNow( currentDuel.getRival());
+
+    }
+
 
     public static void removeTheSpecialSummoned(Monster monster, Duel currentDuel) {
         boolean found = false;
@@ -135,6 +145,7 @@ public class DuelMenu implements Menuable {
         if (isGetFromHand && !found) {
             Card[] cards = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
             for (int i = 0; i < cards.length; i++) {
+                if (cards[i] == null)continue;
                 if (cards[i].getName().equals(monster.getName())) {
                     currentDuel.getUserWhoPlaysNow().getHand().removeCardFromHand(i);
                     break;
@@ -153,7 +164,7 @@ public class DuelMenu implements Menuable {
 
     @Override
     public void run(String command) {
-        if (checkSpecialSummon(command, currentDuel)) return;
+        if (checkSpecialSummon(command, currentDuel , false)) return;
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
         boolean isValidCommand = false;
 
@@ -181,7 +192,9 @@ public class DuelMenu implements Menuable {
             ignored.printStackTrace();
         }
         if (!isValidCommand)
+        {
             PrintResponses.printInvalidFormat();
+        }
 
     }
 

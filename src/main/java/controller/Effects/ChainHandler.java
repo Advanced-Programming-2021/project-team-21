@@ -54,7 +54,7 @@ public class ChainHandler {
         if (spell.getNegateTrap().hasEffect()) {
             Trap trap = (Trap) chainCards.get(i - 1).getCard();
             Effect effect = trap.getCanAttackLP();
-            effect.resetEffect();
+            effect.finishEffect();
             trap.setCanAttackLP(effect);
             chainCards.get(i - 1).setCard(trap);
         }
