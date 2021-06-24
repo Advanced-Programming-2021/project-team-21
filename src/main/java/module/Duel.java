@@ -113,7 +113,6 @@ public class Duel {
     }
 
     public void summonMonster() {
-//        addCardToGraveyard(selectedCard, 10, userWhoPlaysNow);
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
@@ -347,6 +346,7 @@ public class Duel {
         if (userWhoPlaysNow.getGraveyard().size() == 0)
             return Responses.emptinessOfGraveyard;
         for (Card card : userWhoPlaysNow.getGraveyard()) {
+            if (card == null)continue;
             graveyardToShow.append(i).append(". ").append(card.getName()).append(":").append(card.getDescription());
             i++;
         }
@@ -552,7 +552,7 @@ public class Duel {
         if (monster.isFlipSummonEffect())
             FlipSummonEffects.run(monster, userWhoPlaysNow, this, getRival());
         if (monster.isFlipSetEffect()) {
-            SetFlip.run(monster, getRival(), this);
+            SetFlip.run(monster, userWhoPlaysNow, this);
         }
         getRival().getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
     }
@@ -590,6 +590,10 @@ public class Duel {
     private void resetCards() {
         Card[] cards = userWhoPlaysNow.getBoard().getMonsters();
         Arrays.stream(cards).filter(Objects::nonNull).forEach(card -> ((Monster) card).setHasAttackedOnceInTurn(false));
+    }
+
+    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
+        this.userWhoPlaysNow = userWhoPlaysNow;
     }
 }
 

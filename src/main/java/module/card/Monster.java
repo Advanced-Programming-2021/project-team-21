@@ -424,6 +424,9 @@ public class Monster extends Card {
         this.discardToSpecialSummon = discardToSpecialSummon;
     }
 
+    public void setCanHaveDifferentTribute(boolean canHaveDifferentTribute) {
+        this.canHaveDifferentTribute = canHaveDifferentTribute;
+    }
 
     public Map<String, Consumer<Boolean>> getBooleanMap() {
         Map<String, Consumer<Boolean>> booleanMap = new HashMap<>();
@@ -436,6 +439,7 @@ public class Monster extends Card {
         booleanMap.put("isFlipSummonEffect", this::setFlipSummonEffect);
         booleanMap.put("isFlipSetEffect", this::setFlipSetEffect);
         booleanMap.put("isSelectEffect" , this::setSelectEffect);
+        booleanMap.put("isCanHaveDifferentTribute" , this::setCanHaveDifferentTribute);
         return booleanMap;
     }
 

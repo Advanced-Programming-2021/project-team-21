@@ -53,6 +53,10 @@ public class ChangeTurnEffects {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
             }
+            if (monster.getSummonACardFromEveryWhere().isNeedsToBeReset()){
+                monster.getSummonACardFromEveryWhere().resetEffect();
+                monster.getSummonACardFromEveryWhere().setNeedsToBeReset(false);
+            }
             if (monster.getCanChangeTheAttackersATK().isNeedsToBeReset()) {
                 monster.getCanChangeTheAttackersATK().resetEffect();
                 monster.getCanChangeTheAttackersATK().setNeedsToBeReset(false);
