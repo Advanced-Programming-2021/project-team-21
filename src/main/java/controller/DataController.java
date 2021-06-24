@@ -204,11 +204,7 @@ public class DataController {
         if (information.isEmpty())
             return;
         String[] pairs = information.split("\\*");
-        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings, Regex.parseTwoNumberOneString};
-        Set<String> keys = card.getEffectsMap().keySet();
-        for (String key : keys) {
-            card.getEffectsMap().get(key).accept(new Effect(0, 0));
-        }
+        String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings};
         Arrays.stream(pairs).forEach(pair -> Arrays.stream(parserRegexes).forEach(parserRegex -> {
             Matcher matcher = Regex.getMatcher(pair, parserRegex);
             if (matcher.find()) {

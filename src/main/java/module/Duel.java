@@ -2,13 +2,11 @@ package module;
 
 
 import controller.Effects.*;
-import controller.ProgramController;
 import controller.menu.DuelMenu;
 import module.card.*;
 import module.card.BattlePhaseEnd;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
-import view.PrintResponses;
 import view.Responses;
 
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class Duel {
     private boolean hasSummonedOrSetOnce;
     private boolean hasChangedPositionOnce;
     private int numberOfTurnsPlayedUpToNow;
-
+    private int summonedOrSetPlace = -1;
 
     public Duel(User first_user, User second_user) {
         FIRST_USER = first_user;
@@ -49,9 +47,13 @@ public class Duel {
         user.setCanSummonSpell(true);
         user.setCanSummonMonster(true);
         user.setCanAttack(true);
+        for (int i = 0; i < 5; i++) {
+            drawACard(user);
+        }
     }
 
     public void changeTurn() {
+        summonedOrSetPlace = -1;
         resetCards();
         ChangeTurnEffects.run(userWhoPlaysNow, getRival(), this);
         if (userWhoPlaysNow.equals(FIRST_USER))
@@ -70,8 +72,8 @@ public class Duel {
             return FIRST_USER;
     }
 
-    public Card drawACard() {
-        Hand currentHand = userWhoPlaysNow.getHand();
+    public Card drawACard(User user) {
+        Hand currentHand = user.getHand();
         currentHand.shuffleDeck();
         return currentHand.drawACard();
     }
@@ -85,9 +87,9 @@ public class Duel {
             isSelectedCardForOpponent = false;
             if (fromWhere.equals("monster")) {
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
+                if (selectedCard == null)return;
                 if (((Monster) selectedCard).isSelectEffect()) {
-                    PrintResponses.printAskForEffectMonster();
-                    if (ProgramController.scanner.nextLine().equals("Yes")) {
+                    if (DuelMenu.askForEffectMonster().equals("Yes")) {
                         SelectEffect.run((Monster) selectedCard, getRival(), getUserWhoPlaysNow(), this, cardAddress);
                     }
                 }
@@ -110,7 +112,7 @@ public class Duel {
     }
 
     public void summonMonster() {
-
+        addCardToGraveyard(selectedCard , 10 , userWhoPlaysNow);
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
@@ -126,11 +128,11 @@ public class Duel {
         }
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         hasSummonedOrSetOnce = true;
+        summonedOrSetPlace = placeInBoard;
         userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
         deselectACard();
     }
 
-    //TODO implement the changes in flip summon
     public void flipSummon() {
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
@@ -141,12 +143,9 @@ public class Duel {
             FlipSummonEffects.run((Monster) selectedCard, getRival(), this, userWhoPlaysNow);
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
+        summonedOrSetPlace = placeInBoard;
+        currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
     }
-
-    public void specialSummon() {
-        //TODO implement the body for this function.
-    }
-
     public void tribute(int[] placesOnBoard) {
         for (int placeOnBoard : placesOnBoard) {
             Card cardToTribute = userWhoPlaysNow.getBoard().getCard(placeOnBoard, 'M');
@@ -157,6 +156,7 @@ public class Duel {
     public void setMonster() {
         int placeOnBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
         Board currentBoard = userWhoPlaysNow.getBoard();
+        summonedOrSetPlace = placeOnBoard;
         currentBoard.addMonsterFaceDown(placeOnBoard, selectedCard);
         hasSummonedOrSetOnce = true;
         userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
@@ -186,11 +186,8 @@ public class Duel {
     }
 
 
-    public void checkSpellEffects() {
-    }
 
-
-    public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
+        public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
         if (initialRounds == 1) {
             return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
         } else {
@@ -227,25 +224,21 @@ public class Duel {
     public Pair<String, String> handleEndingTheWholeMatch() {
         User rival = getRival();
         if (rival.getLifePoints() < userWhoPlaysNow.getLifePoints()) {
-            userWhoPlaysNow.setMaxLifePoint(userWhoPlaysNow.getLifePoints());
-            userWhoPlaysNow.setCoins(userWhoPlaysNow.getCoins() + 3000 + 3 * userWhoPlaysNow.getMaxLifePoint());
-            userWhoPlaysNow.setScore(userWhoPlaysNow.getLifePoints() + 3000);
-            rival.setCoins(300 + rival.getCoins());
-            return new Pair<>(userWhoPlaysNow.getUsername(), 3000 + "-" + 0);
+            return getStringStringPair(userWhoPlaysNow, rival, userWhoPlaysNow, userWhoPlaysNow.getMaxLifePoint(), userWhoPlaysNow.getLifePoints(), 300);
         } else {
-            rival.setMaxLifePoint(rival.getLifePoints());
-            rival.setCoins(rival.getCoins() + 3000 + 3 * rival.getLifePoints());
-            rival.setScore(rival.getScore() + 3000);
-            userWhoPlaysNow.setCoins(100 + userWhoPlaysNow.getCoins());
-            return new Pair<>(rival.getUsername(), 3000 + "-" + 0);
+            return getStringStringPair(rival, userWhoPlaysNow, rival, rival.getLifePoints(), rival.getScore(), 100);
         }
     }
 
     public Pair<String, String> handleEndingThreeRoundGames(User winner, User loser) {
+        return getStringStringPair(winner, loser, userWhoPlaysNow, winner.getMaxLifePoint(), winner.getLifePoints(), 300);
+    }
+
+    private Pair<String, String> getStringStringPair(User winner, User loser, User userWhoPlaysNow, int maxLifePoint, int lifePoints, int i) {
         winner.setMaxLifePoint(userWhoPlaysNow.getLifePoints());
-        winner.setCoins(winner.getCoins() + 3000 + 3 * winner.getMaxLifePoint());
-        winner.setScore(winner.getLifePoints() + 3000);
-        loser.setCoins(300 + loser.getCoins());
+        winner.setCoins(winner.getCoins() + 3000 + 3 * maxLifePoint);
+        winner.setScore(lifePoints + 3000);
+        loser.setCoins(i + loser.getCoins());
         return new Pair<>(winner.getUsername(), 3000 + "-" + 0);
     }
 
@@ -370,12 +363,6 @@ public class Duel {
             return selectedCard.toString();
         }
     }
-
-
-    public Card getCardFromGraveyard(int identifier) {
-        return userWhoPlaysNow.getGraveyard().get(identifier);
-    }
-
     public void addCardToGraveyard(Card card, int placeInBoard, User user) {
         if (placeInBoard == 10) {
             Card cardToAdd = Card.getCardByName(card.getName());
@@ -458,7 +445,7 @@ public class Duel {
 
     //TODO implement this
     public boolean isSelectedCardSummonedInThisTurn() {
-        return false;
+        return placeOfSelectedCard == summonedOrSetPlace;
     }
 
     private Pair<Integer, Integer> handleDefencePositionAttack(Monster monsterToAttack, int placeInBoard, User
@@ -559,8 +546,8 @@ public class Duel {
             return;
         if (monster.isSummonEffect())
             SummonEffects.run(monster, userWhoPlaysNow, getRival(), this);
-        if (((Monster) selectedCard).isFlipSummonEffect())
-            FlipSummonEffects.run((Monster) selectedCard, userWhoPlaysNow, this, getRival());
+        if (monster.isFlipSummonEffect())
+            FlipSummonEffects.run(monster, userWhoPlaysNow, this, getRival());
         if (monster.isFlipSetEffect()) {
             SetFlip.run(monster, getRival(), this);
         }

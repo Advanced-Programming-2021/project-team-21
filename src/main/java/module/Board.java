@@ -12,7 +12,6 @@ public class Board {
     private final String[] showMonsters;
     private final Card[] spellsAndTraps;
     private final String[] showSpellsAndTraps;
-    private final ArrayList<Card> graveyard;
     private final ArrayList<Integer> order;
     private User boardOwner;
     private Card fieldZone;
@@ -24,7 +23,6 @@ public class Board {
         this.spellsAndTraps = new Card[5];
         this.showSpellsAndTraps = new String[]{"E", "E", "E", "E", "E"};
         this.showFieldZone = "E";
-        this.graveyard = new ArrayList<>();
         this.order = new ArrayList<>();
         order.add(5);
         order.add(3);
@@ -49,9 +47,6 @@ public class Board {
         return fieldZone;
     }
 
-    public ArrayList<Card> getGraveyard() {
-        return graveyard;
-    }
 
     public String getShowFieldZone() {
         return showFieldZone;
@@ -69,7 +64,7 @@ public class Board {
         monsters[placeInBoard - 1] = selectedMonsterCard;
         showMonsters[placeInBoard - 1] = "OO";
         ((Monster) selectedMonsterCard).setIsATKPosition(true);
-        selectedMonsterCard.setFaceUp(false);
+        selectedMonsterCard.setFaceUp(true);
     }
 
     public void addMonsterFaceDown(int placeInBoard, Card selectedMonsterCard) {
@@ -122,12 +117,6 @@ public class Board {
     public void removeFieldZone() {
         fieldZone = null;
         showFieldZone = "E";
-    }
-
-    public void disableSpellAndTrap(int placeInBoard) {
-        graveyard.add(spellsAndTraps[placeInBoard - 1]);
-        spellsAndTraps[placeInBoard - 1] = null;
-        showSpellsAndTraps[placeInBoard - 1] = "E";
     }
 
     // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
@@ -187,10 +176,9 @@ public class Board {
     }
 
     public boolean isCardOnMonsterZone(Card card) {
-        for (Card monster : monsters)
-            if (monster == card)
-                return true;
-        return false;
+        for (Card monster : monsters) {
+            if (monster != null && monster.getName().equals(card.getName()))return true;
+        }    return false;
     }
 
     public String showMonstersToString() {
@@ -269,12 +257,12 @@ public class Board {
     }
 
     public void removeFromGY(String cardName) {
-        this.graveyard.removeIf(card -> card.getName().equals(cardName));
+        boardOwner.getGraveyard().removeIf(card -> card.getName().equals(cardName));
     }
 
     public ArrayList<Monster> getCardsFromGYByLevel(int minimum) {
         ArrayList<Monster> cards = new ArrayList<>();
-        for (Card card : this.graveyard) {
+        for (Card card : boardOwner.getGraveyard()) {
             if (!(card instanceof Monster)) continue;
             Monster monster = (Monster) card;
             if (monster.getLevel() > minimum) cards.add(monster);
@@ -288,5 +276,11 @@ public class Board {
             if (monster != null) number++;
         }
         return number;
+    }
+    public Monster getNotNullMonster(){
+        for (Card monster : monsters) {
+            if (monster != null)return (Monster) monster;
+        }
+        return null;
     }
 }

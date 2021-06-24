@@ -88,17 +88,16 @@ public class DuelMenu implements Menuable {
                 }
             }
         } catch (Exception ignored) {
-            System.out.println(ignored.getMessage());
-            System.out.println(Arrays.toString(ignored.getStackTrace()));
+
         }
         if (!isValidCommand)
             PrintResponses.printInvalidFormat();
+
     }
 
     public static boolean checkSpecialSummon(String command, Duel currentDuel) {
         Matcher matcher;
         if (specialSummonsedCards != null) {
-            PrintResponses.printSpecialSummonCards(specialSummonsedCards);
             if (!(matcher = Regex.getMatcher(command, Regex.specialSummon)).matches()) {
                 PrintResponses.printEmergencySpecialSummon();
                 return true;
@@ -108,13 +107,13 @@ public class DuelMenu implements Menuable {
                 return true;
             }
             int number = Integer.parseInt(matcher.group("cardNumber"));
-            if (number < 0 || number > specialSummonsedCards.size()) {
+            if (number < 0 || number >= specialSummonsedCards.size()) {
                 PrintResponses.printWrongChoice();
                 return true;
             }
             Monster monster = specialSummonsedCards.get(number);
             if (isForScan) {
-                if (SelectEffect.scannerHolder.isATK())
+                if (SelectEffect.scannerHolder.isATKPosition())
                     currentDuel.getUserWhoPlaysNow().getBoard().addMonsterFaceUp(SelectEffect.scannerPlace, monster);
                 else currentDuel.getUserWhoPlaysNow().getBoard().addMonsterFaceDown(SelectEffect.scannerPlace, monster);
                 isForScan = false;
@@ -150,7 +149,7 @@ public class DuelMenu implements Menuable {
     public static void removeTheSpecialSummoned(Monster monster, Duel currentDuel) {
         boolean found = false;
         if (isGetFromGY) {
-            for (Card card : currentDuel.getUserWhoPlaysNow().getBoard().getGraveyard()) {
+            for (Card card : currentDuel.getUserWhoPlaysNow().getGraveyard()) {
                 if (card.getName().equals(monster.getName())) {
                     currentDuel.getUserWhoPlaysNow().getBoard().removeFromGY(card.getName());
                     found = true;
@@ -310,14 +309,14 @@ public class DuelMenu implements Menuable {
                 phase = Phases.BATTLE_PHASE;
             } else {
                 handleTransitionFromEndPhaseToDrawPhase();
-                handleDrawingACard(currentDuel.drawACard());
+                handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
                 return;
             }
         } else if (phase.equals(Phases.BATTLE_PHASE)) {
             phase = Phases.MAIN_PHASE2;
         } else if (phase.equals(Phases.MAIN_PHASE2)) {
             handleTransitionFromEndPhaseToDrawPhase();
-            handleDrawingACard(currentDuel.drawACard());
+            handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
             return;
         }
         PrintResponses.printPhaseName(phase);
@@ -405,8 +404,6 @@ public class DuelMenu implements Menuable {
             currentDuel.summonMonster();
             PrintResponses.printSuccessfulSummon();
         }
-
-
     }
 
     private void set(Matcher matcher) {
@@ -428,6 +425,7 @@ public class DuelMenu implements Menuable {
         if (currentDuel.isNoCardSelected()) {
             PrintResponses.printNoCardSelected();
         } else if (isSelectedCardNotInMonsterZone()) {
+
             PrintResponses.printUnableToChangePositionOfCard();
         } else if (isNotInMainPhases()) {
             PrintResponses.printSetCardInWrongPhase();
@@ -452,8 +450,9 @@ public class DuelMenu implements Menuable {
             PrintResponses.printUnableToChangePositionOfCard();
         } else if (isNotInMainPhases()) {
             PrintResponses.printFlipSummonInWrongPhase();
-        } else if (currentDuel.isSelectedCardSummonedInThisTurn() || !(!currentDuel.getSelectedCard().isFaceUp()
-                && currentDuel.getSelectedCard().isFaceUp())) {
+        } else if (currentDuel.isSelectedCardSummonedInThisTurn() || (currentDuel.getSelectedCard().isFaceUp()
+                && currentDuel.getSelectedCard().isATK())) {
+            System.out.println(currentDuel.getSelectedCard().isFaceUp());
             PrintResponses.printUnableToFlipSummonCard();
         } else {
             currentDuel.flipSummon();
@@ -657,7 +656,7 @@ public class DuelMenu implements Menuable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        handleDrawingACard(currentDuel.drawACard());
+        handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
     }
 
     private void handleTransitionFromEndPhaseToDrawPhase() {
@@ -786,7 +785,10 @@ public class DuelMenu implements Menuable {
             PrintResponses.print(currentDuel);
         }
     }
-
+    public static String askForEffectMonster(){
+        PrintResponses.printAskForEffectMonster();
+        return ProgramController.scanner.nextLine();
+    }
 
 }
 

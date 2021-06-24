@@ -459,6 +459,7 @@ public class PrintResponses {
     }
 
     public static void printSpecialSummonCards(ArrayList<Monster> monsters) {
+        System.out.println("these are the cards to choose from");
         for (int i = 0; i < monsters.size(); i++) {
             System.out.println(i + ": " + monsters.get(i));
         }
@@ -573,5 +574,8 @@ public class PrintResponses {
                 System.out.println((i + 1) + ": " + hand.getCardsInHand()[i].getName());
             }
         }
+    }
+    public static void printNoSpecialEffect(){
+        System.out.println(Responses.noSpecialEffect);
     }
 }

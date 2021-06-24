@@ -74,7 +74,7 @@ public class Hand {
     }
 
     public void discardACard(int place) {
-        handOwner.getBoard().getGraveyard().add(cardsInHand[place - 1]);
+        handOwner.getGraveyard().add(cardsInHand[place - 1]);
         cardsInHand[place - 1] = null;
     }
 
@@ -100,7 +100,7 @@ public class Hand {
     public ArrayList<Monster> getCardsWithType(int identifier, String type) {
         ArrayList<Monster> found = new ArrayList<>();
         ArrayList<Card> lookingCards = new ArrayList<>();
-        if (identifier >= 4) lookingCards.addAll(handOwner.getBoard().getGraveyard());
+        if (identifier >= 4) lookingCards.addAll(handOwner.getGraveyard());
         if (identifier % 4 >= 2) lookingCards.addAll(Arrays.asList(this.cardsInHand));
         else if (identifier % 2 == 1) lookingCards.addAll(this.deckToDraw.getMainDeckCards());
         for (Card card : lookingCards) {

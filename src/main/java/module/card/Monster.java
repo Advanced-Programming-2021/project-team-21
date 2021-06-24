@@ -12,6 +12,7 @@ import module.card.enums.MonsterTypes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class Monster extends Card {
@@ -64,7 +65,7 @@ public class Monster extends Card {
     //man eater bug +
     /* done */private Effect canDestroyMonster;        //(2 , 0)       in flipSummonEffect
     //Scanner +
-    private Effect canScan;         //(1 , 2)           in mainPhaseChosen
+    private Effect canScan;         //(1 , 2)           in selectEffect
     //marshmallon +
     /* done*/private Effect notDestroyable;          //( 1 , 1)      in battlePhaseEnd
     /* done */private Effect canDecreaseLP;        //(-999 , 0)       in flipSetEffect
@@ -104,6 +105,10 @@ public class Monster extends Card {
         setDefHolder((int) parameters[6]);
         setDescription((String) parameters[7]);
         setPrice((int) parameters[8]);
+        Set<String> keys = this.getEffectsMap().keySet();
+        for (String key : keys) {
+            this.getEffectsMap().get(key).accept(new Effect(0, 0));
+        }
         DataController.monsterEffectParser((String) parameters[9], this);
         DataController.cardPairsParser((String) parameters[10], this);
         setHasAttackedOnceInTurn(false);
@@ -126,7 +131,7 @@ public class Monster extends Card {
         return atkHolder;
     }
 
-    public Monster copy(Object object) {
+    public static Monster copy(Object object) {
         if (object == null) return null;
         if (!(object instanceof Monster)) return null;
         Cloner cloner = new Cloner();
@@ -439,6 +444,7 @@ public class Monster extends Card {
         booleanMap.put("isBattlePhaseEffectEnd", this::setBattlePhaseEffectEnd);
         booleanMap.put("isFlipSummonEffect", this::setFlipSummonEffect);
         booleanMap.put("isFlipSetEffect", this::setFlipSetEffect);
+        booleanMap.put("isSelectEffect" , this::setSelectEffect);
         return booleanMap;
     }
 
@@ -473,6 +479,9 @@ public class Monster extends Card {
         return canGetFromGYByLevelToHand;
     }
 
+    public void setSelectEffect(boolean selectEffect) {
+        isSelectEffect = selectEffect;
+    }
 
     public boolean isCanAttack() {
         return canAttack;

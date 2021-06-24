@@ -114,6 +114,7 @@ public class DeckMenu implements Menuable {
 
     private void addCard(Matcher matcher) {
         String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
+        cardName = cardName.replaceAll("\\s+-" , "");
         Card card = Card.getCardByName(cardName);
         Deck deck = user.getDeckByName(deckName);
         if (card == null) {
@@ -145,7 +146,7 @@ public class DeckMenu implements Menuable {
     }
 
     private boolean invalidAdd(String cardName, String deckName, Deck deck) {
-        if (deck.getCardNumber(cardName) >= 3) {
+        if (deck.getCardNumber(cardName) >= 50) {
             PrintResponses.printInvalidAdd(cardName, deckName);
             return true;
         }

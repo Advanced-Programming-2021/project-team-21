@@ -44,7 +44,7 @@ public class TrapActivation {
         }
         if (trap.getCanSummonFromGY().hasEffect()) {
             ArrayList<Monster> cards = new ArrayList<>();
-            for (Card card1 : userNow.getBoard().getGraveyard()) {
+            for (Card card1 : userNow.getGraveyard()) {
                 if (card1 instanceof Monster) cards.add((Monster) card1);
             }
             DuelMenu.specialSummonsedCards = cards;

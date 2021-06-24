@@ -95,7 +95,7 @@ public class Responses {
     public static String disabledMonsterSummon = "You can not summon due to an Effect";
     public static String disabledTrapSummon = "You can not activate due to an Effect";
     public static String disabledSpellSummon = "you can not activate due to an Effect";
-    public static String activateEffectMonster = "Do you want to activate the Effect?";
+    public static String activateEffectMonster = "Do you want to activate the Effect?[Yes/No]";
     public static String changeOfHeart = "choose the monster you want to control";
     public static String wrongChoiceControl = "you did not choose the monster correctly";
     public static String canNotControl = "you can Not control any thing";
@@ -109,4 +109,5 @@ public class Responses {
     public static String askToGetCardName = "enter a card name";
     public static String wrongCardName = "there is no card with this name";
     public static String noSelect = "There is no selected card";
+    public static String noSpecialEffect = "You can not use this Effect now";
 }

@@ -112,8 +112,8 @@ public class SpellActivation {
         while (effect.hasEffect()) {
             ArrayList<Monster> monstersWithType = getMonsters(userNow, effect);
             for (Monster monster : monstersWithType) {
-                effect.setAttack(effect.getAttack() * userNow.getBoard().getGraveyard().size());
-                effect.setDefense(effect.getDefense() * userNow.getBoard().getGraveyard().size());
+                effect.setAttack(effect.getAttack() * userNow.getGraveyard().size());
+                effect.setDefense(effect.getDefense() * userNow.getGraveyard().size());
                 setChanges(fieldSpellAdd, effect, monster);
             }
             effect = spell.getFieldATKIncreaseGY2();
@@ -289,10 +289,10 @@ public class SpellActivation {
 
     private static void handleSummonFromGY(Spell spell, User userNow, User rival, Duel duel, int place) {
         ArrayList<Monster> cards = new ArrayList<>();
-        for (Card card : userNow.getBoard().getGraveyard()) {
+        for (Card card : userNow.getGraveyard()) {
             if (card instanceof Monster) cards.add((Monster) card);
         }
-        for (Card card : rival.getBoard().getGraveyard()) {
+        for (Card card : rival.getGraveyard()) {
             if (card instanceof Monster) cards.add((Monster) card);
         }
         DuelMenu.specialSummonsedCards = cards;

@@ -13,6 +13,7 @@ public class BattlePhaseStart {
     // texchanger
     // suijin
     public static boolean run(Monster attack, Monster defense, User secondUser, Duel duel) {
+        System.out.println(attack.getName() + " " + defense.getName());
         Board board = secondUser.getBoard();
         // for summoning with specific type
         if (defense.getSummonACardFromEveryWhere().hasEffect()) {
@@ -31,7 +32,8 @@ public class BattlePhaseStart {
             }
             return board.getMonsterNumber() > defense.getUndefeatable().getContinuousNumber();
         } else if (defense.getCanChangeTheAttackersATK().hasEffect()) {
-            attack.setAtk(attack.getAtk() - defense.getCanChangeTheAttackersATK().getEffectNumber());
+            System.out.println("check is battle phase start");
+            attack.setAtk(attack.getAtk() + defense.getCanChangeTheAttackersATK().getEffectNumber());
         }
         return false;
     }

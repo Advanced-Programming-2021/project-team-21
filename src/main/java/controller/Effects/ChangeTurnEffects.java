@@ -61,11 +61,13 @@ public class ChangeTurnEffects {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
             }
-            if (monster.getCanScan().isNeedsToBeReset()) {
-                if (SelectEffect.scannerHolder.isATK())
+            if ( SelectEffect.scannerHolder != null) {
+                if (SelectEffect.scannerHolder.isATKPosition())
                     duel.getUserWhoPlaysNow().getBoard().addMonsterFaceUp(SelectEffect.scannerPlace, SelectEffect.scannerHolder);
                 else
                     duel.getUserWhoPlaysNow().getBoard().addMonsterFaceDown(SelectEffect.scannerPlace, SelectEffect.scannerHolder);
+                SelectEffect.scannerHolder = null;
+                SelectEffect.scannerPlace = -1;
             }
         }
     }
