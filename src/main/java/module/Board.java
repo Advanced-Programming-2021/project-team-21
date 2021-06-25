@@ -219,23 +219,14 @@ public class Board {
         return reverseString.toString();
     }
 
-    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType) {
-        for (int i = 0; i < order.size(); i++)
-            if (monsters[i].getCardType().getName().equals(cardType.getName()) || spellsAndTraps[i].getCardType().getName().equals(cardType.getName()))
-                return true;
-        return false;
-    }
 
     public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell) {
         int level = 0;
-        for (Card card : monsters)
+        for (Card card : monsters) {
+            if (card == null)continue;
             if (((Monster) card).getLevel() < level)
-                level = ((Monster) card).getLevel();
-        int maximumLevelInHand = 0;
-        for (Card card : boardOwner.getHand().getCardsInHand())
-            if (card != null)
-                maximumLevelInHand += ((Monster) card).getLevel();
-        return maximumLevelInHand >= level;
+                level += ((Monster) card).getLevel();
+        } return level >= levelOfRitualEffectSpell;
     }
 
     public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
@@ -262,15 +253,7 @@ public class Board {
         boardOwner.getGraveyard().removeIf(card -> card.getName().equals(cardName));
     }
 
-    public ArrayList<Monster> getCardsFromGYByLevel(int minimum) {
-        ArrayList<Monster> cards = new ArrayList<>();
-        for (Card card : boardOwner.getGraveyard()) {
-            if (!(card instanceof Monster)) continue;
-            Monster monster = (Monster) card;
-            if (monster.getLevel() > minimum) cards.add(monster);
-        }
-        return cards;
-    }
+
 
     public int getMonsterNumber() {
         int number = 0;
@@ -279,16 +262,13 @@ public class Board {
         }
         return number;
     }
-
-    public int getSpellNumber(){
-        return (int) Arrays.stream(spellsAndTraps).filter(Objects::nonNull).count();
-    }
-
-
     public Monster getNotNullMonster(){
         for (Card monster : monsters) {
             if (monster != null)return (Monster) monster;
         }
         return null;
+    }
+    public int getSpellNumber(){
+        return (int) Arrays.stream(spellsAndTraps).filter(Objects::nonNull).count();
     }
 }

@@ -30,14 +30,19 @@ public class ChangeTurnEffects {
                     rival.getBoard().addMonsterFaceUp(SpellActivation.oldPlace, monster);
                 }
                 duel.addCardToGraveyard(user.getBoard().getCard(SpellActivation.changeSpellPlace, 'S'), SpellActivation.changeSpellPlace, rival);
+                if (user.isHasSummonedAlteringATK() ) {
+                    Monster monster1 = (Monster) user.getBoard().getCard(user.getAlteringATKPlace(), 'm');
+                    monster1.setAtk(monster1.getAtk() - 300 * monster1.getLevel());
+                }
             }
             if (spell.getCanChangeFaceOFOpponent().hasEffect() && spell.isFaceUp()) {
                 spell.getCanChangeFaceOFOpponent().setIsEffect(spell.getCanChangeFaceOFOpponent().getIsEffect() - 1);
             }
             if (spell.getCanMakeMonstersUndefeatable().hasEffect() && spell.isFaceUp()) {
-                spell.getCanChangeFaceOFOpponent().setIsEffect(spell.getCanMakeMonstersUndefeatable().getIsEffect() - 1);
-                if (spell.getCanMakeMonstersUndefeatable().getIsEffect() == 0) {
-                    spell.getCanMakeMonstersUndefeatable().resetEffect();
+                spell.getCanChangeFaceOFOpponent().setIsContinuous(spell.getCanChangeFaceOFOpponent().getContinuousNumber() - 1);
+                spell.getCanMakeMonstersUndefeatable().setIsContinuous(spell.getCanMakeMonstersUndefeatable().getContinuousNumber() - 1);
+                if (spell.getCanMakeMonstersUndefeatable().getContinuousNumber() == 0) {
+                    duel.addCardToGraveyard(spell , user.getBoard().getAddressByCard(spell) , user);
                     rival.setCanAttack(true);
                 }
             }
@@ -64,6 +69,11 @@ public class ChangeTurnEffects {
             if (monster.getUndefeatable().isNeedsToBeReset()) {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
+            }
+            if ( monster.getCanGetFromGYByLevelToHand().isNeedsToBeReset()){
+                monster.getCanGetFromGYByLevelToHand().resetEffect();
+                monster.getCanGetFromGYByLevelToHand().setNeedsToBeReset(false);
+                monster.setSelectEffect(true);
             }
             if ( SelectEffect.scannerHolder != null) {
                 if (SelectEffect.scannerHolder.isATK())

@@ -115,7 +115,7 @@ public class Duel {
     }
 
     public void summonMonster() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
+        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow,getRival(), this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
@@ -124,17 +124,18 @@ public class Duel {
         ((Monster) selectedCard).setAtk(userWhoPlaysNow.getIncreaseATK() + ((Monster) selectedCard).getAtk());
         ((Monster) selectedCard).setDef(userWhoPlaysNow.getIncreaseDEF() + ((Monster) selectedCard).getDef());
         Board currentBoard = userWhoPlaysNow.getBoard();
-        if (userWhoPlaysNow.isHasSummonedAlteringATK()) {
-            Monster monster = (Monster) userWhoPlaysNow.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'm');
-            monster.setAtk(monster.getAtk() + 300 * ((Monster) selectedCard).getLevel());
-        }
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         summonedOrSetPlace = placeInBoard;
+        if (userWhoPlaysNow.isHasSummonedAlteringATK()) {
+            System.out.println(userWhoPlaysNow.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'M'));
+            Monster monster = (Monster) userWhoPlaysNow.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'M');
+            monster.setAtk(monster.getAtk() + 300 * ((Monster) selectedCard).getLevel());
+        }
         handleSuccessfulSummonOrSet();
     }
 
     public void flipSummon() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, this,
+        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow,getRival(), this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
@@ -262,7 +263,7 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-                getRival(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
+                getRival(),getUserWhoPlaysNow(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
                 rival, new Chain(attackingMonster, null, ""), WhereToChain.ATTACK)) {
             return new Pair<>(0, 0);
         }
@@ -307,7 +308,7 @@ public class Duel {
         Spell spellToActivate = (Spell) selectedCard;
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOfSelectedCard);
         boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-                getRival(), this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
+                getRival(),userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
                 userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
                 WhereToChain.EFFECT_ACTIVATE);
         if (isCancelled) {
@@ -521,9 +522,10 @@ public class Duel {
 
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             if (userWhoPlaysNow.getBoard().selectOwnMonster(placeInBoard) != null) {
+                int notDuplicate = 0;
                 if (attackingMonster.isDeathEffect())
                     if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
-                        return new Pair<>(0, 0);
+                        return new Pair<>(notDuplicate, 0);
                     }
                 if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
                     if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))

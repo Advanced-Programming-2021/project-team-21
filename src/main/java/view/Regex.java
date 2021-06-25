@@ -22,7 +22,7 @@ public class Regex {
     public static final String deckCreate = "deck create (?<deckName>\\S+)";
     public static final String deckDelete = "deck delete (?<deckName>\\S+)";
     public static final String ActiveDeck = "deck set-activate (?<deckName>\\S+)";
-    public static final String addCardMain = "deck add-card (?=.*--card (?<cardName>[a-z A-Z]+-?[a-z A-Z]*))(?=.*--deck (?<deckName>\\S+))";
+    public static final String addCardMain = "deck add-card (?=.*--card (?<cardName>[a-z A-Z,]+-?[a-z A-Z]*))(?=.*--deck (?<deckName>\\S+))";
     public static final String addCardSide = addCardMain + "(?=.*--(?<side>side))";
     public static final String removeCardMain = "deck rm-card (?=.*--card (?<cardName>[a-z A-Z]+))(?=.*--deck (?<deckName>\\S+))";
     public static final String removeCardSide = removeCardMain + "(?=.*--(?<side>side))";
@@ -50,7 +50,7 @@ public class Regex {
     public static final String showGraveyard = "^show graveyard$";
     public static final String showSelectedCard = "card show .*--selected";
     public static final String surrender = "^surrender$";
-    public static final String specialSummon = "Special Summon card (?<cardNumber>\\d+)";
+    public static final String specialSummon = "Special card (?<cardNumber>\\d+)";
     public static final String importCard = "import card (?<cardName>\\S+)";
     public static final String exportCard = "export card (?<cardName>\\S+)";
     //These are for extracting data for card effects.
@@ -73,6 +73,8 @@ public class Regex {
     //decks are not saved if you exit the program exactly after adding card
     // add a feature that you can activate traps in your turn too without chain
     // add tribute set
+    // add if there are not enough cards to tribute you can not summon
+    // add a feature to check for spells required
     public static Matcher getMatcher(String input, String regex) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);
