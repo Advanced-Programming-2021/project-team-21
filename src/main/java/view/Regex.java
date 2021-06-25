@@ -33,8 +33,11 @@ public class Regex {
     public static final String scoreBoard = "scoreboard show";
     public static final String createNewDuel = "duel\\s(?=.*--new)(?=.*--second-player\\s(?<player2Username>\\S+))(?=.*--rounds\\s(?<rounds>\\d+))";
     public static final String createNewDuelWithAI = "duel\\s(?=.*--new)(?=.*--ai)(?=.*--rounds\\s(?<rounds>\\d+))";
-    public static final String selectFromOwn = "^select\\s--(?<where>\\S+)\\s*(?<number>\\d+)$";
-    public static final String selectFromOpponent = "select\\s(?=.*--(?<where>\\S+)\\s(?<number>\\d+))(?=.*--opponent)";
+    public static final String selectFromOwn = "^select\\s--(?<where>(?!field)\\S+)\\s*(?<number>\\d+)$";
+    public static final String selectFromOwnField = "^select\\s--field$";
+    public static final String selectFromOpponent = "select\\s(?=.*--(?<where>(?!field)\\S+)\\s(?<number>\\d+))(?=.*--opponent)";
+    public static final String selectFromOpponentField = "^select\\s--field\\s--opponent$";
+    public static final String selectFromOpponentField2 = "^select\\s--opponent\\s--field$";
     public static final String deselectCard = "select -d";
     public static final String nextPhase = "^next phase$";
     public static final String summon = "^summon$";

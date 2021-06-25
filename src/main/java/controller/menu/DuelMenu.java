@@ -217,7 +217,10 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.createNewDuel, this::createNewDuel);
         commandMap.put(Regex.createNewDuelWithAI, this::createNewDuelWithAI);
         commandMap.put(Regex.selectFromOwn, this::selectCardFromOwn);
+        commandMap.put(Regex.selectFromOwnField, this::selectCardFromOwnField);
         commandMap.put(Regex.selectFromOpponent, this::selectCardFromOpponent);
+        commandMap.put(Regex.selectFromOpponentField, this::selectCardFromOpponentField);
+        commandMap.put(Regex.selectFromOpponentField2, this::selectCardFromOpponentField);
         commandMap.put(Regex.deselectCard, this::deselectCard);
         commandMap.put(Regex.nextPhase, this::goToNextPhase);
         commandMap.put(Regex.summon, this::summon);
@@ -237,6 +240,24 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.showACard, this::showCard);
         commandMap.put(Regex.addCardToHand, this::addCardToHand);
         return commandMap;
+    }
+
+    private void selectCardFromOpponentField(Matcher matcher) {
+        currentDuel.selectCard(1, "field", "opponent");
+        if (currentDuel.getSelectedCard() == null) {
+            PrintResponses.printNoCardInPosition();
+        } else {
+            PrintResponses.printSuccessfulCardSelection();
+        }
+    }
+
+    private void selectCardFromOwnField(Matcher matcher) {
+        currentDuel.selectCard(1, "field", "own");
+        if (currentDuel.getSelectedCard() == null) {
+            PrintResponses.printNoCardInPosition();
+        } else {
+            PrintResponses.printSuccessfulCardSelection();
+        }
     }
 
     private void showHand(Matcher matcher) {
@@ -287,7 +308,6 @@ public class DuelMenu implements Menuable {
         String whereToSelectFrom = matcher.group("where");
         int cardAddress = Integer.parseInt(matcher.group("number"));
         if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
-                || whereToSelectFrom.equals("field")
                 || whereToSelectFrom.equals("hand"))
                 || cardAddress > 6) {
             PrintResponses.printInvalidSelection();
@@ -306,9 +326,12 @@ public class DuelMenu implements Menuable {
 
     private void selectCardFromOpponent(Matcher matcher) {
         String whereToSelectFrom = matcher.group("where");
+        if (whereToSelectFrom.equals("field")) {
+            PrintResponses.printInvalidFormat();
+            return;
+        }
         int cardAddress = Integer.parseInt(matcher.group("number"));
-        if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
-                || whereToSelectFrom.equals("field"))) {
+        if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell"))) {
             PrintResponses.printInvalidSelection();
         } else {
             currentDuel.selectCard(cardAddress, whereToSelectFrom, "opponent");
