@@ -7,6 +7,7 @@ import module.card.*;
 import module.card.BattlePhaseEnd;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
+import view.PrintResponses;
 import view.Responses;
 
 import java.util.ArrayList;
@@ -327,7 +328,7 @@ public class Duel {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, monster, null);
-        } else {
+        } else if (userWhoPlaysNow.getHand().isCardInHand(selectedCard)){
             int addressToPut = userWhoPlaysNow.getBoard().getAddressToPutSpell();
             userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
             flipSetForSpells(addressToPut);
@@ -348,7 +349,8 @@ public class Duel {
             return Responses.emptinessOfGraveyard;
         for (Card card : userWhoPlaysNow.getGraveyard()) {
             if (card == null)continue;
-            graveyardToShow.append(i).append(". ").append(card.getName()).append(":").append(card.getDescription());
+            graveyardToShow.append(i).append(". ").append(card.getName()).append(":")
+                    .append(card.getDescription()).append("\n");
             i++;
         }
         return graveyardToShow.toString();

@@ -216,7 +216,7 @@ public class User {
         this.canSummonMonster = canSummonMonster;
     }
 
-    public boolean isCanSummonSpell() {
+    public boolean isCanSetSpell() {
         return canSummonSpell;
     }
 

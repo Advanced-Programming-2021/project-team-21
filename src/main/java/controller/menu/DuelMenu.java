@@ -546,11 +546,12 @@ public class DuelMenu implements Menuable {
             PrintResponses.printFullnessOfSpellCardZone();
         } else if (isSpellNotPreparedToBeActivated()) {
             PrintResponses.printUnfinishedPreparationOfSpell();
-        } else if (currentDuel.getUserWhoPlaysNow().isCanSummonSpell()) {
+        } else if (!currentDuel.getUserWhoPlaysNow().isCanSetSpell()) {
             PrintResponses.printDisabledSummonSpell();
         } else {
             currentDuel.activateEffects();
             PrintResponses.printSuccessfulSpellActivation();
+            PrintResponses.print(currentDuel);
         }
     }
 
@@ -601,6 +602,10 @@ public class DuelMenu implements Menuable {
         while (true) {
             if (i >= cardsInHandLength) break;
             Card card1 = cardsInHand[i];
+            if (card1 == null){
+                PrintResponses.print(Responses.cardNotFoundInHand);
+                return;
+            }
             if (card1.getName().equals(cardName)) {
                 currentDuel.setSelectedCard(card1);
                 currentDuel.setPlaceOfSelectedCard(i + 1);
@@ -678,10 +683,101 @@ public class DuelMenu implements Menuable {
         return currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0;
     }
 
-    //TODO implement this method
     private boolean isSpellNotPreparedToBeActivated() {
+        Spell spell = (Spell) currentDuel.getSelectedCard();
+        return isGYEffectNotPrepared(spell) || isFieldZoneCardDrawNotPrepared(spell)
+                || isCanAddFromDeckNotPrepared(spell)
+                || isCanDestroyOrControlOpponentMonsterNotPrepared(spell)
+                || isCanDestroyOpponentSpellAndTrapNotPrepared(spell)
+                || isCanDestroyMyMonsterNotPrepared(spell)
+                || isDiscardACardToActivateNotPrepared(spell)
+                || isEquipCardNormalsAndEquipBasedMyUpMonstersNotPrepared(spell);
+
+    }
+
+    private boolean isGYEffectNotPrepared(Spell spell) {
+        return spell.getCanSummonFromGY().hasEffect() &&
+                (currentDuel.getUserWhoPlaysNow().getGraveyard().size() == 0 &&
+                        currentDuel.getRival().getGraveyard().size() == 0);
+    }
+
+    private boolean isFieldZoneCardDrawNotPrepared(Spell spell) {
+        if (spell.getCanAddFieldSpellFromDeck().hasEffect()) {
+            boolean label = true;
+            for (Card card : currentDuel.getUserWhoPlaysNow().getHand().getDeckToDraw().getMainDeckCards()) {
+                if (card instanceof Spell && ((Spell) card).isFieldZone())
+                    label = false;
+            }
+            return label;
+        }
         return false;
     }
+
+    private boolean isCanAddFromDeckNotPrepared(Spell spell) {
+        return spell.getCanAddFromDeckToHand().hasEffect() && currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() > 4
+                && currentDuel.getUserWhoPlaysNow().getHand().getNumberOfRemainingCardsInDeck() < 2;
+    }
+
+    private boolean isCanDestroyOrControlOpponentMonsterNotPrepared(Spell spell) {
+        return (spell.getCanControlOpponentMonster().hasEffect() || spell.getCanControlOpponentMonster().hasEffect()
+                || spell.getEquipBasedMyUpMonsters().hasEffect())
+                && currentDuel.getRival().getBoard().getMonsterNumber() == 0;
+    }
+
+    private boolean isCanDestroyOpponentSpellAndTrapNotPrepared(Spell spell) {
+        return spell.getCanDestroyOpponentSpellAndTrap().hasEffect() && currentDuel.getUserWhoPlaysNow().getBoard().getSpellNumber() == 0;
+    }
+
+    private boolean isCanDestroyMyMonsterNotPrepared(Spell spell) {
+        return spell.getCanDestroyMyMonster().hasEffect() && currentDuel.getRival().getBoard().getMonsterNumber() == 0
+                && currentDuel.getUserWhoPlaysNow().getBoard().getMonsterNumber() == 0;
+    }
+
+    private boolean isDiscardACardToActivateNotPrepared(Spell spell) {
+        return spell.getDiscardACardToActivate().hasEffect() && currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() == 0
+                && currentDuel.getRival().getBoard().getSpellNumber() == 0;
+    }
+
+    private boolean isEquipCardNormalsAndEquipBasedMyUpMonstersNotPrepared(Spell spell) {
+        if (spell.getEquipCardNormal1().hasEffect() || spell.getEquipCardNormal2().hasEffect()
+                || spell.getEquipCardNormal3().hasEffect()
+                || spell.getEquipBasedOnPosition().hasEffect()) {
+            if (spell.getEquipCardNormal1().hasEffect()) {
+                String type = spell.getEquipCardNormal1().getType();
+                if (checkForMonsterType(type))
+                    return true;
+            }
+            if (spell.getEquipCardNormal2().hasEffect()) {
+                String type = spell.getEquipCardNormal2().getType();
+                if (checkForMonsterType(type))
+                    return true;
+            }
+            if (spell.getEquipCardNormal3().hasEffect()) {
+                String type = spell.getEquipCardNormal3().getType();
+                if (checkForMonsterType(type))
+                    return true;
+            }
+            if (spell.getEquipBasedOnPosition().hasEffect()){
+                if (spell.getEquipCardNormal3().hasEffect()) {
+                    String type = spell.getEquipCardNormal3().getType();
+                    return checkForMonsterType(type);
+                }
+            }
+
+        }
+        return false;
+    }
+
+    private boolean checkForMonsterType(String type) {
+        if (type.equals(""))
+            return currentDuel.getUserWhoPlaysNow().getBoard().getMonsterNumber() == 0;
+        for (Card monster : currentDuel.getUserWhoPlaysNow().getBoard().getMonsters()) {
+            if (monster != null && ((Monster) monster).getMonsterType().getName().equals(type))
+                return false;
+        }
+        return true;
+    }
+
 
     private void handleSuccessfulSummon() {
         currentDuel.summonMonster();

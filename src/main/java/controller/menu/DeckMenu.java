@@ -117,7 +117,7 @@ public class DeckMenu implements Menuable {
         cardName = cardName.replaceAll("\\s+-" , "");
         Card card = Card.getCardByName(cardName);
         Deck deck = user.getDeckByName(deckName);
-        if (card == null) {
+        if (!ProgramController.userInGame.getCards().contains(card)) {
             PrintResponses.printCardNotExist(cardName);
             return;
         }

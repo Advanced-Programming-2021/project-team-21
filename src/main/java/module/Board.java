@@ -6,6 +6,8 @@ import module.card.enums.CardType;
 import module.card.Monster;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Board {
     private final Card[] monsters;
@@ -278,6 +280,12 @@ public class Board {
         }
         return number;
     }
+
+    public int getSpellNumber(){
+        return (int) Arrays.stream(spellsAndTraps).filter(Objects::nonNull).count();
+    }
+
+
     public Monster getNotNullMonster(){
         for (Card monster : monsters) {
             if (monster != null)return (Monster) monster;
