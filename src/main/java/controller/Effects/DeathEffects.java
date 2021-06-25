@@ -16,6 +16,9 @@ public class DeathEffects {
     // supply squad
     public static boolean run(Monster attacked, Monster dead, User rival, Duel duel, int attackingPlace, User userNow) {
         CheckSpells(userNow);
+        if (dead.getDisableTrapSummon().hasEffect()) {
+            rival.setCanSummonTrap(true);
+        }
         if (dead.getCanIncreaseATK().hasEffect()) {
             ArrayList<Card> monsters = new ArrayList<>();
             Collections.addAll(monsters, rival.getBoard().getMonsters());

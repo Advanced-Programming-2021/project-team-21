@@ -21,7 +21,6 @@ public class User {
     private boolean canSummonMonster = true, canSummonSpell = true, canSummonTrap = true, canAttack = true;
     private int winsInAMatch;
     private int CanNotDrawRounds;
-
     private int increaseATK, increaseDEF;
     private boolean hasSummonedAlteringATK;
     private int alteringATKPlace = -1;

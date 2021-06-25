@@ -79,8 +79,6 @@ public class Monster extends Card {
     private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
     // mirage dragon +
     private Effect disableTrapSummon;      // (1 , 1)          in summonEffect and DeathEffect
-    // herald of creation +
-    private Effect canSummonFromGYByLevel;      //(8 , 0)           in mainPhaseChosen
     // exploder dragon +
     // herald of creation
     /* done */private Effect canGetFromGYByLevelToHand;      //(8 , 0)           in mainPhaseChosen
@@ -400,13 +398,7 @@ public class Monster extends Card {
         this.disableTrapSummon = disableTrapSummon;
     }
 
-    public Effect getCanSummonFromGYByLevel() {
-        return canSummonFromGYByLevel;
-    }
 
-    public void setCanSummonFromGYByLevel(Effect canSummonFromGYByLevel) {
-        this.canSummonFromGYByLevel = canSummonFromGYByLevel;
-    }
 
     public Effect getCanSetFromDeckByMaxLevel() {
         return canSetFromDeckByMaxLevel;
@@ -459,10 +451,10 @@ public class Monster extends Card {
         effectsMap.put("summonACardFromEveryWhere", this::setSummonACardFromEveryWhere);
         effectsMap.put("alteringAttack", this::setAlteringAttack);
         effectsMap.put("disableTrapSummon", this::setDisableTrapSummon);
-        effectsMap.put("canSummonFromGYByLevel", this::setCanSummonFromGYByLevel);
         effectsMap.put("canDestroyBothWithoutLosingLP", this::setCanDestroyBothWithoutLosingLP);
         effectsMap.put("canSetFromDeckByMaxLevel", this::setCanSetFromDeckByMaxLevel);
         effectsMap.put("discardToSpecialSummon", this::setDiscardToSpecialSummon);
+        effectsMap.put("canGetFromGYByLevelToHand", this::setCanGetFromGYByLevelToHand);
         return effectsMap;
     }
 
@@ -485,5 +477,9 @@ public class Monster extends Card {
 
     public void setCanAttack(boolean canAttack) {
         this.canAttack = canAttack;
+    }
+
+    public void setCanGetFromGYByLevelToHand(Effect canGetFromGYByLevelToHand) {
+        this.canGetFromGYByLevelToHand = canGetFromGYByLevelToHand;
     }
 }

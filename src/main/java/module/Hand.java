@@ -5,6 +5,7 @@ import controller.ProgramController;
 import controller.menu.DuelMenu;
 import module.card.Card;
 import module.card.Monster;
+import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ public class Hand {
     private final Card[] cardsInHand;
     private final Deck deckToDraw;
     private User handOwner;
+
     {
         cardsInHand = new Card[6];
     }
@@ -41,11 +43,11 @@ public class Hand {
         shift();
     }
 
-    private void shift(){
+    private void shift() {
         for (int i = 0; i < cardsInHand.length; i++) {
-            if (cardsInHand[i] == null){
-                if (i + 1 < cardsInHand.length){
-                    cardsInHand[i] = cardsInHand[i+1];
+            if (cardsInHand[i] == null) {
+                if (i + 1 < cardsInHand.length) {
+                    cardsInHand[i] = cardsInHand[i + 1];
                     cardsInHand[i + 1] = null;
                 }
             }
@@ -118,7 +120,7 @@ public class Hand {
         if (identifier % 4 >= 2) lookingCards.addAll(Arrays.asList(this.cardsInHand));
         else if (identifier % 2 == 1) lookingCards.addAll(this.deckToDraw.getMainDeckCards());
         for (Card card : lookingCards) {
-            if (card instanceof Monster && ((Monster)card).getMonsterType().getName().equals(type)) {
+            if (card instanceof Monster && ((Monster) card).getMonsterType().getName().equals(type)) {
                 Monster monster = (Monster) card;
                 found.add(monster);
             }
@@ -154,7 +156,7 @@ public class Hand {
     }
 
     public int getMinLevelOfRitualMonstersInHand() {
-        int level = 0;
+        int level = 20;
         for (Card card : cardsInHand) {
             if (card instanceof Monster && card.getCardType().getName().equals("Ritual") && ((Monster) card).getLevel() < level)
                 level = ((Monster) card).getLevel();
@@ -162,8 +164,19 @@ public class Hand {
         return level;
     }
 
-    public int getNumberOfCardsInHand(){
+    public int getNumberOfCardsInHand() {
         return (int) Arrays.stream(cardsInHand).filter(Objects::nonNull).count();
+    }
+
+    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType) {
+        for (Card card : cardsInHand) {
+            if (card instanceof Monster) {
+                Monster monster = (Monster) card;
+                if ( monster.getCardType().getName().equals(cardType.getName()))
+                    return true;
+            }
+        }
+        return false;
     }
 
     public Deck getDeckToDraw() {

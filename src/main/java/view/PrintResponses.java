@@ -579,4 +579,12 @@ public class PrintResponses {
     public static void printNoSpecialEffect(){
         System.out.println(Responses.noSpecialEffect);
     }
+
+    public static void printAskToRitualMonster() {
+        System.out.println(Responses.askToRitual);
+    }
+
+    public static void printEnterTributeOrRitual() {
+        System.out.println(Responses.enterTribute);
+    }
 }

@@ -112,6 +112,9 @@ public class Responses {
     public static String noSpecialEffect = "You can not use this Effect now";
     public static String addACardToHand = "CHEAT: Given card added to your hand!";
     public static String handIsFull = "CHEAT: Your hand is full. Could not add the card.";
+    public static String askToRitual = "select Your Ritual Monster And then enter the ones to be killed at last summon it";
+    public static String enterTribute = "enter the place of monster to be killed in order to summon and divide them by " +
+            "space then decide the format of the monster";
     public static String cardNotFoundInHand = "CHEAT: Card not found in hand.";
     public static String canNotAttackDueToEffect = "You can't attack due to an effect.";
 }
