@@ -105,7 +105,6 @@ public class DuelMenu implements Menuable {
                 currentDuel.flipSetForMonsters(place);
                 currentDuel.setSelectedCard(temp);
                 currentDuel.setPlaceOfSelectedCard(tempPlace);
-                System.out.println(currentDuel.getSelectedCard());
             } else {
                 currentDuel.setSelectedCard(monster);
                 if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
@@ -808,10 +807,10 @@ public class DuelMenu implements Menuable {
         if (type.equals(""))
             return currentDuel.getUserWhoPlaysNow().getBoard().getMonsterNumber() == 0;
         for (Card monster : currentDuel.getUserWhoPlaysNow().getBoard().getMonsters()) {
-            if (monster != null && ((Monster) monster).getMonsterType().getName().equals(type))
-                return false;
+            if (monster != null && ((Monster) monster).getMonsterType().getName().toLowerCase().equals(type))
+                return true;
         }
-        return true;
+        return false;
     }
 
 

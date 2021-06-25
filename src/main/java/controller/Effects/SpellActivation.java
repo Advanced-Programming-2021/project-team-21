@@ -92,7 +92,7 @@ public class SpellActivation {
     }
 
     private static void equipSpell(Monster equipped, Spell spell, boolean equipSpellAdd) {
-        Effect effect = spell.getEquipCardNormal2();
+        Effect effect = spell.getEquipCardNormal1();
         int type = 1;
         HashMap<Integer, Effect> checkNext = new HashMap<>();
         checkNext.put(1, spell.getEquipCardNormal1());

@@ -7,7 +7,6 @@ import module.card.*;
 import module.card.BattlePhaseEnd;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
-import view.PrintResponses;
 import view.Responses;
 
 import java.util.ArrayList;
@@ -127,7 +126,6 @@ public class Duel {
         currentBoard.addMonsterFaceUp(placeInBoard, selectedCard);
         summonedOrSetPlace = placeInBoard;
         if (userWhoPlaysNow.isHasSummonedAlteringATK()) {
-            System.out.println(userWhoPlaysNow.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'M'));
             Monster monster = (Monster) userWhoPlaysNow.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'M');
             monster.setAtk(monster.getAtk() + 300 * ((Monster) selectedCard).getLevel());
         }
@@ -337,6 +335,7 @@ public class Duel {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, monster, null);
+            return;
         }
         SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                 false, null, null);

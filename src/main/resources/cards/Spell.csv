@@ -17,7 +17,7 @@ Yami,Field,"All Fiend and Spellcaster monsters on the field gain 200 ATK/DEF, al
 Forest,Field,"All Insect, Beast, Plant, and Beast-Warrior monsters on the field gain 200 ATK/DEF.",Unlimited,4300,fieldSpellType1=200_200_"Insect"*fieldSpellType2=200_200_"Beast"*fieldSpellType3=200_200_"BeastWarrior"
 Closed Forest,Field,All Beast-Type monsters you control gain 100 ATK for each monster in your Graveyard. Field Spell Cards cannot be activated. Field Spell Cards cannot be activated during the turn this card is destroyed.,Unlimited,4300,fieldATKIncreaseGY1=100_0_"BeastWarrior"
 Umiiruka,Field,Increase the ATK of all WATER monsters by 500 points and decrease their DEF by 400 points.,Unlimited,4300,fieldSpellType1=500_-400_"Aqua"
-Sword of dark destruction,Equip,A DARK monster equipped with this card increases its ATK by 400 points and decreases its DEF by 200 points.,Unlimited,4300,equipCardNormal1=400_-200_"Friend"*equipCardNormal1=400_-200_"SpellCaster"
+Sword of dark destruction,Equip,A DARK monster equipped with this card increases its ATK by 400 points and decreases its DEF by 200 points.,Unlimited,4300,equipCardNormal1=400_-200_"Fiend"*equipCardNormal2=400_-200_"SpellCaster"
 Black Pendant,Equip,The equipped monster gains 500 ATK. When this card is sent from the field to the Graveyard: Inflict 500 damage to your opponent.,Unlimited,4300,equipCardNormal1=500_0_""
 United We Stand,Equip,The equipped monster gains 800 ATK/DEF for each face-up monster you control.,Unlimited,4300,equipBasedMyUpMonsters=800_0_""
 Magnum Shield,Equip,"Equip only to a Warrior-Type monster. Apply this effect, depending on its battle position.
