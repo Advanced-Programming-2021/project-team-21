@@ -150,7 +150,7 @@ public class SpellActivation {
         ArrayList<Monster> monstersWithType = new ArrayList<>();
         for (Card monster : userNow.getBoard().getMonsters()) {
             Monster monsterType = (Monster) monster;
-            if (monsterType.getMonsterType().getName().equals(effect.getType()))
+            if (monster != null && monsterType.getMonsterType().getName().equals(effect.getType()))
                 monstersWithType.add(monsterType);
         }
         monstersWithType.addAll(userNow.getHand().getCardsWithType(7, effect.getType()));
@@ -184,7 +184,7 @@ public class SpellActivation {
     private static void handleFaceChange(Spell spell, User userNow, User rival, Duel duel) {
         Board board = rival.getBoard();
         for (Card monster : board.getMonsters()) {
-            if (!monster.isFaceUp()) duel.flipSetForMonsters(board.getAddressByCard(monster));
+            if (monster != null && !monster.isFaceUp()) duel.flipSetForMonsters(board.getAddressByCard(monster));
         }
     }
 

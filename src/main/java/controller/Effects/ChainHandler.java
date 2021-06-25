@@ -19,6 +19,7 @@ public class ChainHandler {
         boolean isCanceled = false;
         boolean temp = false;
         ArrayList<Chain> chainCards = getChain(duel, choose, user, rival, card, where);
+        if (chainCards.size() == 0)return false;
         for (int i = chainCards.size() - 1; i >= 0; i--) {
             Chain chain = chainCards.get(i);
             if (chain == null) continue;

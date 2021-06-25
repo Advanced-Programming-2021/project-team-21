@@ -2,7 +2,9 @@ package controller.Effects;
 
 import module.Duel;
 import module.User;
-import module.card.*;
+import module.card.Card;
+import module.card.Monster;
+import module.card.Spell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +37,11 @@ public class ChangeTurnEffects {
                 spell.getCanChangeFaceOFOpponent().setIsEffect(spell.getCanChangeFaceOFOpponent().getIsEffect() - 1);
             }
             if (spell.getCanMakeMonstersUndefeatable().hasEffect() && spell.isFaceUp()) {
-                spell.getCanChangeFaceOFOpponent().setIsEffect(spell.getCanMakeMonstersUndefeatable().getIsEffect() - 1);
-                if (spell.getCanMakeMonstersUndefeatable().getIsEffect() == 0) {
-                    spell.getCanMakeMonstersUndefeatable().resetEffect();
+                spell.getCanChangeFaceOFOpponent().setIsContinuous(spell.getCanChangeFaceOFOpponent().getContinuousNumber());
+                spell.getCanMakeMonstersUndefeatable().setIsContinuous(spell.getCanMakeMonstersUndefeatable().getContinuousNumber());
+                System.out.println(spell.getCanChangeFaceOFOpponent().getContinuousNumber());
+                if (spell.getCanMakeMonstersUndefeatable().getContinuousNumber() == 0) {
+                    duel.addCardToGraveyard(spell , user.getBoard().getAddressByCard(spell) , user);
                     rival.setCanAttack(true);
                 }
             }
@@ -53,7 +57,7 @@ public class ChangeTurnEffects {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
             }
-            if (monster.getSummonACardFromEveryWhere().isNeedsToBeReset()){
+            if (monster.getSummonACardFromEveryWhere().isNeedsToBeReset()) {
                 monster.getSummonACardFromEveryWhere().resetEffect();
                 monster.getSummonACardFromEveryWhere().setNeedsToBeReset(false);
             }
@@ -65,7 +69,7 @@ public class ChangeTurnEffects {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
             }
-            if ( SelectEffect.scannerHolder != null) {
+            if (SelectEffect.scannerHolder != null) {
                 if (SelectEffect.scannerHolder.isATK())
                     duel.getUserWhoPlaysNow().getBoard().addMonsterFaceUp(SelectEffect.scannerPlace, SelectEffect.scannerHolder);
                 else

@@ -509,6 +509,8 @@ public class DuelMenu implements Menuable {
             PrintResponses.printCardAttackedBefore();
         } else if (monsterToAttack == null) {
             PrintResponses.printNoCardToAttackWith();
+        } else if (!currentDuel.getUserWhoPlaysNow().isCanAttack()){
+            PrintResponses.print(Responses.canNotAttackDueToEffect);
         } else {
             handleSuccessfulAttack(address, monsterToAttack);
             PrintResponses.printBoard(currentDuel);

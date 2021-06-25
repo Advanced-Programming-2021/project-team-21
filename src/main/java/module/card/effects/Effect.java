@@ -18,7 +18,7 @@ public class Effect {
         this.isEffectHolder = isEffect;
         this.isContinuousHolder = isContinuous;
         if (isEffect != 0) effectNumber = isEffect - 1;
-        if (isContinuous != 0) continuousNumber = isContinuous - 1;
+        if (isContinuous != 0) continuousNumber = 2*isContinuous - 1;
         needsToBeReset = false;
     }
 

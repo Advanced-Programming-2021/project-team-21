@@ -113,4 +113,5 @@ public class Responses {
     public static String addACardToHand = "CHEAT: Given card added to your hand!";
     public static String handIsFull = "CHEAT: Your hand is full. Could not add the card.";
     public static String cardNotFoundInHand = "CHEAT: Card not found in hand.";
+    public static String canNotAttackDueToEffect = "You can't attack due to an effect.";
 }

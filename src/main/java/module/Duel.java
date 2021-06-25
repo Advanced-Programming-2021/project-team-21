@@ -322,9 +322,10 @@ public class Duel {
                 userWhoPlaysNow.getBoard().removeFieldZone();
             }
             userWhoPlaysNow.getBoard().putCardToFieldZone(spellToActivate);
+            userWhoPlaysNow.getBoard().removeSpellAndTrap(placeOfSelectedCard);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, null, null);
-
+            return;
         } else if (spellToActivate.isEquipSPell()) {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
