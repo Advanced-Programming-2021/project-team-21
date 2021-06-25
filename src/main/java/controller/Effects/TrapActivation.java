@@ -16,7 +16,7 @@ public class TrapActivation {
 
     public static boolean run(Trap trap, User userNow, User rival, Duel duel, Chain card, Chain first) {
         if (trap.getCanAttackLP().hasEffect()) {
-            handleAttackLP(trap, rival, duel, (Monster) card.getCard());
+            handleAttackLP(trap, rival, duel, (Monster) first.getCard());
         }
         if (trap.getDestroyAttackMonsters().hasEffect()) {
             handleDestroyAttackMonsters(rival, duel);
@@ -60,16 +60,17 @@ public class TrapActivation {
     private static void handleDestroyAll(User userNow, User rival, Duel duel, Chain first) {
         duel.addCardToGraveyard(first.getCard(), 10, userNow);
         for (Card monster : rival.getBoard().getMonsters()) {
-            duel.addCardToGraveyard(monster, rival.getBoard().getAddressByCard(monster), rival);
+           if (monster != null)duel.addCardToGraveyard(monster, rival.getBoard().getAddressByCard(monster), rival);
         }
         for (Card monster : userNow.getBoard().getMonsters()) {
-            duel.addCardToGraveyard(monster, userNow.getBoard().getAddressByCard(monster), userNow);
+          if (monster!= null) duel.addCardToGraveyard(monster, userNow.getBoard().getAddressByCard(monster), userNow);
         }
     }
 
     private static void handleDestroyCardsFromHandAndDeck(User userNow, User rival, Duel duel, Chain card, int number) {
         int destroyed = 0;
-        for (Card mainDeckCard : rival.getHand().getDeckToDraw().getMainDeckCards()) {
+        for (int i = 0; i < rival.getHand().getDeckToDraw().getMainDeckCards().size(); i++) {
+            Card mainDeckCard = rival.getHand().getDeckToDraw().getMainDeckCards().get(i);
             if (mainDeckCard.getName().equals(card.getCardName())) {
                 destroyed++;
                 if (destroyed == number) return;
@@ -101,7 +102,9 @@ public class TrapActivation {
 
     private static void handleDestroyAttackMonsters(User rival, Duel duel) {
         for (Card card1 : rival.getBoard().getMonsters()) {
+            if (card1 == null)continue;
             Monster monster = (Monster) card1;
+
             if (monster.isATK()) {
                 rival.getBoard().removeMonster(rival.getBoard().getAddressByCard(monster));
                 duel.addCardToGraveyard(monster, rival.getBoard().getAddressByCard(monster), rival);
@@ -116,7 +119,7 @@ public class TrapActivation {
         } else {
             number = trap.getCanAttackLP().getEffectNumber();
         }
-        duel.changeLP(rival, number);
+        duel.changeLP(rival, -number);
     }
 }
 

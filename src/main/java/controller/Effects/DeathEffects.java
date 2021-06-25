@@ -26,7 +26,8 @@ public class DeathEffects {
             userNow.setIncreaseATK(userNow.getIncreaseATK() - dead.getCanIncreaseATK().getEffectNumber());
         }
         if (dead.getCanKillTheAttacker().hasEffect() && !attacked.isDead()) {
-            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival , deadPlace);
+            if (attacked.isDeathEffect()
+            && !attacked.getCanDestroyBothWithoutLosingLP().hasEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival , deadPlace);
             duel.addCardToGraveyard(attacked, attackingPlace, userNow);
         }
         if (dead.getCanDestroyBothWithoutLosingLP().hasEffect()) {

@@ -114,7 +114,7 @@ public class Duel {
     }
 
     public void summonMonster() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow,getRival(), this,
+        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),getRival() ,userWhoPlaysNow, this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
