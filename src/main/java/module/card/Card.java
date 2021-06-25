@@ -82,16 +82,11 @@ public class Card {
         this.description = description;
     }
 
-    public void destroyWithoutLosingLifePoints() {
-    }
 
     public void setHasEffect(boolean hasEffect) {
         this.hasEffect = hasEffect;
     }
 
-    public boolean HasEffect() {
-        return hasEffect;
-    }
 
     public boolean isATK() {
         return isATK;
@@ -101,13 +96,6 @@ public class Card {
         isATK = ATK;
     }
 
-    //for searching a card on board or deck or graveYard
-    public Card getACardFromArrayByName(ArrayList<Card> cards, String name) {
-        for (Card card : cards) {
-            if (card.getName().equals(name)) return card;
-        }
-        return null;
-    }
 
     public Map<String, Consumer<Effect>> getEffectsMap() {
         return null;

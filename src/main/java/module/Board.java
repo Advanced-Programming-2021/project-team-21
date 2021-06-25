@@ -2,8 +2,6 @@ package module;
 
 import module.card.Card;
 import module.card.Monster;
-import module.card.enums.CardType;
-import module.card.Monster;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,25 +131,6 @@ public class Board {
         return monsters[placeInBoard - 1];
     }
 
-    public Card selectOpponentMonster(User opponent, int placeInBoard) {
-        return opponent.getBoard().getMonsters()[placeInBoard - 1];
-    }
-
-    public Card selectOwnSpellAndTrap(int placeInBoard) {
-        return spellsAndTraps[placeInBoard - 1];
-    }
-
-    public Card selectOpponentSpellAndTrap(User opponent, int placeInBoard) {
-        return opponent.getBoard().getSpellsAndTraps()[placeInBoard - 1];
-    }
-
-    public Card selectOwnFieldZone() {
-        return fieldZone;
-    }
-
-    public Card selectOpponentFieldZone(User opponent) {
-        return opponent.getBoard().getFieldZone();
-    }
 
     public int getAddressToSummon() {
         for (int i = 0; i < order.size(); i++) {
@@ -169,18 +148,12 @@ public class Board {
         return 0;
     }
 
-    public Boolean isCardOnBoard(Card card) {
-        for (int i = 0; i < spellsAndTraps.length; i++) {
-            if (spellsAndTraps[i] == card || monsters[i] == card)
-                return true;
-        }
-        return false;
-    }
 
     public boolean isCardOnMonsterZone(Card card) {
         for (Card monster : monsters) {
-            if (monster != null && monster.equals(card))return true;
-        }    return false;
+            if (monster != null && monster.equals(card)) return true;
+        }
+        return false;
     }
 
     public String showMonstersToString() {
@@ -223,10 +196,11 @@ public class Board {
     public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell) {
         int level = 0;
         for (Card card : monsters) {
-            if (card == null)continue;
+            if (card == null) continue;
             if (((Monster) card).getLevel() < level)
                 level += ((Monster) card).getLevel();
-        } return level >= levelOfRitualEffectSpell;
+        }
+        return level >= levelOfRitualEffectSpell;
     }
 
     public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
@@ -254,7 +228,6 @@ public class Board {
     }
 
 
-
     public int getMonsterNumber() {
         int number = 0;
         for (Card monster : this.getMonsters()) {
@@ -262,13 +235,15 @@ public class Board {
         }
         return number;
     }
-    public Monster getNotNullMonster(){
+
+    public Monster getNotNullMonster() {
         for (Card monster : monsters) {
-            if (monster != null)return (Monster) monster;
+            if (monster != null) return (Monster) monster;
         }
         return null;
     }
-    public int getSpellNumber(){
+
+    public int getSpellNumber() {
         return (int) Arrays.stream(spellsAndTraps).filter(Objects::nonNull).count();
     }
 }

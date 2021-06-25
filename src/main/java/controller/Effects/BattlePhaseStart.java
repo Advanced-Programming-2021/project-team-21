@@ -25,9 +25,9 @@ public class BattlePhaseStart {
             DuelMenu.isGetFromHand = true;
             getNormal(cards);
             DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
-            if (cards.size() != 0)PrintResponses.printSpecialSummonCards(cards);
-            while (DuelMenu.specialSummonsedCards != null){
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine() , duel , true);
+            if (cards.size() != 0) PrintResponses.printSpecialSummonCards(cards);
+            while (DuelMenu.specialSummonsedCards != null) {
+                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, true);
             }
             defense.getSummonACardFromEveryWhere().finishEffect();
             defense.getSummonACardFromEveryWhere().setNeedsToBeReset(true);

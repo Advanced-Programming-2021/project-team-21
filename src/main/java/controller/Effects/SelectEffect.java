@@ -17,7 +17,7 @@ public class SelectEffect {
     public static void run(Monster selected, User rival, User player, Duel duel, int selectedPlace) {
         if (selected.getCanScan().hasEffect()) {
             DuelMenu.specialSummonsedCards = selectMonstersFromGY(rival);
-            if (DuelMenu.specialSummonsedCards.size() == 0){
+            if (DuelMenu.specialSummonsedCards.size() == 0) {
                 PrintResponses.printNoSpecialEffect();
                 DuelMenu.specialSummonsedCards = null;
                 return;
@@ -28,7 +28,7 @@ public class SelectEffect {
             scannerHolder = Monster.copy(selected);
             scannerHolder.setATK(selected.isATK());
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine()  , duel , false);
+                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
         } else if (selected.getCanGetFromGYByLevelToHand().hasEffect()) {
             Card card = player.getHand().selectARandomCardFromHand();
             int i;
@@ -38,11 +38,12 @@ public class SelectEffect {
             }
             player.getHand().discardACard(i);
             DuelMenu.specialSummonsedCards = getCardsFromGYByLevel(
-                    selected.getCanGetFromGYByLevelToHand().getEffectNumber() , player);
+                    selected.getCanGetFromGYByLevelToHand().getEffectNumber(), player);
             DuelMenu.addToHand = true;
-            if (DuelMenu.specialSummonsedCards.size() > 0)PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
+            if (DuelMenu.specialSummonsedCards.size() > 0)
+                PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine()  , duel , false);
+                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
             selected.getCanGetFromGYByLevelToHand().finishEffect();
             selected.getCanGetFromGYByLevelToHand().setNeedsToBeReset(true);
             selected.setSelectEffect(false);
@@ -58,7 +59,8 @@ public class SelectEffect {
         }
         return monsters;
     }
-    public static ArrayList<Monster> getCardsFromGYByLevel(int minimum , User boardOwner) {
+
+    public static ArrayList<Monster> getCardsFromGYByLevel(int minimum, User boardOwner) {
         ArrayList<Monster> cards = new ArrayList<>();
         for (Card card : boardOwner.getGraveyard()) {
             if (!(card instanceof Monster)) continue;

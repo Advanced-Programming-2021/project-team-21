@@ -7,8 +7,6 @@ import module.Hand;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
-import module.card.Spell;
-import module.card.Trap;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
@@ -486,9 +484,6 @@ public class PrintResponses {
         System.out.println(Responses.disabledSpellSummon);
     }
 
-    public static void printDisabledTrapSummon() {
-        System.out.println(Responses.disabledTrapSummon);
-    }
 
     public static void printAskForEffectMonster() {
         System.out.println(Responses.activateEffectMonster);
@@ -565,9 +560,6 @@ public class PrintResponses {
         System.out.println(Responses.noSpellFound);
     }
 
-    public static void printDisabledAttack() {
-        System.out.println(Responses.disabledAttack);
-    }
 
     public static void printHandShow(Hand hand) {
         for (int i = 0; i < hand.getCardsInHand().length; i++) {
@@ -576,7 +568,8 @@ public class PrintResponses {
             }
         }
     }
-    public static void printNoSpecialEffect(){
+
+    public static void printNoSpecialEffect() {
         System.out.println(Responses.noSpecialEffect);
     }
 

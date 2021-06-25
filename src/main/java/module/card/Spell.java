@@ -73,11 +73,6 @@ public class Spell extends Card {
         DataController.cardPairsParser((String) parameters[5], this);
     }
 
-    @Override
-    public void destroyWithoutLosingLifePoints() {
-
-    }
-
     public SpellTrapIcon getSpellTrapIcon() {
         return spellTrapIcon;
     }
@@ -288,7 +283,7 @@ public class Spell extends Card {
         this.equipCardNormal3 = equipCardNormal3;
     }
 
-    public boolean isEquipSPell() {
+    public boolean isEquipSpell() {
         return spellTrapIcon.equals(SpellTrapIcon.EQUIP);
     }
 

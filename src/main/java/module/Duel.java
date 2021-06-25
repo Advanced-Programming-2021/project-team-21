@@ -3,8 +3,10 @@ package module;
 
 import controller.Effects.*;
 import controller.menu.DuelMenu;
-import module.card.*;
-import module.card.BattlePhaseEnd;
+import module.card.Card;
+import module.card.Chain;
+import module.card.Monster;
+import module.card.Spell;
 import module.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.Responses;
@@ -114,7 +116,7 @@ public class Duel {
     }
 
     public void summonMonster() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow,getRival(), this,
+        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
@@ -133,13 +135,13 @@ public class Duel {
     }
 
     public void flipSummon() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow,getRival(), this,
+        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
                 WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
                 new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
             SummonEffects.run((Monster) selectedCard, userWhoPlaysNow, getRival(), this);
         if (((Monster) selectedCard).isFlipSummonEffect())
-            FlipSummonEffects.run((Monster) selectedCard, getRival(), this, userWhoPlaysNow);
+            FlipSummonEffects.run((Monster) selectedCard, getRival(), this);
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         summonedOrSetPlace = placeInBoard;
@@ -261,7 +263,7 @@ public class Duel {
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
         if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-                getRival(),getUserWhoPlaysNow(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
+                getRival(), getUserWhoPlaysNow(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
                 rival, new Chain(attackingMonster, null, ""), WhereToChain.ATTACK)) {
             return new Pair<>(0, 0);
         }
@@ -305,14 +307,14 @@ public class Duel {
     public void activateEffects() {
         Spell spellToActivate = (Spell) selectedCard;
         int addressToPut = placeOfSelectedCard;
-         if (userWhoPlaysNow.getHand().isCardInHand(selectedCard)){
+        if (userWhoPlaysNow.getHand().isCardInHand(selectedCard)) {
             addressToPut = userWhoPlaysNow.getBoard().getAddressToPutSpell();
             userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
             flipSetForSpells(addressToPut);
         }
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
         boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-                getRival(),userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
+                getRival(), userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
                 userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
                 WhereToChain.EFFECT_ACTIVATE);
         if (isCancelled) {
@@ -331,7 +333,7 @@ public class Duel {
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, null, null);
             return;
-        } else if (spellToActivate.isEquipSPell()) {
+        } else if (spellToActivate.isEquipSpell()) {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, monster, null);
@@ -352,7 +354,7 @@ public class Duel {
         if (userWhoPlaysNow.getGraveyard().size() == 0)
             return Responses.emptinessOfGraveyard;
         for (Card card : userWhoPlaysNow.getGraveyard()) {
-            if (card == null)continue;
+            if (card == null) continue;
             graveyardToShow.append(i).append(". ").append(card.getName()).append(":")
                     .append(card.getDescription()).append("\n");
             i++;
@@ -385,7 +387,7 @@ public class Duel {
                 user.getBoard().removeMonster(placeInBoard);
             else {
                 user.getBoard().removeSpellAndTrap(placeInBoard);
-                if (card instanceof Spell && ((Spell) card).isEquipSPell()) {
+                if (card instanceof Spell && ((Spell) card).isEquipSpell()) {
                     Spell spell = (Spell) card;
                     Monster monster = (Monster) userWhoPlaysNow.getBoard().getCard(spell.getEquippedPlace(), 'm');
                     SpellActivation.run(spell, userWhoPlaysNow, getRival(), this, placeInBoard,
@@ -420,6 +422,10 @@ public class Duel {
 
     public User getUserWhoPlaysNow() {
         return userWhoPlaysNow;
+    }
+
+    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
+        this.userWhoPlaysNow = userWhoPlaysNow;
     }
 
     public User getSECOND_USER() {
@@ -471,25 +477,25 @@ public class Duel {
         if (differenceOfATK > 0) {
             monsterToAttack.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
+                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow, placeInBoard)) {
                     return new Pair<>(0, 0);
                 }
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
-                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))
+                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack))
                     return new Pair<>(0, 0);
             }
             addCardToGraveyard(monsterToAttack, placeInBoard, rival);
             return new Pair<>(key, differenceOfATK);
         } else if (differenceOfATK == 0) {
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
-                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))
+                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack))
                     return new Pair<>(0, 0);
             }
             return new Pair<>(key + 1, differenceOfATK);
         } else {
             changeLP(userWhoPlaysNow, differenceOfATK);
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
-                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))
+                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack))
                     return new Pair<>(0, 0);
             }
             return new Pair<>(key + 2, differenceOfATK);
@@ -503,12 +509,12 @@ public class Duel {
         if (differenceOfATK > 0) {
             monsterToAttack.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
+                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow, placeInBoard)) {
                     return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
                 }
             changeLP(rival, -differenceOfATK);
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
-                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this)) {
+                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack)) {
                     return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
                 }
             }
@@ -518,7 +524,7 @@ public class Duel {
             monsterToAttack.setDead(true);
             attackingMonster.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
+                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow, placeInBoard)) {
                     return new Pair<>(0, 0);
                 }
 
@@ -526,11 +532,11 @@ public class Duel {
             if (userWhoPlaysNow.getBoard().selectOwnMonster(placeInBoard) != null) {
                 int notDuplicate = 0;
                 if (attackingMonster.isDeathEffect())
-                    if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
+                    if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow, placeInBoard)) {
                         return new Pair<>(notDuplicate, 0);
                     }
                 if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
-                    if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))
+                    if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack))
                         return new Pair<>(0, 0);
                 }
                 addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
@@ -538,13 +544,13 @@ public class Duel {
             return new Pair<>(2, differenceOfATK);
         } else {
             if (((Monster) selectedCard).isDeathEffect())
-                if (DeathEffects.run(monsterToAttack, (Monster) selectedCard, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
+                if (DeathEffects.run(monsterToAttack, (Monster) selectedCard, rival, this, placeOfSelectedCard, userWhoPlaysNow, placeInBoard)) {
                     return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
                 }
 
             changeLP(userWhoPlaysNow, differenceOfATK);
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
-                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack, rival, this))
+                if (BattlePhaseEnd.run(((Monster) selectedCard), monsterToAttack))
                     return new Pair<>(0, 0);
             }
             addCardToGraveyard(selectedCard, placeOfSelectedCard, userWhoPlaysNow);
@@ -559,7 +565,7 @@ public class Duel {
         if (monster.isSummonEffect())
             SummonEffects.run(monster, userWhoPlaysNow, getRival(), this);
         if (monster.isFlipSummonEffect())
-            FlipSummonEffects.run(monster, userWhoPlaysNow, this, getRival());
+            FlipSummonEffects.run(monster, userWhoPlaysNow, this);
         if (monster.isFlipSetEffect()) {
             SetFlip.run(monster, userWhoPlaysNow, this);
         }
@@ -569,7 +575,6 @@ public class Duel {
     public void flipSetForSpells(int placeOnBoard) {
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOnBoard);
     }
-
 
     @Override
     public String toString() {
@@ -595,14 +600,9 @@ public class Duel {
         this.numberOfTurnsPlayedUpToNow = numberOfTurnsPlayedUpToNow;
     }
 
-
     private void resetCards() {
         Card[] cards = userWhoPlaysNow.getBoard().getMonsters();
         Arrays.stream(cards).filter(Objects::nonNull).forEach(card -> ((Monster) card).setHasAttackedOnceInTurn(false));
-    }
-
-    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
-        this.userWhoPlaysNow = userWhoPlaysNow;
     }
 }
 

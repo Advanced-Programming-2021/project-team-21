@@ -51,7 +51,7 @@ public class TrapActivation {
             DuelMenu.isGetFroOpponentGY = true;
             PrintResponses.printSpecialSummonCards(cards);
             while (true) {
-                if (!DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel , false)) break;
+                if (!DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false)) break;
             }
         }
         return false;

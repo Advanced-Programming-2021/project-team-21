@@ -2,8 +2,8 @@ package module.card;
 // must add a method to summon in which decides if the leve is less than five there is 0 tribute if the level is 5 , 6 1tribute
 //if it is 7 8 two tributes and 9 10 11 three tribute
 
-import controller.DataController;
 import com.rits.cloning.Cloner;
+import controller.DataController;
 import module.card.effects.Effect;
 import module.card.enums.Attributes;
 import module.card.enums.CardType;
@@ -72,8 +72,6 @@ public class Monster extends Card {
     private Effect canBeNotTribute;      //(1101 , 0)        in summonEffect
     private Effect tributeToKillAllMonsterOfOpponent;       //(4 , 1)       in summonEffect
     // TexChanger +
-    /*done */private Effect TributeToKillAllMonsterOfOpponent;       //(4 , 0)       in summonEffect
-    // TexChanger
     /* done */private Effect summonACardFromEveryWhere;       //(2 , "1" , "Cyberse")       in battlePhaseStart
     //calculator +
     private Effect alteringAttack;          //(301 , 1)        in summonEffect and deathEffect
@@ -119,15 +117,6 @@ public class Monster extends Card {
         }
     }
 
-
-    public void setFlipSetEffect(boolean flipSetEffect) {
-        isFlipSetEffect = flipSetEffect;
-    }
-
-    public int getAtkHolder() {
-        return atkHolder;
-    }
-
     public static Monster copy(Object object) {
         if (object == null) return null;
         if (!(object instanceof Monster)) return null;
@@ -136,20 +125,32 @@ public class Monster extends Card {
         return cloner.deepClone(monster);
     }
 
+    public int getAtkHolder() {
+        return atkHolder;
+    }
+
+    public void setAtkHolder(int atkHolder) {
+        this.atkHolder = atkHolder;
+    }
+
     public boolean isCanHaveDifferentTribute() {
         return canHaveDifferentTribute;
     }
 
-    public void setRequiredCardsFOrTribute(int requiredCardsFOrTribute) {
-        this.requiredCardsFOrTribute = requiredCardsFOrTribute;
+    public void setCanHaveDifferentTribute(boolean canHaveDifferentTribute) {
+        this.canHaveDifferentTribute = canHaveDifferentTribute;
     }
 
     public int getRequiredCardsFOrTribute() {
         return requiredCardsFOrTribute;
     }
 
-    public void setAtkHolder(int atkHolder) {
-        this.atkHolder = atkHolder;
+    public void setRequiredCardsFOrTribute(int requiredCardsFOrTribute) {
+        this.requiredCardsFOrTribute = requiredCardsFOrTribute;
+    }
+
+    public int getDefHolder() {
+        return defHolder;
     }
 
     public void setDefHolder(int defHolder) {
@@ -157,18 +158,12 @@ public class Monster extends Card {
     }
 
 
-    public int getDefHolder() {
-        return defHolder;
-    }
-
-
-    @Override
-    public void destroyWithoutLosingLifePoints() {
-
-    }
-
     public boolean isFlipSetEffect() {
         return isFlipSetEffect;
+    }
+
+    public void setFlipSetEffect(boolean flipSetEffect) {
+        isFlipSetEffect = flipSetEffect;
     }
 
     public int getLevel() {
@@ -207,7 +202,6 @@ public class Monster extends Card {
         return def;
     }
 
-
     public void setDef(int def) {
         this.def = Math.max(def, 0);
     }
@@ -220,7 +214,6 @@ public class Monster extends Card {
                 "\nDef: " + def +
                 "\nDescription: " + getDescription();
     }
-
 
     public boolean isHasAttackedOnceInTurn() {
         return hasAttackedOnceInTurn;
@@ -398,8 +391,6 @@ public class Monster extends Card {
         this.disableTrapSummon = disableTrapSummon;
     }
 
-
-
     public Effect getCanSetFromDeckByMaxLevel() {
         return canSetFromDeckByMaxLevel;
     }
@@ -416,10 +407,6 @@ public class Monster extends Card {
         this.discardToSpecialSummon = discardToSpecialSummon;
     }
 
-    public void setCanHaveDifferentTribute(boolean canHaveDifferentTribute) {
-        this.canHaveDifferentTribute = canHaveDifferentTribute;
-    }
-
     public Map<String, Consumer<Boolean>> getBooleanMap() {
         Map<String, Consumer<Boolean>> booleanMap = new HashMap<>();
         booleanMap.put("isDead", this::setDead);
@@ -430,8 +417,8 @@ public class Monster extends Card {
         booleanMap.put("isBattlePhaseEffectEnd", this::setBattlePhaseEffectEnd);
         booleanMap.put("isFlipSummonEffect", this::setFlipSummonEffect);
         booleanMap.put("isFlipSetEffect", this::setFlipSetEffect);
-        booleanMap.put("isSelectEffect" , this::setSelectEffect);
-        booleanMap.put("isCanHaveDifferentTribute" , this::setCanHaveDifferentTribute);
+        booleanMap.put("isSelectEffect", this::setSelectEffect);
+        booleanMap.put("isCanHaveDifferentTribute", this::setCanHaveDifferentTribute);
         return booleanMap;
     }
 
@@ -463,12 +450,16 @@ public class Monster extends Card {
         return isSelectEffect;
     }
 
+    public void setSelectEffect(boolean selectEffect) {
+        isSelectEffect = selectEffect;
+    }
+
     public Effect getCanGetFromGYByLevelToHand() {
         return canGetFromGYByLevelToHand;
     }
 
-    public void setSelectEffect(boolean selectEffect) {
-        isSelectEffect = selectEffect;
+    public void setCanGetFromGYByLevelToHand(Effect canGetFromGYByLevelToHand) {
+        this.canGetFromGYByLevelToHand = canGetFromGYByLevelToHand;
     }
 
     public boolean isCanAttack() {
@@ -477,9 +468,5 @@ public class Monster extends Card {
 
     public void setCanAttack(boolean canAttack) {
         this.canAttack = canAttack;
-    }
-
-    public void setCanGetFromGYByLevelToHand(Effect canGetFromGYByLevelToHand) {
-        this.canGetFromGYByLevelToHand = canGetFromGYByLevelToHand;
     }
 }

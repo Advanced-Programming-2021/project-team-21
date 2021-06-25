@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Hand {
     private final Card[] cardsInHand;
     private final Deck deckToDraw;
-    private User handOwner;
+    private final User handOwner;
 
     {
         cardsInHand = new Card[6];
@@ -83,10 +83,6 @@ public class Hand {
 
     public Card selectACard(int cardAddress) {
         return cardsInHand[cardAddress - 1];
-    }
-
-    public void deselectACard(Card selectedCard) {
-        selectedCard = null;
     }
 
     public void discardACard(int place) {
@@ -172,7 +168,7 @@ public class Hand {
         for (Card card : cardsInHand) {
             if (card instanceof Monster) {
                 Monster monster = (Monster) card;
-                if ( monster.getCardType().getName().equals(cardType.getName()))
+                if (monster.getCardType().getName().equals(cardType.getName()))
                     return true;
             }
         }

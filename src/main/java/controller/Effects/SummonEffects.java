@@ -1,6 +1,5 @@
 package controller.Effects;
 
-import controller.Effects.SpellActivation;
 import controller.ProgramController;
 import controller.menu.DuelMenu;
 import module.Duel;
@@ -51,10 +50,10 @@ public class SummonEffects {
                     handSpecial.add(monster);
             }
             DuelMenu.specialSummonsedCards = handSpecial;
-            if (handSpecial.size() != 0)PrintResponses.printSpecialSummonCards(handSpecial);
+            if (handSpecial.size() != 0) PrintResponses.printSpecialSummonCards(handSpecial);
             DuelMenu.specialSummonsedCards = handSpecial;
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine()  , duel , false);
+                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
         }
         checkHasContinuousSpell(summoned, rival, user, duel);
     }

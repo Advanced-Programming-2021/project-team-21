@@ -239,6 +239,7 @@ public class DataController {
         int firstNumber = Integer.parseInt(matcher.group("firstNumber")),
                 secondNumber = Integer.parseInt(matcher.group("secondNumber"));
         String string = matcher.group("string");
+
         return new Effect(firstNumber, secondNumber, string);
     }
 

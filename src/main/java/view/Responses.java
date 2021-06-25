@@ -93,14 +93,12 @@ public class Responses {
     public static String choiceOfDifferentTribute = "Pick a number to choose how many monsters to tribute";
     public static String wrongChoiceOfTribute = "choose a suitable number for tribute";
     public static String disabledMonsterSummon = "You can not summon due to an Effect";
-    public static String disabledTrapSummon = "You can not activate due to an Effect";
     public static String disabledSpellSummon = "you can not activate due to an Effect";
     public static String activateEffectMonster = "Do you want to activate the Effect?[Yes/No]";
     public static String changeOfHeart = "choose the monster you want to control";
     public static String wrongChoiceControl = "you did not choose the monster correctly";
     public static String canNotControl = "you can Not control any thing";
     public static String noSpellFound = "no spell found on this location";
-    public static String disabledAttack = "You can not attack due to effect of an card";
     public static String chooseEquip = "Choose a Monster to Equip it with this Spell";
     public static String askForChain = "do you want to activate your trap and spell?";
     public static String wrongSpell = "you have chosen a wrong place or a spell that can not be chained right now";

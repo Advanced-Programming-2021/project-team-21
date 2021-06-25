@@ -114,7 +114,7 @@ public class DeckMenu implements Menuable {
 
     private void addCard(Matcher matcher) {
         String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
-        cardName = cardName.replaceAll("\\s+-" , "");
+        cardName = cardName.replaceAll("\\s+-", "");
         Card card = Card.getCardByName(cardName);
         Deck deck = user.getDeckByName(deckName);
         boolean doesHaveCard = false;

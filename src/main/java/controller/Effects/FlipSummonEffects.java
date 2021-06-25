@@ -10,7 +10,7 @@ public class FlipSummonEffects {
     // man eater bug
     static int index;
 
-    public static void run(Monster flipSummoned, User rival, Duel duel, User userNow) {
+    public static void run(Monster flipSummoned, User rival, Duel duel) {
         if (flipSummoned.getCanDestroyMonster().hasEffect()) {
             DestroyAMonster(rival, duel);
             flipSummoned.getCanDestroyMonster().finishEffect();
@@ -20,12 +20,12 @@ public class FlipSummonEffects {
     private static void DestroyAMonster(User rival, Duel duel) {
         Board board = rival.getBoard();
         Card[] monsters = board.getMonsters();
-        Monster monster = findTheDead(monsters , board);
+        Monster monster = findTheDead(monsters, board);
         if (monster == null) return;
         duel.addCardToGraveyard(monster, index, rival);
     }
 
-    private static Monster findTheDead(Card[] monsters , Board board) {
+    private static Monster findTheDead(Card[] monsters, Board board) {
         Monster monster;
         if (monsters == null || (monster = board.getNotNullMonster()) == null) return null;
         index = board.getAddressByCard(monster);

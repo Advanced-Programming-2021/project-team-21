@@ -1,6 +1,7 @@
 package controller.menu;
 
 import controller.Effects.SelectEffect;
+import controller.Effects.StandByEffects;
 import controller.ProgramController;
 import module.AI;
 import module.Duel;
@@ -196,7 +197,6 @@ public class DuelMenu implements Menuable {
                 }
             }
         } catch (Exception ignored) {
-            ignored.printStackTrace();
         }
         if (!isValidCommand) {
             PrintResponses.printInvalidFormat();
@@ -366,6 +366,7 @@ public class DuelMenu implements Menuable {
         if (phase.equals(Phases.DRAW_PHASE)) {
             phase = Phases.STANDBY_PHASE;
         } else if (phase.equals(Phases.STANDBY_PHASE)) {
+            StandByEffects.run(currentDuel.getRival(), currentDuel, currentDuel.getUserWhoPlaysNow());
             phase = Phases.MAIN_PHASE1;
         } else if (phase.equals(Phases.MAIN_PHASE1)) {
             if (currentDuel.getNumberOfTurnsPlayedUpToNow() != 0) {
@@ -538,7 +539,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printCardAttackedBefore();
         } else if (monsterToAttack == null) {
             PrintResponses.printNoCardToAttackWith();
-        } else if (!currentDuel.getUserWhoPlaysNow().isCanAttack()){
+        } else if (!currentDuel.getUserWhoPlaysNow().isCanAttack()) {
             PrintResponses.print(Responses.canNotAttackDueToEffect);
         } else {
             handleSuccessfulAttack(address, monsterToAttack);
@@ -577,10 +578,10 @@ public class DuelMenu implements Menuable {
             PrintResponses.printFullnessOfSpellCardZone();
         } else if (isSpellNotPreparedToBeActivated()) {
             PrintResponses.printUnfinishedPreparationOfSpell();
-        } else if (!currentDuel.getUserWhoPlaysNow().isCanSetSpell()) {
+        } else if (currentDuel.getUserWhoPlaysNow().isCanNotSetSpell()) {
             PrintResponses.printDisabledSummonSpell();
         } else {
-            if (((Spell)currentDuel.getSelectedCard()).getSpellTrapIcon().getName().equals("Ritual") ){
+            if (((Spell) currentDuel.getSelectedCard()).getSpellTrapIcon().getName().equals("Ritual")) {
                 isRitualSummon();
                 return;
             }
@@ -637,7 +638,7 @@ public class DuelMenu implements Menuable {
         while (true) {
             if (i >= cardsInHandLength) break;
             Card card1 = cardsInHand[i];
-            if (card1 == null){
+            if (card1 == null) {
                 PrintResponses.print(Responses.cardNotFoundInHand);
                 return;
             }
@@ -663,16 +664,15 @@ public class DuelMenu implements Menuable {
             PrintResponses.print(Responses.handIsFull);
     }
 
-    private boolean isRitualSummon() {
+    private void isRitualSummon() {
         if (!currentDuel.getUserWhoPlaysNow().getHand().isThereAnyCardWithGivenTypeInMonsters(CardType.RITUAL)
                 || currentDuel.getUserWhoPlaysNow().getBoard()
                 .isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(currentDuel.getUserWhoPlaysNow().getHand().getMinLevelOfRitualMonstersInHand())) {
             PrintResponses.printUnableToRitualSummonMonster();
-            return false;
+            return;
         }
         handleSelectionForRitualSummon();
         handleSummonForRitualSummon();
-        return true;
     }
 
     private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
@@ -792,7 +792,7 @@ public class DuelMenu implements Menuable {
                 if (checkForMonsterType(type))
                     return true;
             }
-            if (spell.getEquipBasedOnPosition().hasEffect()){
+            if (spell.getEquipBasedOnPosition().hasEffect()) {
                 if (spell.getEquipCardNormal3().hasEffect()) {
                     String type = spell.getEquipCardNormal3().getType();
                     return checkForMonsterType(type);
@@ -871,7 +871,7 @@ public class DuelMenu implements Menuable {
         }
         switch (key) {
             case 0:
-                //print sth if you want!
+                PrintResponses.print(Responses.canNotAttackDueToEffect);
                 break;
             case 1:
                 PrintResponses.printOpponentMonsterDestroyedWithDamage(pair.getValue());
@@ -902,7 +902,7 @@ public class DuelMenu implements Menuable {
             if (matcher.find()) {
                 selectCardFromOwn(matcher);
                 if (currentDuel.getSelectedCard().getCardType().getName().equals("Ritual"))
-                break;
+                    break;
                 else
                     PrintResponses.printEmergencyRitualSummon();
             } else {
@@ -913,38 +913,36 @@ public class DuelMenu implements Menuable {
 
     private void handleSummonForRitualSummon() {
 
-                while (true) {
-                    PrintResponses.printEnterTributeOrRitual();
-                    int[] cardAddresses = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-                    if (currentDuel.getUserWhoPlaysNow().getBoard().areGivenCardsEnoughForRitualSummon(cardAddresses, currentDuel.getSelectedCard())) {
-                        currentDuel.tribute(cardAddresses);
-                        break;
-                    } else {
-                        PrintResponses.printInequalityOfLevelsOfSelectedAndRitualMonster();
-                    }
-                }
-                boolean isAttacking;
-                while (true) {
-                    String input = ProgramController.scanner.nextLine();
-                    if (input.equals("attacking")) {
-                        isAttacking = true;
-                        break;
-                    } else if (input.equals("defensive")) {
-                        isAttacking = false;
-                        break;
-                    } else {
-                        PrintResponses.printInvalidFormat();
-                    }
-                }
-                if (isAttacking)
-                {
-                    currentDuel.summonMonster();
-                    PrintResponses.printSuccessfulSummon();
-                }
-                else {
-                    currentDuel.setMonster();
-                    PrintResponses.printSuccessfulCardSetting();
-                }
+        while (true) {
+            PrintResponses.printEnterTributeOrRitual();
+            int[] cardAddresses = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            if (currentDuel.getUserWhoPlaysNow().getBoard().areGivenCardsEnoughForRitualSummon(cardAddresses, currentDuel.getSelectedCard())) {
+                currentDuel.tribute(cardAddresses);
+                break;
+            } else {
+                PrintResponses.printInequalityOfLevelsOfSelectedAndRitualMonster();
+            }
+        }
+        boolean isAttacking;
+        while (true) {
+            String input = ProgramController.scanner.nextLine();
+            if (input.equals("attacking")) {
+                isAttacking = true;
+                break;
+            } else if (input.equals("defensive")) {
+                isAttacking = false;
+                break;
+            } else {
+                PrintResponses.printInvalidFormat();
+            }
+        }
+        if (isAttacking) {
+            currentDuel.summonMonster();
+            PrintResponses.printSuccessfulSummon();
+        } else {
+            currentDuel.setMonster();
+            PrintResponses.printSuccessfulCardSetting();
+        }
 
     }
 

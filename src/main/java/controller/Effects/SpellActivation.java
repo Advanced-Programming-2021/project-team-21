@@ -5,7 +5,10 @@ import controller.menu.DuelMenu;
 import module.Board;
 import module.Duel;
 import module.User;
-import module.card.*;
+import module.card.Card;
+import module.card.Chain;
+import module.card.Monster;
+import module.card.Spell;
 import module.card.effects.Effect;
 import view.PrintResponses;
 
@@ -43,10 +46,10 @@ public class SpellActivation {
             handleControl(spell, userNow, rival, duel, place);
         }
         if (spell.getCanChangeFaceOFOpponent().hasEffect()) {
-            handleFaceChange(spell, userNow, rival, duel);
+            handleFaceChange(rival, duel);
         }
         if (spell.getCanMakeMonstersUndefeatable().hasEffect()) {
-            handleMakeUndefeatable(rival, duel);
+            handleMakeUndefeatable(rival);
         }
         if (spell.getMonstersCanNotAttack().hasEffect()) {
             handleMonsterNotAttack(rival, spell);
@@ -86,8 +89,8 @@ public class SpellActivation {
 
     private static void secondEquipSpell(Monster equipped, Spell spell, boolean fieldAndEquipSpellAdd, User userNow) {
         Effect effect = spell.getEquipBasedMyUpMonsters();
-        effect.setAttack(effect.getAttack() * userNow.getBoard().getMonsters().length);
-        effect.setDefense(effect.getDefense() * userNow.getBoard().getMonsters().length);
+        effect.setAttack(effect.getAttack() * userNow.getBoard().getMonsterNumber());
+        effect.setDefense(effect.getDefense() * userNow.getBoard().getMonsterNumber());
         setChanges(fieldAndEquipSpellAdd, effect, equipped);
     }
 
@@ -167,6 +170,8 @@ public class SpellActivation {
     }
 
     private static void checkSpells(User userNow, Duel duel) {
+        if (userNow.getBoard().getSpellNumber() < 2)
+            return;
         for (Card spellsAndTrap : userNow.getBoard().getSpellsAndTraps()) {
             if (spellsAndTrap instanceof Spell) {
                 Spell spell = (Spell) spellsAndTrap;
@@ -177,11 +182,11 @@ public class SpellActivation {
         }
     }
 
-    private static void handleMakeUndefeatable(User rival, Duel duel) {
+    private static void handleMakeUndefeatable(User rival) {
         rival.setCanAttack(false);
     }
 
-    private static void handleFaceChange(Spell spell, User userNow, User rival, Duel duel) {
+    private static void handleFaceChange(User rival, Duel duel) {
         Board board = rival.getBoard();
         for (Card monster : board.getMonsters()) {
             if (monster != null && !monster.isFaceUp()) duel.flipSetForMonsters(board.getAddressByCard(monster));
@@ -301,8 +306,8 @@ public class SpellActivation {
         DuelMenu.specialSummonsedCards = cards;
         DuelMenu.isGetFroOpponentGY = true;
         PrintResponses.printSpecialSummonCards(cards);
-        while (DuelMenu.specialSummonsedCards != null){
-            DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine() , duel , false);
+        while (DuelMenu.specialSummonsedCards != null) {
+            DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
         }
         duel.addCardToGraveyard(spell, place, userNow);
     }

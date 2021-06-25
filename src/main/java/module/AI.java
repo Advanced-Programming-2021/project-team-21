@@ -5,13 +5,13 @@ import module.card.Card;
 import module.card.Monster;
 import module.card.enums.CardType;
 
-import java.util.Iterator;
 import java.util.stream.IntStream;
 
 public class AI extends User {
 
 
     private Duel currentDuel;
+
     public AI(String username, String password, String nickname) {
         super(username, password, nickname);
         createDeck();
@@ -35,8 +35,7 @@ public class AI extends User {
     private void createDeck() {
         Deck deck = new Deck("AI Deck");
         int counter = 0;
-        for (Iterator<Card> iterator = ProgramController.allCards.values().iterator(); iterator.hasNext(); ) {
-            Card card = iterator.next();
+        for (Card card : ProgramController.allCards.values()) {
             if (card instanceof Monster && card.getCardType().equals(CardType.NORMAL)
                     && ((Monster) card).getLevel() < 5) {
                 for (int i = 0; i < 3; i++) {
@@ -51,7 +50,7 @@ public class AI extends User {
         deck.setActive(true);
     }
 
-    private void startStrategy(){
+    private void startStrategy() {
         IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
         if (getHand().getNumberOfCardsInHand() > 0 && getBoard().getMonsterNumber() < 4) {
             ProgramController.currentMenu.run("select --hand 1");

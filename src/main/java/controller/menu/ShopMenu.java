@@ -57,7 +57,7 @@ public class ShopMenu implements Menuable {
         user.setCoins(user.getCoins() - card.getPrice());
     }
 
-    private void increaseMoney(Matcher matcher){
+    private void increaseMoney(Matcher matcher) {
         int amount = Integer.parseInt(matcher.group("amount"));
         ProgramController.userInGame.setCoins(ProgramController.userInGame.getCoins() + amount);
         PrintResponses.print(Responses.moneyIncreased);
