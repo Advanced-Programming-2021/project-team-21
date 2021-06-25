@@ -41,9 +41,10 @@ public class DeathEffects {
         return false;
     }
 
-    private static void CheckSpells(User userNow) {
+    public static void CheckSpells(User userNow) {
         for (Card spellsAndTrap : userNow.getBoard().getSpellsAndTraps()) {
             if (spellsAndTrap instanceof Spell) {
+                System.out.println(spellsAndTrap.getName());
                 Spell spell = (Spell) spellsAndTrap;
                 if (spell.getCanDrawACardWhenAMonsterIsDead().hasEffect() && spell.isFaceUp()) {
                     ArrayList<Card> deckCards = userNow.getHand().getDeckToDraw().getMainDeckCards();

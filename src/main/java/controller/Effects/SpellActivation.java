@@ -215,6 +215,7 @@ public class SpellActivation {
             }
         }
         duel.addCardToGraveyard(spell, place, userNow);
+
     }
 
     public static int getPlace(Card[] spellsAndTraps) {
@@ -228,6 +229,8 @@ public class SpellActivation {
     }
 
     private static void destroySpell(Card card, User userNow, Duel duel) {
+        if (card == null)
+            return;
         duel.addCardToGraveyard(card, userNow.getBoard().getAddressByCard(card), userNow);
     }
 
@@ -308,6 +311,9 @@ public class SpellActivation {
             Monster monster = (Monster) rivalCard;
             duel.addCardToGraveyard(monster, userNow.getBoard().getAddressByCard(monster), userNow);
         }
-        duel.addCardToGraveyard(spell, place, userNow);
+        if (!duel.getUserWhoPlaysNow().equals(userNow))
+            duel.addCardToGraveyard(spell, place, duel.getUserWhoPlaysNow());
+        else
+            duel.addCardToGraveyard(spell, place, duel.getRival());
     }
 }

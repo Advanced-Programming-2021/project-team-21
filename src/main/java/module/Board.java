@@ -98,8 +98,7 @@ public class Board {
 
     public void changeFacePositionToAttackForSpells(int placeOnBoard) {
         showSpellsAndTraps[placeOnBoard - 1] = "O";
-        monsters[placeOnBoard - 1].setATK(true);
-        monsters[placeOnBoard - 1].setFaceUp(false);
+        spellsAndTraps[placeOnBoard - 1].setFaceUp(true);
     }
 
     public void putCardToFieldZone(Card card) {

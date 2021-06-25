@@ -305,6 +305,7 @@ public class Duel {
 
     public void activateEffects() {
         Spell spellToActivate = (Spell) selectedCard;
+        userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOfSelectedCard);
         boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
                 getRival(), this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
                 userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
@@ -393,6 +394,7 @@ public class Duel {
             Monster monster = (Monster) user.getBoard().getCard(userWhoPlaysNow.getAlteringATKPlace(), 'm');
             monster.setAtk(monster.getAtk() - 300 * ((Monster) card).getLevel());
         }
+        DeathEffects.CheckSpells(user);
         Card cardToAdd = Card.getCardByName(card.getName());
         user.getGraveyard().add(cardToAdd);
     }
