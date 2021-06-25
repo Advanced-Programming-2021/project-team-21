@@ -423,11 +423,7 @@ public class Duel {
     public User getUserWhoPlaysNow() {
         return userWhoPlaysNow;
     }
-
-    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
-        this.userWhoPlaysNow = userWhoPlaysNow;
-    }
-
+    
     public User getSECOND_USER() {
         return SECOND_USER;
     }
@@ -576,6 +572,7 @@ public class Duel {
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOnBoard);
     }
 
+
     @Override
     public String toString() {
         return getRival().getNickname() + ":" + getRival().getLifePoints() +
@@ -600,9 +597,14 @@ public class Duel {
         this.numberOfTurnsPlayedUpToNow = numberOfTurnsPlayedUpToNow;
     }
 
+
     private void resetCards() {
         Card[] cards = userWhoPlaysNow.getBoard().getMonsters();
         Arrays.stream(cards).filter(Objects::nonNull).forEach(card -> ((Monster) card).setHasAttackedOnceInTurn(false));
+    }
+
+    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
+        this.userWhoPlaysNow = userWhoPlaysNow;
     }
 }
 

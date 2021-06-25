@@ -1,7 +1,7 @@
 Name,Icon,Description,Status,Price,Pairs
 Trap Hole,Normal,When your opponent Normal or Flip Summons 1 monster with 1000 or more ATK: Target that monster,Unlimited,2000,canDestroyMonsterSummonWithATK=1001_0
 Mirror Force,Normal,When an opponent's monster declares an attack: Destroy all your opponent's Attack Position monsters.,Unlimited,2000,destroyAttackMonsters=6_0
-Magic Cylinder,Normal,"When an opponent's monster declares an attack: Target the attacking monster; negate the attack, and if you do, inflict damage to your opponent equal to its ATK.",Unlimited,2000,canNegateWholeAttack=2_0*canAttackLP=1_0
+Magic Cylinder,Normal,"When an opponent's monster declares an attack: Target the attacking monster; negate the attack, and if you do, inflict damage to your opponent equal to its ATK.",Unlimited,2000,canNegateWholeAttack=2_0*canAttackLP=2_0
 Mind Crush,Normal,"Declare 1 card name; if that card is in your opponent's hand, they must discard all copies of it, otherwise you discard 1 random card.",Unlimited,2000,canDestroyFromDeckAndHand=4_0
 Torrential Tribute,Normal,When a monster(s) is Summoned: Destroy all monsters on the field.,Unlimited,2000,canDestroyAll=1_0
 Time Seal,Normal,Skip the Draw Phase of your opponent's next turn.,Limited,2000,canNotDraw=2_0
