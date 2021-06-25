@@ -301,6 +301,9 @@ public class SpellActivation {
         DuelMenu.specialSummonsedCards = cards;
         DuelMenu.isGetFroOpponentGY = true;
         PrintResponses.printSpecialSummonCards(cards);
+        while (DuelMenu.specialSummonsedCards != null){
+            DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine() , duel , false);
+        }
         duel.addCardToGraveyard(spell, place, userNow);
     }
 

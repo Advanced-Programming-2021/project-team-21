@@ -14,7 +14,7 @@ public class DeathEffects {
     //yami ship
     // exploder dragon
     // supply squad
-    public static boolean run(Monster attacked, Monster dead, User rival, Duel duel, int attackingPlace, User userNow) {
+    public static boolean run(Monster attacked, Monster dead, User rival, Duel duel, int attackingPlace, User userNow , int deadPlace) {
         CheckSpells(userNow);
         if (dead.getDisableTrapSummon().hasEffect()) {
             rival.setCanSummonTrap(true);
@@ -26,12 +26,13 @@ public class DeathEffects {
             userNow.setIncreaseATK(userNow.getIncreaseATK() - dead.getCanIncreaseATK().getEffectNumber());
         }
         if (dead.getCanKillTheAttacker().hasEffect() && !attacked.isDead()) {
-            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival);
+            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival , deadPlace);
             duel.addCardToGraveyard(attacked, attackingPlace, userNow);
         }
         if (dead.getCanDestroyBothWithoutLosingLP().hasEffect()) {
-            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival);
+            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival , deadPlace);
             duel.addCardToGraveyard(attacked, attackingPlace, userNow);
+            duel.addCardToGraveyard(dead , deadPlace , rival);
             return true;
         }
         if (dead.getDisableTrapSummon().hasEffect()) {

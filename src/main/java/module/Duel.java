@@ -306,7 +306,13 @@ public class Duel {
 
     public void activateEffects() {
         Spell spellToActivate = (Spell) selectedCard;
-        userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOfSelectedCard);
+        int addressToPut = placeOfSelectedCard;
+         if (userWhoPlaysNow.getHand().isCardInHand(selectedCard)){
+            addressToPut = userWhoPlaysNow.getBoard().getAddressToPutSpell();
+            userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
+            flipSetForSpells(addressToPut);
+        }
+        userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
         boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
                 getRival(),userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
                 userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
@@ -331,10 +337,6 @@ public class Duel {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, monster, null);
-        } else if (userWhoPlaysNow.getHand().isCardInHand(selectedCard)){
-            int addressToPut = userWhoPlaysNow.getBoard().getAddressToPutSpell();
-            userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
-            flipSetForSpells(addressToPut);
         }
         SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                 false, null, null);
@@ -470,7 +472,7 @@ public class Duel {
         if (differenceOfATK > 0) {
             monsterToAttack.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
+                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
                     return new Pair<>(0, 0);
                 }
             if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
@@ -502,7 +504,7 @@ public class Duel {
         if (differenceOfATK > 0) {
             monsterToAttack.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
+                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
                     return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
                 }
             changeLP(rival, -differenceOfATK);
@@ -517,7 +519,7 @@ public class Duel {
             monsterToAttack.setDead(true);
             attackingMonster.setDead(true);
             if (monsterToAttack.isDeathEffect())
-                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
+                if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
                     return new Pair<>(0, 0);
                 }
 
@@ -525,7 +527,7 @@ public class Duel {
             if (userWhoPlaysNow.getBoard().selectOwnMonster(placeInBoard) != null) {
                 int notDuplicate = 0;
                 if (attackingMonster.isDeathEffect())
-                    if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
+                    if (DeathEffects.run(((Monster) selectedCard), monsterToAttack, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
                         return new Pair<>(notDuplicate, 0);
                     }
                 if (monsterToAttack.isBattlePhaseEffectEnd() || ((Monster) selectedCard).isBattlePhaseEffectEnd()) {
@@ -537,7 +539,7 @@ public class Duel {
             return new Pair<>(2, differenceOfATK);
         } else {
             if (((Monster) selectedCard).isDeathEffect())
-                if (DeathEffects.run(monsterToAttack, (Monster) selectedCard, rival, this, placeOfSelectedCard, userWhoPlaysNow)) {
+                if (DeathEffects.run(monsterToAttack, (Monster) selectedCard, rival, this, placeOfSelectedCard, userWhoPlaysNow , placeInBoard)) {
                     return new Pair<>(toBeNotDuplicate, toBeNotDuplicate);
                 }
 
