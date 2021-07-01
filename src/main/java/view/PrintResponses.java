@@ -3,11 +3,10 @@ package view;
 import controller.menu.Phases;
 import module.Deck;
 import module.Duel;
+import module.Hand;
 import module.User;
 import module.card.Card;
 import module.card.Monster;
-import module.card.Spell;
-import module.card.Trap;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
@@ -425,11 +424,11 @@ public class PrintResponses {
         System.out.println("no card is destroyed and you received " + damage + " battle damage");
     }
 
-    public static void printCardNameInAttackIfIsDefenceHide(String cardName){
-        System.out.print("opponent’s monster card was "+ cardName +" and ");
+    public static void printCardNameInAttackIfIsDefenceHide(String cardName) {
+        System.out.print("opponent’s monster card was " + cardName + " and ");
     }
 
-    public static void printDamageInAttackDirectly(int damage){
+    public static void printDamageInAttackDirectly(int damage) {
         System.out.println("you opponent receives " + damage + " battle damage");
     }
 
@@ -456,30 +455,37 @@ public class PrintResponses {
     public static void printBoard(Duel currentDuel) {
         System.out.println(currentDuel);
     }
+
     public static void printSpecialSummonCards(ArrayList<Monster> monsters) {
+        System.out.println("these are the cards to choose from");
         for (int i = 0; i < monsters.size(); i++) {
-            System.out.println(i + ": " + monsters.get(i));
+            System.out.println(i + ": \n" + monsters.get(i));
+            System.out.println("-------------------------------------------------------------------------------------");
         }
     }
-    public static void printWrongChoice(){
+
+    public static void printWrongChoice() {
         System.out.println(Responses.wrongChoose);
     }
-    public static void printChooseTribute(){
+
+    public static void printChooseTribute() {
         System.out.println(Responses.choiceOfDifferentTribute);
     }
-    public static void printWrongTribute(){
+
+    public static void printWrongTribute() {
         System.out.println(Responses.wrongChoiceOfTribute);
     }
-    public static void printDisabledSummonMonster(){
+
+    public static void printDisabledSummonMonster() {
         System.out.println(Responses.disabledMonsterSummon);
     }
-    public static void printDisabledSummonSpell(){
+
+    public static void printDisabledSummonSpell() {
         System.out.println(Responses.disabledSpellSummon);
     }
-    public static void printDisabledTrapSummon(){
-        System.out.println(Responses.disabledTrapSummon);
-    }
-    public static void printAskForEffectMonster(){
+
+
+    public static void printAskForEffectMonster() {
         System.out.println(Responses.activateEffectMonster);
     }
 
@@ -487,11 +493,11 @@ public class PrintResponses {
         System.out.println("Round " + (4 - remainingRounds) + " started");
     }
 
-    public static void printWinnerInRound(User winner){
+    public static void printWinnerInRound(User winner) {
         System.out.println("Round ended. \"" + winner.getUsername() + "\" is the winner.");
     }
 
-    public static void print(Object object){
+    public static void print(Object object) {
         System.out.println(object);
     }
 
@@ -500,6 +506,7 @@ public class PrintResponses {
         printBoard(duel);
         System.out.println(Responses.askForChain);
     }
+
     public static void printChainComplete(int chainCount) {
         System.out.println("chain Count: " + chainCount);
     }
@@ -553,8 +560,24 @@ public class PrintResponses {
         System.out.println(Responses.noSpellFound);
     }
 
-    public static void printDisabledAttack() {
-        System.out.println(Responses.disabledAttack);
+
+    public static void printHandShow(Hand hand) {
+        for (int i = 0; i < hand.getCardsInHand().length; i++) {
+            if (hand.getCardsInHand()[i] != null) {
+                System.out.println((i + 1) + ": " + hand.getCardsInHand()[i].getName());
+            }
+        }
     }
 
+    public static void printNoSpecialEffect() {
+        System.out.println(Responses.noSpecialEffect);
+    }
+
+    public static void printAskToRitualMonster() {
+        System.out.println(Responses.askToRitual);
+    }
+
+    public static void printEnterTributeOrRitual() {
+        System.out.println(Responses.enterTribute);
+    }
 }

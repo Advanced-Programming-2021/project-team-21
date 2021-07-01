@@ -4,11 +4,14 @@ package module.card;
 
 import com.rits.cloning.Cloner;
 import controller.ProgramController;
+import module.card.effects.Effect;
 import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class Card {
     protected String name;
@@ -29,7 +32,7 @@ public class Card {
         return null;
     }
 
-    public static ArrayList<Card> sort(ArrayList<Card> cards) {
+    public static void sort(ArrayList<Card> cards) {
         ArrayList<Card> sort = new ArrayList<>(cards);
         for (int i = 0; i < sort.size(); i++) {
             for (int j = i + 1; j < sort.size(); j++) {
@@ -37,7 +40,6 @@ public class Card {
                     Collections.swap(sort, i, j);
             }
         }
-        return sort;
     }
 
     public String getName() {
@@ -80,16 +82,11 @@ public class Card {
         this.description = description;
     }
 
-    public void destroyWithoutLosingLifePoints() {
-    }
 
     public void setHasEffect(boolean hasEffect) {
         this.hasEffect = hasEffect;
     }
 
-    public boolean HasEffect() {
-        return hasEffect;
-    }
 
     public boolean isATK() {
         return isATK;
@@ -99,11 +96,8 @@ public class Card {
         isATK = ATK;
     }
 
-    //for searching a card on board or deck or graveYard
-    public Card getACardFromArrayByName(ArrayList<Card> cards, String name) {
-        for (Card card : cards) {
-            if (card.getName().equals(name)) return card;
-        }
+
+    public Map<String, Consumer<Effect>> getEffectsMap() {
         return null;
     }
 }

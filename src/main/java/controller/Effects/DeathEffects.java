@@ -14,8 +14,11 @@ public class DeathEffects {
     //yami ship
     // exploder dragon
     // supply squad
-    public static boolean run(Monster attacked, Monster dead, User rival, Duel duel, int attackingPlace, User userNow) {
+    public static boolean run(Monster attacked, Monster dead, User rival, Duel duel, int attackingPlace, User userNow , int deadPlace) {
         CheckSpells(userNow);
+        if (dead.getDisableTrapSummon().hasEffect()) {
+            rival.setCanSummonTrap(true);
+        }
         if (dead.getCanIncreaseATK().hasEffect()) {
             ArrayList<Card> monsters = new ArrayList<>();
             Collections.addAll(monsters, rival.getBoard().getMonsters());
@@ -23,12 +26,14 @@ public class DeathEffects {
             userNow.setIncreaseATK(userNow.getIncreaseATK() - dead.getCanIncreaseATK().getEffectNumber());
         }
         if (dead.getCanKillTheAttacker().hasEffect() && !attacked.isDead()) {
-            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival);
+            if (attacked.isDeathEffect()
+            && !attacked.getCanDestroyBothWithoutLosingLP().hasEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival , deadPlace);
             duel.addCardToGraveyard(attacked, attackingPlace, userNow);
         }
         if (dead.getCanDestroyBothWithoutLosingLP().hasEffect()) {
-            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival);
+            if (attacked.isDeathEffect()) DeathEffects.run(dead, attacked, userNow, duel, attackingPlace, rival , deadPlace);
             duel.addCardToGraveyard(attacked, attackingPlace, userNow);
+            duel.addCardToGraveyard(dead , deadPlace , rival);
             return true;
         }
         if (dead.getDisableTrapSummon().hasEffect()) {
@@ -41,9 +46,10 @@ public class DeathEffects {
         return false;
     }
 
-    private static void CheckSpells(User userNow) {
+    public static void CheckSpells(User userNow) {
         for (Card spellsAndTrap : userNow.getBoard().getSpellsAndTraps()) {
             if (spellsAndTrap instanceof Spell) {
+                System.out.println(spellsAndTrap.getName());
                 Spell spell = (Spell) spellsAndTrap;
                 if (spell.getCanDrawACardWhenAMonsterIsDead().hasEffect() && spell.isFaceUp()) {
                     ArrayList<Card> deckCards = userNow.getHand().getDeckToDraw().getMainDeckCards();

@@ -21,13 +21,13 @@ public class User {
     private ArrayList<Card> graveyard;
     private int lifePoints;
     private int maxLifePoint = 0;
-    private boolean canSummonMonster, canSummonSpell, canSummonTrap, canAttack;
+    private boolean canSummonMonster = true, canSummonSpell = true, canSummonTrap = true, canAttack = true;
     private int winsInAMatch;
     private int CanNotDrawRounds;
-
-    private int increaseATK , increaseDEF;
+    private int increaseATK, increaseDEF;
     private boolean hasSummonedAlteringATK;
     private int alteringATKPlace = -1;
+
     {
         coins = 100000;
         decks = new ArrayList<>();
@@ -119,22 +119,6 @@ public class User {
         return null;
     }
 
-    public void setActiveDeck(Deck deck) {
-        deck.setActive(true);
-        DataController.saveData(deck);
-    }
-
-    public ArrayList<Card> getSideDeck() {
-        for (Deck deck : decks) {
-            return deck.getSideDeckCards();
-        }
-        return null;
-    }
-
-    public void setSideDeck(Deck deck) {
-        this.decks.add(deck);
-        DataController.saveData(deck);
-    }
 
     public ArrayList<Deck> getDecks() {
         return decks;
@@ -155,24 +139,6 @@ public class User {
         DataController.saveData(this);
     }
 
-    public void removeCard(Card card) {
-        this.cards.remove(card);
-        DataController.saveData(this);
-    }
-
-    public void increaseCoins(int amount) {
-        this.coins += amount;
-        DataController.saveData(this);
-    }
-
-    public void increaseScore(int amount) {
-        this.score += amount;
-        DataController.saveData(this);
-    }
-
-    public boolean doesUserExist(String username) {
-        return DataController.getUserByUsername(username) != null;
-    }
 
     public Deck getDeckByName(String name) {
         for (Deck deck : decks) {
@@ -233,8 +199,8 @@ public class User {
         this.canSummonMonster = canSummonMonster;
     }
 
-    public boolean isCanSummonSpell() {
-        return canSummonSpell;
+    public boolean isCanNotSetSpell() {
+        return !canSummonSpell;
     }
 
     public void setCanSummonSpell(boolean canSummonSpell) {
@@ -269,12 +235,12 @@ public class User {
         return increaseATK;
     }
 
-    public int getIncreaseDEF() {
-        return increaseDEF;
-    }
-
     public void setIncreaseATK(int increaseATK) {
         this.increaseATK = increaseATK;
+    }
+
+    public int getIncreaseDEF() {
+        return increaseDEF;
     }
 
     public void setIncreaseDEF(int increaseDEF) {

@@ -1,9 +1,15 @@
 package module.card;
 
 
+import controller.DataController;
 import module.card.effects.Effect;
 import module.card.enums.SpellTrapIcon;
 import module.card.enums.SpellTrapStatus;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
 // add user a field named canDraw
 public class Trap extends Card {
@@ -39,8 +45,16 @@ public class Trap extends Card {
         setDescription((String) parameters[2]);
         setSpellTrapStatus(SpellTrapStatus.valueOf(((String) parameters[3]).toUpperCase()));
         setPrice((int) parameters[4]);
+        Set<String> keys = this.getEffectsMap().keySet();
+        for (String key : keys) {
+            this.getEffectsMap().get(key).accept(new Effect(0, 0));
+        }
+        DataController.cardPairsParser((String) parameters[5], this);
     }
 
+    public void setKillTheSummoned(Effect killTheSummoned) {
+        this.killTheSummoned = killTheSummoned;
+    }
 
     public SpellTrapIcon getSpellTrapIcon() {
         return spellTrapIcon;
@@ -67,51 +81,114 @@ public class Trap extends Card {
         return canAttackLP;
     }
 
+    public void setCanAttackLP(Effect canAttackLP) {
+        this.canAttackLP = canAttackLP;
+    }
+
     public Effect getCanNegateWholeAttack() {
         return canNegateWholeAttack;
+    }
+
+    public void setCanNegateWholeAttack(Effect canNegateWholeAttack) {
+        this.canNegateWholeAttack = canNegateWholeAttack;
     }
 
     public Effect getDestroyAttackMonsters() {
         return destroyAttackMonsters;
     }
 
+    public void setDestroyAttackMonsters(Effect destroyAttackMonsters) {
+        this.destroyAttackMonsters = destroyAttackMonsters;
+    }
+
     public Effect getCanDestroyAll() {
         return canDestroyAll;
+    }
+
+    public void setCanDestroyAll(Effect canDestroyAll) {
+        this.canDestroyAll = canDestroyAll;
     }
 
     public Effect getCanDestroyMonsterSummonWithATK() {
         return canDestroyMonsterSummonWithATK;
     }
 
+    public void setCanDestroyMonsterSummonWithATK(Effect canDestroyMonsterSummonWithATK) {
+        this.canDestroyMonsterSummonWithATK = canDestroyMonsterSummonWithATK;
+    }
+
     public Effect getNegateASummon() {
         return negateASummon;
+    }
+
+    public void setNegateASummon(Effect negateASummon) {
+        this.negateASummon = negateASummon;
     }
 
     public Effect getNegateSpellActivation() {
         return negateSpellActivation;
     }
 
+    public void setNegateSpellActivation(Effect negateSpellActivation) {
+        this.negateSpellActivation = negateSpellActivation;
+    }
+
     public Effect getCostLP() {
         return costLP;
+    }
+
+    public void setCostLP(Effect costLP) {
+        this.costLP = costLP;
     }
 
     public Effect getDiscardACard() {
         return discardACard;
     }
 
+    public void setDiscardACard(Effect discardACard) {
+        this.discardACard = discardACard;
+    }
+
     public Effect getCanDestroyFromDeckAndHand() {
         return canDestroyFromDeckAndHand;
     }
 
-    public void setCanAttackLP(Effect canAttackLP) {
-        this.canAttackLP = canAttackLP;
+    public void setCanDestroyFromDeckAndHand(Effect canDestroyFromDeckAndHand) {
+        this.canDestroyFromDeckAndHand = canDestroyFromDeckAndHand;
     }
 
     public Effect getCanNotDraw() {
         return canNotDraw;
     }
 
+    public void setCanNotDraw(Effect canNotDraw) {
+        this.canNotDraw = canNotDraw;
+    }
+
     public Effect getCanSummonFromGY() {
         return canSummonFromGY;
+    }
+
+    public void setCanSummonFromGY(Effect canSummonFromGY) {
+        this.canSummonFromGY = canSummonFromGY;
+    }
+
+    @Override
+    public Map<String, Consumer<Effect>> getEffectsMap() {
+        Map<String, Consumer<Effect>> effectsMap = new HashMap<>();
+        effectsMap.put("canNegateWholeAttack", this::setCanNegateWholeAttack);
+        effectsMap.put("canAttackLP", this::setCanAttackLP);
+        effectsMap.put("destroyAttackMonsters", this::setDestroyAttackMonsters);
+        effectsMap.put("canDestroyFromDeckAndHand", this::setCanDestroyFromDeckAndHand);
+        effectsMap.put("canDestroyMonsterSummonWithATK", this::setCanDestroyMonsterSummonWithATK);
+        effectsMap.put("canDestroyAll", this::setCanDestroyAll);
+        effectsMap.put("canNotDraw", this::setCanNotDraw);
+        effectsMap.put("discardACard", this::setDiscardACard);
+        effectsMap.put("negateSpellActivation", this::setNegateSpellActivation);
+        effectsMap.put("costLP", this::setCostLP);
+        effectsMap.put("negateASummon", this::setNegateASummon);
+        effectsMap.put("canSummonFromGY", this::setCanSummonFromGY);
+        effectsMap.put("killTheSummoned", this::setKillTheSummoned);
+        return effectsMap;
     }
 }

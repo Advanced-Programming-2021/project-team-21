@@ -5,7 +5,10 @@ import controller.menu.DuelMenu;
 import module.Board;
 import module.Duel;
 import module.User;
-import module.card.*;
+import module.card.Card;
+import module.card.Chain;
+import module.card.Monster;
+import module.card.Spell;
 import module.card.effects.Effect;
 import view.PrintResponses;
 
@@ -43,10 +46,10 @@ public class SpellActivation {
             handleControl(spell, userNow, rival, duel, place);
         }
         if (spell.getCanChangeFaceOFOpponent().hasEffect()) {
-            handleFaceChange(spell, userNow, rival, duel);
+            handleFaceChange(rival, duel);
         }
         if (spell.getCanMakeMonstersUndefeatable().hasEffect()) {
-            handleMakeUndefeatable(rival, duel);
+            handleMakeUndefeatable(rival);
         }
         if (spell.getMonstersCanNotAttack().hasEffect()) {
             handleMonsterNotAttack(rival, spell);
@@ -78,7 +81,7 @@ public class SpellActivation {
     private static void thirdEquipSpell(Monster equipped, Spell spell, boolean fieldAndEquipSpellAdd) {
         Effect effect = spell.getEquipBasedMyUpMonsters();
         if (equipped.getMonsterType().getName().equals(spell.getEquipBasedOnPosition().getType())) {
-            if (equipped.isATKPosition()) effect.setAttack(equipped.getDef());
+            if (equipped.isATK()) effect.setAttack(equipped.getDef());
             else effect.setDefense(equipped.getAtk());
         }
         setChanges(fieldAndEquipSpellAdd, effect, equipped);
@@ -86,13 +89,13 @@ public class SpellActivation {
 
     private static void secondEquipSpell(Monster equipped, Spell spell, boolean fieldAndEquipSpellAdd, User userNow) {
         Effect effect = spell.getEquipBasedMyUpMonsters();
-        effect.setAttack(effect.getAttack() * userNow.getBoard().getMonsters().length);
-        effect.setDefense(effect.getDefense() * userNow.getBoard().getMonsters().length);
+        effect.setAttack(effect.getAttack() * userNow.getBoard().getMonsterNumber());
+        effect.setDefense(effect.getDefense() * userNow.getBoard().getMonsterNumber());
         setChanges(fieldAndEquipSpellAdd, effect, equipped);
     }
 
     private static void equipSpell(Monster equipped, Spell spell, boolean equipSpellAdd) {
-        Effect effect = spell.getEquipCardNormal2();
+        Effect effect = spell.getEquipCardNormal1();
         int type = 1;
         HashMap<Integer, Effect> checkNext = new HashMap<>();
         checkNext.put(1, spell.getEquipCardNormal1());
@@ -112,8 +115,8 @@ public class SpellActivation {
         while (effect.hasEffect()) {
             ArrayList<Monster> monstersWithType = getMonsters(userNow, effect);
             for (Monster monster : monstersWithType) {
-                effect.setAttack(effect.getAttack() * userNow.getBoard().getGraveyard().size());
-                effect.setDefense(effect.getDefense() * userNow.getBoard().getGraveyard().size());
+                effect.setAttack(effect.getAttack() * userNow.getGraveyard().size());
+                effect.setDefense(effect.getDefense() * userNow.getGraveyard().size());
                 setChanges(fieldSpellAdd, effect, monster);
             }
             effect = spell.getFieldATKIncreaseGY2();
@@ -150,7 +153,7 @@ public class SpellActivation {
         ArrayList<Monster> monstersWithType = new ArrayList<>();
         for (Card monster : userNow.getBoard().getMonsters()) {
             Monster monsterType = (Monster) monster;
-            if (monsterType.getMonsterType().getName().equals(effect.getType()))
+            if (monster != null && monsterType.getMonsterType().getName().equals(effect.getType()))
                 monstersWithType.add(monsterType);
         }
         monstersWithType.addAll(userNow.getHand().getCardsWithType(7, effect.getType()));
@@ -167,6 +170,8 @@ public class SpellActivation {
     }
 
     private static void checkSpells(User userNow, Duel duel) {
+        if (userNow.getBoard().getSpellNumber() < 2)
+            return;
         for (Card spellsAndTrap : userNow.getBoard().getSpellsAndTraps()) {
             if (spellsAndTrap instanceof Spell) {
                 Spell spell = (Spell) spellsAndTrap;
@@ -177,14 +182,14 @@ public class SpellActivation {
         }
     }
 
-    private static void handleMakeUndefeatable(User rival, Duel duel) {
+    private static void handleMakeUndefeatable(User rival) {
         rival.setCanAttack(false);
     }
 
-    private static void handleFaceChange(Spell spell, User userNow, User rival, Duel duel) {
+    private static void handleFaceChange(User rival, Duel duel) {
         Board board = rival.getBoard();
         for (Card monster : board.getMonsters()) {
-            if (!monster.isFaceUp()) duel.flipSetForMonsters(board.getAddressByCard(monster));
+            if (monster != null && !monster.isFaceUp()) duel.flipSetForMonsters(board.getAddressByCard(monster));
         }
     }
 
@@ -215,6 +220,7 @@ public class SpellActivation {
             }
         }
         duel.addCardToGraveyard(spell, place, userNow);
+
     }
 
     public static int getPlace(Card[] spellsAndTraps) {
@@ -228,6 +234,8 @@ public class SpellActivation {
     }
 
     private static void destroySpell(Card card, User userNow, Duel duel) {
+        if (card == null)
+            return;
         duel.addCardToGraveyard(card, userNow.getBoard().getAddressByCard(card), userNow);
     }
 
@@ -289,15 +297,18 @@ public class SpellActivation {
 
     private static void handleSummonFromGY(Spell spell, User userNow, User rival, Duel duel, int place) {
         ArrayList<Monster> cards = new ArrayList<>();
-        for (Card card : userNow.getBoard().getGraveyard()) {
+        for (Card card : userNow.getGraveyard()) {
             if (card instanceof Monster) cards.add((Monster) card);
         }
-        for (Card card : rival.getBoard().getGraveyard()) {
+        for (Card card : rival.getGraveyard()) {
             if (card instanceof Monster) cards.add((Monster) card);
         }
         DuelMenu.specialSummonsedCards = cards;
         DuelMenu.isGetFroOpponentGY = true;
         PrintResponses.printSpecialSummonCards(cards);
+        while (DuelMenu.specialSummonsedCards != null) {
+            DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
+        }
         duel.addCardToGraveyard(spell, place, userNow);
     }
 
@@ -308,6 +319,9 @@ public class SpellActivation {
             Monster monster = (Monster) rivalCard;
             duel.addCardToGraveyard(monster, userNow.getBoard().getAddressByCard(monster), userNow);
         }
-        duel.addCardToGraveyard(spell, place, userNow);
+        if (!duel.getUserWhoPlaysNow().equals(userNow))
+            duel.addCardToGraveyard(spell, place, duel.getUserWhoPlaysNow());
+        else
+            duel.addCardToGraveyard(spell, place, duel.getRival());
     }
 }

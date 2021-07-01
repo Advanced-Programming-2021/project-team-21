@@ -2,7 +2,9 @@ package controller.Effects;
 
 import module.Duel;
 import module.User;
-import module.card.*;
+import module.card.Card;
+import module.card.Monster;
+import module.card.Spell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,14 +32,19 @@ public class ChangeTurnEffects {
                     rival.getBoard().addMonsterFaceUp(SpellActivation.oldPlace, monster);
                 }
                 duel.addCardToGraveyard(user.getBoard().getCard(SpellActivation.changeSpellPlace, 'S'), SpellActivation.changeSpellPlace, rival);
+                if (user.isHasSummonedAlteringATK()) {
+                    Monster monster1 = (Monster) user.getBoard().getCard(user.getAlteringATKPlace(), 'm');
+                    monster1.setAtk(monster1.getAtk() - 300 * monster1.getLevel());
+                }
             }
             if (spell.getCanChangeFaceOFOpponent().hasEffect() && spell.isFaceUp()) {
                 spell.getCanChangeFaceOFOpponent().setIsEffect(spell.getCanChangeFaceOFOpponent().getIsEffect() - 1);
             }
             if (spell.getCanMakeMonstersUndefeatable().hasEffect() && spell.isFaceUp()) {
-                spell.getCanChangeFaceOFOpponent().setIsEffect(spell.getCanMakeMonstersUndefeatable().getIsEffect() - 1);
-                if (spell.getCanMakeMonstersUndefeatable().getIsEffect() == 0) {
-                    spell.getCanMakeMonstersUndefeatable().resetEffect();
+                spell.getCanChangeFaceOFOpponent().setIsContinuous(spell.getCanChangeFaceOFOpponent().getContinuousNumber());
+                spell.getCanMakeMonstersUndefeatable().setIsContinuous(spell.getCanMakeMonstersUndefeatable().getContinuousNumber());
+                if (spell.getCanMakeMonstersUndefeatable().getContinuousNumber() == 0) {
+                    duel.addCardToGraveyard(spell, user.getBoard().getAddressByCard(spell), user);
                     rival.setCanAttack(true);
                 }
             }
@@ -53,6 +60,10 @@ public class ChangeTurnEffects {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
             }
+            if (monster.getSummonACardFromEveryWhere().isNeedsToBeReset()) {
+                monster.getSummonACardFromEveryWhere().resetEffect();
+                monster.getSummonACardFromEveryWhere().setNeedsToBeReset(false);
+            }
             if (monster.getCanChangeTheAttackersATK().isNeedsToBeReset()) {
                 monster.getCanChangeTheAttackersATK().resetEffect();
                 monster.getCanChangeTheAttackersATK().setNeedsToBeReset(false);
@@ -61,11 +72,18 @@ public class ChangeTurnEffects {
                 monster.getUndefeatable().resetEffect();
                 monster.getUndefeatable().setNeedsToBeReset(false);
             }
-            if (monster.getCanScan().isNeedsToBeReset()) {
+            if (monster.getCanGetFromGYByLevelToHand().isNeedsToBeReset()) {
+                monster.getCanGetFromGYByLevelToHand().resetEffect();
+                monster.getCanGetFromGYByLevelToHand().setNeedsToBeReset(false);
+                monster.setSelectEffect(true);
+            }
+            if (SelectEffect.scannerHolder != null) {
                 if (SelectEffect.scannerHolder.isATK())
                     duel.getUserWhoPlaysNow().getBoard().addMonsterFaceUp(SelectEffect.scannerPlace, SelectEffect.scannerHolder);
                 else
                     duel.getUserWhoPlaysNow().getBoard().addMonsterFaceDown(SelectEffect.scannerPlace, SelectEffect.scannerHolder);
+                SelectEffect.scannerHolder = null;
+                SelectEffect.scannerPlace = -1;
             }
         }
     }

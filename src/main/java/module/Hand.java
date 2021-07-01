@@ -1,18 +1,21 @@
 package module;
 
 import com.rits.cloning.Cloner;
+import controller.ProgramController;
+import controller.menu.DuelMenu;
 import module.card.Card;
 import module.card.Monster;
+import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 public class Hand {
     private final Card[] cardsInHand;
     private final Deck deckToDraw;
-    private User handOwner;
-    private Boolean canDraw;
+    private final User handOwner;
 
     {
         cardsInHand = new Card[6];
@@ -21,6 +24,7 @@ public class Hand {
     public Hand(User handOwner) {
         Cloner cloner = new Cloner();
         handOwner.setHand(this);
+        this.handOwner = handOwner;
         deckToDraw = cloner.deepClone(handOwner.getActiveDeck());
     }
 
@@ -36,6 +40,18 @@ public class Hand {
 
     public void removeCardFromHand(int cardAddress) {
         cardsInHand[cardAddress - 1] = null;
+        shift();
+    }
+
+    private void shift() {
+        for (int i = 0; i < cardsInHand.length; i++) {
+            if (cardsInHand[i] == null) {
+                if (i + 1 < cardsInHand.length) {
+                    cardsInHand[i] = cardsInHand[i + 1];
+                    cardsInHand[i + 1] = null;
+                }
+            }
+        }
     }
 
     public Card[] getCardsInHand() {
@@ -44,7 +60,7 @@ public class Hand {
 
     public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0) {
-            // ending game
+            ((DuelMenu) ProgramController.currentMenu).endTheGame();
             return null;
         }
         for (int i = 0; i < cardsInHand.length; i++) {
@@ -69,12 +85,8 @@ public class Hand {
         return cardsInHand[cardAddress - 1];
     }
 
-    public void deselectACard(Card selectedCard) {
-        selectedCard = null;
-    }
-
     public void discardACard(int place) {
-        handOwner.getBoard().getGraveyard().add(cardsInHand[place - 1]);
+        handOwner.getGraveyard().add(cardsInHand[place - 1]);
         cardsInHand[place - 1] = null;
     }
 
@@ -100,11 +112,11 @@ public class Hand {
     public ArrayList<Monster> getCardsWithType(int identifier, String type) {
         ArrayList<Monster> found = new ArrayList<>();
         ArrayList<Card> lookingCards = new ArrayList<>();
-        if (identifier >= 4) lookingCards.addAll(handOwner.getBoard().getGraveyard());
+        if (identifier >= 4) lookingCards.addAll(handOwner.getGraveyard());
         if (identifier % 4 >= 2) lookingCards.addAll(Arrays.asList(this.cardsInHand));
         else if (identifier % 2 == 1) lookingCards.addAll(this.deckToDraw.getMainDeckCards());
         for (Card card : lookingCards) {
-            if (card.getCardType().getName().equals(type) && card instanceof Monster) {
+            if (card instanceof Monster && ((Monster) card).getMonsterType().getName().equals(type)) {
                 Monster monster = (Monster) card;
                 found.add(monster);
             }
@@ -140,12 +152,27 @@ public class Hand {
     }
 
     public int getMinLevelOfRitualMonstersInHand() {
-        int level = 0;
+        int level = 20;
         for (Card card : cardsInHand) {
             if (card instanceof Monster && card.getCardType().getName().equals("Ritual") && ((Monster) card).getLevel() < level)
                 level = ((Monster) card).getLevel();
         }
         return level;
+    }
+
+    public int getNumberOfCardsInHand() {
+        return (int) Arrays.stream(cardsInHand).filter(Objects::nonNull).count();
+    }
+
+    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType) {
+        for (Card card : cardsInHand) {
+            if (card instanceof Monster) {
+                Monster monster = (Monster) card;
+                if (monster.getCardType().getName().equals(cardType.getName()))
+                    return true;
+            }
+        }
+        return false;
     }
 
     public Deck getDeckToDraw() {

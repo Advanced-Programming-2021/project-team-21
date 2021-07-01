@@ -3,9 +3,9 @@ package module.card;
 import java.util.ArrayList;
 
 public class Chain {
+    private final String cardName;
     private Card card;
     private ArrayList<Card> destroySpellOrTrap;
-    private String cardName;
 
     public Chain(Card card, ArrayList<Card> destroySpellOrTrap, String cardName) {
         this.card = card;
@@ -17,17 +17,16 @@ public class Chain {
         return card;
     }
 
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
     public ArrayList<Card> getDestroySpellOrTrap() {
         return destroySpellOrTrap;
     }
 
     public void setDestroySpellOrTrap(ArrayList<Card> destroySpellOrTrap) {
         this.destroySpellOrTrap = destroySpellOrTrap;
-    }
-
-
-    public void setCard(Card card) {
-        this.card = card;
     }
 
     public String getCardName() {

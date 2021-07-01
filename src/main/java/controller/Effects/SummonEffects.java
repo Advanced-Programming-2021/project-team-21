@@ -1,6 +1,6 @@
 package controller.Effects;
 
-import controller.Effects.SpellActivation;
+import controller.ProgramController;
 import controller.menu.DuelMenu;
 import module.Duel;
 import module.User;
@@ -26,7 +26,7 @@ public class SummonEffects {
             user.setIncreaseATK(user.getIncreaseATK() + summoned.getCanIncreaseATK().getEffectNumber());
         }
         if (summoned.getDisableTrapSummon().hasEffect()) {
-            user.setCanSummonTrap(false);
+            rival.setCanSummonTrap(false);
         }
         if (summoned.getAlteringAttack().hasEffect()) {
             user.setHasSummonedAlteringATK(true);
@@ -37,19 +37,23 @@ public class SummonEffects {
                 levelSum += getLevel.getLevel();
             }
             summoned.setAtk(summoned.getAlteringAttack().getEffectNumber() * levelSum);
-            user.setAlteringATKPlace(duel.getPlaceOfSelectedCard());
+            user.setAlteringATKPlace(user.getBoard().getAddressToSummon());
         }
         if (summoned.getCanSetFromDeckByMaxLevel().hasEffect()) {
             DuelMenu.isGetFromHand = true;
+            DuelMenu.isForSet = true;
             ArrayList<Monster> handSpecial = new ArrayList<>();
             for (Card card : user.getHand().getCardsInHand()) {
                 if (!(card instanceof Monster)) continue;
                 Monster monster = (Monster) card;
-                if (monster.getLevel() < summoned.getCanSetFromDeckByMaxLevel().getEffectNumber())
+                if (monster.getLevel() <= summoned.getCanSetFromDeckByMaxLevel().getEffectNumber())
                     handSpecial.add(monster);
             }
             DuelMenu.specialSummonsedCards = handSpecial;
-            PrintResponses.printSpecialSummonCards(handSpecial);
+            if (handSpecial.size() != 0) PrintResponses.printSpecialSummonCards(handSpecial);
+            DuelMenu.specialSummonsedCards = handSpecial;
+            while (DuelMenu.specialSummonsedCards != null)
+                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
         }
         checkHasContinuousSpell(summoned, rival, user, duel);
     }

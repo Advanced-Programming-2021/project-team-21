@@ -1,7 +1,9 @@
 package controller.menu;
 
 import controller.Effects.SelectEffect;
+import controller.Effects.StandByEffects;
 import controller.ProgramController;
+import module.AI;
 import module.Duel;
 import module.User;
 import module.card.Card;
@@ -13,7 +15,6 @@ import view.PrintResponses;
 import view.Regex;
 import view.Responses;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -62,48 +63,21 @@ public class DuelMenu implements Menuable {
         return (Monster) duel.getUserWhoPlaysNow().getBoard().getCard(number, 'm');
     }
 
-
-    public void run(String command) {
-        if (checkSpecialSummon(command, currentDuel)) return;
-        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
-        boolean isValidCommand = false;
-
-        try {
-            for (String string : commandMap.keySet()) {
-                Matcher matcher = Regex.getMatcher(command, string);
-                if (currentDuel != null && currentDuel.isGameEnded()) {
-                    endTheGame();
-                    return;
-                } else if (matcher.find() && isInGame) {
-                    isValidCommand = true;
-                    commandMap.get(string).accept(matcher);
-                } else if (!isInGame) {
-                    if (command.equals("back")) {
-                        back();
-                        isValidCommand = true;
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        if (!isValidCommand)
-            PrintResponses.printInvalidFormat();
-    }
-
-    public static boolean checkSpecialSummon(String command, Duel currentDuel) {
+    public static boolean checkSpecialSummon(String command, Duel currentDuel, boolean isInRivalTurn) {
         Matcher matcher;
         if (specialSummonsedCards != null) {
-            PrintResponses.printSpecialSummonCards(specialSummonsedCards);
+            Card card = currentDuel.getSelectedCard();
             if (!(matcher = Regex.getMatcher(command, Regex.specialSummon)).matches()) {
                 PrintResponses.printEmergencySpecialSummon();
                 return true;
             }
             if (specialSummonsedCards.size() == 0) {
                 PrintResponses.printUnableToSpecialSummonMonster();
+                specialSummonsedCards = null;
                 return true;
             }
             int number = Integer.parseInt(matcher.group("cardNumber"));
-            if (number < 0 || number > specialSummonsedCards.size()) {
+            if (number < 0 || number >= specialSummonsedCards.size()) {
                 PrintResponses.printWrongChoice();
                 return true;
             }
@@ -118,15 +92,20 @@ public class DuelMenu implements Menuable {
                 addToHand = false;
                 specialSummonsedCards = null;
             } else if (isForSet) {
+                Card temp = currentDuel.getSelectedCard();
+                int tempPlace = currentDuel.getPlaceOfSelectedCard();
                 currentDuel.setSelectedCard(monster);
                 if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
                     PrintResponses.printUnableToSpecialSummonMonster();
+                    specialSummonsedCards = null;
                     return true;
                 }
                 removeTheSpecialSummoned(monster, currentDuel);
                 int place = currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon();
                 currentDuel.setMonster();
                 currentDuel.flipSetForMonsters(place);
+                currentDuel.setSelectedCard(temp);
+                currentDuel.setPlaceOfSelectedCard(tempPlace);
             } else {
                 currentDuel.setSelectedCard(monster);
                 if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
@@ -134,18 +113,27 @@ public class DuelMenu implements Menuable {
                     return true;
                 }
                 removeTheSpecialSummoned(monster, currentDuel);
+                if (isInRivalTurn) changeTurnTemp(currentDuel);
                 currentDuel.summonMonster();
+                if (isInRivalTurn) changeTurnTemp(currentDuel);
             }
             specialSummonsedCards = null;
+            currentDuel.setSelectedCard(card);
             return true;
         }
         return false;
     }
 
+    private static void changeTurnTemp(Duel currentDuel) {
+        currentDuel.setUserWhoPlaysNow(currentDuel.getRival());
+
+    }
+
+
     public static void removeTheSpecialSummoned(Monster monster, Duel currentDuel) {
         boolean found = false;
         if (isGetFromGY) {
-            for (Card card : currentDuel.getUserWhoPlaysNow().getBoard().getGraveyard()) {
+            for (Card card : currentDuel.getUserWhoPlaysNow().getGraveyard()) {
                 if (card.getName().equals(monster.getName())) {
                     currentDuel.getUserWhoPlaysNow().getBoard().removeFromGY(card.getName());
                     found = true;
@@ -165,8 +153,9 @@ public class DuelMenu implements Menuable {
         if (isGetFromHand && !found) {
             Card[] cards = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
             for (int i = 0; i < cards.length; i++) {
+                if (cards[i] == null) continue;
                 if (cards[i].getName().equals(monster.getName())) {
-                    currentDuel.getUserWhoPlaysNow().getHand().removeCardFromHand(i);
+                    currentDuel.getUserWhoPlaysNow().getHand().removeCardFromHand(i + 1);
                     break;
                 }
             }
@@ -176,17 +165,68 @@ public class DuelMenu implements Menuable {
         isGetFromGY = false;
     }
 
+    public static String askForEffectMonster() {
+        PrintResponses.printAskForEffectMonster();
+        return ProgramController.scanner.nextLine();
+    }
+
+    @Override
+    public void run(String command) {
+        if (checkSpecialSummon(command, currentDuel, false)) return;
+        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
+        boolean isValidCommand = false;
+
+        try {
+            for (String string : commandMap.keySet()) {
+                if (command.equals(Regex.menuExit)) {
+                    exitMenu();
+                    return;
+                }
+                Matcher matcher = Regex.getMatcher(command, string);
+                if (currentDuel != null && currentDuel.isGameEnded()) {
+                    endTheGame();
+                    return;
+                } else if (matcher.find() && isInGame) {
+                    isValidCommand = true;
+                    commandMap.get(string).accept(matcher);
+                } else if (!isInGame) {
+                    if (command.equals("back")) {
+                        back();
+                        isValidCommand = true;
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        if (!isValidCommand) {
+            PrintResponses.printInvalidFormat();
+        }
+
+    }
+
     private void back() {
         isInGame = true;
     }
 
+    @Override
+    public void showCurrentMenu() {
+        PrintResponses.printDuelMenuShow();
+    }
+
+    @Override
+    public void exitMenu() {
+        ProgramController.currentMenu = new MainMenu();
+    }
 
     private HashMap<String, Consumer<Matcher>> createCommandMap() {
         HashMap<String, Consumer<Matcher>> commandMap = new HashMap<>();
         commandMap.put(Regex.createNewDuel, this::createNewDuel);
         commandMap.put(Regex.createNewDuelWithAI, this::createNewDuelWithAI);
         commandMap.put(Regex.selectFromOwn, this::selectCardFromOwn);
+        commandMap.put(Regex.selectFromOwnField, this::selectCardFromOwnField);
         commandMap.put(Regex.selectFromOpponent, this::selectCardFromOpponent);
+        commandMap.put(Regex.selectFromOpponentField, this::selectCardFromOpponentField);
+        commandMap.put(Regex.selectFromOpponentField2, this::selectCardFromOpponentField);
         commandMap.put(Regex.deselectCard, this::deselectCard);
         commandMap.put(Regex.nextPhase, this::goToNextPhase);
         commandMap.put(Regex.summon, this::summon);
@@ -202,9 +242,33 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.increaseLP, this::increaseLP);
         commandMap.put(Regex.setWinner, this::setWinner);
         commandMap.put(Regex.forceSelectHand, this::forceSelectHand);
+        commandMap.put(Regex.showHand, this::showHand);
+        commandMap.put(Regex.showACard, this::showCard);
+        commandMap.put(Regex.addCardToHand, this::addCardToHand);
         return commandMap;
     }
 
+    private void selectCardFromOpponentField(Matcher matcher) {
+        currentDuel.selectCard(1, "field", "opponent");
+        if (currentDuel.getSelectedCard() == null) {
+            PrintResponses.printNoCardInPosition();
+        } else {
+            PrintResponses.printSuccessfulCardSelection();
+        }
+    }
+
+    private void selectCardFromOwnField(Matcher matcher) {
+        currentDuel.selectCard(1, "field", "own");
+        if (currentDuel.getSelectedCard() == null) {
+            PrintResponses.printNoCardInPosition();
+        } else {
+            PrintResponses.printSuccessfulCardSelection();
+        }
+    }
+
+    private void showHand(Matcher matcher) {
+        PrintResponses.printHandShow(currentDuel.getUserWhoPlaysNow().getHand());
+    }
 
     private void createNewDuel(Matcher matcher) {
         if (currentDuel != null) {
@@ -232,15 +296,29 @@ public class DuelMenu implements Menuable {
     }
 
     private void createNewDuelWithAI(Matcher matcher) {
-
+        remainingRounds = Integer.parseInt(matcher.group("rounds"));
+        initialRounds = remainingRounds;
+        if (ProgramController.userInGame.getActiveDeck() == null) {
+            PrintResponses.printHasNoActiveDeck(ProgramController.userInGame);
+        } else if (!ProgramController.userInGame.getActiveDeck().isValid()) {
+            PrintResponses.printInvalidDeck(ProgramController.userInGame);
+        } else if (!(remainingRounds == 1 || remainingRounds == 3)) {
+            PrintResponses.printNonSupportiveRound();
+        } else {
+            handleSuccessfulGameCreation(new AI("AI", "AI", "AI"));
+            ((AI) currentDuel.getSECOND_USER()).setCurrentDuel(currentDuel);
+        }
     }
 
     private void selectCardFromOwn(Matcher matcher) {
         String whereToSelectFrom = matcher.group("where");
         int cardAddress = Integer.parseInt(matcher.group("number"));
         if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
-                || whereToSelectFrom.equals("field")
-                || whereToSelectFrom.equals("hand"))) {
+                || whereToSelectFrom.equals("hand"))
+                || cardAddress > 6) {
+            PrintResponses.printInvalidSelection();
+        } else if ((whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell"))
+                && cardAddress > 5) {
             PrintResponses.printInvalidSelection();
         } else {
             currentDuel.selectCard(cardAddress, whereToSelectFrom, "own");
@@ -254,9 +332,12 @@ public class DuelMenu implements Menuable {
 
     private void selectCardFromOpponent(Matcher matcher) {
         String whereToSelectFrom = matcher.group("where");
+        if (whereToSelectFrom.equals("field")) {
+            PrintResponses.printInvalidFormat();
+            return;
+        }
         int cardAddress = Integer.parseInt(matcher.group("number"));
-        if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell")
-                || whereToSelectFrom.equals("field"))) {
+        if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell"))) {
             PrintResponses.printInvalidSelection();
         } else {
             currentDuel.selectCard(cardAddress, whereToSelectFrom, "opponent");
@@ -285,26 +366,27 @@ public class DuelMenu implements Menuable {
         if (phase.equals(Phases.DRAW_PHASE)) {
             phase = Phases.STANDBY_PHASE;
         } else if (phase.equals(Phases.STANDBY_PHASE)) {
+            StandByEffects.run(currentDuel.getRival(), currentDuel, currentDuel.getUserWhoPlaysNow());
             phase = Phases.MAIN_PHASE1;
         } else if (phase.equals(Phases.MAIN_PHASE1)) {
-            if (currentDuel.getNumberOfTurnsPlayedUpToNow() != 0)
+            if (currentDuel.getNumberOfTurnsPlayedUpToNow() != 0) {
                 phase = Phases.BATTLE_PHASE;
-            else {
+            } else {
                 handleTransitionFromEndPhaseToDrawPhase();
-                handleDrawingACard(currentDuel.drawACard());
+                handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
                 return;
             }
         } else if (phase.equals(Phases.BATTLE_PHASE)) {
             phase = Phases.MAIN_PHASE2;
         } else if (phase.equals(Phases.MAIN_PHASE2)) {
             handleTransitionFromEndPhaseToDrawPhase();
-            handleDrawingACard(currentDuel.drawACard());
+            handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
             return;
         }
         PrintResponses.printPhaseName(phase);
     }
 
-    private void endTheGame() {
+    public void endTheGame() {
         remainingRounds--;
         if (remainingRounds == 0) {
             if (initialRounds == 1)
@@ -333,7 +415,7 @@ public class DuelMenu implements Menuable {
             PrintResponses.printFullnessOfMonsterCardZone();
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
-        } else if (currentDuel.getUserWhoPlaysNow().isCanSummonMonster()) {
+        } else if (!currentDuel.getUserWhoPlaysNow().isCanSummonMonster()) {
             PrintResponses.printDisabledSummonMonster();
         } else if (((Monster) currentDuel.getSelectedCard()).getLevel() > 4) {
             Monster monster = (Monster) currentDuel.getSelectedCard();
@@ -346,8 +428,7 @@ public class DuelMenu implements Menuable {
                 }
                 if (number == 0 && monster.getCanBeNotTribute().hasEffect()) {
                     monster.setAtk(monster.getAtk() - monster.getCanBeNotTribute().getEffectNumber());
-                    currentDuel.summonMonster();
-                    PrintResponses.printSuccessfulSummon();
+                    handleSuccessfulSummon();
                     return;
                 }
                 if (number == 0 && monster.getDiscardToSpecialSummon().hasEffect()) {
@@ -358,8 +439,7 @@ public class DuelMenu implements Menuable {
                             break;
                     }
                     currentDuel.getUserWhoPlaysNow().getHand().discardACard(i);
-                    currentDuel.summonMonster();
-                    PrintResponses.printSuccessfulSummon();
+                    handleSuccessfulSummon();
                     return;
                 }
                 monster.setRequiredCardsFOrTribute(number);
@@ -380,106 +460,110 @@ public class DuelMenu implements Menuable {
                     if (card != null) currentDuel.addCardToGraveyard(card, i, currentDuel.getRival());
                 }
             }
-            currentDuel.summonMonster();
-            PrintResponses.printSuccessfulSummon();
+            handleSuccessfulSummon();
         } else {
-            currentDuel.summonMonster();
-            PrintResponses.printSuccessfulSummon();
+            handleSuccessfulSummon();
         }
+    }
 
+    private void set(Matcher matcher) {
+        if (currentDuel.isNoCardSelected()) {
+            PrintResponses.printNoCardSelected();
+        } else if (!currentDuel.getUserWhoPlaysNow().getHand().isCardInHand(currentDuel.getSelectedCard())) {
+            PrintResponses.printUnableToSetCard();
+        } else if (isNotInMainPhases()) {
+            PrintResponses.printSetCardInWrongPhase();
+        } else if (currentDuel.getSelectedCard() instanceof Monster) {
+            handleMonsterSet();
+        } else {
+            handleSpellAndTrapSet();
+        }
+    }
+
+    private void showCard(Matcher matcher) {
+        String cardName = matcher.group("cardName").trim();
+        PrintResponses.printACard(Card.getCardByName(cardName));
+    }
+
+    private void setPosition(Matcher matcher) {
+        String position = matcher.group("position");
+        if (currentDuel.isNoCardSelected()) {
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()) {
+            PrintResponses.printUnableToChangePositionOfCard();
+        } else if (isNotInMainPhases()) {
+            PrintResponses.printSetCardInWrongPhase();
+        } else if (isPositionTheSameAsBefore(position)) {
+            PrintResponses.printCardInWantedPosition();
+        } else if (currentDuel.isHasChangedPositionOnce()) {
+            PrintResponses.printUnableToChangePositionInTurnTwice();
+        } else {
+            if (position.equals("attack")) {
+                currentDuel.changeToAttackPosition();
+            } else {
+                currentDuel.changeToDefensePosition();
+            }
+            PrintResponses.printSuccessfulMonsterCardPositionChange();
+            PrintResponses.print(currentDuel);
+        }
+    }
+
+    private void flipSummon(Matcher matcher) {
+        if (currentDuel.isNoCardSelected()) {
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()) {
+            PrintResponses.printUnableToChangePositionOfCard();
+        } else if (isNotInMainPhases()) {
+            PrintResponses.printFlipSummonInWrongPhase();
+        } else if (currentDuel.isSelectedCardSummonedInThisTurn() || (currentDuel.getSelectedCard().isFaceUp()
+                || currentDuel.getSelectedCard().isATK())) {
+            PrintResponses.printUnableToFlipSummonCard();
+        } else {
+            currentDuel.flipSummon();
+            PrintResponses.printSuccessfulFlipSummon();
+        }
 
     }
 
-        private void set (Matcher matcher){
-            if (currentDuel.isNoCardSelected()) {
-                PrintResponses.printNoCardSelected();
-            } else if (!currentDuel.getUserWhoPlaysNow().getHand().isCardInHand(currentDuel.getSelectedCard())) {
-                PrintResponses.printUnableToSetCard();
-            } else if (isNotInMainPhases()) {
-                PrintResponses.printSetCardInWrongPhase();
-            } else if (currentDuel.getSelectedCard() instanceof Monster) {
-                handleMonsterSet();
-            } else {
-                handleSpellAndTrapSet();
-            }
+    private void attack(Matcher matcher) {
+        int address = Integer.parseInt(matcher.group("number"));
+        Monster monsterToAttack = (Monster) currentDuel.getRival().getBoard().
+                getCard(address, 'M');
+        if (currentDuel.isNoCardSelected()) {
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()) {
+            PrintResponses.printUnableToAttack();
+        } else if (isNotInBattlePhase()) {
+            PrintResponses.printAttackInWrongPhase();
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
+            PrintResponses.printCardAttackedBefore();
+        } else if (monsterToAttack == null) {
+            PrintResponses.printNoCardToAttackWith();
+        } else if (!currentDuel.getUserWhoPlaysNow().isCanAttack()) {
+            PrintResponses.print(Responses.canNotAttackDueToEffect);
+        } else {
+            handleSuccessfulAttack(address, monsterToAttack);
+            PrintResponses.printBoard(currentDuel);
         }
+    }
 
-        private void setPosition (Matcher matcher){
-            String position = matcher.group("position");
-            if (currentDuel.isNoCardSelected()) {
-                PrintResponses.printNoCardSelected();
-            } else if (isSelectedCardNotInMonsterZone()) {
-                PrintResponses.printUnableToChangePositionOfCard();
-            } else if (isNotInMainPhases()) {
-                PrintResponses.printSetCardInWrongPhase();
-            } else if (isPositionTheSameAsBefore(position)) {
-                PrintResponses.printCardInWantedPosition();
-            } else if (currentDuel.isHasChangedPositionOnce()) {
-                PrintResponses.printUnableToChangePositionInTurnTwice();
-            } else {
-                if (position.equals("attack")) {
-                    currentDuel.changeToAttackPosition();
-                } else {
-                    currentDuel.changeToDefensePosition();
-                }
-                PrintResponses.printSuccessfulMonsterCardPositionChange();
-            }
+    private void attackDirectly(Matcher matcher) {
+        if (currentDuel.isNoCardSelected()) {
+            PrintResponses.printNoCardSelected();
+        } else if (isSelectedCardNotInMonsterZone()) {
+            PrintResponses.printUnableToAttack();
+        } else if (isNotInBattlePhase()) {
+            PrintResponses.printAttackInWrongPhase();
+        } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
+            PrintResponses.printCardAttackedBefore();
+        } else if (currentDuel.getRival().getBoard().getMonsterNumber() != 0) {
+            PrintResponses.print(Responses.unableToAttackDirectly);
+        } else {
+            int damage = currentDuel.attackDirectly();
+            PrintResponses.printDamageInAttackDirectly(damage);
+            currentDuel.deselectACard();
         }
-
-        private void flipSummon (Matcher matcher){
-            if (currentDuel.isNoCardSelected()) {
-                PrintResponses.printNoCardSelected();
-            } else if (isSelectedCardNotInMonsterZone()) {
-                PrintResponses.printUnableToChangePositionOfCard();
-            } else if (isNotInMainPhases()) {
-                PrintResponses.printFlipSummonInWrongPhase();
-            } else if (currentDuel.isSelectedCardSummonedInThisTurn() || !(!currentDuel.getSelectedCard().isFaceUp()
-                    && currentDuel.getSelectedCard().isFaceUp())) {
-                PrintResponses.printUnableToFlipSummonCard();
-            } else {
-                currentDuel.flipSummon();
-                PrintResponses.printSuccessfulFlipSummon();
-            }
-
-        }
-
-        private void attack (Matcher matcher){
-            int address = Integer.parseInt(matcher.group("number"));
-            Monster monsterToAttack = (Monster) currentDuel.getRival().getBoard().
-                    getCard(currentDuel.getPlaceOfSelectedCard(), 'M');
-            if (currentDuel.isNoCardSelected()) {
-                PrintResponses.printNoCardSelected();
-            } else if (isSelectedCardNotInMonsterZone()) {
-                PrintResponses.printUnableToAttack();
-            } else if (isNotInBattlePhase()) {
-                PrintResponses.printAttackInWrongPhase();
-            } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
-                PrintResponses.printCardAttackedBefore();
-            } else if (monsterToAttack == null) {
-                PrintResponses.printNoCardToAttackWith();
-            } else {
-                handleSuccessfulAttack(address, monsterToAttack);
-                PrintResponses.printBoard(currentDuel);
-            }
-        }
-
-        private void attackDirectly (Matcher matcher){
-            if (currentDuel.isNoCardSelected()) {
-                PrintResponses.printNoCardSelected();
-            } else if (isSelectedCardNotInMonsterZone()) {
-                PrintResponses.printUnableToAttack();
-            } else if (isNotInBattlePhase()) {
-                PrintResponses.printAttackInWrongPhase();
-            } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
-                PrintResponses.printCardAttackedBefore();
-            } else if (currentDuel.getRival().getBoard().getMonsters().length != 0) {
-                PrintResponses.print(Responses.unableToAttackDirectly);
-            } else {
-                int damage = currentDuel.attackDirectly();
-                PrintResponses.printDamageInAttackDirectly(damage);
-                currentDuel.deselectACard();
-            }
-        }
+    }
 
     private void activateSpell(Matcher matcher) {
         if (currentDuel.isNoCardSelected()) {
@@ -492,285 +576,399 @@ public class DuelMenu implements Menuable {
             PrintResponses.printUnableToActivateCardTwice();
         } else if (isSpellZoneFullAndNeedsToBeOnBoard()) {
             PrintResponses.printFullnessOfSpellCardZone();
-        } else if (isSpellPreparedToBeActivated()) {
+        } else if (isSpellNotPreparedToBeActivated()) {
             PrintResponses.printUnfinishedPreparationOfSpell();
-        } else if (currentDuel.getUserWhoPlaysNow().isCanSummonSpell()) {
+        } else if (currentDuel.getUserWhoPlaysNow().isCanNotSetSpell()) {
             PrintResponses.printDisabledSummonSpell();
         } else {
+            if (((Spell) currentDuel.getSelectedCard()).getSpellTrapIcon().getName().equals("Ritual")) {
+                isRitualSummon();
+                return;
+            }
             currentDuel.activateEffects();
             PrintResponses.printSuccessfulSpellActivation();
-        }
-    }
-
-        private void showGraveyard (Matcher matcher){
-            isInGame = false;
-            PrintResponses.showGraveyard(currentDuel.showGraveyard());
-        }
-
-        private void showSelectedCard (Matcher matcher){
-            PrintResponses.printSelectedCard(currentDuel.showSelectedCard());
-        }
-
-        private void surrender (Matcher matcher){
-            PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds));
-            currentDuel = null;
-        }
-
-
-        private void increaseLP (Matcher matcher){
-            int amount = Integer.parseInt(matcher.group("amount"));
-            currentDuel.getUserWhoPlaysNow().setLifePoints(currentDuel.getUserWhoPlaysNow().getLifePoints() + amount);
-            PrintResponses.print(Responses.increaseLP);
-        }
-
-        private void setWinner (Matcher matcher){
-            String nickname = matcher.group("nickname");
-            User winner, loser;
-            if (currentDuel.getUserWhoPlaysNow().getNickname().equals(nickname)) {
-                winner = currentDuel.getUserWhoPlaysNow();
-                loser = currentDuel.getRival();
-            } else {
-                winner = currentDuel.getRival();
-                loser = currentDuel.getUserWhoPlaysNow();
-            }
-            if (initialRounds == 1)
-                PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
-            else
-                PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
-            currentDuel = null;
-
-        }
-
-        // when we want to summon unconditionally.
-        private void forceSelectHand (Matcher matcher){
-            String cardName = matcher.group("cardName");
-            Card[] cardsInHand = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
-            int i = 0, cardsInHandLength = cardsInHand.length;
-            while (true) {
-                if (i >= cardsInHandLength) break;
-                Card card1 = cardsInHand[i];
-                if (card1.getName().equals(cardName)) {
-                    currentDuel.setSelectedCard(card1);
-                    currentDuel.setPlaceOfSelectedCard(i + 1);
-                    break;
-                }
-                i++;
-            }
-            currentDuel.summonMonster();
-            PrintResponses.print(Responses.forceSelectHand);
             PrintResponses.print(currentDuel);
         }
+    }
 
-        private boolean isRitualSummon () {
-            if (!currentDuel.getUserWhoPlaysNow().getBoard().isThereAnyCardWithGivenTypeInMonsters(CardType.RITUAL)
-                    || currentDuel.getUserWhoPlaysNow().getBoard()
-                    .isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(currentDuel.getUserWhoPlaysNow().getHand().getMinLevelOfRitualMonstersInHand())) {
-                PrintResponses.printUnableToRitualSummonMonster();
-                return false;
-            }
-            handleSelectionForRitualSummon();
-            handleSummonForRitualSummon();
-            return true;
+    private void showGraveyard(Matcher matcher) {
+        isInGame = false;
+        PrintResponses.showGraveyard(currentDuel.showGraveyard());
+    }
+
+    private void showSelectedCard(Matcher matcher) {
+        PrintResponses.printSelectedCard(currentDuel.showSelectedCard());
+    }
+
+    private void surrender(Matcher matcher) {
+        PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds));
+        currentDuel = null;
+    }
+
+    private void increaseLP(Matcher matcher) {
+        int amount = Integer.parseInt(matcher.group("amount"));
+        currentDuel.getUserWhoPlaysNow().setLifePoints(currentDuel.getUserWhoPlaysNow().getLifePoints() + amount);
+        PrintResponses.print(Responses.increaseLP);
+    }
+
+    private void setWinner(Matcher matcher) {
+        String nickname = matcher.group("nickname");
+        User winner, loser;
+        if (currentDuel.getUserWhoPlaysNow().getNickname().equals(nickname)) {
+            winner = currentDuel.getUserWhoPlaysNow();
+            loser = currentDuel.getRival();
+        } else {
+            winner = currentDuel.getRival();
+            loser = currentDuel.getUserWhoPlaysNow();
         }
-
-
-        private boolean isNotEnoughCardsForTribute ( int requiredCardsAmount){
-            if (currentDuel.getUserWhoPlaysNow().getBoard().getMonsters().length == requiredCardsAmount) {
-                PrintResponses.printNoCardToTribute();
-                return true;
-            }
-            return false;
-        }
-
-        private boolean areCardAddressesEmpty ( int[] cardsAddresses){
-            for (int toTributeAddress : cardsAddresses) {
-                if (currentDuel.getUserWhoPlaysNow().getBoard().getCard(toTributeAddress, 'M') == null) {
-                    PrintResponses.printNoMonsterOnAddress();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private boolean isPositionTheSameAsBefore (String position){
-            if (position.equals("attack")) {
-                return currentDuel.getSelectedCard().isFaceUp();
-            } else {
-                return !currentDuel.getSelectedCard().isATK() && !currentDuel.getSelectedCard().isFaceUp();
-            }
-        }
-
-        private boolean isNotInMainPhases () {
-            return !(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2));
-        }
-
-        private boolean isSelectedCardNotInMonsterZone () {
-            return !currentDuel.getUserWhoPlaysNow().getBoard().isCardOnMonsterZone(currentDuel.getSelectedCard());
-        }
-
-        private boolean isNotInBattlePhase () {
-            return !phase.equals(Phases.BATTLE_PHASE);
-        }
-
-        private boolean isSpellZoneFullAndNeedsToBeOnBoard () {
-            //TODO implement if the card **needs** to be on board
-            return currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0;
-        }
-
-        //TODO implement this method
-        private boolean isSpellPreparedToBeActivated () {
-            return true;
-        }
-
-        private void handleSuccessfulGameCreation (User secondPlayer){
-            currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
-            phase = Phases.DRAW_PHASE;
-            if (isFirstRound) {
-                PrintResponses.printGameSuccessfullyCreated();
-                isFirstRound = false;
-                currentDuel.getSECOND_USER().setWinsInAMatch(0);
-                currentDuel.getFIRST_USER().setWinsInAMatch(0);
-            } else {
-                PrintResponses.printRoundNumber(remainingRounds);
-            }
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            handleDrawingACard(currentDuel.drawACard());
-        }
-
-        private void handleTransitionFromEndPhaseToDrawPhase () {
-            phase = Phases.END_PHASE;
-            PrintResponses.printPhaseName(phase);
-            currentDuel.changeTurn();
-            currentDuel.setNumberOfTurnsPlayedUpToNow(currentDuel.getNumberOfTurnsPlayedUpToNow() + 1);
-            PrintResponses.showTurn(currentDuel.getUserWhoPlaysNow());
-            phase = Phases.DRAW_PHASE;
-            PrintResponses.printPhaseName(phase);
-        }
-
-        private void handleDrawingACard (Card card){
-            if (card == null) {
-                endTheGame();
-            } else {
-                PrintResponses.printDrawnCard(card);
-                PrintResponses.printBoard(currentDuel);
-            }
-        }
-
-        private void handleSuccessfulAttack ( int address, Monster monsterToAttack){
-            Pair<Integer, Integer> pair = currentDuel.attack(address);
-            int key = pair.getKey();
-            if (key > 6) {
-                key -= 3;
-                PrintResponses.printCardNameInAttackIfIsDefenceHide(monsterToAttack.getName());
-            }
-            switch (key) {
-                case 0:
-                    //print sth if you want!
-                    break;
-                case 1:
-                    PrintResponses.printOpponentMonsterDestroyedWithDamage(pair.getValue());
-                    break;
-                case 2:
-                    PrintResponses.printBothCardsDestroyedInAttack();
-                    break;
-                case 3:
-                    PrintResponses.printOwnMonsterDestroyedInAttackWithDamage(pair.getValue());
-                    break;
-                case 4:
-                    PrintResponses.printOpponentMonsterInDefenceDestroyed();
-                case 5:
-                    PrintResponses.printNoCardDestroyedInDefence();
-                    break;
-                case 6:
-                    PrintResponses.printNoCardDestroyedButReceivedDamage(pair.getValue());
-                    break;
-            }
-        }
-
-        private void handleSelectionForRitualSummon () {
-            while (true) {
-                Matcher matcher = Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.selectFromOwn);
-                if (matcher.find()) {
-                    selectCardFromOwn(Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.selectFromOwn));
-                    break;
-                } else {
-                    PrintResponses.printEmergencyRitualSummon();
-                }
-            }
-        }
-
-        private void handleSummonForRitualSummon () {
-            while (true) {
-                Matcher matcher = Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.summon);
-                if (matcher.find()) {
-                    while (true) {
-                        int[] cardAddresses = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-                        if (currentDuel.getUserWhoPlaysNow().getBoard().areGivenCardsEnoughForRitualSummon(cardAddresses, currentDuel.getSelectedCard())) {
-                            currentDuel.tribute(cardAddresses);
-                            break;
-                        } else {
-                            PrintResponses.printInequalityOfLevelsOfSelectedAndRitualMonster();
-                        }
-                    }
-                    boolean isAttacking;
-                    while (true) {
-                        String input = ProgramController.scanner.nextLine();
-                        if (input.equals("attacking")) {
-                            isAttacking = true;
-                            break;
-                        } else if (input.equals("defensive")) {
-                            isAttacking = false;
-                            break;
-                        } else {
-                            PrintResponses.printInvalidFormat();
-                        }
-                    }
-                    if (isAttacking)
-                        summon(Regex.getMatcher(ProgramController.scanner.nextLine(), Regex.summon));
-                    else {
-                        currentDuel.setMonster();
-                        currentDuel.changeToDefensePosition();
-                        PrintResponses.printSuccessfulSummon();
-                    }
-                    break;
-                } else {
-                    PrintResponses.printEmergencyRitualSummon();
-                }
-            }
-        }
-
-        private void handleMonsterSet () {
-            if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
-                PrintResponses.printFullnessOfMonsterCardZone();
-            } else if (currentDuel.isHasSummonedOrSetOnce()) {
-                PrintResponses.printUnableToSummonInTurn();
-            } else {
-                currentDuel.setMonster();
-                PrintResponses.printSuccessfulCardSetting();
-                PrintResponses.print(currentDuel);
-            }
-        }
-
-        private void handleSpellAndTrapSet () {
-            if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0) {
-                PrintResponses.printFullnessOfSpellCardZone();
-            } else if (currentDuel.isHasSummonedOrSetOnce()) {
-                PrintResponses.printUnableToSummonInTurn();
-            } else {
-                currentDuel.setSpellOrTrap();
-                PrintResponses.printSuccessfulCardSetting();
-                PrintResponses.print(currentDuel);
-            }
-        }
-
-
-    @Override
-    public void showMenu() throws IOException {
+        if (initialRounds == 1)
+            PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
+        else
+            PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
+        currentDuel = null;
 
     }
+
+    // when we want to summon unconditionally.
+
+    private void forceSelectHand(Matcher matcher) {
+        String cardName = matcher.group("cardName").trim();
+        Card[] cardsInHand = currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand();
+        int i = 0, cardsInHandLength = cardsInHand.length;
+        while (true) {
+            if (i >= cardsInHandLength) break;
+            Card card1 = cardsInHand[i];
+            if (card1 == null) {
+                PrintResponses.print(Responses.cardNotFoundInHand);
+                return;
+            }
+            if (card1.getName().equals(cardName)) {
+                currentDuel.setSelectedCard(card1);
+                currentDuel.setPlaceOfSelectedCard(i + 1);
+                break;
+            }
+            i++;
+        }
+        currentDuel.summonMonster();
+        PrintResponses.print(Responses.forceSelectHand);
+        PrintResponses.print(currentDuel);
+    }
+
+    private void addCardToHand(Matcher matcher) {
+        Card card = Card.getCardByName(matcher.group("cardName"));
+        if (currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() != 6) {
+            currentDuel.getUserWhoPlaysNow().getHand().addCardToHand(card);
+            PrintResponses.print(Responses.addACardToHand);
+            PrintResponses.print(currentDuel);
+        } else
+            PrintResponses.print(Responses.handIsFull);
+    }
+
+    private void isRitualSummon() {
+        if (!currentDuel.getUserWhoPlaysNow().getHand().isThereAnyCardWithGivenTypeInMonsters(CardType.RITUAL)
+                || currentDuel.getUserWhoPlaysNow().getBoard()
+                .isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(currentDuel.getUserWhoPlaysNow().getHand().getMinLevelOfRitualMonstersInHand())) {
+            PrintResponses.printUnableToRitualSummonMonster();
+            return;
+        }
+        handleSelectionForRitualSummon();
+        handleSummonForRitualSummon();
+    }
+
+    private boolean isNotEnoughCardsForTribute(int requiredCardsAmount) {
+        if (currentDuel.getUserWhoPlaysNow().getBoard().getMonsters().length == requiredCardsAmount) {
+            PrintResponses.printNoCardToTribute();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean areCardAddressesEmpty(int[] cardsAddresses) {
+        for (int toTributeAddress : cardsAddresses) {
+            if (currentDuel.getUserWhoPlaysNow().getBoard().getCard(toTributeAddress, 'M') == null) {
+                PrintResponses.printNoMonsterOnAddress();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isPositionTheSameAsBefore(String position) {
+        if (position.equals("attack")) {
+            return currentDuel.getSelectedCard().isATK();
+        } else {
+            return !currentDuel.getSelectedCard().isATK();
+        }
+    }
+
+    private boolean isNotInMainPhases() {
+        return !(phase.equals(Phases.MAIN_PHASE1) || phase.equals(Phases.MAIN_PHASE2));
+    }
+
+    private boolean isSelectedCardNotInMonsterZone() {
+        return !currentDuel.getUserWhoPlaysNow().getBoard().isCardOnMonsterZone(currentDuel.getSelectedCard());
+    }
+
+    private boolean isNotInBattlePhase() {
+        return !phase.equals(Phases.BATTLE_PHASE);
+    }
+
+    private boolean isSpellZoneFullAndNeedsToBeOnBoard() {
+        //TODO implement if the card **needs** to be on board
+        return currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0;
+    }
+
+    private boolean isSpellNotPreparedToBeActivated() {
+        Spell spell = (Spell) currentDuel.getSelectedCard();
+        return isGYEffectNotPrepared(spell) || isFieldZoneCardDrawNotPrepared(spell)
+                || isCanAddFromDeckNotPrepared(spell)
+                || isCanDestroyOrControlOpponentMonsterNotPrepared(spell)
+                || isCanDestroyOpponentSpellAndTrapNotPrepared(spell)
+                || isCanDestroyMyMonsterNotPrepared(spell)
+                || isDiscardACardToActivateNotPrepared(spell)
+                || isEquipCardNormalsAndEquipBasedMyUpMonstersNotPrepared(spell);
+
+    }
+
+    private boolean isGYEffectNotPrepared(Spell spell) {
+        return spell.getCanSummonFromGY().hasEffect() &&
+                (currentDuel.getUserWhoPlaysNow().getGraveyard().size() == 0 &&
+                        currentDuel.getRival().getGraveyard().size() == 0);
+    }
+
+    private boolean isFieldZoneCardDrawNotPrepared(Spell spell) {
+        if (spell.getCanAddFieldSpellFromDeck().hasEffect()) {
+            boolean label = true;
+            for (Card card : currentDuel.getUserWhoPlaysNow().getHand().getDeckToDraw().getMainDeckCards()) {
+                if (card instanceof Spell && ((Spell) card).isFieldZone())
+                    label = false;
+            }
+            return label;
+        }
+        return false;
+    }
+
+    private boolean isCanAddFromDeckNotPrepared(Spell spell) {
+        return spell.getCanAddFromDeckToHand().hasEffect() && currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() > 4
+                && currentDuel.getUserWhoPlaysNow().getHand().getNumberOfRemainingCardsInDeck() < 2;
+    }
+
+    private boolean isCanDestroyOrControlOpponentMonsterNotPrepared(Spell spell) {
+        return (spell.getCanControlOpponentMonster().hasEffect() || spell.getCanControlOpponentMonster().hasEffect()
+                || spell.getEquipBasedMyUpMonsters().hasEffect())
+                && currentDuel.getRival().getBoard().getMonsterNumber() == 0;
+    }
+
+    private boolean isCanDestroyOpponentSpellAndTrapNotPrepared(Spell spell) {
+        return spell.getCanDestroyOpponentSpellAndTrap().hasEffect() && currentDuel.getUserWhoPlaysNow().getBoard().getSpellNumber() == 0;
+    }
+
+    private boolean isCanDestroyMyMonsterNotPrepared(Spell spell) {
+        return spell.getCanDestroyMyMonster().hasEffect() && currentDuel.getRival().getBoard().getMonsterNumber() == 0
+                && currentDuel.getUserWhoPlaysNow().getBoard().getMonsterNumber() == 0;
+    }
+
+    private boolean isDiscardACardToActivateNotPrepared(Spell spell) {
+        return spell.getDiscardACardToActivate().hasEffect() && currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() == 0
+                && currentDuel.getRival().getBoard().getSpellNumber() == 0;
+    }
+
+    private boolean isEquipCardNormalsAndEquipBasedMyUpMonstersNotPrepared(Spell spell) {
+        if (spell.getEquipCardNormal1().hasEffect() || spell.getEquipCardNormal2().hasEffect()
+                || spell.getEquipCardNormal3().hasEffect()
+                || spell.getEquipBasedOnPosition().hasEffect()) {
+            if (spell.getEquipCardNormal1().hasEffect()) {
+                String type = spell.getEquipCardNormal1().getType();
+                if (checkForMonsterType(type))
+                    return true;
+            }
+            if (spell.getEquipCardNormal2().hasEffect()) {
+                String type = spell.getEquipCardNormal2().getType();
+                if (checkForMonsterType(type))
+                    return true;
+            }
+            if (spell.getEquipCardNormal3().hasEffect()) {
+                String type = spell.getEquipCardNormal3().getType();
+                if (checkForMonsterType(type))
+                    return true;
+            }
+            if (spell.getEquipBasedOnPosition().hasEffect()) {
+                if (spell.getEquipCardNormal3().hasEffect()) {
+                    String type = spell.getEquipCardNormal3().getType();
+                    return checkForMonsterType(type);
+                }
+            }
+
+        }
+        return false;
+    }
+
+    private boolean checkForMonsterType(String type) {
+        if (type.equals(""))
+            return currentDuel.getUserWhoPlaysNow().getBoard().getMonsterNumber() == 0;
+        for (Card monster : currentDuel.getUserWhoPlaysNow().getBoard().getMonsters()) {
+            if (monster != null && ((Monster) monster).getMonsterType().getName().toLowerCase().equals(type))
+                return true;
+        }
+        return false;
+    }
+
+
+    private void handleSuccessfulSummon() {
+        currentDuel.summonMonster();
+        PrintResponses.printSuccessfulSummon();
+        PrintResponses.print(currentDuel);
+    }
+
+    private void handleSuccessfulGameCreation(User secondPlayer) {
+        currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
+        phase = Phases.DRAW_PHASE;
+        if (isFirstRound) {
+            PrintResponses.printGameSuccessfullyCreated();
+            isFirstRound = false;
+            currentDuel.getSECOND_USER().setWinsInAMatch(0);
+            currentDuel.getFIRST_USER().setWinsInAMatch(0);
+        } else {
+            PrintResponses.printRoundNumber(remainingRounds);
+        }
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
+    }
+
+    private void handleTransitionFromEndPhaseToDrawPhase() {
+        phase = Phases.END_PHASE;
+        PrintResponses.printPhaseName(phase);
+        currentDuel.changeTurn();
+        currentDuel.setNumberOfTurnsPlayedUpToNow(currentDuel.getNumberOfTurnsPlayedUpToNow() + 1);
+        PrintResponses.showTurn(currentDuel.getUserWhoPlaysNow());
+        phase = Phases.DRAW_PHASE;
+        PrintResponses.printPhaseName(phase);
+    }
+
+    private void handleDrawingACard(Card card) {
+        if (card == null) {
+            endTheGame();
+        } else {
+            PrintResponses.printDrawnCard(card);
+            PrintResponses.printBoard(currentDuel);
+            if (currentDuel.getUserWhoPlaysNow() instanceof AI) {
+                ((AI) currentDuel.getUserWhoPlaysNow()).run();
+            }
+        }
+    }
+
+    private void handleSuccessfulAttack(int address, Monster monsterToAttack) {
+
+        Pair<Integer, Integer> pair = currentDuel.attack(address);
+        int key = pair.getKey();
+        if (key > 6) {
+            key -= 3;
+            PrintResponses.printCardNameInAttackIfIsDefenceHide(monsterToAttack.getName());
+        }
+        switch (key) {
+            case 0:
+                PrintResponses.print(Responses.canNotAttackDueToEffect);
+                break;
+            case 1:
+                PrintResponses.printOpponentMonsterDestroyedWithDamage(pair.getValue());
+                break;
+            case 2:
+                PrintResponses.printBothCardsDestroyedInAttack();
+                break;
+            case 3:
+                PrintResponses.printOwnMonsterDestroyedInAttackWithDamage(pair.getValue());
+                break;
+            case 4:
+                PrintResponses.printOpponentMonsterInDefenceDestroyed();
+                break;
+            case 5:
+                PrintResponses.printNoCardDestroyedInDefence();
+                break;
+            case 6:
+                PrintResponses.printNoCardDestroyedButReceivedDamage(pair.getValue());
+                break;
+        }
+    }
+
+    private void handleSelectionForRitualSummon() {
+        PrintResponses.printAskToRitualMonster();
+        while (true) {
+            String input = ProgramController.scanner.nextLine();
+            Matcher matcher = Regex.getMatcher(input, Regex.selectFromOwn);
+            if (matcher.find()) {
+                selectCardFromOwn(matcher);
+                if (currentDuel.getSelectedCard().getCardType().getName().equals("Ritual"))
+                    break;
+                else
+                    PrintResponses.printEmergencyRitualSummon();
+            } else {
+                PrintResponses.printEmergencyRitualSummon();
+            }
+        }
+    }
+
+    private void handleSummonForRitualSummon() {
+
+        while (true) {
+            PrintResponses.printEnterTributeOrRitual();
+            int[] cardAddresses = Arrays.stream(ProgramController.scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            if (currentDuel.getUserWhoPlaysNow().getBoard().areGivenCardsEnoughForRitualSummon(cardAddresses, currentDuel.getSelectedCard())) {
+                currentDuel.tribute(cardAddresses);
+                break;
+            } else {
+                PrintResponses.printInequalityOfLevelsOfSelectedAndRitualMonster();
+            }
+        }
+        boolean isAttacking;
+        while (true) {
+            String input = ProgramController.scanner.nextLine();
+            if (input.equals("attacking")) {
+                isAttacking = true;
+                break;
+            } else if (input.equals("defensive")) {
+                isAttacking = false;
+                break;
+            } else {
+                PrintResponses.printInvalidFormat();
+            }
+        }
+        if (isAttacking) {
+            currentDuel.summonMonster();
+            PrintResponses.printSuccessfulSummon();
+        } else {
+            currentDuel.setMonster();
+            PrintResponses.printSuccessfulCardSetting();
+        }
+
+    }
+
+    private void handleMonsterSet() {
+        if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
+            PrintResponses.printFullnessOfMonsterCardZone();
+        } else if (currentDuel.isHasSummonedOrSetOnce()) {
+            PrintResponses.printUnableToSummonInTurn();
+        } else {
+            currentDuel.setMonster();
+            PrintResponses.printSuccessfulCardSetting();
+            PrintResponses.print(currentDuel);
+        }
+    }
+
+    private void handleSpellAndTrapSet() {
+        if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToPutSpell() == 0) {
+            PrintResponses.printFullnessOfSpellCardZone();
+        } else if (currentDuel.isHasSummonedOrSetOnce()) {
+            PrintResponses.printUnableToSummonInTurn();
+        } else {
+            currentDuel.setSpellOrTrap();
+            PrintResponses.printSuccessfulCardSetting();
+            PrintResponses.print(currentDuel);
+        }
+    }
+
 }
 

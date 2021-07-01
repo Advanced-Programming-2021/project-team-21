@@ -2,17 +2,16 @@ package module;
 
 import module.card.Card;
 import module.card.Monster;
-import module.card.enums.CardType;
-import module.card.Monster;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Board {
     private final Card[] monsters;
     private final String[] showMonsters;
     private final Card[] spellsAndTraps;
     private final String[] showSpellsAndTraps;
-    private final ArrayList<Card> graveyard;
     private final ArrayList<Integer> order;
     private User boardOwner;
     private Card fieldZone;
@@ -24,7 +23,6 @@ public class Board {
         this.spellsAndTraps = new Card[5];
         this.showSpellsAndTraps = new String[]{"E", "E", "E", "E", "E"};
         this.showFieldZone = "E";
-        this.graveyard = new ArrayList<>();
         this.order = new ArrayList<>();
         order.add(5);
         order.add(3);
@@ -49,9 +47,6 @@ public class Board {
         return fieldZone;
     }
 
-    public ArrayList<Card> getGraveyard() {
-        return graveyard;
-    }
 
     public String getShowFieldZone() {
         return showFieldZone;
@@ -68,8 +63,9 @@ public class Board {
     public void addMonsterFaceUp(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;
         showMonsters[placeInBoard - 1] = "OO";
-        ((Monster) selectedMonsterCard).setIsATKPosition(true);
-        selectedMonsterCard.setFaceUp(false);
+//        ((Monster) selectedMonsterCard).setIsATKPosition(true);
+        selectedMonsterCard.setATK(true);
+        selectedMonsterCard.setFaceUp(true);
     }
 
     public void addMonsterFaceDown(int placeInBoard, Card selectedMonsterCard) {
@@ -82,7 +78,7 @@ public class Board {
     public void addSpellAndTrap(int placeInBoard, Card selectedSpellAndTrapCard) {
         spellsAndTraps[placeInBoard - 1] = selectedSpellAndTrapCard;
         showSpellsAndTraps[placeInBoard - 1] = "H";
-        selectedSpellAndTrapCard.setFaceUp(true);
+        selectedSpellAndTrapCard.setFaceUp(false);
         selectedSpellAndTrapCard.setATK(false);
     }
 
@@ -95,13 +91,12 @@ public class Board {
     public void changeFacePositionToDefenceForMonsters(int placeInBoard) {
         showMonsters[placeInBoard - 1] = "DO";
         monsters[placeInBoard - 1].setATK(false);
-        monsters[placeInBoard - 1].setFaceUp(false);
+        monsters[placeInBoard - 1].setFaceUp(true);
     }
 
     public void changeFacePositionToAttackForSpells(int placeOnBoard) {
         showSpellsAndTraps[placeOnBoard - 1] = "O";
-        monsters[placeOnBoard - 1].setATK(true);
-        monsters[placeOnBoard - 1].setFaceUp(false);
+        spellsAndTraps[placeOnBoard - 1].setFaceUp(true);
     }
 
     public void putCardToFieldZone(Card card) {
@@ -124,12 +119,6 @@ public class Board {
         showFieldZone = "E";
     }
 
-    public void disableSpellAndTrap(int placeInBoard) {
-        graveyard.add(spellsAndTraps[placeInBoard - 1]);
-        spellsAndTraps[placeInBoard - 1] = null;
-        showSpellsAndTraps[placeInBoard - 1] = "E";
-    }
-
     // monsterOrSpell takes either 'S' as Spell or 'M' as Monster
     public Card getCard(int placeInBoard, char monsterOrSpell) {
         if (monsterOrSpell == 'M' || monsterOrSpell == 'm')
@@ -142,25 +131,6 @@ public class Board {
         return monsters[placeInBoard - 1];
     }
 
-    public Card selectOpponentMonster(User opponent, int placeInBoard) {
-        return opponent.getBoard().getMonsters()[placeInBoard - 1];
-    }
-
-    public Card selectOwnSpellAndTrap(int placeInBoard) {
-        return spellsAndTraps[placeInBoard - 1];
-    }
-
-    public Card selectOpponentSpellAndTrap(User opponent, int placeInBoard) {
-        return opponent.getBoard().getSpellsAndTraps()[placeInBoard - 1];
-    }
-
-    public Card selectOwnFieldZone() {
-        return fieldZone;
-    }
-
-    public Card selectOpponentFieldZone(User opponent) {
-        return opponent.getBoard().getFieldZone();
-    }
 
     public int getAddressToSummon() {
         for (int i = 0; i < order.size(); i++) {
@@ -178,18 +148,11 @@ public class Board {
         return 0;
     }
 
-    public Boolean isCardOnBoard(Card card) {
-        for (int i = 0; i < spellsAndTraps.length; i++) {
-            if (spellsAndTraps[i] == card || monsters[i] == card)
-                return true;
-        }
-        return false;
-    }
 
     public boolean isCardOnMonsterZone(Card card) {
-        for (Card monster : monsters)
-            if (monster == card)
-                return true;
+        for (Card monster : monsters) {
+            if (monster != null && monster.equals(card)) return true;
+        }
         return false;
     }
 
@@ -229,23 +192,15 @@ public class Board {
         return reverseString.toString();
     }
 
-    public boolean isThereAnyCardWithGivenTypeInMonsters(CardType cardType) {
-        for (int i = 0; i < order.size(); i++)
-            if (monsters[i].getCardType().getName().equals(cardType.getName()) || spellsAndTraps[i].getCardType().getName().equals(cardType.getName()))
-                return true;
-        return false;
-    }
 
     public boolean isThereASubsetOfMonstersWithSumOfLevelsGreaterThanGivenLevel(int levelOfRitualEffectSpell) {
         int level = 0;
-        for (Card card : monsters)
+        for (Card card : monsters) {
+            if (card == null) continue;
             if (((Monster) card).getLevel() < level)
-                level = ((Monster) card).getLevel();
-        int maximumLevelInHand = 0;
-        for (Card card : boardOwner.getHand().getCardsInHand())
-            if (card != null)
-                maximumLevelInHand += ((Monster) card).getLevel();
-        return maximumLevelInHand >= level;
+                level += ((Monster) card).getLevel();
+        }
+        return level >= levelOfRitualEffectSpell;
     }
 
     public boolean areGivenCardsEnoughForRitualSummon(int[] cardAddresses, Card selectedCard) {
@@ -269,16 +224,26 @@ public class Board {
     }
 
     public void removeFromGY(String cardName) {
-        this.graveyard.removeIf(card -> card.getName().equals(cardName));
+        boardOwner.getGraveyard().removeIf(card -> card.getName().equals(cardName));
     }
 
-    public ArrayList<Monster> getCardsFromGYByLevel(int minimum) {
-        ArrayList<Monster> cards = new ArrayList<>();
-        for (Card card : this.graveyard) {
-            if (!(card instanceof Monster))continue;
-            Monster monster = (Monster)card;
-            if (monster.getLevel() > minimum)cards.add(monster);
+
+    public int getMonsterNumber() {
+        int number = 0;
+        for (Card monster : this.getMonsters()) {
+            if (monster != null) number++;
         }
-        return cards;
+        return number;
+    }
+
+    public Monster getNotNullMonster() {
+        for (Card monster : monsters) {
+            if (monster != null) return (Monster) monster;
+        }
+        return null;
+    }
+
+    public int getSpellNumber() {
+        return (int) Arrays.stream(spellsAndTraps).filter(Objects::nonNull).count();
     }
 }

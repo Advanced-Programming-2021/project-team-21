@@ -93,14 +93,12 @@ public class Responses {
     public static String choiceOfDifferentTribute = "Pick a number to choose how many monsters to tribute";
     public static String wrongChoiceOfTribute = "choose a suitable number for tribute";
     public static String disabledMonsterSummon = "You can not summon due to an Effect";
-    public static String disabledTrapSummon = "You can not activate due to an Effect";
     public static String disabledSpellSummon = "you can not activate due to an Effect";
-    public static String activateEffectMonster = "Do you want to activate the Effect?";
+    public static String activateEffectMonster = "Do you want to activate the Effect?[Yes/No]";
     public static String changeOfHeart = "choose the monster you want to control";
     public static String wrongChoiceControl = "you did not choose the monster correctly";
     public static String canNotControl = "you can Not control any thing";
     public static String noSpellFound = "no spell found on this location";
-    public static String disabledAttack = "You can not attack due to effect of an card";
     public static String chooseEquip = "Choose a Monster to Equip it with this Spell";
     public static String askForChain = "do you want to activate your trap and spell?";
     public static String wrongSpell = "you have chosen a wrong place or a spell that can not be chained right now";
@@ -108,4 +106,13 @@ public class Responses {
     public static String askToDiscard = "select the cards in your hand to discard";
     public static String askToGetCardName = "enter a card name";
     public static String wrongCardName = "there is no card with this name";
+    public static String noSelect = "There is no selected card";
+    public static String noSpecialEffect = "You can not use this Effect now";
+    public static String addACardToHand = "CHEAT: Given card added to your hand!";
+    public static String handIsFull = "CHEAT: Your hand is full. Could not add the card.";
+    public static String askToRitual = "select Your Ritual Monster And then enter the ones to be killed at last summon it";
+    public static String enterTribute = "enter the place of monster to be killed in order to summon and divide them by " +
+            "space then decide the format of the monster";
+    public static String cardNotFoundInHand = "CHEAT: Card not found in hand.";
+    public static String canNotAttackDueToEffect = "You can't attack due to an effect.";
 }

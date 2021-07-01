@@ -6,13 +6,18 @@ import javafx.scene.control.Label;
 import module.User;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ScoreBoard implements Menuable {
 
     private ArrayList<User> scoreBoardShow() {
         ArrayList<User> users = DataController.getAllUsers();
-        assert users != null;
-        users.sort(new ScoreSorter());
+        if (users == null)
+            return null;
+        Comparator<User> comparator = Comparator.comparing(User::getScore, Comparator.reverseOrder())
+                .thenComparing(User::getUsername);
+        users.sort(comparator);
+        int[] ranks = getRanks(users);
         return users;
     }
 
@@ -23,7 +28,7 @@ public class ScoreBoard implements Menuable {
             if (users.get(i).getScore() == users.get(i - 1).getScore()) {
                 ranks[i] = ranks[i - 1];
             } else {
-                ranks[i] = i;
+                ranks[i] = i + 1;
             }
         }
         return ranks;
