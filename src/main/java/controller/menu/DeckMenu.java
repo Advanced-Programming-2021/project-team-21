@@ -21,27 +21,27 @@ public class DeckMenu implements Menuable {
             createDeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.deckDelete)).find()) {
             deleteDeck(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuShow).find()) {
             showCurrentMenu();
         } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
             activateDeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.addCardMain)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.addCardSide)).find()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.addCardSide)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.addCardMain)).find()) {
             addCard(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).find() ||
                 (matcher = Regex.getMatcher(command, Regex.removeCardSide)).find()) {
             removeCard(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuExit).find()) {
             exitMenu();
-        } else if (Regex.getMatcher(command, Regex.showAllDeck).matches()) {
+        } else if (Regex.getMatcher(command, Regex.showAllDeck).find()) {
             showAllDeck();
-        } else if ((matcher = Regex.getMatcher(command, Regex.showDeckMain)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.showDeckSide)).find()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.showDeckSide)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.showDeckMain)).find()) {
             showADeck(matcher);
         } else if ((matcher = Regex.getMatcher(command, Regex.showACard)).find()) {
             String cardName = matcher.group("cardName").trim();
             PrintResponses.printACard(Card.getCardByName(cardName));
-        } else if (Regex.getMatcher(command, Regex.deckShowCard).matches()) {
+        } else if (Regex.getMatcher(command, Regex.deckShowCard).find()) {
             showAllCards();
         } else PrintResponses.printInvalidFormat();
     }
@@ -74,7 +74,7 @@ public class DeckMenu implements Menuable {
         PrintResponses.printActive();
         ArrayList<Deck> show = Deck.deckSort(user.getDecks());
         int index = 0;
-        if (show.get(index).isActive()) {
+        if (show.size() > 0 && show.get(index).isActive()) {
             PrintResponses.printDeckShow(show.get(index));
             index++;
         }
@@ -114,9 +114,17 @@ public class DeckMenu implements Menuable {
 
     private void addCard(Matcher matcher) {
         String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
+        cardName = cardName.replaceAll("\\s+-", "");
         Card card = Card.getCardByName(cardName);
         Deck deck = user.getDeckByName(deckName);
-        if (card == null) {
+        boolean doesHaveCard = false;
+        for (Card userInGameCard : ProgramController.userInGame.getCards()) {
+            if (userInGameCard.getName().equals(cardName)) {
+                doesHaveCard = true;
+                break;
+            }
+        }
+        if (!doesHaveCard) {
             PrintResponses.printCardNotExist(cardName);
             return;
         }
@@ -141,11 +149,12 @@ public class DeckMenu implements Menuable {
             if (invalidAdd(cardName, deckName, deck)) return;
             deck.addCardToMainDeck(card);
         }
+        DataController.saveData(user);
         PrintResponses.printSuccessfulCardAddition();
     }
 
     private boolean invalidAdd(String cardName, String deckName, Deck deck) {
-        if (deck.getCardNumber(cardName) == 3) {
+        if (deck.getCardNumber(cardName) >= 50) {
             PrintResponses.printInvalidAdd(cardName, deckName);
             return true;
         }
@@ -187,12 +196,12 @@ public class DeckMenu implements Menuable {
         Deck deck = new Deck(name);
         user.addDeck(deck);
         PrintResponses.printSuccessfulDeckCreation();
+        DataController.saveData(user);
     }
 
     @Override
     public void exitMenu() {
         ProgramController.currentMenu = new MainMenu();
-        DataController.saveData(user);
     }
 
     @Override

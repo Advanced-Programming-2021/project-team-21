@@ -1,10 +1,16 @@
 package view;
 
+import controller.menu.Phases;
 import module.Deck;
+import module.Duel;
+import module.Hand;
 import module.User;
 import module.card.Card;
+import module.card.Monster;
+import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PrintResponses {
     public static void printInvalidFormat() {
@@ -203,17 +209,14 @@ public class PrintResponses {
         System.out.println(Responses.noCardToAttackWith);
     }
 
-    public static void printDestructionOfTwoSideCards() {
+    public static void printBothCardsDestroyedInAttack() {
         System.out.println(Responses.destructionOfTwoSideCards);
     }
 
-    public static void printDestructionOfDefensePositionMonster() {
+    public static void printOpponentMonsterInDefenceDestroyed() {
         System.out.println(Responses.destructionOfDefensePositionMonster);
     }
 
-    public static void printNoDestruction() {
-        System.out.println(Responses.noDestruction);
-    }
 
     public static void printNonSpellCardsToActivateEffect() {
         System.out.println(Responses.nonSpellCardsToActivateEffect);
@@ -383,5 +386,198 @@ public class PrintResponses {
         for (int i = 0; i < users.size(); i++) {
             System.out.println(ranks[i] + "- " + users.get(i).getNickname() + ": " + users.get(i).getScore());
         }
+    }
+
+    public static void printHasNoActiveDeck(User user) {
+        System.out.println(user.getUsername() + " has no active deck");
+    }
+
+    public static void printInvalidDeck(User user) {
+        System.out.println(user.getUsername() + "’s deck is invalid");
+    }
+
+    public static void printPhaseName(Phases phase) {
+        System.out.println("phase: " + phase.toString().toLowerCase().replace("_", " "));
+    }
+
+    public static void printDrawnCard(Card card) {
+        System.out.println("new card added to the hand : " + card.getName());
+    }
+
+    public static void showTurn(User user) {
+        System.out.println("its " + user.getNickname() + "’s turn");
+    }
+
+    public static void printOpponentMonsterDestroyedWithDamage(int damage) {
+        System.out.println("your opponent’s monster is destroyed and your opponent receives " + damage + " battle damage");
+    }
+
+    public static void printOwnMonsterDestroyedInAttackWithDamage(int damage) {
+        System.out.println("Your monster card is destroyed and you received " + damage + " battle damage");
+    }
+
+    public static void printNoCardDestroyedInDefence() {
+        System.out.println(Responses.noDestruction);
+    }
+
+    public static void printNoCardDestroyedButReceivedDamage(int damage) {
+        System.out.println("no card is destroyed and you received " + damage + " battle damage");
+    }
+
+    public static void printCardNameInAttackIfIsDefenceHide(String cardName) {
+        System.out.print("opponent’s monster card was " + cardName + " and ");
+    }
+
+    public static void printDamageInAttackDirectly(int damage) {
+        System.out.println("you opponent receives " + damage + " battle damage");
+    }
+
+    public static void showGraveyard(String graveyardToShow) {
+        System.out.println(graveyardToShow);
+    }
+
+    public static void printSelectedCard(String selectedCardToShow) {
+        System.out.println(selectedCardToShow);
+    }
+
+    public static void printEndingTheGame(Pair<String, String> pair) {
+        System.out.println(pair.getFirst() + " won the game and the score is: " + pair.getSecond());
+    }
+
+    public static void printEndingTheWholeMatch(Pair<String, String> pair) {
+        System.out.println(pair.getFirst() + " won the whole match with score: " + pair.getSecond());
+    }
+
+    public static void printGameSuccessfullyCreated() {
+        System.out.println(Responses.gameCreation);
+    }
+
+    public static void printBoard(Duel currentDuel) {
+        System.out.println(currentDuel);
+    }
+
+    public static void printSpecialSummonCards(ArrayList<Monster> monsters) {
+        System.out.println("these are the cards to choose from");
+        for (int i = 0; i < monsters.size(); i++) {
+            System.out.println(i + ": \n" + monsters.get(i));
+            System.out.println("-------------------------------------------------------------------------------------");
+        }
+    }
+
+    public static void printWrongChoice() {
+        System.out.println(Responses.wrongChoose);
+    }
+
+    public static void printChooseTribute() {
+        System.out.println(Responses.choiceOfDifferentTribute);
+    }
+
+    public static void printWrongTribute() {
+        System.out.println(Responses.wrongChoiceOfTribute);
+    }
+
+    public static void printDisabledSummonMonster() {
+        System.out.println(Responses.disabledMonsterSummon);
+    }
+
+    public static void printDisabledSummonSpell() {
+        System.out.println(Responses.disabledSpellSummon);
+    }
+
+
+    public static void printAskForEffectMonster() {
+        System.out.println(Responses.activateEffectMonster);
+    }
+
+    public static void printRoundNumber(int remainingRounds) {
+        System.out.println("Round " + (4 - remainingRounds) + " started");
+    }
+
+    public static void printWinnerInRound(User winner) {
+        System.out.println("Round ended. \"" + winner.getUsername() + "\" is the winner.");
+    }
+
+    public static void print(Object object) {
+        System.out.println(object);
+    }
+
+    public static void printAskToChain(User user, Duel duel) {
+        System.out.println("now it will be " + user.getUsername() + "’s turn\n");
+        printBoard(duel);
+        System.out.println(Responses.askForChain);
+    }
+
+    public static void printChainComplete(int chainCount) {
+        System.out.println("chain Count: " + chainCount);
+    }
+
+    public static void printWrongSpell() {
+        System.out.println(Responses.wrongSpell);
+    }
+
+    public static void printWrongSpellFormat() {
+        System.out.println(Responses.wrongSpellFormat);
+    }
+
+
+    public static void printAskToDiscard() {
+        System.out.println(Responses.askToDiscard);
+    }
+
+    public static void printAskTpGetCardName() {
+        System.out.println(Responses.askToGetCardName);
+    }
+
+    public static void printWrongCardName() {
+        System.out.println(Responses.wrongCardName);
+    }
+
+    public static void printChooseEquip() {
+        System.out.println(Responses.chooseEquip);
+    }
+
+
+    public static void printSpellsToDestroy(List<Card> cards) {
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i) == null) continue;
+            System.out.println(i + ": " + cards.get(i));
+        }
+    }
+
+    public static void printChangeOfHeart() {
+        System.out.println(Responses.changeOfHeart);
+    }
+
+    public static void printWrongControl() {
+        System.out.println(Responses.wrongChoiceControl);
+    }
+
+    public static void printCanNotControl() {
+        System.out.println(Responses.canNotControl);
+    }
+
+    public static void printNoSpellFound() {
+        System.out.println(Responses.noSpellFound);
+    }
+
+
+    public static void printHandShow(Hand hand) {
+        for (int i = 0; i < hand.getCardsInHand().length; i++) {
+            if (hand.getCardsInHand()[i] != null) {
+                System.out.println((i + 1) + ": " + hand.getCardsInHand()[i].getName());
+            }
+        }
+    }
+
+    public static void printNoSpecialEffect() {
+        System.out.println(Responses.noSpecialEffect);
+    }
+
+    public static void printAskToRitualMonster() {
+        System.out.println(Responses.askToRitual);
+    }
+
+    public static void printEnterTributeOrRitual() {
+        System.out.println(Responses.enterTribute);
     }
 }

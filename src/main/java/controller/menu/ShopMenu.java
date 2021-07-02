@@ -5,6 +5,7 @@ import module.User;
 import module.card.Card;
 import view.PrintResponses;
 import view.Regex;
+import view.Responses;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,11 +18,13 @@ public class ShopMenu implements Menuable {
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.buyACard)).find()) {
             buyCard(matcher);
-        } else if (Regex.getMatcher(command, Regex.showCardShop).matches()) {
+        } else if (Regex.getMatcher(command, Regex.showCardShop).find()) {
             printCardsShop();
-        } else if (Regex.getMatcher(command, Regex.menuShow).matches()) {
+        } else if ((matcher = Regex.getMatcher(command, Regex.increaseMoney)).find()) {
+            increaseMoney(matcher);
+        } else if (Regex.getMatcher(command, Regex.menuShow).find()) {
             showCurrentMenu();
-        } else if (Regex.getMatcher(command, Regex.menuExit).matches()) {
+        } else if (Regex.getMatcher(command, Regex.menuExit).find()) {
             exitMenu();
         } else if ((matcher = Regex.getMatcher(command, Regex.showACard)).find()) {
             String cardName = matcher.group("cardName");
@@ -52,6 +55,12 @@ public class ShopMenu implements Menuable {
         }
         ProgramController.userInGame.addCard(card);
         user.setCoins(user.getCoins() - card.getPrice());
+    }
+
+    private void increaseMoney(Matcher matcher) {
+        int amount = Integer.parseInt(matcher.group("amount"));
+        ProgramController.userInGame.setCoins(ProgramController.userInGame.getCoins() + amount);
+        PrintResponses.print(Responses.moneyIncreased);
     }
 
     @Override

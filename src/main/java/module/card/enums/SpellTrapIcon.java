@@ -1,4 +1,4 @@
-package module.card;
+package module.card.enums;
 
 public enum SpellTrapIcon {
     NORMAL("Normal"),
@@ -8,7 +8,7 @@ public enum SpellTrapIcon {
     FIELD("Field"),
     EQUIP("Equip"),
     RITUAL("Ritual");
-    private String name;
+    private final String name;
 
     SpellTrapIcon(String name) {
         this.name = name;

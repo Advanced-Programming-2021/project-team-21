@@ -1,4 +1,4 @@
-package module.card;
+package module.card.enums;
 
 public enum MonsterTypes {
     WARRIOR("Warrior"),
@@ -16,7 +16,7 @@ public enum MonsterTypes {
     CYBERSE("Cyberse"),
     FAIRY("Fairy"),
     SEA_SERPENT("Sea Serpent");
-    private String name;
+    private final String name;
 
     MonsterTypes(String name) {
         this.name = name;

@@ -2,11 +2,16 @@ package module.card;
 
 // a problem is when there are multiple cards in print
 
+import com.rits.cloning.Cloner;
 import controller.ProgramController;
+import module.card.effects.Effect;
+import module.card.enums.CardType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class Card {
     protected String name;
@@ -14,16 +19,20 @@ public class Card {
     private String description;
     private boolean isFaceUp;
     private int price;
+    private boolean hasEffect;
+    private boolean isATK;
 
     public static Card getCardByName(String name) {
         HashMap<String, Card> allCards = ProgramController.allCards;
+        if (allCards == null)
+            return null;
         for (String cardName : allCards.keySet()) {
-            if (cardName.equals(name)) return allCards.get(cardName);
+            if (cardName.equals(name)) return new Cloner().deepClone(allCards.get(cardName));
         }
         return null;
     }
 
-    public static ArrayList<Card> sort(ArrayList<Card> cards) {
+    public static void sort(ArrayList<Card> cards) {
         ArrayList<Card> sort = new ArrayList<>(cards);
         for (int i = 0; i < sort.size(); i++) {
             for (int j = i + 1; j < sort.size(); j++) {
@@ -31,7 +40,6 @@ public class Card {
                     Collections.swap(sort, i, j);
             }
         }
-        return sort;
     }
 
     public String getName() {
@@ -42,7 +50,7 @@ public class Card {
         this.name = name;
     }
 
-    protected CardType getCardType() {
+    public CardType getCardType() {
         return cardType;
     }
 
@@ -50,11 +58,11 @@ public class Card {
         this.cardType = cardType;
     }
 
-    protected boolean isFaceUp() {
+    public boolean isFaceUp() {
         return isFaceUp;
     }
 
-    protected void setFaceUp(boolean faceUp) {
+    public void setFaceUp(boolean faceUp) {
         isFaceUp = faceUp;
     }
 
@@ -74,6 +82,22 @@ public class Card {
         this.description = description;
     }
 
-    public void destroyWithoutLosingLifePoints() {
+
+    public void setHasEffect(boolean hasEffect) {
+        this.hasEffect = hasEffect;
+    }
+
+
+    public boolean isATK() {
+        return isATK;
+    }
+
+    public void setATK(boolean ATK) {
+        isATK = ATK;
+    }
+
+
+    public Map<String, Consumer<Effect>> getEffectsMap() {
+        return null;
     }
 }
