@@ -15,6 +15,7 @@ import view.PrintResponses;
 import view.Regex;
 import view.Responses;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -170,7 +171,7 @@ public class DuelMenu implements Menuable {
         return ProgramController.scanner.nextLine();
     }
 
-    @Override
+
     public void run(String command) {
         if (checkSpecialSummon(command, currentDuel, false)) return;
         HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
@@ -208,12 +209,12 @@ public class DuelMenu implements Menuable {
         isInGame = true;
     }
 
-    @Override
+
     public void showCurrentMenu() {
         PrintResponses.printDuelMenuShow();
     }
 
-    @Override
+
     public void exitMenu() {
         ProgramController.currentMenu = new MainMenu();
     }
@@ -970,5 +971,9 @@ public class DuelMenu implements Menuable {
         }
     }
 
+    @Override
+    public void showMenu() throws IOException {
+
+    }
 }
 

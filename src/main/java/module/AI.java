@@ -29,7 +29,7 @@ public class AI extends User {
     }
 
     public void run() {
-        startStrategy();
+        //startStrategy();
     }
 
     private void createDeck() {
@@ -50,18 +50,18 @@ public class AI extends User {
         deck.setActive(true);
     }
 
-    private void startStrategy() {
-        IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
-        if (getHand().getNumberOfCardsInHand() > 0 && getBoard().getMonsterNumber() < 4) {
-            ProgramController.currentMenu.run("select --hand 1");
-            ProgramController.currentMenu.run("summon");
-            ProgramController.currentMenu.run("next phase");
-            ProgramController.currentMenu.run("select --monster 1");
-            if (currentDuel.getRival().getBoard().getMonsterNumber() > 0)
-                ProgramController.currentMenu.run("attack 1");
-            else
-                ProgramController.currentMenu.run("attack direct");
-            IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
-        }
-    }
+   // private void startStrategy() {
+     //   IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
+      //  if (getHand().getNumberOfCardsInHand() > 0 && getBoard().getMonsterNumber() < 4) {
+       //     ProgramController.currentMenu.run("select --hand 1");
+     //       ProgramController.currentMenu.run("summon");
+       //     ProgramController.currentMenu.run("next phase");
+       //     ProgramController.currentMenu.run("select --monster 1");
+       //     if (currentDuel.getRival().getBoard().getMonsterNumber() > 0)
+       //         ProgramController.currentMenu.run("attack 1");
+       //     else
+     //           ProgramController.currentMenu.run("attack direct");
+      //      IntStream.range(0, 2).forEach(i -> ProgramController.currentMenu.run("next phase"));
+      //  }
+   // }
 }

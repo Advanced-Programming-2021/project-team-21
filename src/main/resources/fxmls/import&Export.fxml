@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<?import java.net.URL?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundImport" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.menu.ImportAndExport">
+   <children>
+      <Label layoutX="191.0" layoutY="17.0" text="Import/Export">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="100.0" text="Name :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="325.0" layoutY="147.0" text="Card type :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <MenuButton layoutX="437.0" layoutY="145.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="138.0" text="card type" textAlignment="CENTER">
+        <items>
+          <MenuItem mnemonicParsing="false" text="monster" />
+          <MenuItem mnemonicParsing="false" text="spell" />
+            <MenuItem mnemonicParsing="false" text="trap" />
+        </items>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </MenuButton>
+      <TextField layoutX="127.0" layoutY="102.0" prefHeight="26.0" prefWidth="150.0" />
+      <Label layoutX="14.0" layoutY="252.0" text="Description :">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <TextField layoutX="127.0" layoutY="258.0" prefHeight="120.0" prefWidth="220.0" />
+      <MenuButton layoutX="437.0" layoutY="198.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="138.0" text="effect">
+        <items>
+          <MenuItem mnemonicParsing="false" text="none" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </MenuButton>
+      <Label layoutX="325.0" layoutY="198.0" text="Effect :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="24.0" layoutY="145.0" text="Attack :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="16.0" layoutY="198.0" text="Defence :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="325.0" layoutY="100.0" text="Image :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField layoutX="127.0" layoutY="149.0" prefHeight="26.0" prefWidth="150.0" />
+      <TextField layoutX="127.0" layoutY="200.0" prefHeight="26.0" prefWidth="150.0" />
+      <Button layoutX="437.0" layoutY="99.0" mnemonicParsing="false" onMouseClicked="#chooseImage" prefHeight="30.0" prefWidth="138.0" text="choose">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="442.0" layoutY="318.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="create">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="425.0" layoutY="267.0" text="Price :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="490.0" layoutY="252.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Line endX="88.4000244140625" layoutX="490.0" layoutY="266.0" startX="-73.20001220703125" />
+      <Line endX="88.4000244140625" layoutX="490.0" layoutY="297.0" startX="-73.20001220703125" />
+      <Line endX="100.29998779296875" endY="-5.5" layoutX="316.0" layoutY="271.0" startX="100.29998779296875" startY="25.5" />
+      <Line endX="100.9000244140625" endY="-4.5" layoutX="478.0" layoutY="271.0" startX="100.29998779296875" startY="25.5" />
+      <Label layoutX="448.0" layoutY="28.0" text="Coins :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="515.0" layoutY="28.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Line endX="81.0" endY="3.814697265625E-6" layoutX="499.0" layoutY="27.0" startX="-61.4000244140625" startY="3.814697265625E-6" />
+      <Line endX="81.0" endY="3.814697265625E-6" layoutX="499.0" layoutY="58.0" startX="-61.4000244140625" startY="3.814697265625E-6" />
+      <Line endX="100.29998779296875" endY="-5.5" layoutX="336.0" layoutY="33.0" startX="100.29998779296875" startY="25.5" />
+      <Line endX="100.29998779296875" endY="-5.5" layoutX="480.0" layoutY="33.0" startX="100.29998779296875" startY="25.5" />
+      <Button layoutX="29.0" layoutY="28.0" mnemonicParsing="false" text="Back to main menu">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+   <stylesheets>
+      <URL value="@../../classes/css/CSS.css" />
+   </stylesheets>
+</AnchorPane>

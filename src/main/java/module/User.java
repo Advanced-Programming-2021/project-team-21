@@ -3,7 +3,9 @@ package module;
 import controller.DataController;
 import module.card.Card;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class User {
     private final ArrayList<Deck> decks;
@@ -11,6 +13,7 @@ public class User {
     private String username;
     private String password;
     private String nickname;
+    private String avatar;
     private int score;
     private int coins;
     private Board board;
@@ -35,6 +38,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+        this.avatar = setRandomAvatar();
         DataController.saveData(this);
     }
 
@@ -61,6 +65,10 @@ public class User {
 
     public int getCoins() {
         return coins;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public void setCoins(int coins) {
@@ -139,6 +147,16 @@ public class User {
             }
         }
         return null;
+    }
+
+    public String setRandomAvatar() {
+        ArrayList<String> images = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            String address = "/images/avatars/avatar" + i + ".jfif";
+            images.add(address);
+        }
+        Collections.shuffle(images);
+        return images.get(0);
     }
 
     public void deactivateDecks(String name) {

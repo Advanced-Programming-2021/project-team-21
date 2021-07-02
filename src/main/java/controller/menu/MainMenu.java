@@ -1,60 +1,40 @@
 package controller.menu;
 
 import controller.ProgramController;
-import view.PrintResponses;
-import view.Regex;
-import view.Responses;
+import javafx.scene.input.MouseEvent;
 
-import java.util.regex.Matcher;
+import java.io.IOException;
 
 public class MainMenu implements Menuable {
     @Override
-    public void run(String command) {
-        Matcher matcher;
-        if (Regex.getMatcher(command, Regex.menuExit).find() || Regex.getMatcher(command, Regex.logout).find())
-            exitMenu();
-        else if (Regex.getMatcher(command, Regex.menuShow).find()) showCurrentMenu();
-        else if ((matcher = Regex.getMatcher(command, Regex.menuEnter)).find()) menuEnter(matcher);
-        else PrintResponses.printInvalidFormat();
+    public void showMenu() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/fxmls/mainMenu.fxml"));
+        ProgramController.stage.show();
     }
 
-    private void menuEnter(Matcher matcher) {
-        String name = matcher.group("menuName");
-        switch (name) {
-            case "Duel":
-                ProgramController.currentMenu = new DuelMenu();
-                break;
-            case "Deck":
-                ProgramController.currentMenu = new DeckMenu();
-                break;
-            case "Scoreboard":
-                ProgramController.currentMenu = new ScoreBoard();
-                break;
-            case "Profile":
-                ProgramController.currentMenu = new ProfileMenu();
-                break;
-            case "Shop":
-                ProgramController.currentMenu = new ShopMenu();
-                break;
-            case "Import":
-            case "Export":
-                ProgramController.currentMenu = new ImportAndExport();
-                break;
-            default:
-                PrintResponses.printInvalidFormat();
-                break;
-        }
-    }
-
-    @Override
-    public void exitMenu() {
-        PrintResponses.print(Responses.successfulLogout);
+    public void logout() throws IOException {
         ProgramController.currentMenu = new LoginMenu();
+        ProgramController.userInGame = null;
+        ((LoginMenu) ProgramController.currentMenu).backToEntrance();
     }
 
-    @Override
-    public void showCurrentMenu() {
-        PrintResponses.printMainMenuShow();
+    public void goToShopMenu() throws IOException {
+        ProgramController.currentMenu = new ShopMenu();
+        ProgramController.currentMenu.showMenu();
     }
 
+    public void goToScoreboard() throws IOException {
+        ProgramController.currentMenu = new ScoreBoard();
+        ProgramController.currentMenu.showMenu();
+    }
+
+    public void goToProfileMenu() throws IOException {
+        ProgramController.currentMenu = new ProfileMenu();
+        ProgramController.currentMenu.showMenu();
+    }
+
+    public void goToImportAndExport(MouseEvent mouseEvent) throws IOException {
+        ProgramController.currentMenu = new ImportAndExport();
+        ProgramController.currentMenu.showMenu();
+    }
 }

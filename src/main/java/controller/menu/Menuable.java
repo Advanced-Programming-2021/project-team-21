@@ -1,9 +1,8 @@
 package controller.menu;
 
+import java.io.IOException;
+
 public interface Menuable {
-    void run(String command);
 
-    void showCurrentMenu();
-
-    void exitMenu();
+    void showMenu() throws IOException;
 }

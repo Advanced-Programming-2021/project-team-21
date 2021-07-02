@@ -8,13 +8,14 @@ import module.card.Card;
 import view.PrintResponses;
 import view.Regex;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class DeckMenu implements Menuable {
     User user = ProgramController.userInGame;
 
-    @Override
+
     public void run(String command) {
         Matcher matcher;
         if ((matcher = Regex.getMatcher(command, Regex.deckCreate)).find()) {
@@ -199,13 +200,18 @@ public class DeckMenu implements Menuable {
         DataController.saveData(user);
     }
 
-    @Override
+
     public void exitMenu() {
         ProgramController.currentMenu = new MainMenu();
     }
 
-    @Override
+
     public void showCurrentMenu() {
         PrintResponses.printDeckMenuShow();
+    }
+
+    @Override
+    public void showMenu() throws IOException {
+
     }
 }

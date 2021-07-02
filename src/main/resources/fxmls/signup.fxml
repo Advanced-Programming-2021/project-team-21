@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundSignup" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.menu.LoginMenu">
+   <top>
+      <VBox alignment="TOP_CENTER" prefHeight="136.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Label alignment="TOP_CENTER" text="Sign up menu" textFill="white">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
+            <Label id="errorSignUp" textFill="RED">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="88.0" prefWidth="328.0" spacing="68.0">
+               <children>
+                  <Label text="username :" textFill="white">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="usernameSignUp" prefHeight="26.0" prefWidth="192.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="72.0">
+               <children>
+                  <Label text="nickname :" textFill="white">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="nicknameSignUp" prefHeight="26.0" prefWidth="192.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="70.0">
+               <children>
+                  <Label text="password :" textFill="white">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <PasswordField fx:id="passwordSignUp" prefHeight="26.0" prefWidth="192.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <CheckBox fx:id="agreeToPolicies" mnemonicParsing="false" text="I agree to all privacy and policies." textFill="white">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <right>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#policies" text="Policies">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="3.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#passSignupInformationToCheck" prefHeight="30.0" prefWidth="2000.0" styleClass="buttonEntrance" text="Sign up">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="3.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#backToEntrance" text="Back">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="3.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </right>
+   <stylesheets>
+      <URL value="@../../classes/css/CSS.css" />
+   </stylesheets>
+   <left>
+      <VBox prefHeight="274.0" prefWidth="22.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label id="errorUsernameSignUp" textFill="RED">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+            <Label id="errorNicknameSignUp" textFill="RED">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <Label id="errorPasswordSignUp" textFill="RED">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="18.0" />
+               </VBox.margin>
+            </Label>
+            <Label id="errorPoliciesSignUp" textFill="RED">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </left>
+</BorderPane>
