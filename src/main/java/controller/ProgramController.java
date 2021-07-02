@@ -34,7 +34,7 @@ public class ProgramController {
     public void run() throws IOException {
         DataController.createDirectories();
         allCards = DataController.getAllCards();
-        ProgramController.createNewScene(getClass().getResource("/fxmls/entrance.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/entrance.fxml"));
         ProgramController.stage.show();
     }
 

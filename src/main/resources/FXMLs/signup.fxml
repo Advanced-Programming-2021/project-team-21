@@ -117,7 +117,7 @@
       </VBox>
    </right>
    <stylesheets>
-      <URL value="@../css/CSS.css" />
+      <URL value="@../CSS/CSS.css" />
    </stylesheets>
    <left>
       <VBox prefHeight="274.0" prefWidth="22.0" BorderPane.alignment="CENTER">

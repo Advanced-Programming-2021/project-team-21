@@ -36,7 +36,7 @@ public class ScoreBoard implements Menuable {
 
     @Override
     public void showMenu() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/scoreboard.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/scoreboard.fxml"));
         ArrayList<ArrayList<Label>> columnInformation = getLabels();
         ArrayList<User> users = scoreBoardShow();
         int[] ranks = getRanks(users);

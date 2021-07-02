@@ -8,7 +8,7 @@ import java.io.IOException;
 public class MainMenu implements Menuable {
     @Override
     public void showMenu() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/mainMenu.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
         ProgramController.stage.show();
     }
 

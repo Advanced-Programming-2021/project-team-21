@@ -4,15 +4,11 @@ import controller.ProgramController;
 import javafx.animation.FadeTransition;
 import javafx.animation.Transition;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -23,8 +19,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setResizable(false);
         ProgramController.stage = primaryStage;
-        Scene scene = ProgramController.createNewScene(getClass().getResource("/fxmls/welcome.fxml"));
-        FadeTransition textTransition = new FadeTransition(Duration.seconds(0.75), ((Label) scene.lookup("#pressKey")));
+        Scene scene = ProgramController.createNewScene(getClass().getResource("/FXMLs/welcome.fxml"));
+        FadeTransition textTransition = new FadeTransition(Duration.seconds(0.75), scene.lookup("#pressKey"));
         textTransition.setAutoReverse(true);
         textTransition.setFromValue(0);
         textTransition.setToValue(1);

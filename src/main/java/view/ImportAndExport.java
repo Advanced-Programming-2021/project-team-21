@@ -58,7 +58,7 @@ public class ImportAndExport implements Menuable {
 
     @Override
     public void showMenu() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/import&Export.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/import&Export.fxml"));
         ProgramController.stage.show();
     }
 

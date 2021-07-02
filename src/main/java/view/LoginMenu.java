@@ -67,7 +67,7 @@ public class LoginMenu implements Menuable {
     }
 
     private void showPopUpSuccessfulSignUp() throws IOException {
-        Parent pane = FXMLLoader.load(getClass().getResource("/fxmls/succussfulSignup.fxml"));
+        Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/succussfulSignup.fxml"));
         Scene scene = new Scene(pane);
         Stage stagePopUp = new Stage();
         stagePopUp.setScene(scene);
@@ -95,12 +95,12 @@ public class LoginMenu implements Menuable {
 
 
     public void goToLogin() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/login.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/login.fxml"));
         ProgramController.stage.show();
     }
 
     public void goToSignup() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/signup.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/signup.fxml"));
         ProgramController.stage.show();
     }
 
@@ -130,12 +130,12 @@ public class LoginMenu implements Menuable {
     }
 
     public void backToEntrance() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/entrance.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/entrance.fxml"));
         ProgramController.stage.show();
     }
 
     public void policies() throws IOException {
-        Parent pane = FXMLLoader.load(getClass().getResource("/fxmls/policies.fxml"));
+        Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/policies.fxml"));
         Scene scene = new Scene(pane);
         Stage stagePopUp = new Stage();
         stagePopUp.setScene(scene);

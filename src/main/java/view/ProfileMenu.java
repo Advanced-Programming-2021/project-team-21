@@ -82,7 +82,7 @@ public class ProfileMenu implements Menuable {
 
     @Override
     public void showMenu() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/profileMenu.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/profileMenu.fxml"));
         ((Label) ProgramController.currentScene.lookup("#usernameProfile")).setText(ProgramController.userInGame.getUsername());
         ProgramController.currentScene.lookup("#usernameProfile").setStyle("-fx-border-color: black; -fx-background-color: white;");
         ((TextField) ProgramController.currentScene.lookup("#nicknameProfile")).setText(ProgramController.userInGame.getNickname());

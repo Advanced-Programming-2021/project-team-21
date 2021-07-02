@@ -38,7 +38,7 @@ public class ShopMenu implements Menuable {
 
 
     public void showMenu() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/fxmls/shopMenu.fxml"));
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/shopMenu.fxml"));
         ((Label) ProgramController.currentScene.lookup("#page")).setText(String.valueOf(currentPage));
         ((Label) ProgramController.currentScene.lookup("#money")).setText(String.valueOf(ProgramController.userInGame.getCoins()));
         cardsName = new ArrayList<>(DataController.getAllCards().keySet());
