@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundShopMenu" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.menu.ShopMenu">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundShopMenu" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="view.ShopMenu">
    <children>
       <Label layoutX="248.0" layoutY="14.0" text="Shop" textFill="white">
          <font>
@@ -132,6 +132,6 @@
       </Button>
    </children>
    <stylesheets>
-      <URL value="@../../classes/css/CSS.css" />
+      <URL value="@../css/CSS.css" />
    </stylesheets>
 </AnchorPane>

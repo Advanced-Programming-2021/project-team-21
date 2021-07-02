@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundSignup" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginMenu">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundSignup" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="view.LoginMenu">
    <top>
       <VBox alignment="TOP_CENTER" prefHeight="136.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="TOP_CENTER">
          <children>
@@ -117,7 +117,7 @@
       </VBox>
    </right>
    <stylesheets>
-      <URL value="@../../classes/css/CSS.css" />
+      <URL value="@../css/CSS.css" />
    </stylesheets>
    <left>
       <VBox prefHeight="274.0" prefWidth="22.0" BorderPane.alignment="CENTER">

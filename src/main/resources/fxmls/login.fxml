@@ -79,6 +79,6 @@
       </VBox>
    </center>
    <stylesheets>
-      <URL value="@../../classes/css/CSS.css" />
+      <URL value="@../css/CSS.css" />
    </stylesheets>
 </BorderPane>
