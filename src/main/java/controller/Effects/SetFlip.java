@@ -1,9 +1,9 @@
 package controller.Effects;
 
 
-import module.Duel;
-import module.User;
-import module.card.Monster;
+import model.Duel;
+import model.User;
+import model.card.Monster;
 
 public class SetFlip {
     // marshmallon

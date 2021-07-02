@@ -1,10 +1,10 @@
 package controller.Effects;
 
-import module.Board;
-import module.Duel;
-import module.User;
-import module.card.Card;
-import module.card.Monster;
+import model.Board;
+import model.Duel;
+import model.User;
+import model.card.Card;
+import model.card.Monster;
 
 public class FlipSummonEffects {
     // man eater bug

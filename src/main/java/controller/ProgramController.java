@@ -1,14 +1,13 @@
 package controller;
 
-import controller.menu.LoginMenu;
-import controller.menu.Menuable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import view.LoginMenu;
+import view.Menuable;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import module.User;
-import module.card.Card;
+import model.User;
+import model.card.Card;
 
 import java.io.IOException;
 import java.net.URL;

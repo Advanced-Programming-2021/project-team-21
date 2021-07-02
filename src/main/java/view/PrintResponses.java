@@ -1,12 +1,11 @@
 package view;
 
-import controller.menu.Phases;
-import module.Deck;
-import module.Duel;
-import module.Hand;
-import module.User;
-import module.card.Card;
-import module.card.Monster;
+import model.Deck;
+import model.Duel;
+import model.Hand;
+import model.User;
+import model.card.Card;
+import model.card.Monster;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;

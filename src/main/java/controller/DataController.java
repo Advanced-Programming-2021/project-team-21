@@ -1,21 +1,19 @@
 package controller;
 
 import com.google.gson.Gson;
-import module.AI;
-import module.Deck;
-import module.User;
-import module.card.Card;
-import module.card.Monster;
-import module.card.Spell;
-import module.card.Trap;
-import module.card.effects.Effect;
-import tech.tablesaw.api.Table;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import model.AI;
+import model.Deck;
+import model.User;
+import model.card.Card;
+import model.card.Monster;
+import model.card.Spell;
+import model.card.Trap;
+import model.card.effects.Effect;
 import view.Regex;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -51,13 +49,14 @@ public class DataController {
     private static HashMap<String, Card> getCardsFromTable(String path) {
         HashMap<String, Card> cards = new HashMap<>();
         try {
-            Table table = Table.read().csv(path);
-            for (int i = 0; i < table.rowCount(); i++) {
-                String[] columnNames = table.columnNames().toArray(new String[0]);
-                Object[] parameters = new Object[columnNames.length];
-                for (int j = 0; j < columnNames.length; j++) {
-                    parameters[j] = table.column(columnNames[j]).get(i);
-                }//checking which constructor to call
+            File file = new File(path);
+            FileReader filereader = new FileReader(file);
+            CSVReader csvReader = new CSVReaderBuilder(filereader).withSkipLines(1).build();
+            List<String[]> allData = csvReader.readAll();
+            for (String[] allDatum : allData) {
+                Object[] parameters = new Object[allData.get(0).length];
+                //checking which constructor to call
+                System.arraycopy(allDatum, 0, parameters, 0, allData.get(0).length);
                 if (path.equals(CARD_PATHS[0])) {
                     Monster monster = new Monster(parameters);
                     cards.put(monster.getName(), monster);
@@ -69,7 +68,7 @@ public class DataController {
                     cards.put(trap.getName(), trap);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return cards;

@@ -1,12 +1,12 @@
 package controller.Effects;
 
 import controller.ProgramController;
-import module.Duel;
-import module.Hand;
-import module.User;
-import module.WhereToChain;
-import module.card.*;
-import module.card.effects.Effect;
+import model.Duel;
+import model.Hand;
+import model.User;
+import model.WhereToChain;
+import model.card.*;
+import model.card.effects.Effect;
 import view.PrintResponses;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class ChainHandler {
         else return user;
     }
 
-    private static boolean checkIsRightPlace(ArrayList<module.card.Chain> chainCards, WhereToChain where,
+    private static boolean checkIsRightPlace(ArrayList<model.card.Chain> chainCards, WhereToChain where,
                                              Card spellOrTrap, Card card, User userNow, User rival) {
         if (chainCards.size() != 0) card = chainCards.get(chainCards.size() - 1).getCard();
         if (spellOrTrap instanceof Spell) {
@@ -132,12 +132,12 @@ public class ChainHandler {
         }
     }
 
-    public static ArrayList<module.card.Chain> getChain(Duel duel, String choose, User user, User rival
+    public static ArrayList<model.card.Chain> getChain(Duel duel, String choose, User user, User rival
             , Chain firstCard, WhereToChain where) {
         currentDuel = duel;
         int chainCount = 0;
         int speed = 2;
-        ArrayList<module.card.Chain> chainCards = new ArrayList<>();
+        ArrayList<model.card.Chain> chainCards = new ArrayList<>();
         while (!choose.equals("no")) {
             chainCount++;
             Card spellOrTrap;
@@ -158,7 +158,7 @@ public class ChainHandler {
             if ((spellOrTrap instanceof Trap) && ((Trap) spellOrTrap).getSpellTrapIcon().getName().equals("Counter"))
                 speed = 3;
             PrintResponses.printChainComplete(chainCount);
-            module.card.Chain chain = getOtherInputs(spellOrTrap, userNow, otherUser, firstCard);
+            model.card.Chain chain = getOtherInputs(spellOrTrap, userNow, otherUser, firstCard);
             chainCards.add(chain);
             choose = getChainCommand(chainCards, otherUser, userNow, currentDuel, where, firstCard.getCard());
         }

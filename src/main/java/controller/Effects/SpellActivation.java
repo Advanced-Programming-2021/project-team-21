@@ -1,15 +1,15 @@
 package controller.Effects;
 
 import controller.ProgramController;
-import controller.menu.DuelMenu;
-import module.Board;
-import module.Duel;
-import module.User;
-import module.card.Card;
-import module.card.Chain;
-import module.card.Monster;
-import module.card.Spell;
-import module.card.effects.Effect;
+import view.DuelMenu;
+import model.Board;
+import model.Duel;
+import model.User;
+import model.card.Card;
+import model.card.Chain;
+import model.card.Monster;
+import model.card.Spell;
+import model.card.effects.Effect;
 import view.PrintResponses;
 
 import java.util.ArrayList;

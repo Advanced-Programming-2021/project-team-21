@@ -1,6 +1,6 @@
 package controller.Effects;
 
-import module.card.Monster;
+import model.card.Monster;
 
 public class BattlePhaseEnd {
     //suijin

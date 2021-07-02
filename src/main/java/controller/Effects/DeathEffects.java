@@ -1,10 +1,10 @@
 package controller.Effects;
 
-import module.Duel;
-import module.User;
-import module.card.Card;
-import module.card.Monster;
-import module.card.Spell;
+import model.Duel;
+import model.User;
+import model.card.Card;
+import model.card.Monster;
+import model.card.Spell;
 
 import java.util.ArrayList;
 import java.util.Collections;
