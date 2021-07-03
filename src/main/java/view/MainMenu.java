@@ -1,7 +1,6 @@
 package view;
 
 import controller.ProgramController;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -33,8 +32,13 @@ public class MainMenu implements Menuable {
         ProgramController.currentMenu.showMenu();
     }
 
-    public void goToImportAndExport(MouseEvent mouseEvent) throws IOException {
+    public void goToImportAndExport() throws IOException {
         ProgramController.currentMenu = new ImportAndExport();
+        ProgramController.currentMenu.showMenu();
+    }
+
+    public void goToDeckMenu() throws IOException {
+        ProgramController.currentMenu = new DeckMenu();
         ProgramController.currentMenu.showMenu();
     }
 }

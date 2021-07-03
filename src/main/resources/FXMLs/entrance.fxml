@@ -18,7 +18,7 @@
             minWidth="-Infinity"
             prefHeight="400.0" prefWidth="600.0">
     <top>
-        <Label text="Entrance menu" BorderPane.alignment="CENTER">
+        <Label text="Entrance menu" BorderPane.alignment="CENTER" styleClass="title-label">
             <font>
                 <Font size="40.0" />
             </font>

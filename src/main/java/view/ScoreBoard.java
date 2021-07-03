@@ -68,7 +68,7 @@ public class ScoreBoard implements Menuable {
         hBox.getChildren().add(avatar);
         ((Label) labelsForUser.get(0)).setMinWidth(30);
         ((Label) labelsForUser.get(1)).setMinWidth(200);
-        ((Label) labelsForUser.get(2)).setMinWidth(20);
+        ((Label) labelsForUser.get(2)).setMinWidth(60);
         hBox.getChildren().addAll(labelsForUser);
         hBox.setSpacing(20);
         return hBox;

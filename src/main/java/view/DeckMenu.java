@@ -2,6 +2,11 @@ package view;
 
 import controller.DataController;
 import controller.ProgramController;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import model.Deck;
 import model.User;
 import model.card.Card;
@@ -11,8 +16,9 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class DeckMenu implements Menuable {
-    User user = ProgramController.userInGame;
+    private final User USER = ProgramController.userInGame;
 
+    private final int DECK_WIDTH = 90, DECK_HIGHT = 100;
 
     public void run(String command) {
         Matcher matcher;
@@ -46,7 +52,7 @@ public class DeckMenu implements Menuable {
     }
 
     private void showAllCards() {
-        ArrayList<Card> allCards = user.getCards();
+        ArrayList<Card> allCards = USER.getCards();
         Card.sort(allCards);
         for (Card card : allCards) {
             PrintResponses.printAllCard(card);
@@ -55,7 +61,7 @@ public class DeckMenu implements Menuable {
 
     private void showADeck(Matcher matcher) {
         String deckName = matcher.group("deckName");
-        Deck deck = user.getDeckByName(deckName);
+        Deck deck = USER.getDeckByName(deckName);
         if (deck == null) {
             PrintResponses.printDeckNotExist(deckName);
             return;
@@ -71,7 +77,7 @@ public class DeckMenu implements Menuable {
 
     private void showAllDeck() {
         PrintResponses.printActive();
-        ArrayList<Deck> show = Deck.deckSort(user.getDecks());
+        ArrayList<Deck> show = Deck.deckSort(USER.getDecks());
         int index = 0;
         if (show.size() > 0 && show.get(index).isActive()) {
             PrintResponses.printDeckShow(show.get(index));
@@ -85,7 +91,7 @@ public class DeckMenu implements Menuable {
 
     private void removeCard(Matcher matcher) {
         String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
-        Deck deck = user.getDeckByName(deckName);
+        Deck deck = USER.getDeckByName(deckName);
         if (deck == null) {
             PrintResponses.printDeckNotExist(deckName);
             return;
@@ -115,7 +121,7 @@ public class DeckMenu implements Menuable {
         String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
         cardName = cardName.replaceAll("\\s+-", "");
         Card card = Card.getCardByName(cardName);
-        Deck deck = user.getDeckByName(deckName);
+        Deck deck = USER.getDeckByName(deckName);
         boolean doesHaveCard = false;
         for (Card userInGameCard : ProgramController.userInGame.getCards()) {
             if (userInGameCard.getName().equals(cardName)) {
@@ -148,7 +154,7 @@ public class DeckMenu implements Menuable {
             if (invalidAdd(cardName, deckName, deck)) return;
             deck.addCardToMainDeck(card);
         }
-        DataController.saveData(user);
+        DataController.saveData(USER);
         PrintResponses.printSuccessfulCardAddition();
     }
 
@@ -165,12 +171,12 @@ public class DeckMenu implements Menuable {
         Deck deck = getDeck(name);
         if (deck == null) return;
         deck.setActive(true);
-        user.deactivateDecks(name);
+        USER.deactivateDecks(name);
         PrintResponses.printSuccessfulDeckActivation();
     }
 
     private Deck getDeck(String name) {
-        Deck deck = user.getDeckByName(name);
+        Deck deck = USER.getDeckByName(name);
         if (deck == null) {
             PrintResponses.printDeckNotExist(name);
             return null;
@@ -182,20 +188,20 @@ public class DeckMenu implements Menuable {
         String name = matcher.group("deckName");
         Deck deck = getDeck(name);
         if (deck == null) return;
-        user.removeDeck(deck);
+        USER.removeDeck(deck);
         PrintResponses.printSuccessfulDeckDeletion();
     }
 
     private void createDeck(Matcher matcher) {
         String name = matcher.group("deckName");
-        if (user.getDeckByName(name) != null) {
+        if (USER.getDeckByName(name) != null) {
             PrintResponses.printDeckExist(name);
             return;
         }
         Deck deck = new Deck(name);
-        user.addDeck(deck);
+        USER.addDeck(deck);
         PrintResponses.printSuccessfulDeckCreation();
-        DataController.saveData(user);
+        DataController.saveData(USER);
     }
 
 
@@ -210,6 +216,23 @@ public class DeckMenu implements Menuable {
 
     @Override
     public void showMenu() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/DeckMenu.fxml"));
+        ProgramController.stage.show();
+        HBox mainHBox = (HBox) ProgramController.currentScene.lookup("#mainHBox");
+        USER.getActiveDeck();
+        Rectangle activeDeck = new Rectangle(DECK_WIDTH, DECK_HIGHT);
+        activeDeck.setFill(new ImagePattern(
+                new Image(getClass().getResource("/images/deck.png").toExternalForm())));
+        mainHBox.getChildren().add(activeDeck);
+    }
 
+    public void createDeck(MouseEvent mouseEvent) {
+
+    }
+
+    public void goToMainMenu() throws IOException {
+        ProgramController.currentMenu = new MainMenu();
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
+        ProgramController.stage.show();
     }
 }

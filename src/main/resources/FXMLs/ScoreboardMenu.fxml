@@ -5,6 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
@@ -15,9 +18,16 @@
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml">
     <ScrollPane hbarPolicy="NEVER" styleClass="scroll-bar" fitToWidth="true">
-        <VBox alignment="CENTER" spacing="10" prefHeight="400"
+        <VBox alignment="TOP_CENTER" spacing="10" prefHeight="400"
               prefWidth="600" styleClass="scoreboard" id="mainVBox">
-            <Button text="Back" onMouseClicked="#handleBackToMenu" styleClass="buttonEntrance"/>
+            <HBox spacing="100">
+                <Button text="Back" onMouseClicked="#handleBackToMenu" styleClass="buttonEntrance"/>
+                <Label text="  Scoreboard  " styleClass="title-label">
+                    <font>
+                        <Font size="40.0" />
+                    </font>
+                </Label>
+            </HBox>
 
         </VBox>
 

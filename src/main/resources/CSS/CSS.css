@@ -49,13 +49,15 @@
 }
 
 .buttonEntrance {
+    -fx-background-color: rgba(39, 138, 88, 0.897);
+    -fx-text-fill: rgb(255, 255, 255);
      -fx-background-radius: 10;
      -fx-cursor: hand;
 }
 
 .buttonEntrance:hover {
-     -fx-background-color: white;
-     -fx-text-fill: red;
+     -fx-background-color: rgb(161, 212, 168);
+     -fx-text-fill: rgb(0, 0, 0);
      -fx-cursor: hand;
 }
 
@@ -103,8 +105,16 @@
 }
 
 .scoreboard-users {
-  -fx-background-color: white;
-  -fx-text-fill: purple;
-  -fx-background-radius: 10;
+    -fx-background-color: rgb(199, 240, 226);
+    -fx-text-fill: purple;
+    -fx-background-radius: 10;
+  }
 
+.decks {
+
+}
+
+.title-label {
+   -fx-background-color: rgba(199, 240, 226, 0.479);
+   -fx-background-radius: 10;
 }

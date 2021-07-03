@@ -8,11 +8,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" fx:controller="view.MainMenu" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundMainMenu" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+            fx:controller="view.MainMenu" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundMainMenu" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <Label text="Main menu" BorderPane.alignment="TOP_LEFT">
+      <Label text="Main menu" BorderPane.alignment="TOP_LEFT" styleClass="title-label">
          <font>
-            <Font size="40.0" />
+            <Font size="36.0" />
          </font>
       </Label>
    </top>
@@ -24,7 +26,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" text="Deck menu">
+            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToDeckMenu" text="Deck menu">
                <font>
                   <Font size="20.0" />
                </font>
