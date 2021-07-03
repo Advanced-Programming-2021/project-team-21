@@ -43,11 +43,11 @@ public class ShopMenu implements Menuable {
         ((Label) ProgramController.currentScene.lookup("#money")).setText(String.valueOf(ProgramController.userInGame.getCoins()));
         cardsName = new ArrayList<>(DataController.getAllCards().keySet());
         Collections.sort(cardsName);
-        ((ImageView) ProgramController.currentScene.lookup("#card1")).setImage(new Image("/images/cards/" + cardsName.get(0) + ".jpg"));
-        ((ImageView) ProgramController.currentScene.lookup("#card2")).setImage(new Image("/images/cards/" + cardsName.get(1) + ".jpg"));
-        ((ImageView) ProgramController.currentScene.lookup("#card3")).setImage(new Image("/images/cards/" + cardsName.get(2) + ".jpg"));
-        ((ImageView) ProgramController.currentScene.lookup("#card4")).setImage(new Image("/images/cards/" + cardsName.get(3) + ".jpg"));
-        ((ImageView) ProgramController.currentScene.lookup("#card5")).setImage(new Image("/images/cards/" + cardsName.get(4) + ".jpg"));
+        ((ImageView) ProgramController.currentScene.lookup("#card1")).setImage(new Image("../images/cards/" + cardsName.get(0) + ".jpg"));
+        ((ImageView) ProgramController.currentScene.lookup("#card2")).setImage(new Image("../images/cards/" + cardsName.get(1) + ".jpg"));
+        ((ImageView) ProgramController.currentScene.lookup("#card3")).setImage(new Image("../images/cards/" + cardsName.get(2) + ".jpg"));
+        ((ImageView) ProgramController.currentScene.lookup("#card4")).setImage(new Image("../images/cards/" + cardsName.get(3) + ".jpg"));
+        ((ImageView) ProgramController.currentScene.lookup("#card5")).setImage(new Image("../images/cards/" + cardsName.get(4) + ".jpg"));
         ProgramController.currentScene.lookup("#previousPage").setDisable(true);
         ProgramController.currentScene.lookup("#previousPage").setStyle("-fx-background-color: gray;");
         ProgramController.stage.show();

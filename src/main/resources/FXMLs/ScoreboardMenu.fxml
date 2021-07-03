@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="400.0"
+            prefWidth="600.0"
+            fx:controller="view.ScoreBoard"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml">
+    <ScrollPane hbarPolicy="NEVER" styleClass="scroll-bar" fitToWidth="true">
+        <VBox alignment="CENTER" spacing="10" prefHeight="400"
+              prefWidth="600" styleClass="scoreboard" id="mainVBox">
+            <Button text="Back" onMouseClicked="#handleBackToMenu" styleClass="buttonEntrance"/>
+
+        </VBox>
+
+    </ScrollPane>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css"/>
+    </stylesheets>
+
+</AnchorPane>
