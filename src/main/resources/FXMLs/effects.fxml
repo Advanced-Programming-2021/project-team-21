@@ -5,13 +5,28 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import java.net.URL?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="view.CreateCard"
             prefHeight="400.0" prefWidth="500.0">
-    <ScrollPane styleClass="scroll-bar" fitToWidth="true" fitToHeight="true">
-                <HBox id="effects" prefHeight="400" prefWidth="500">
-                </HBox>
+    <ScrollPane hbarPolicy="NEVER" styleClass="scroll-bar" fitToWidth="true">
+        <VBox alignment="TOP_CENTER" spacing="10" prefHeight="400"
+              prefWidth="600"  id="mainVBox">
+            <HBox spacing="100">
+                <Button text="Back" styleClass="buttonEntrance"/>
+                <ChoiceBox value="Groups" id="effectChoiceBox" styleClass="choice-box" minWidth="100"/>
+            </HBox>
+
+        </VBox>
 
     </ScrollPane>
+
+    <stylesheets>
+        <URL value="@../CSS/CSS.css"/>
+    </stylesheets>
+
 </AnchorPane>
