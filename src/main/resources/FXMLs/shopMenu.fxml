@@ -13,21 +13,16 @@
 <BorderPane prefHeight="400.0" style="-fx-background-color: gray;" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml" fx:controller="view.ShopMenu">
    <top>
       <HBox spacing="113">
-         <Button text="Back" prefWidth="100" prefHeight="33" onMouseClicked="#back"/>
-         <Label text="Shop menu" textFill="white">
+         <Button text="Back" prefWidth="100" prefHeight="33" onMouseClicked="#back" styleClass="buttonEntrance"/>
+         <Label text="Shop menu" textFill="white" styleClass="title-label">
             <font>
-               <Font size="22"/>
+               <Font size="19"/>
             </font>
          </Label>
-         <HBox spacing="10" style="-fx-border-color: black;" onMouseClicked="#showIncreaseMoneyStage">
-            <Label text="Coins : " textFill="white" >
+         <HBox spacing="10"  onMouseClicked="#showIncreaseMoneyStage">
+            <Label id="coin" textFill="white" styleClass="title-label">
                <font>
-                  <Font size="22"/>
-               </font>
-            </Label>
-            <Label id="coin" textFill="white">
-               <font>
-                  <Font size="22"/>
+                  <Font size="19"/>
                </font>
             </Label>
          </HBox>
