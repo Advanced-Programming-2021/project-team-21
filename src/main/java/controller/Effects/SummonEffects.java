@@ -29,7 +29,6 @@ public class SummonEffects {
             rival.setCanSummonTrap(false);
         }
         if (summoned.getAlteringAttack().hasEffect()) {
-            user.setHasSummonedAlteringATK(true);
             int levelSum = 0;
             for (Card monster : user.getBoard().getMonsters()) {
                 if (!(monster instanceof Monster)) continue;
@@ -37,7 +36,10 @@ public class SummonEffects {
                 levelSum += getLevel.getLevel();
             }
             summoned.setAtk(summoned.getAlteringAttack().getEffectNumber() * levelSum);
-            user.setAlteringATKPlace(user.getBoard().getAddressToSummon());
+            if (summoned.getAlteringAttack().getContinuousNumber() == 0 ){
+                user.setHasSummonedAlteringATK(true);
+                user.setAlteringATKPlace(user.getBoard().getAddressToSummon());
+            }
         }
         if (summoned.getCanSetFromDeckByMaxLevel().hasEffect()) {
             DuelMenu.isGetFromHand = true;

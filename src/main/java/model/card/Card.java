@@ -7,10 +7,7 @@ import controller.ProgramController;
 import model.card.effects.Effect;
 import model.card.enums.CardType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class Card {
@@ -27,7 +24,11 @@ public class Card {
         if (allCards == null)
             return null;
         for (String cardName : allCards.keySet()) {
-            if (cardName.equals(name)) return new Cloner().deepClone(allCards.get(cardName));
+            System.out.println(cardName);
+            if (cardName.equals(name)) {
+                System.out.println(cardName);;
+                return new Cloner().deepClone(allCards.get(cardName));
+            }
         }
         return null;
     }

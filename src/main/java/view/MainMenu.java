@@ -32,8 +32,8 @@ public class MainMenu implements Menuable {
         ProgramController.currentMenu.showMenu();
     }
 
-    public void goToImportAndExport() throws IOException {
-        ProgramController.currentMenu = new ImportAndExport();
+    public void goToCreateCard() throws IOException {
+        ProgramController.currentMenu = new CreateCard();
         ProgramController.currentMenu.showMenu();
     }
 

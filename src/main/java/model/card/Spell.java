@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 public class Spell extends Card {
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
+    public static Set<String>effectsList;
     private int equippedPlace;
     // monster reborn
     /* done */private Effect canSummonFromGY;     //(2 , 0)
@@ -60,6 +61,8 @@ public class Spell extends Card {
     //Magnum Shield
     /*done*/private Effect equipBasedOnPosition;            //(0 , 0 , "Warrior")
 
+    private Effect isRitual;
+
     public Spell(Object[] parameters) {
         setName((String) parameters[0]);
         setSpellTrapIcon(SpellTrapIcon.valueOf(((String) parameters[1]).toUpperCase()));
@@ -71,6 +74,22 @@ public class Spell extends Card {
             this.getEffectsMap().get(key).accept(new Effect(0, 0));
         }
         DataController.cardPairsParser((String) parameters[5], this);
+    }
+
+    public static String getWhichGroup(String string) {
+        if (string.equals("canSummonFromGY") || string.equals("canAddFieldSpellFromDeck") ||
+        string.equals("canAddFromDeckToHand") || string.equals("canDestroyOpponentMonster")  ||
+        string.equals("canControlOpponentMonster") || string.equals("canChangeFaceOFOpponent") ||
+        string.equals("canMakeMonstersUndefeatable") || string.equals("canDestroyOpponentSpellAndTrap") ||
+        string.equals("canDestroyMyMonster"))return "Normal";
+        if (string.equals("isRitual"))return "Ritual";
+        if (string.equals("canDrawACardWhenAMonsterIsDead") || string.equals("getLPForEverySpellActivation") ||
+        string.equals("monstersCanNotAttack") || string.equals("costLP"))return "Continuous";
+        if(string.equals("negateTrap") || string.equals("discardACardToActivate"))return "Quick";
+        if (string.equals("equipBasedOnPosition") || string.equals("equipBasedMyUpMonsters") ||
+                string.equals("equipCardNormal1") || string.equals("equipCardNormal2") ||
+        string.equals("equipCardNormal3"))return "Equip";
+        return "Field";
     }
 
     public SpellTrapIcon getSpellTrapIcon() {
@@ -145,6 +164,10 @@ public class Spell extends Card {
 
     public void setCanControlOpponentMonster(Effect canControlOpponentMonster) {
         this.canControlOpponentMonster = canControlOpponentMonster;
+    }
+
+    public void setIsRitual(Effect isRitual) {
+        this.isRitual = isRitual;
     }
 
     public Effect getCanDestroyOpponentSpellAndTrap() {
@@ -357,7 +380,12 @@ public class Spell extends Card {
         effectsMap.put("equipCardNormal3", this::setEquipCardNormal3);
         effectsMap.put("equipBasedMyUpMonsters", this::setEquipBasedMyUpMonsters);
         effectsMap.put("equipBasedOnPosition", this::setEquipBasedOnPosition);
-
+        effectsMap.put("isRitual" , this::setIsRitual);
+        effectsList = effectsMap.keySet();
         return effectsMap;
+    }
+
+    public static Set<String> getEffectsList() {
+        return effectsList;
     }
 }

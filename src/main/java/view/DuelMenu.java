@@ -429,14 +429,18 @@ public class DuelMenu implements Menuable {
                     handleSuccessfulSummon();
                     return;
                 }
-                if (number == 0 && monster.getDiscardToSpecialSummon().hasEffect()) {
-                    Card card = currentDuel.getUserWhoPlaysNow().getHand().selectARandomCardFromHand();
-                    int i;
-                    for (i = 0; i < currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand().length; i++) {
-                        if (card == currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand()[i])
-                            break;
+                if (number == 0 && monster.getDiscardToSpecialSummon().hasEffect() &&
+                currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() >=
+                        monster.getDiscardToSpecialSummon().getEffectNumber()) {
+                    for (int j = 0; j < monster.getDiscardToSpecialSummon().getEffectNumber(); j++) {
+                        Card card = currentDuel.getUserWhoPlaysNow().getHand().selectARandomCardFromHand();
+                        int i;
+                        for (i = 0; i < currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand().length; i++) {
+                            if (card == currentDuel.getUserWhoPlaysNow().getHand().getCardsInHand()[i])
+                                break;
+                        }
+                        currentDuel.getUserWhoPlaysNow().getHand().discardACard(i);
                     }
-                    currentDuel.getUserWhoPlaysNow().getHand().discardACard(i);
                     handleSuccessfulSummon();
                     return;
                 }

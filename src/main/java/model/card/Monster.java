@@ -38,7 +38,7 @@ public class Monster extends Card {
 
     boolean isFlipSetEffect;
 
-
+    public static Set<String> effectsList;
     //for some effects that user choose to activate
     boolean isSelectEffect;
     private Integer level;
@@ -86,6 +86,8 @@ public class Monster extends Card {
     private Effect canSetFromDeckByMaxLevel;             //(1 , 0)       in summonEffect
     //The Tricky +
     private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
+
+    private Effect isRitual;
 
     public Monster(Object[] parameters) {
         setName((String) parameters[0]);
@@ -303,6 +305,10 @@ public class Monster extends Card {
         this.canChangeTheAttackersATK = canChangeTheAttackersATK;
     }
 
+    public void setIsRitual(Effect isRitual) {
+        this.isRitual = isRitual;
+    }
+
     public boolean isBattlePhaseEffectEnd() {
         return isBattlePhaseEffectEnd;
     }
@@ -421,7 +427,6 @@ public class Monster extends Card {
         booleanMap.put("isCanHaveDifferentTribute", this::setCanHaveDifferentTribute);
         return booleanMap;
     }
-
     @Override
     public Map<String, Consumer<Effect>> getEffectsMap() {
         Map<String, Consumer<Effect>> effectsMap = new HashMap<>();
@@ -442,6 +447,8 @@ public class Monster extends Card {
         effectsMap.put("canSetFromDeckByMaxLevel", this::setCanSetFromDeckByMaxLevel);
         effectsMap.put("discardToSpecialSummon", this::setDiscardToSpecialSummon);
         effectsMap.put("canGetFromGYByLevelToHand", this::setCanGetFromGYByLevelToHand);
+        effectsMap.put("isRitual" , this::setIsRitual);
+        effectsList = effectsMap.keySet();
         return effectsMap;
     }
 
@@ -469,4 +476,9 @@ public class Monster extends Card {
     public void setCanAttack(boolean canAttack) {
         this.canAttack = canAttack;
     }
+
+    public static Set<String> getEffectsList() {
+        return effectsList;
+    }
+
 }

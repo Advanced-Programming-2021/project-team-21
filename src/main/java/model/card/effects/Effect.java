@@ -1,5 +1,7 @@
 package model.card.effects;
 
+import java.util.ArrayList;
+
 public class Effect {
     private int isEffect;
     private int isEffectHolder;
@@ -18,7 +20,7 @@ public class Effect {
         this.isEffectHolder = isEffect;
         this.isContinuousHolder = isContinuous;
         if (isEffect != 0) effectNumber = isEffect - 1;
-        if (isContinuous != 0) continuousNumber = 2 * isContinuous - 1;
+        if (isContinuous != 0) continuousNumber =  isContinuous - 1;
         needsToBeReset = false;
     }
 
@@ -111,5 +113,56 @@ public class Effect {
     public void resetEffect() {
         this.isEffect = isEffectHolder;
         this.isContinuous = isContinuousHolder;
+    }
+    public static ArrayList<String> getEffectsWithNoSetter(){
+        ArrayList<String>effects = new ArrayList<>();
+        effects.add("isRitual");
+        effects.add("canKillTheAttacker");
+        effects.add("canScan");
+        effects.add("disableTrapSummon");
+        effects.add("canDestroyBothWithoutLosingLP");
+        effects.add("canControlOpponentMonster");
+        effects.add("negateTrap");
+        effects.add("canDestroyAll");
+        effects.add("canSummonFromGY");
+        effects.add("canNegateWholeAttack");
+        effects.add("canAttackLP");
+        effects.add("canNegateWholeAttack");
+        effects.add("negateASummon");
+        effects.add("negateSpellActivation");
+        effects.add("canSummonFromGY");
+        return effects;
+    }
+    public static ArrayList<String> getEffectsWithOneSetter(){
+        ArrayList<String>effects = new ArrayList<>();
+        effects.add("canChangeTheAttackersATK");
+        effects.add("canDestroyMonster");
+        effects.add("notDestroyable");
+        effects.add("canDecreaseLP");
+        effects.add("canBeNotTribute");
+        effects.add("tributeToKillAllMonsterOfOpponent");
+        effects.add("undefeatable");
+        effects.add("canGetFromGYByLevelToHand");
+        effects.add("canSetFromDeckByMaxLevel");
+        effects.add("discardToSpecialSummon");
+        effects.add("canIncreaseATK");
+        effects.add("canAddFieldSpellFromDeck");
+        effects.add("canAddFromDeckToHand");
+        effects.add("canDestroyOpponentMonster");
+        effects.add("canChangeFaceOFOpponent");
+        effects.add("canMakeMonstersUndefeatable");
+        effects.add("canDestroyOpponentSpellAndTrap");
+        effects.add("canDestroyMyMonster");
+        effects.add("canDrawACardWhenAMonsterIsDead");
+        effects.add("getLPForEverySpellActivation");
+        effects.add("monstersCanNotAttack");
+        effects.add("costLP");
+        effects.add("discardACardToActivate");
+        effects.add("canDestroyMonsterSummonWithATK");
+        effects.add("canDestroyFromDeckAndHand");
+        effects.add("canNotDraw");
+        effects.add("discardACard");
+
+        return effects;
     }
 }

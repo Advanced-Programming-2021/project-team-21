@@ -16,7 +16,6 @@ public class BattlePhaseEnd {
                 defense.getNotDestroyable().finishEffect();
                 defense.getNotDestroyable().setNeedsToBeReset(true);
             }
-
             return true;
         }
         return false;

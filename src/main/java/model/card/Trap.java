@@ -16,6 +16,7 @@ public class Trap extends Card {
 
     SpellTrapIcon spellTrapIcon;
     SpellTrapStatus spellTrapStatus;
+    public static Set<String> effectsList;
     //Magic Cylinder                                            //Negate Attack
     /*done*/private Effect canNegateWholeAttack;        //(2 , 0)      (1 , 1)
     /*done*/private Effect canAttackLP;                //(1 , 0)
@@ -50,6 +51,14 @@ public class Trap extends Card {
             this.getEffectsMap().get(key).accept(new Effect(0, 0));
         }
         DataController.cardPairsParser((String) parameters[5], this);
+    }
+
+    public static String getWhichGroup(String string) {
+        if (string.equals("canSummonFromGY"))return "Continuous";
+        if (string.equals("discardACard") || string.equals("negateSpellActivation") ||
+        string.equals("costLP") || string.equals("negateASummon") ||
+        string.equals("canNegateWholeAttack"))return "Counter";
+        return "Normal";
     }
 
     public void setKillTheSummoned(Effect killTheSummoned) {
@@ -189,6 +198,11 @@ public class Trap extends Card {
         effectsMap.put("negateASummon", this::setNegateASummon);
         effectsMap.put("canSummonFromGY", this::setCanSummonFromGY);
         effectsMap.put("killTheSummoned", this::setKillTheSummoned);
+        effectsList = effectsMap.keySet();
         return effectsMap;
+    }
+
+    public static Set<String> getEffectsList() {
+        return effectsList;
     }
 }

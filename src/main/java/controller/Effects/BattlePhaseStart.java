@@ -35,7 +35,7 @@ public class BattlePhaseStart {
         }
         //for undefeatable effect
         else if (defense.getUndefeatable().hasEffect()) {
-            if (defense.getUndefeatable().getContinuousNumber() == 1) {
+            if (defense.getUndefeatable().getContinuousNumber() == 0) {
                 defense.getUndefeatable().finishEffect();
                 defense.getUndefeatable().setNeedsToBeReset(true);
             }
