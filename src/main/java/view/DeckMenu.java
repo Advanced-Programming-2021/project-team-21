@@ -152,7 +152,6 @@ public class DeckMenu implements Menuable {
         HBox mainHBox = (HBox) ProgramController.currentScene.lookup("#mainHBox");
         ListView<VBox> listView = new ListView<>();
         listView.getStyleClass().add("list-view");
-        // todo style this list view
         listView.setOrientation(Orientation.HORIZONTAL);
         listView.setMinWidth(500);
         ArrayList<Deck> decks = USER.getDecks();
@@ -170,8 +169,8 @@ public class DeckMenu implements Menuable {
             Rectangle deckPicture = new Rectangle(DECK_WIDTH, DECK_HEIGHT);
             deckPicture.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
             Label deckName = new Label(deck.getName());
-           deckName.setTextFill(Color.WHITE);
-           deckName.setStyle("-fx-font-size: 15pt ;");
+            deckName.setTextFill(Color.WHITE);
+            deckName.setStyle("-fx-font-size: 15pt ;");
             if (deck.isActive())
                 deckName.setStyle("-fx-text-fill: rgb(255, 228, 73);-fx-font-size: 15pt ;");
             vBox.getChildren().addAll(deckPicture, deckName);

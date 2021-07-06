@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="view.DuelMenu"
+            prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <Label text="Duel Setup" styleClass="title-label" alignment="CENTER" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="40.0"/>
+            </font>
+        </Label>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="40">
+            <ChoiceBox value="Another Player" id="playerChoiceBox" styleClass="choice-box">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Another Player"/>
+                        <String fx:value="AI"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox >
+            <TextField promptText="Username of Rival" maxWidth="200" alignment="CENTER" id="usernameTextField"/>
+            <ChoiceBox value="1 round" styleClass="choice-box" id="roundChoiceBox">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="1 round"/>
+                        <String fx:value="3 rounds"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+            <VBox alignment="CENTER" spacing="10">
+                <Button text="Start" onMouseClicked="#startNewGame" styleClass="buttonEntrance" minWidth="80"/>
+                <Button text="Back" onMouseClicked="#goToMainMenu" styleClass="buttonEntrance" minWidth="80"/>
+
+            </VBox>
+        </VBox>
+
+    </center>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css"/>
+    </stylesheets>
+</BorderPane>
