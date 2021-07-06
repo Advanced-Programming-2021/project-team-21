@@ -102,6 +102,9 @@ public class DeckMenu implements Menuable {
     private void showErrorForAddingCards(String errorText) {
         Alert alert = new Alert(Alert.AlertType.ERROR, errorText);
         alert.initStyle(StageStyle.UNDECORATED);
+        alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("/CSS/CSS.css").toExternalForm());
+        alert.getDialogPane().getStyleClass().add("dialog-pane");
         alert.showAndWait();
     }
 
