@@ -2,6 +2,9 @@ package view;
 
 import controller.DataController;
 import controller.ProgramController;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -11,14 +14,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import model.User;
 import model.card.Card;
 
@@ -26,18 +36,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class ShopMenu implements Menuable {
     public static ArrayList<String> cardsName;
-    private Stage stageCheat = new Stage();
     public TextField moneyCheat = new TextField();
     private HashMap<String, Label> countToUpdate = new HashMap<>();
     private static HashMap<String, Button> buttonToUpdate = new HashMap<>();
+    private final ArrayList<Animation> delays = new ArrayList<>();
+    private final ArrayList<Stage> stages = new ArrayList<>();
+    private boolean canEnlargeCard = true;
 
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/shopMenu.fxml"));
         ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + String.valueOf(ProgramController.userInGame.getCoins()));
+        ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> closeAllStages());
         cardsName = new ArrayList<>(DataController.getAllCards().keySet());
         Collections.sort(cardsName);
         ListView<VBox> listView = (ListView<VBox>) ProgramController.currentScene.lookup("#showCards");
@@ -50,6 +64,7 @@ public class ShopMenu implements Menuable {
             vBox.setSpacing(20);
             Rectangle cardPicture = new Rectangle(100, 150);
             cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm())));
+            cardPicture.setOnMouseEntered(event -> enlargeCardPicture(cardPicture, event));
             vBox.getChildren().add(cardPicture);
             addLabelsToVBox(name, vBox);
             Button button = new Button("Buy");
@@ -62,6 +77,35 @@ public class ShopMenu implements Menuable {
         }
         updateButtons();
         ProgramController.stage.show();
+    }
+
+    private void closeAllStages() {
+        stages.forEach(Stage::close);
+    }
+
+    private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
+        if (!canEnlargeCard)
+            return;
+        Animation delay = new PauseTransition(Duration.seconds(1));
+        Stage stage = new Stage();
+        stage.setX(mouseEvent.getScreenX());
+        stage.setY(mouseEvent.getScreenY());
+        stage.initStyle(StageStyle.UNDECORATED);
+        BorderPane borderPane = new BorderPane();
+        Scene scene = new Scene(borderPane, 300, 400);
+        delay.setOnFinished(e -> {
+            delays.forEach(Animation::stop);
+            stages.forEach(Stage::close);
+            Rectangle enlargedPicture = new Rectangle(300, 400);
+            enlargedPicture.setFill(rectangle.getFill());
+            borderPane.setCenter(enlargedPicture);
+            stage.setScene(scene);
+            stage.show();
+            stages.add(stage);
+            delays.add(delay);
+        });
+        delay.play();
+        rectangle.setOnMouseExited(event -> delay.stop());
     }
 
     private void updateButtons() {
@@ -113,16 +157,56 @@ public class ShopMenu implements Menuable {
         ProgramController.currentMenu.showMenu();
     }
 
-    public void showIncreaseMoneyStage() throws IOException {
-        Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/IncreaseMoney.fxml"));
-        Scene scene = new Scene(pane);
-        stageCheat.setScene(scene);
-        stageCheat.show();
+    public void showIncreaseMoneyStage() {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setResizable(false);
+        TextField amount = new TextField();
+        amount.setMaxWidth(150);
+        amount.setPromptText("Amount");
+        Button submitButton = new Button("Submit"), closeButton = new Button("Close");
+        closeButton.setOnAction(e -> {
+            stage.close();
+            ProgramController.currentScene.getRoot().setEffect(null);
+        });
+        closeButton.getStyleClass().add("buttonEntrance");
+        submitButton.getStyleClass().add("buttonEntrance");
+        Platform.runLater(submitButton::requestFocus);
+
+        HBox hbox = new HBox();
+        hbox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
+        hbox.setSpacing(40);
+        hbox.getChildren().addAll(closeButton, submitButton);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: rgb(255, 237, 137);");
+        borderPane.setCenter(amount);
+        borderPane.setBottom(hbox);
+        ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
+        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        adj.setInput(blur);
+        ProgramController.currentScene.getRoot().setEffect(blur);
+        amount.setAlignment(Pos.CENTER);
+        hbox.setAlignment(Pos.BOTTOM_CENTER);
+
+        submitButton.setOnAction(e -> {
+            increaseMoney(Integer.parseInt(amount.getText()));
+            stage.close();
+            ProgramController.currentScene.getRoot().setEffect(null);
+        });
+        amount.focusedProperty().addListener((obs, oldValue, newValue) -> amount.setStyle("-fx-text-fill: black"));
+        createNewScene(borderPane, stage);
     }
 
-    public void increaseMoney() throws IOException {
-        stageCheat.close();
-        int amount = Integer.parseInt(moneyCheat.getText());
+    private void createNewScene(BorderPane borderPane, Stage stage) {
+        Scene scene = new Scene(borderPane, 250, 150);
+        stage.setTitle("Create New Deck");
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    public void increaseMoney(int amount) {
         ProgramController.userInGame.setCoins(ProgramController.userInGame.getCoins() + amount);
         ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + String.valueOf(ProgramController.userInGame.getCoins()));
         updateButtons();
