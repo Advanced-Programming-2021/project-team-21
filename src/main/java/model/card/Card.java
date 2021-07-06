@@ -51,7 +51,7 @@ public class Card {
     }
 
     public String getCardImageAddress() {
-        return getClass().getResource("images/cards/" + name + ".jpg").toExternalForm();
+        return getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm();
     }
 
     public CardType getCardType() {
