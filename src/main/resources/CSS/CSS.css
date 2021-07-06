@@ -110,6 +110,12 @@
     -fx-background-radius: 10;
   }
 
+.scoreboard-user-in-game {
+    -fx-background-color: rgb(21, 161, 115);
+    -fx-text-fill: purple;
+    -fx-background-radius: 10;
+}
+
 .decks {
 
 }
@@ -136,6 +142,12 @@
 .list-view {
 -fx-background-insets: 0;
     -fx-background-color: transparent;
+}
+
+.list-view .list-cell:filled:selected:focused,
+.list-view .list-cell:filled:selected {
+    -fx-background-color: rgba(212, 29, 29, 0.877);
+    -fx-text-fill: white;
 }
 
 .deck-menu-background {
