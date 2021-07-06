@@ -127,6 +127,16 @@ public class Monster extends Card {
         return cloner.deepClone(monster);
     }
 
+
+    public static String getWhichGroup(String effect){
+        if (effect.equals("isRitual")){
+            return "Ritual";
+        } else {
+            return "Normal";
+        }
+    }
+
+
     public int getAtkHolder() {
         return atkHolder;
     }
