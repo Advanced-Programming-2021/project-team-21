@@ -6,8 +6,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.User;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
 
@@ -83,10 +87,10 @@ public class ProfileMenu implements Menuable {
     @Override
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/profileMenu.fxml"));
-        ((Label) ProgramController.currentScene.lookup("#usernameProfile")).setText(ProgramController.userInGame.getUsername());
+        ((Label) ProgramController.currentScene.lookup("#usernameProfile")).setText(" username : " + ProgramController.userInGame.getUsername());
         ProgramController.currentScene.lookup("#usernameProfile").setStyle("-fx-border-color: black; -fx-background-color: white;");
         ((TextField) ProgramController.currentScene.lookup("#nicknameProfile")).setText(ProgramController.userInGame.getNickname());
-        ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image((ProgramController.userInGame.getAvatar())));
+        ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image((getClass().getResource(ProgramController.userInGame.getAvatar()).toExternalForm())));
         ProgramController.stage.show();
     }
 
@@ -154,5 +158,19 @@ public class ProfileMenu implements Menuable {
     public void backToMainMenu() throws IOException {
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
+    }
+
+    public void changeAvatar(MouseEvent mouseEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("JPG Files (*.jpg)",
+                "*.jpg");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        fileChooser.setSelectedExtensionFilter(extensionFilter);
+        Stage stage = new Stage();
+        File image;
+        image = fileChooser.showOpenDialog(stage);
+        ProgramController.userInGame.setAvatar(image.getPath());
+        // todo
     }
 }
