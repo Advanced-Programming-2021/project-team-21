@@ -5,6 +5,8 @@ import controller.ProgramController;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -58,7 +60,10 @@ public class ScoreBoard implements Menuable {
 
     private HBox getHBoxForUser(User user, String rank) {
         HBox hBox = new HBox();
-        hBox.getStyleClass().add("scoreboard-users");
+        if (user.getUsername().equals(ProgramController.userInGame.getUsername()))
+            hBox.getStyleClass().add("scoreboard-user-in-game");
+        else
+            hBox.getStyleClass().add("scoreboard-users");
         hBox.setAlignment(Pos.CENTER);
         hBox.setMaxWidth(350);
         ArrayList<Node> labelsForUser = getLabelsForUser(user, rank);
