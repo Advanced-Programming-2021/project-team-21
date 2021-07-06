@@ -48,7 +48,7 @@
     -fx-background-size: cover;
 }
 
-.buttonEntrance {
+.buttonEntrance, .dialog-pane .button {
     -fx-background-color: rgba(39, 138, 88, 0.897);
     -fx-text-fill: rgb(255, 255, 255);
      -fx-background-radius: 10;
@@ -111,6 +111,12 @@
     -fx-background-radius: 10;
   }
 
+.scoreboard-user-in-game {
+    -fx-background-color: rgb(21, 161, 115);
+    -fx-text-fill: purple;
+    -fx-background-radius: 10;
+}
+
 .decks {
 
 }
@@ -119,3 +125,72 @@
    -fx-background-color: rgba(199, 240, 226, 0.479);
    -fx-background-radius: 10;
 }
+
+.list-view .scroll-bar:vertical .increment-arrow,
+.list-view .scroll-bar:vertical .decrement-arrow,
+.list-view .scroll-bar:vertical .increment-button,
+.list-view .scroll-bar:vertical .decrement-button {
+    -fx-padding:0;
+}
+
+.list-view .list-cell:even,
+.list-view .list-cell:odd {
+-fx-background-color: rgba(31, 17, 8, 0.685);
+
+}
+
+
+.list-view {
+-fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+.list-view .list-cell:filled:selected:focused,
+.list-view .list-cell:filled:selected {
+    -fx-background-color: rgba(212, 29, 29, 0.877);
+    -fx-text-fill: white;
+}
+
+.deck-menu-background {
+    -fx-background-image: url("../images/DeckMenu.jpg");
+    -fx-background-size: cover;
+}
+
+.deck-detail {
+        -fx-background-image: url("../images/DeckDetail.jpg");
+        -fx-background-size: cover;
+}
+
+.dialog-pane:header .header-panel {
+  -fx-background-color: rgba(212, 29, 29, 0.877);
+}
+
+.dialog-pane:header .header-panel .label{
+  -fx-font-size:20.0px;
+}
+
+.dialog-pane > .content.label {
+   -fx-font-size:15.0px;
+}
+
+.choice-box .context-menu {
+-fx-background-color: black;
+}
+.choice-box .menu-item:focused {
+-fx-background-color: orange;
+}
+.choice-box .menu-item > .label {
+-fx-text-fill: white;
+}
+.choice-box .menu-item:focused > .label {
+ -fx-text-fill: black;
+ }
+
+ .choice-box {
+   -fx-background-color: black;
+   -fx-mark-color: orange;
+ }
+
+ .choice-box > .label {
+ -fx-text-fill: white;
+ }

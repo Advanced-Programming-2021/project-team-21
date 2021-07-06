@@ -51,6 +51,10 @@ public class Card {
         this.name = name;
     }
 
+    public String getCardImageAddress() {
+        return getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm();
+    }
+
     public CardType getCardType() {
         return cardType;
     }

@@ -62,6 +62,10 @@ public class User {
         DataController.saveData(this);
     }
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public int getCoins() {
         return coins;
     }

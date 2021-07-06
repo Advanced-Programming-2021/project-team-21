@@ -21,7 +21,7 @@
    <left>
       <VBox prefHeight="342.0" prefWidth="194.0" spacing="6.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" text="Duel menu">
+            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" text="Duel menu" onMouseClicked="#goToDuelMenu">
                <font>
                   <Font size="20.0" />
                </font>

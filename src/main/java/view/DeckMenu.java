@@ -2,237 +2,431 @@ package view;
 
 import controller.DataController;
 import controller.ProgramController;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import model.Deck;
 import model.User;
 import model.card.Card;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class DeckMenu implements Menuable {
+    private static Deck deckToShow;
     private final User USER = ProgramController.userInGame;
+    private final int DECK_WIDTH = 90, DECK_HEIGHT = 100;
+    private final int CARD_WIDTH = 80, CARD_HEIGHT = 90;
+    private final ArrayList<Animation> delays = new ArrayList<>();
+    private final ArrayList<Stage> stages = new ArrayList<>();
+    private boolean canEnlargeCard = true;
 
-    private final int DECK_WIDTH = 90, DECK_HIGHT = 100;
 
-    public void run(String command) {
-        Matcher matcher;
-        if ((matcher = Regex.getMatcher(command, Regex.deckCreate)).find()) {
-            createDeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.deckDelete)).find()) {
-            deleteDeck(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuShow).find()) {
-            showCurrentMenu();
-        } else if ((matcher = Regex.getMatcher(command, Regex.ActiveDeck)).find()) {
-            activateDeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.addCardSide)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.addCardMain)).find()) {
-            addCard(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.removeCardMain)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.removeCardSide)).find()) {
-            removeCard(matcher);
-        } else if (Regex.getMatcher(command, Regex.menuExit).find()) {
-            exitMenu();
-        } else if (Regex.getMatcher(command, Regex.showAllDeck).find()) {
-            showAllDeck();
-        } else if ((matcher = Regex.getMatcher(command, Regex.showDeckSide)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.showDeckMain)).find()) {
-            showADeck(matcher);
-        } else if ((matcher = Regex.getMatcher(command, Regex.showACard)).find()) {
-            String cardName = matcher.group("cardName").trim();
-            PrintResponses.printACard(Card.getCardByName(cardName));
-        } else if (Regex.getMatcher(command, Regex.deckShowCard).find()) {
-            showAllCards();
-        } else PrintResponses.printInvalidFormat();
-    }
-
-    private void showAllCards() {
-        ArrayList<Card> allCards = USER.getCards();
-        Card.sort(allCards);
-        for (Card card : allCards) {
-            PrintResponses.printAllCard(card);
-        }
-    }
-
-    private void showADeck(Matcher matcher) {
-        String deckName = matcher.group("deckName");
-        Deck deck = USER.getDeckByName(deckName);
-        if (deck == null) {
-            PrintResponses.printDeckNotExist(deckName);
-            return;
-        }
-        String type;
-        try {
-            type = matcher.group("side");
-        } catch (Exception e) {
-            type = "main";
-        }
-        PrintResponses.printADeck(deck, type);
-    }
-
-    private void showAllDeck() {
-        PrintResponses.printActive();
-        ArrayList<Deck> show = Deck.deckSort(USER.getDecks());
-        int index = 0;
-        if (show.size() > 0 && show.get(index).isActive()) {
-            PrintResponses.printDeckShow(show.get(index));
-            index++;
-        }
-        PrintResponses.printOther();
-        for (int i = index; i < show.size(); i++) {
-            PrintResponses.printDeckShow(show.get(i));
-        }
-    }
-
-    private void removeCard(Matcher matcher) {
-        String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
-        Deck deck = USER.getDeckByName(deckName);
-        if (deck == null) {
-            PrintResponses.printDeckNotExist(deckName);
-            return;
-        }
-        Card card;
-        try {
-            String side = matcher.group("side");
-            card = deck.checkCardInDeck(cardName, side);
-            if (card == null) {
-                PrintResponses.printNoCardTodDelete(cardName, side);
-                return;
-            }
-            deck.removeCardFromSideDeck(card);
-        } catch (Exception e) {
-            String type = "main";
-            card = deck.checkCardInDeck(cardName, type);
-            if (card == null) {
-                PrintResponses.printNoCardTodDelete(cardName, type);
-                return;
-            }
+    private void deleteCard(Card card, String mainOrSide) {
+        Deck deck = deckToShow;
+        if (mainOrSide.equals("main")) {
             deck.removeCardFromMainDeck(card);
+        } else {
+            deck.removeCardFromSideDeck(card);
         }
-        PrintResponses.printSuccessfulCardRemoval();
+        editDeckDetails(deckToShow);
     }
 
-    private void addCard(Matcher matcher) {
-        String cardName = matcher.group("cardName").trim(), deckName = matcher.group("deckName");
-        cardName = cardName.replaceAll("\\s+-", "");
-        Card card = Card.getCardByName(cardName);
-        Deck deck = USER.getDeckByName(deckName);
-        boolean doesHaveCard = false;
-        for (Card userInGameCard : ProgramController.userInGame.getCards()) {
-            if (userInGameCard.getName().equals(cardName)) {
-                doesHaveCard = true;
-                break;
-            }
+    private boolean addCardsToMainDeck(ArrayList<Card> cards) {
+        boolean canNotAdd = canAddCard(cards, deckToShow.getMainDeckCards());
+        if (canNotAdd)
+            return false;
+
+        if (deckToShow.getNumberOfMainDeckCards() == 60) {
+            showErrorForAddingCards("main deck is full");
+            return false;
         }
-        if (!doesHaveCard) {
-            PrintResponses.printCardNotExist(cardName);
-            return;
-        }
-        if (deck == null) {
-            PrintResponses.printDeckNotExist(deckName);
-            return;
-        }
-        try {
-            String side = matcher.group("side");
-            if (deck.getNumberOfSideDeckCards() == 15) {
-                PrintResponses.printDeckFull(side);
-                return;
-            }
-            if (invalidAdd(cardName, deckName, deck)) return;
-            deck.addCardToSideDeck(card);
-        } catch (Exception e) {
-            String type = "main";
-            if (deck.getNumberOfMainDeckCards() == 60) {
-                PrintResponses.printDeckFull(type);
-                return;
-            }
-            if (invalidAdd(cardName, deckName, deck)) return;
-            deck.addCardToMainDeck(card);
-        }
+        cards.forEach(card -> deckToShow.addCardToMainDeck(card));
         DataController.saveData(USER);
-        PrintResponses.printSuccessfulCardAddition();
+        return true;
     }
 
-    private boolean invalidAdd(String cardName, String deckName, Deck deck) {
-        if (deck.getCardNumber(cardName) >= 50) {
-            PrintResponses.printInvalidAdd(cardName, deckName);
-            return true;
+    private boolean addCardsToSideDeck(ArrayList<Card> selectedCards) {
+        boolean canNotAdd = canAddCard(selectedCards, deckToShow.getSideDeckCards());
+        if (canNotAdd)
+            return false;
+        if (deckToShow.getNumberOfSideDeckCards() == 15) {
+            showErrorForAddingCards("side deck is full");
+            return false;
         }
-        return false;
+        selectedCards.forEach(card -> deckToShow.addCardToSideDeck(card));
+        DataController.saveData(USER);
+        return true;
     }
 
-    private void activateDeck(Matcher matcher) {
-        String name = matcher.group("deckName");
-        Deck deck = getDeck(name);
-        if (deck == null) return;
-        deck.setActive(true);
-        USER.deactivateDecks(name);
-        PrintResponses.printSuccessfulDeckActivation();
-    }
-
-    private Deck getDeck(String name) {
-        Deck deck = USER.getDeckByName(name);
-        if (deck == null) {
-            PrintResponses.printDeckNotExist(name);
-            return null;
+    private boolean canAddCard(ArrayList<Card> cards, ArrayList<Card> mainOrSideDeckCards) {
+        boolean canNotAdd = false;
+        StringBuilder cardsMoreThan3 = new StringBuilder();
+        for (Card card : cards) {
+            int counter = (int) mainOrSideDeckCards.stream().filter(mainDeckCard -> mainDeckCard.getName().equals(card.getName())).count();
+            if (counter >= 3) {
+                cardsMoreThan3.append(card.getName()).append(", ");
+                canNotAdd = true;
+            }
         }
-        return deck;
+        if (cardsMoreThan3.length() != 0) {
+            cardsMoreThan3.deleteCharAt(cardsMoreThan3.length() - 1);
+            cardsMoreThan3.deleteCharAt(cardsMoreThan3.length() - 1);
+            showErrorForAddingCards("You already have 3 instances of these cards:\n" + cardsMoreThan3);
+        }
+        return canNotAdd;
     }
 
-    private void deleteDeck(Matcher matcher) {
-        String name = matcher.group("deckName");
-        Deck deck = getDeck(name);
+    private void showErrorForAddingCards(String errorText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, errorText);
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("/CSS/CSS.css").toExternalForm());
+        alert.getDialogPane().getStyleClass().add("dialog-pane");
+        alert.showAndWait();
+    }
+
+
+    private void activateDeck(Deck deckToActivate) {
+        if (deckToActivate == null) return;
+        deckToActivate.setActive(true);
+        USER.deactivateDecks(deckToActivate.getName());
+        reloadMenu();
+    }
+
+    private void reloadMenu() {
+        try {
+            showMenu();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void deleteDeck(Deck deck) {
         if (deck == null) return;
         USER.removeDeck(deck);
-        PrintResponses.printSuccessfulDeckDeletion();
+        reloadMenu();
     }
 
-    private void createDeck(Matcher matcher) {
-        String name = matcher.group("deckName");
-        if (USER.getDeckByName(name) != null) {
-            PrintResponses.printDeckExist(name);
+    private void createNewDeck(String name) {
+        if (!canCreateDeck(name)) {
             return;
         }
         Deck deck = new Deck(name);
         USER.addDeck(deck);
-        PrintResponses.printSuccessfulDeckCreation();
         DataController.saveData(USER);
     }
 
-
-    public void exitMenu() {
-        ProgramController.currentMenu = new MainMenu();
+    private boolean canCreateDeck(String name) {
+        return USER.getDeckByName(name) == null;
     }
 
-
-    public void showCurrentMenu() {
-        PrintResponses.printDeckMenuShow();
-    }
 
     @Override
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/DeckMenu.fxml"));
         ProgramController.stage.show();
         HBox mainHBox = (HBox) ProgramController.currentScene.lookup("#mainHBox");
-        USER.getActiveDeck();
-        Rectangle activeDeck = new Rectangle(DECK_WIDTH, DECK_HIGHT);
-        activeDeck.setFill(new ImagePattern(
-                new Image(getClass().getResource("/images/deck.png").toExternalForm())));
-        mainHBox.getChildren().add(activeDeck);
+        ListView<VBox> listView = new ListView<>();
+        listView.getStyleClass().add("list-view");
+        listView.setOrientation(Orientation.HORIZONTAL);
+        listView.setMinWidth(500);
+        ArrayList<Deck> decks = USER.getDecks();
+        placeAllDecks(mainHBox, listView, decks);
     }
 
-    public void createDeck(MouseEvent mouseEvent) {
-
+    private void placeAllDecks(HBox mainHBox, ListView<VBox> listView, ArrayList<Deck> decks) {
+        for (Deck deck : decks) {
+            ContextMenu menu = new ContextMenu();
+            VBox vBox = new VBox();
+            if (deck.isActive())
+                vBox.setEffect(new Glow(0.9));
+            handleContextMenuWhenRightClicked(deck, menu, vBox);
+            vBox.setAlignment(Pos.CENTER);
+            Rectangle deckPicture = new Rectangle(DECK_WIDTH, DECK_HEIGHT);
+            deckPicture.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
+            Label deckName = new Label(deck.getName());
+            deckName.setTextFill(Color.WHITE);
+            deckName.setStyle("-fx-font-size: 15pt ;");
+            if (deck.isActive())
+                deckName.setStyle("-fx-text-fill: rgb(255, 228, 73);-fx-font-size: 15pt ;");
+            vBox.getChildren().addAll(deckPicture, deckName);
+            listView.getItems().add(vBox);
+        }
+        mainHBox.getChildren().add(listView);
     }
+
+    private void handleContextMenuWhenRightClicked(Deck deck, ContextMenu menu, VBox vBox) {
+        MenuItem activateDeck = new MenuItem("Activate"),
+                editDeck = new MenuItem("Edit"),
+                deleteDeck = new MenuItem("Delete");
+        if (deck.isActive())
+            activateDeck.setDisable(true);
+        menu.getItems().addAll(activateDeck, editDeck, deleteDeck);
+        activateDeck.setOnAction(event -> activateDeck(deck));
+        editDeck.setOnAction(event -> editDeckDetails(deck));
+        deleteDeck.setOnAction(event -> deleteDeck(deck));
+        vBox.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                menu.show(vBox, event.getScreenX(), event.getScreenY());
+            } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                editDeckDetails(deck);
+            } else if (event.getButton() == MouseButton.PRIMARY)
+                menu.hide();
+        });
+    }
+
+    private void editDeckDetails(Deck deck) {
+        try {
+            deckToShow = deck;
+            ProgramController.createNewScene(getClass().getResource("/FXMLs/DeckDetails.fxml"));
+            ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> closeAllStages());
+            ((Label) ProgramController.currentScene.lookup("#deckName")).setText(deck.getName());
+            ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                if (event.getButton() != MouseButton.SECONDARY)
+                    canEnlargeCard = true;
+            });
+            ArrayList<ListView<Rectangle>> mainListViews = getMainListViews();
+            for (int i = 0; i < mainListViews.size(); i++) {
+                for (int j = 0; j < Math.min(30, deck.getNumberOfMainDeckCards() - i * 30); j++) {
+                    mainListViews.get(i).getItems().add(getCardToShow(deck.getMainDeckCards(), j + i * 30, "main"));
+                }
+            }
+            ListView<Rectangle> sideListView = (ListView<Rectangle>) ProgramController.currentScene.lookup("#sideDeck");
+            for (int i = 0; i < deck.getSideDeckCards().size(); i++) {
+                sideListView.getItems().add(getCardToShow(deck.getSideDeckCards(), i, "side"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Rectangle getCardToShow(ArrayList<Card> cards, int index, String mainOrSide) {
+        Rectangle card = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
+        card.setOnMouseEntered(event -> enlargeCardPicture(card, event));
+        card.setOnMouseClicked(event -> openContextMenuForCards(cards, index, card, mainOrSide, event));
+        String cardImageAddress = "/images/cards/" + cards.get(index).getName() + ".jpg";
+        ImagePattern cardPicture = new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource(cardImageAddress)).toExternalForm()));
+        card.setFill(cardPicture);
+        return card;
+    }
+
+    private void openContextMenuForCards(ArrayList<Card> cards, int index, Rectangle card, String mainOrSide, MouseEvent event) {
+        ContextMenu menu = new ContextMenu();
+        if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {
+            canEnlargeCard = false;
+            MenuItem deleteCard = new MenuItem("Delete");
+            menu.getItems().add(deleteCard);
+            deleteCard.setOnAction(e -> deleteCard(cards.get(index), mainOrSide));
+            menu.show(card, event.getScreenX(), event.getScreenY());
+        } else {
+            menu.hide();
+            canEnlargeCard = true;
+        }
+    }
+
+    private ArrayList<ListView<Rectangle>> getMainListViews() {
+        ArrayList<ListView<Rectangle>> mainDeckHBoxes = new ArrayList<>();
+        mainDeckHBoxes.add((ListView<Rectangle>) ProgramController.currentScene.lookup("#firstRow"));
+        mainDeckHBoxes.add((ListView<Rectangle>) ProgramController.currentScene.lookup("#secondRow"));
+        return mainDeckHBoxes;
+    }
+
+
+    public void createDeck() {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setResizable(false);
+        TextField name = new TextField();
+        name.setMaxWidth(150);
+        name.setPromptText("Name");
+        Button submitButton = new Button("Submit"), closeButton = new Button("Close");
+        closeButton.setOnAction(e -> stage.close());
+        closeButton.getStyleClass().add("buttonEntrance");
+        submitButton.getStyleClass().add("buttonEntrance");
+        Platform.runLater(submitButton::requestFocus);
+
+        HBox hbox = new HBox();
+        hbox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
+        hbox.setSpacing(40);
+        hbox.getChildren().addAll(closeButton, submitButton);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: rgb(255, 237, 137);");
+        borderPane.setCenter(name);
+        borderPane.setBottom(hbox);
+        ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
+        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        adj.setInput(blur);
+        ProgramController.currentScene.getRoot().setEffect(blur);
+        name.setAlignment(Pos.CENTER);
+        hbox.setAlignment(Pos.BOTTOM_CENTER);
+
+        submitButton.setOnAction(e -> {
+            if (canCreateDeck(name.getText())) {
+                createNewDeck(name.getText());
+                stage.close();
+            } else
+                name.setStyle("-fx-text-fill: rgb(250, 0, 0);");
+        });
+        name.focusedProperty().addListener((obs, oldValue, newValue) -> name.setStyle("-fx-text-fill: black"));
+        createNewScene(borderPane, stage);
+    }
+
+    private void createNewScene(BorderPane borderPane, Stage stage) {
+        Scene scene = new Scene(borderPane, 250, 150);
+        stage.setTitle("Create New Deck");
+        stage.setScene(scene);
+        stage.showAndWait();
+        reloadMenu();
+    }
+
 
     public void goToMainMenu() throws IOException {
         ProgramController.currentMenu = new MainMenu();
         ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
         ProgramController.stage.show();
+    }
+
+    public void addCardToDeck() {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: rgba(155, 155, 155, 0.877);");
+        ColorAdjust adj = new ColorAdjust(0, 0, 0.5, 0);
+        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        adj.setInput(blur);
+        ProgramController.currentScene.getRoot().setEffect(adj);
+
+        borderPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
+        Scene scene = new Scene(borderPane, 500, 250);
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.show();
+        borderPane.getChildren().clear();
+        ListView<Rectangle> userCardsListView = new ListView<>();
+        userCardsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        userCardsListView.setMaxWidth(490);
+        userCardsListView.setOrientation(Orientation.HORIZONTAL);
+        ArrayList<Card> selectedCards = new ArrayList<>();
+        HashMap<Rectangle, Card> allUserCards = getRectangleCardHashMap(userCardsListView);
+        Button backButton = new Button("Back");
+        addVisualComponentsForAddingCardToDeck(borderPane, stage, userCardsListView, selectedCards, allUserCards, backButton);
+
+    }
+
+    private void addVisualComponentsForAddingCardToDeck(BorderPane borderPane, Stage stage, ListView<Rectangle> userCardsListView, ArrayList<Card> selectedCards, HashMap<Rectangle, Card> allUserCards, Button backButton) {
+        backButton.setOnMouseClicked(event -> {
+            editDeckDetails(deckToShow);
+            stage.close();
+        });
+        Button addCardsToMainDeck = new Button("Add Cards To Main Deck");
+        addCardsToMainDeck.setOnMouseClicked(event -> {
+            userCardsListView.getSelectionModel().getSelectedItems().stream().map(allUserCards::get).forEach(selectedCards::add);
+            if (addCardsToMainDeck(selectedCards)) {
+                stage.close();
+                editDeckDetails(deckToShow);
+            }
+
+        });
+        Button addCardsToSideDeck = new Button("Add Cards To Side Deck");
+        addCardsToSideDeck.setOnMouseClicked(event -> {
+            userCardsListView.getSelectionModel().getSelectedItems().stream().map(allUserCards::get).forEach(selectedCards::add);
+            if (addCardsToSideDeck(selectedCards)) {
+                stage.close();
+                editDeckDetails(deckToShow);
+            }
+        });
+        borderPane.setCenter(userCardsListView);
+        backButton.getStyleClass().add("buttonEntrance");
+        addCardsToMainDeck.getStyleClass().add("buttonEntrance");
+        addCardsToSideDeck.getStyleClass().add("buttonEntrance");
+        HBox buttonHBox = new HBox(backButton, addCardsToSideDeck, addCardsToMainDeck);
+        buttonHBox.setSpacing(10);
+        buttonHBox.setAlignment(Pos.CENTER);
+        borderPane.setBottom(buttonHBox);
+    }
+
+    private HashMap<Rectangle, Card> getRectangleCardHashMap(ListView<Rectangle> userCardsListView) {
+        HashMap<Rectangle, Card> allUserCards = new HashMap<>();
+        for (Card card : ProgramController.userInGame.getCards()) {
+            Rectangle cardPicture = new Rectangle(CARD_WIDTH * 2, CARD_HEIGHT * 2);
+            cardPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
+            userCardsListView.getItems().add(cardPicture);
+            allUserCards.put(cardPicture, card);
+        }
+        return allUserCards;
+    }
+
+
+    public void deleteDeckWithWarning() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this deck?");
+        alert.getDialogPane();
+        alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("/CSS/CSS.css").toExternalForm());
+        alert.getDialogPane().getStyleClass().add("dialog-pane");
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            deleteDeck(deckToShow);
+            reloadMenu();
+        }
+    }
+
+    private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
+        if (!canEnlargeCard)
+            return;
+        Animation delay = new PauseTransition(Duration.seconds(1));
+        Stage stage = new Stage();
+        stage.setX(mouseEvent.getScreenX());
+        stage.setY(mouseEvent.getScreenY());
+        stage.initStyle(StageStyle.UNDECORATED);
+        BorderPane borderPane = new BorderPane();
+        Scene scene = new Scene(borderPane, 300, 400);
+        delay.setOnFinished(e -> {
+            delays.forEach(Animation::stop);
+            stages.forEach(Stage::close);
+            Rectangle enlargedPicture = new Rectangle(300, 400);
+            enlargedPicture.setFill(rectangle.getFill());
+            borderPane.setCenter(enlargedPicture);
+            stage.setScene(scene);
+            stage.show();
+            stages.add(stage);
+            delays.add(delay);
+        });
+        delay.play();
+        rectangle.setOnMouseExited(event -> delay.stop());
+    }
+
+    public void goToDeckMenu() {
+        reloadMenu();
+    }
+
+    public void closeAllStages() {
+        stages.forEach(Stage::close);
     }
 }

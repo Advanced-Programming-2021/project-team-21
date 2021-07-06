@@ -1,8 +1,15 @@
 package view;
 
+import controller.DataController;
 import controller.Effects.SelectEffect;
 import controller.Effects.StandByEffects;
 import controller.ProgramController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import model.AI;
 import model.Duel;
 import model.User;
@@ -16,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -972,9 +980,43 @@ public class DuelMenu implements Menuable {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public void showMenu() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/DuelMenu.fxml"));
+        ChoiceBox choiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox");
+        TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener((ov, value, new_value) -> userTextField.setDisable(new_value.intValue() == 1));
+    }
 
+    @SuppressWarnings("rawtypes")
+    public void startNewGame() {
+        ChoiceBox userChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox"),
+        roundChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#roundChoiceBox");
+        TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
+        String userOrAI = (String) userChoiceBox.getValue();
+        userTextField.focusedProperty().addListener((obs, oldValue, newValue) -> userTextField.setStyle("-fx-text-fill: black"));
+        if (userOrAI.equals("Another Player") && isTextFieldInvalid(userTextField.getText())){
+            userTextField.setStyle("-fx-text-fill: rgb(250, 0, 0);");
+            //todo show an error message if you want
+            return;
+        }
+        String rounds = (String) roundChoiceBox.getValue();
+        System.out.println(userOrAI +"  " + userTextField.getText() + "  "+ rounds);
+        //todo implement RSP
+    }
+
+    public void goToMainMenu() throws IOException {
+        ProgramController.currentMenu = new MainMenu();
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
+        ProgramController.stage.show();
+    }
+
+    private boolean isTextFieldInvalid(String username){
+        if (username.isEmpty() || username.isBlank())
+            return true;
+        return Objects.requireNonNull(DataController.getAllUsers()).stream()
+                .noneMatch(user -> user.getUsername().equals(username) && !user.getUsername().equals(ProgramController.userInGame.getUsername()));
     }
 }
 
