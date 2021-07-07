@@ -143,27 +143,24 @@ public class DataController {
         }
     }
 
-    public static Card importCardFromJson(String cardName) {
-        File file = new File("src/main/resources/exported cards");
-        for (String fileName : Objects.requireNonNull(file.list())) {
-            String[] fileInfo = fileName.split("\\.");
-            if (fileInfo[0].equals(cardName)) {
-                try {
-                    file = new File("src/main/resources/exported cards/" + fileName);
-                    StringBuilder data = new StringBuilder();
-                    Scanner scanner = new Scanner(file);
-                    while (scanner.hasNextLine())
-                        data.append(scanner.nextLine());
-                    if (fileInfo[1].equals("Monster"))
-                        return new Gson().fromJson(data.toString(), Monster.class);
-                    else if (fileInfo[1].equals("Spell"))
-                        return new Gson().fromJson(data.toString(), Spell.class);
-                    else
-                        new Gson().fromJson(data.toString(), Trap.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
+    public static Card importCardFromJson(String fileAddress) {
+        File file;
+        String[] fileInfo = fileAddress.split("\\.");
+        try {
+            file = new File(fileAddress);
+            StringBuilder data = new StringBuilder();
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine())
+                data.append(scanner.nextLine());
+            System.out.println(Arrays.toString(fileInfo));
+            if (fileInfo[3].equals("Monster"))
+                return new Gson().fromJson(data.toString(), Monster.class);
+            else if (fileInfo[3].equals("Spell"))
+                return new Gson().fromJson(data.toString(), Spell.class);
+            else
+                new Gson().fromJson(data.toString(), Trap.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }

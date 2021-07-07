@@ -51,6 +51,11 @@
                   <Font size="20.0" />
                </font>
             </Button>
+            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToImportAndExportMenu" text="Import/Export">
+            <font>
+               <Font size="20.0" />
+            </font>
+         </Button>
             <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#logout" text="Log out">
                <font>
                   <Font size="20.0" />
