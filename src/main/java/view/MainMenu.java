@@ -47,4 +47,9 @@ public class MainMenu implements Menuable {
         ProgramController.currentMenu = new DuelMenu();
         ProgramController.currentMenu.showMenu();
     }
+
+    public void goToImportAndExportMenu() throws IOException {
+        ProgramController.currentMenu = new ImportAndExport();
+        ProgramController.currentMenu.showMenu();
+    }
 }

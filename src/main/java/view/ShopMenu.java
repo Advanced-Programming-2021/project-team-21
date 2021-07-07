@@ -143,7 +143,7 @@ public class ShopMenu implements Menuable {
         User user = ProgramController.userInGame;
         ProgramController.userInGame.addCard(card);
         user.setCoins(user.getCoins() - (card != null ? card.getPrice() : 0));
-        ((Label) ProgramController.currentScene.lookup("#coin")).setText(String.valueOf(ProgramController.userInGame.getCoins()));
+        ((Label) ProgramController.currentScene.lookup("#coin")).setText(String.valueOf("Coins : " + ProgramController.userInGame.getCoins()));
         int countBought = 0;
         for (Card cardToCheck : ProgramController.userInGame.getCards())
             if (cardToCheck.getName().equals(card.getName()))
@@ -201,7 +201,7 @@ public class ShopMenu implements Menuable {
 
     private void createNewScene(BorderPane borderPane, Stage stage) {
         Scene scene = new Scene(borderPane, 250, 150);
-        stage.setTitle("Create New Deck");
+        stage.setTitle("Increase money");
         stage.setScene(scene);
         stage.showAndWait();
     }

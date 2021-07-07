@@ -43,6 +43,11 @@
     -fx-background-size: cover;
 }
 
+.backgroundImportAndExport {
+    -fx-background-image: url("../images/importAndExport.jfif");
+    -fx-background-size: 475px;
+}
+
 .backgroundImport {
     -fx-background-image: url("../images/import.gif");
     -fx-background-size: cover;
