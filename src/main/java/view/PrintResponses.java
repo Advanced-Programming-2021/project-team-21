@@ -387,12 +387,12 @@ public class PrintResponses {
         }
     }
 
-    public static void printHasNoActiveDeck(User user) {
-        System.out.println(user.getUsername() + " has no active deck");
+    public static String printHasNoActiveDeck(User user) {
+        return user.getUsername() + " has no active deck";
     }
 
-    public static void printInvalidDeck(User user) {
-        System.out.println(user.getUsername() + "’s deck is invalid");
+    public static String printInvalidDeck(User user) {
+        return user.getUsername() + "’s deck is invalid";
     }
 
     public static void printPhaseName(Phases phase) {

@@ -24,9 +24,7 @@ public class Card {
         if (allCards == null)
             return null;
         for (String cardName : allCards.keySet()) {
-            System.out.println(cardName);
             if (cardName.equals(name)) {
-                System.out.println(cardName);;
                 return new Cloner().deepClone(allCards.get(cardName));
             }
         }
@@ -53,6 +51,10 @@ public class Card {
 
     public String getCardImageAddress() {
         return getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm();
+    }
+
+    public String getBackPictureAddress(){
+        return getClass().getResource("/images/CardBack.png").toExternalForm();
     }
 
     public CardType getCardType() {

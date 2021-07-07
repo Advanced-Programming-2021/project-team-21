@@ -22,7 +22,7 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="40">
+        <VBox alignment="CENTER" spacing="40" id="mainVBox">
             <ChoiceBox value="Another Player" id="playerChoiceBox" styleClass="choice-box">
                 <items>
                     <FXCollections fx:factory="observableArrayList">

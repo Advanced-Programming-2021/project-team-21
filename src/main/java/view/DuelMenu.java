@@ -4,12 +4,17 @@ import controller.DataController;
 import controller.Effects.SelectEffect;
 import controller.Effects.StandByEffects;
 import controller.ProgramController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import model.AI;
 import model.Duel;
 import model.User;
@@ -43,6 +48,9 @@ public class DuelMenu implements Menuable {
     private int remainingRounds;
     private int initialRounds;
     private boolean isFirstRound = true;
+
+
+    private Stage firstUserStage = new Stage(), secondUserStage = new Stage();
 
     {
         isInGame = true;
@@ -176,39 +184,39 @@ public class DuelMenu implements Menuable {
         return ProgramController.scanner.nextLine();
     }
 
-
-    public void run(String command) {
-        if (checkSpecialSummon(command, currentDuel, false)) return;
-        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
-        boolean isValidCommand = false;
-
-        try {
-            for (String string : commandMap.keySet()) {
-                if (command.equals(Regex.menuExit)) {
-                    exitMenu();
-                    return;
-                }
-                Matcher matcher = Regex.getMatcher(command, string);
-                if (currentDuel != null && currentDuel.isGameEnded()) {
-                    endTheGame();
-                    return;
-                } else if (matcher.find() && isInGame) {
-                    isValidCommand = true;
-                    commandMap.get(string).accept(matcher);
-                } else if (!isInGame) {
-                    if (command.equals("back")) {
-                        back();
-                        isValidCommand = true;
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        if (!isValidCommand) {
-            PrintResponses.printInvalidFormat();
-        }
-
-    }
+//
+//    public void run(String command) {
+//        if (checkSpecialSummon(command, currentDuel, false)) return;
+//        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
+//        boolean isValidCommand = false;
+//
+//        try {
+//            for (String string : commandMap.keySet()) {
+//                if (command.equals(Regex.menuExit)) {
+//                    exitMenu();
+//                    return;
+//                }
+//                Matcher matcher = Regex.getMatcher(command, string);
+//                if (currentDuel != null && currentDuel.isGameEnded()) {
+//                    endTheGame();
+//                    return;
+//                } else if (matcher.find() && isInGame) {
+//                    isValidCommand = true;
+//                    commandMap.get(string).accept(matcher);
+//                } else if (!isInGame) {
+//                    if (command.equals("back")) {
+//                        back();
+//                        isValidCommand = true;
+//                    }
+//                }
+//            }
+//        } catch (Exception ignored) {
+//        }
+//        if (!isValidCommand) {
+//            PrintResponses.printInvalidFormat();
+//        }
+//
+//    }
 
     private void back() {
         isInGame = true;
@@ -226,15 +234,12 @@ public class DuelMenu implements Menuable {
 
     private HashMap<String, Consumer<Matcher>> createCommandMap() {
         HashMap<String, Consumer<Matcher>> commandMap = new HashMap<>();
-        commandMap.put(Regex.createNewDuel, this::createNewDuel);
-        commandMap.put(Regex.createNewDuelWithAI, this::createNewDuelWithAI);
         commandMap.put(Regex.selectFromOwn, this::selectCardFromOwn);
         commandMap.put(Regex.selectFromOwnField, this::selectCardFromOwnField);
         commandMap.put(Regex.selectFromOpponent, this::selectCardFromOpponent);
         commandMap.put(Regex.selectFromOpponentField, this::selectCardFromOpponentField);
         commandMap.put(Regex.selectFromOpponentField2, this::selectCardFromOpponentField);
         commandMap.put(Regex.deselectCard, this::deselectCard);
-        commandMap.put(Regex.nextPhase, this::goToNextPhase);
         commandMap.put(Regex.summon, this::summon);
         commandMap.put(Regex.set, this::set);
         commandMap.put(Regex.setPosition, this::setPosition);
@@ -276,42 +281,40 @@ public class DuelMenu implements Menuable {
         PrintResponses.printHandShow(currentDuel.getUserWhoPlaysNow().getHand());
     }
 
-    private void createNewDuel(Matcher matcher) {
+    private void createNewDuel(String otherPlayerUsername, int remainingRounds) {
         if (currentDuel != null) {
             PrintResponses.print(Responses.alreadyInGame);
             return;
         }
-        User secondPlayer = User.getUserByUsername(matcher.group("player2Username"));
-        remainingRounds = Integer.parseInt(matcher.group("rounds"));
+        User secondPlayer = User.getUserByUsername(otherPlayerUsername);
         initialRounds = remainingRounds;
-        if (secondPlayer == null) {
-            PrintResponses.printNoUserExistToPlayWith();
-        } else if (ProgramController.userInGame.getActiveDeck() == null) {
-            PrintResponses.printHasNoActiveDeck(ProgramController.userInGame);
+        if (ProgramController.userInGame.getActiveDeck() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printHasNoActiveDeck(ProgramController.userInGame));
+            alert.showAndWait();
         } else if (secondPlayer.getActiveDeck() == null) {
-            PrintResponses.printHasNoActiveDeck(secondPlayer);
+            Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printHasNoActiveDeck(secondPlayer));
+            alert.showAndWait();
         } else if (!ProgramController.userInGame.getActiveDeck().isValid()) {
-            PrintResponses.printInvalidDeck(ProgramController.userInGame);
+            Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printInvalidDeck(ProgramController.userInGame));
+            alert.showAndWait();
         } else if (!secondPlayer.getActiveDeck().isValid()) {
-            PrintResponses.printInvalidDeck(secondPlayer);
-        } else if (!(remainingRounds == 1 || remainingRounds == 3)) {
-            PrintResponses.printNonSupportiveRound();
+            Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printInvalidDeck(secondPlayer));
+            alert.showAndWait();
         } else {
-            handleSuccessfulGameCreation(secondPlayer);
+            showCoinFlipping(ProgramController.userInGame, secondPlayer); //todo return a Pair that includes first and second user (ordered)
         }
     }
 
-    private void createNewDuelWithAI(Matcher matcher) {
-        remainingRounds = Integer.parseInt(matcher.group("rounds"));
+    private void createNewDuelWithAI(int remainingRounds) {
         initialRounds = remainingRounds;
         if (ProgramController.userInGame.getActiveDeck() == null) {
-            PrintResponses.printHasNoActiveDeck(ProgramController.userInGame);
+            Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printHasNoActiveDeck(ProgramController.userInGame));
+            alert.showAndWait();
         } else if (!ProgramController.userInGame.getActiveDeck().isValid()) {
-            PrintResponses.printInvalidDeck(ProgramController.userInGame);
-        } else if (!(remainingRounds == 1 || remainingRounds == 3)) {
-            PrintResponses.printNonSupportiveRound();
+            Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printInvalidDeck(ProgramController.userInGame));
+            alert.showAndWait();
         } else {
-            handleSuccessfulGameCreation(new AI("AI", "AI", "AI"));
+            handleSuccessfulGameCreation(ProgramController.userInGame, new AI("AI", "AI", "AI"));
             ((AI) currentDuel.getSECOND_USER()).setCurrentDuel(currentDuel);
         }
     }
@@ -364,11 +367,7 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void goToNextPhase(Matcher matcher) {
-        if (currentDuel == null) {
-            PrintResponses.printInvalidFormat();
-            return;
-        }
+    private void goToNextPhase() {
         if (phase.equals(Phases.DRAW_PHASE)) {
             phase = Phases.STANDBY_PHASE;
         } else if (phase.equals(Phases.STANDBY_PHASE)) {
@@ -406,7 +405,7 @@ public class DuelMenu implements Menuable {
             if (winner.getWinsInAMatch() == 2) {
                 endTheGame();
             } else
-                handleSuccessfulGameCreation(currentDuel.getSECOND_USER());
+                handleSuccessfulGameCreation(ProgramController.userInGame, currentDuel.getSECOND_USER());
         }
     }
 
@@ -438,8 +437,8 @@ public class DuelMenu implements Menuable {
                     return;
                 }
                 if (number == 0 && monster.getDiscardToSpecialSummon().hasEffect() &&
-                currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() >=
-                        monster.getDiscardToSpecialSummon().getEffectNumber()) {
+                        currentDuel.getUserWhoPlaysNow().getHand().getNumberOfCardsInHand() >=
+                                monster.getDiscardToSpecialSummon().getEffectNumber()) {
                     for (int j = 0; j < monster.getDiscardToSpecialSummon().getEffectNumber(); j++) {
                         Card card = currentDuel.getUserWhoPlaysNow().getHand().selectARandomCardFromHand();
                         int i;
@@ -830,8 +829,10 @@ public class DuelMenu implements Menuable {
         PrintResponses.print(currentDuel);
     }
 
-    private void handleSuccessfulGameCreation(User secondPlayer) {
-        currentDuel = new Duel(ProgramController.userInGame, secondPlayer);
+    private void handleSuccessfulGameCreation(User firstPlayer, User secondPlayer) {
+        //todo handle starting player.
+        currentDuel = new Duel(firstPlayer, secondPlayer);
+        showLabelsForBothUsers(firstPlayer, secondPlayer);
         phase = Phases.DRAW_PHASE;
         if (isFirstRound) {
             PrintResponses.printGameSuccessfullyCreated();
@@ -847,7 +848,10 @@ public class DuelMenu implements Menuable {
             e.printStackTrace();
         }
         handleDrawingACard(currentDuel.drawACard(currentDuel.getUserWhoPlaysNow()));
+        reloadHands();
+        reloadPhaseLabels();
     }
+
 
     private void handleTransitionFromEndPhaseToDrawPhase() {
         phase = Phases.END_PHASE;
@@ -980,30 +984,51 @@ public class DuelMenu implements Menuable {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     @SuppressWarnings("rawtypes")
     @Override
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/DuelMenu.fxml"));
         ChoiceBox choiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
-        choiceBox.getSelectionModel().selectedIndexProperty().addListener((ov, value, new_value) -> userTextField.setDisable(new_value.intValue() == 1));
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener((ov, value, new_value) -> {
+            userTextField.clear();
+            userTextField.setDisable(new_value.intValue() == 1);
+        });
     }
 
     @SuppressWarnings("rawtypes")
     public void startNewGame() {
         ChoiceBox userChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox"),
-        roundChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#roundChoiceBox");
+                roundChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#roundChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
         String userOrAI = (String) userChoiceBox.getValue();
         userTextField.focusedProperty().addListener((obs, oldValue, newValue) -> userTextField.setStyle("-fx-text-fill: black"));
-        if (userOrAI.equals("Another Player") && isTextFieldInvalid(userTextField.getText())){
+        if (userOrAI.equals("Another Player") && isTextFieldInvalid(userTextField.getText())) {
             userTextField.setStyle("-fx-text-fill: rgb(250, 0, 0);");
             //todo show an error message if you want
             return;
         }
         String rounds = (String) roundChoiceBox.getValue();
-        System.out.println(userOrAI +"  " + userTextField.getText() + "  "+ rounds);
-        //todo implement RSP
+        if (userTextField.getText().isEmpty()) {
+            createNewDuelWithAI(Integer.parseInt(rounds.replaceAll("\\D+", "")));
+        } else {
+            createNewDuel(userTextField.getText(), Integer.parseInt(rounds.replaceAll("\\D+", "")));
+        }
+    }
+
+    private void showCoinFlipping(User starter, User invited) {
+        VBox mainVBox = (VBox) ProgramController.currentScene.lookup("#mainVBox");
+        mainVBox.getChildren().clear();
+        Button okayButton = new Button("Okay");
+        okayButton.setOnMouseClicked(event -> {
+            handleCreatingTwoStages();
+            handleSuccessfulGameCreation(starter, invited);
+        });
+        mainVBox.getChildren().add(okayButton);
+        //todo A private field to store starting user (or returns the user)
     }
 
     public void goToMainMenu() throws IOException {
@@ -1012,11 +1037,102 @@ public class DuelMenu implements Menuable {
         ProgramController.stage.show();
     }
 
-    private boolean isTextFieldInvalid(String username){
+    public void handleCreatingTwoStages() {
+        ProgramController.stage.close();
+        createStageForUser(firstUserStage);
+        createStageForUser(secondUserStage);
+        firstUserStage.setX(300);
+        secondUserStage.setX(900);
+        secondUserStage.show();
+        firstUserStage.show();
+        secondUserStage.getScene().getRoot().setEffect(new GaussianBlur());
+        firstUserStage.getScene().lookup("#nextPhaseButton").setOnMouseClicked(event -> {
+            goToNextPhase();
+            reloadPhaseLabels();
+        });
+        secondUserStage.getScene().lookup("#nextPhaseButton").setOnMouseClicked(event -> {
+            goToNextPhase();
+            reloadPhaseLabels();
+        });
+    }
+
+
+    private void createStageForUser(Stage stage) {
+        try {
+            Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXMLs/DuelBoard.fxml")));
+            Scene scene = new Scene(pane);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setY(200);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isTextFieldInvalid(String username) {
         if (username.isEmpty() || username.isBlank())
             return true;
         return Objects.requireNonNull(DataController.getAllUsers()).stream()
                 .noneMatch(user -> user.getUsername().equals(username) && !user.getUsername().equals(ProgramController.userInGame.getUsername()));
     }
+
+    private void showLabelsForBothUsers(User firstUser, User secondUser) {
+        ((Label) firstUserStage.getScene().lookup("#ownUsername")).setText(firstUser.getUsername());
+        ((Label) firstUserStage.getScene().lookup("#ownNickname")).setText(firstUser.getNickname());
+        ((Label) firstUserStage.getScene().lookup("#ownLP")).setText(String.valueOf(firstUser.getLifePoints()));
+        ((Label) firstUserStage.getScene().lookup("#rivalUsername")).setText(secondUser.getUsername());
+        ((Label) firstUserStage.getScene().lookup("#rivalNickname")).setText(secondUser.getNickname());
+        ((Label) firstUserStage.getScene().lookup("#rivalLP")).setText(String.valueOf(secondUser.getLifePoints()));
+        ((Label) firstUserStage.getScene().lookup("#ownUsername")).setText(firstUser.getUsername());
+        ((Label) secondUserStage.getScene().lookup("#ownUsername")).setText(secondUser.getUsername());
+        ((Label) secondUserStage.getScene().lookup("#ownNickname")).setText(secondUser.getNickname());
+        ((Label) secondUserStage.getScene().lookup("#ownLP")).setText(String.valueOf(secondUser.getLifePoints()));
+        ((Label) secondUserStage.getScene().lookup("#rivalUsername")).setText(firstUser.getUsername());
+        ((Label) secondUserStage.getScene().lookup("#rivalNickname")).setText(firstUser.getNickname());
+        ((Label) secondUserStage.getScene().lookup("#rivalLP")).setText(String.valueOf(firstUser.getLifePoints()));
+    }
+
+    private void reloadHands() {
+        ((ListView) firstUserStage.getScene().lookup("#rivalHandListView")).getItems().addAll(getHandCardPictures(currentDuel.getSECOND_USER(), "hide"));
+        ((ListView) firstUserStage.getScene().lookup("#ownHandListView")).getItems().addAll(getHandCardPictures(currentDuel.getFIRST_USER(), "visible"));
+        ((ListView) secondUserStage.getScene().lookup("#rivalHandListView")).getItems().addAll(getHandCardPictures(currentDuel.getFIRST_USER(), "hide"));
+        ((ListView) secondUserStage.getScene().lookup("#ownHandListView")).getItems().addAll(getHandCardPictures(currentDuel.getSECOND_USER(), "visible"));
+
+    }
+
+    private void reloadPhaseLabels() {
+        ((Label) firstUserStage.getScene().lookup("#phaseLabel")).setText(phase.getName());
+        ((Label) secondUserStage.getScene().lookup("#phaseLabel")).setText(phase.getName());
+    }
+
+    private void reloadCardsOnBoard() {
+        HBox ownMonsters = (HBox) firstUserStage.getScene().lookup("ownMonsterHBox");
+        for (Card monster : currentDuel.getFIRST_USER().getBoard().getMonsters()) {
+            Rectangle monsterCardOnBoard = new Rectangle(40, 50);
+            if (monster.isFaceUp()) {
+                monsterCardOnBoard.setFill(new ImagePattern(new Image(monster.getCardImageAddress())));
+                if (!monster.isATK()) {
+                    monsterCardOnBoard.setRotate(50);
+                }
+
+            }
+        }
+    }
+
+    private ArrayList<Rectangle> getHandCardPictures(User user, String showMode) {
+        ArrayList<Rectangle> handCardPictures = new ArrayList<>();
+        for (Card card : user.getHand().getCardsInHand()) {
+            if (card == null)
+                continue;
+            Rectangle cardPicture = new Rectangle(90, 100);
+            if (showMode.equals("hide"))
+                cardPicture.setFill(new ImagePattern(new Image(card.getBackPictureAddress())));
+            else
+                cardPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
+            handCardPictures.add(cardPicture);
+        }
+        return handCardPictures;
+    }
+
 }
 
