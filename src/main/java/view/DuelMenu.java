@@ -4,9 +4,14 @@ import controller.DataController;
 import controller.Effects.SelectEffect;
 import controller.Effects.StandByEffects;
 import controller.ProgramController;
+import javafx.animation.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -24,11 +29,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javafx.stage.StageStyle;
 import model.AI;
 import model.Duel;
 import model.User;
@@ -39,10 +45,7 @@ import model.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -281,7 +284,6 @@ public class DuelMenu implements Menuable {
 
     private void selectCardFromOwn(int cardAddress, String whereToSelectFrom) {
         currentDuel.selectCard(cardAddress, whereToSelectFrom, "own");
-        System.out.println(currentDuel.getSelectedCard());
     }
 
     private void selectCardFromOpponent(Matcher matcher) {
@@ -796,6 +798,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void handleSuccessfulGameCreation(User firstPlayer, User secondPlayer) {
+        //todo handle starting player.
         currentDuel = new Duel(firstPlayer, secondPlayer);
         loadInformationForBothUsers(firstPlayer, secondPlayer);
         phase = Phases.DRAW_PHASE;
@@ -995,28 +998,71 @@ public class DuelMenu implements Menuable {
     private void showCoinFlipping(User starter, User invited) {
         VBox mainVBox = (VBox) ProgramController.currentScene.lookup("#mainVBox");
         mainVBox.getChildren().clear();
-        Button okayButton = new Button("Okay");
-        okayButton.setOnMouseClicked(event -> {
-            if (!(starter instanceof AI || invited instanceof AI)){
-                handleCreatingTwoStages();
-            } else
-                handleCreatingOneStage();
-            handleSuccessfulGameCreation(starter, invited);
+        BorderPane borderPane = (BorderPane)ProgramController.currentScene.lookup("#mainPane");
+        Rectangle rectangle = new Rectangle(265,200,60 , 60);
+        HBox hBox = new HBox();
+        Button heads = new Button("heads");
+        Button tails = new Button(("tails"));
+        Image headsImage = new Image(getClass().getResource("/images/head.jpg").toExternalForm());
+        Image tailsImage = new Image(getClass().getResource("/images/tails.jpg").toExternalForm());
+        Image coin = new Image(getClass().getResource("/images/coin.png").toExternalForm());
+        heads.setOnMouseClicked(event -> {
+            transition(rectangle , headsImage , tailsImage,0, starter , invited);
         });
-        mainVBox.getChildren().add(okayButton);
+        tails.setOnMouseClicked(event -> {
+            transition(rectangle , headsImage , tailsImage,1, starter , invited);
+        });
+        rectangle.setFill(new ImagePattern(coin));
+         hBox.getChildren().add(heads);
+        hBox.getChildren().add(tails);
+        hBox.setPadding(new Insets(100 , 0 , 0, 0));
+        hBox.setAlignment(Pos.BOTTOM_CENTER);
+        hBox.setSpacing(150.0);
+        borderPane.getChildren().add(rectangle);
+        mainVBox.getChildren().add(hBox);
+        //todo A private field to store starting user (or returns the user)
     }
 
-    private void handleCreatingOneStage() {
-        try {
-            ProgramController.createNewScene(getClass().getResource("/FXMLs/DuelBoard.fxml"));
+    private void transition(Rectangle rectangle , Image heads , Image tails , int chosen , User starter , User invited) {
+        PathTransition pathTransition = getPathTransition(rectangle , 230 , 75);
+        PathTransition pathTransition1 = getPathTransition(rectangle , 75 , 230);
+         RotateTransition rotateTransition = new RotateTransition();
+        rotateTransition.setNode(rectangle);
+        rotateTransition.setAxis(Rotate.Y_AXIS);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setRate(45);
+        rotateTransition.setCycleCount(40);
+        rotateTransition.setDuration(Duration.millis(1200));
+        rotateTransition.setAutoReverse(true);
+        ParallelTransition parallelTransition = new ParallelTransition(pathTransition , rotateTransition);
+        ParallelTransition parallelTransition1 = new ParallelTransition(pathTransition1 , rotateTransition);
+       SequentialTransition sequentialTransition = new SequentialTransition(parallelTransition , parallelTransition1);
+       sequentialTransition.setOnFinished(new EventHandler<ActionEvent>() {
+           @Override
+           public void handle(ActionEvent event) {
+               Random random = new Random();
+               int number = random.nextInt(2);
+               if (number == 0)rectangle.setFill(new ImagePattern(heads));
+               else rectangle.setFill(new ImagePattern(tails));
+               handleCreatingTwoStages();
+                       if (chosen == number)handleSuccessfulGameCreation(starter, invited);
+                       else handleSuccessfulGameCreation(invited , starter);
+           }
+       });
+       sequentialTransition.play();
 
-            ProgramController.currentScene.lookup("#nextPhaseButton").setOnMouseClicked(event -> {
-                goToNextPhase();
-                reloadPhaseLabels();
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
+
+    private PathTransition getPathTransition(Rectangle rectangle , int start ,int end) {
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setCycleCount(1);
+        pathTransition.setDuration(Duration.millis(1200));
+        pathTransition.setNode(rectangle);
+        Path path = new Path();
+        path.getElements().add(new MoveTo(295 , start));
+        path.getElements().add(new LineTo(295 ,end));
+        pathTransition.setPath(path);
+        return pathTransition;
     }
 
     public void goToMainMenu() throws IOException {
@@ -1345,6 +1391,7 @@ public class DuelMenu implements Menuable {
             Stage stage = (firstUserStage.getScene().getRoot().getEffect() == null) ? firstUserStage : secondUserStage;
             cardPicture.setCursor(Cursor.OPEN_HAND);
             HBox ownMonsters = (HBox) stage.getScene().lookup("#ownMonsterHBox");
+            System.out.println(mouseEvent.getTarget().equals(mouseEvent.getSource()));
             if (ownMonsters.contains(mouseEvent.getX(), mouseEvent.getY())) {
                 addCardToBoard(mouseEvent);
                 ((AnchorPane) stage.getScene().getRoot()).getChildren().remove(cardPicture);
