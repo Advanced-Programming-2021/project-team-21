@@ -7,7 +7,10 @@ import controller.ProgramController;
 import model.card.effects.Effect;
 import model.card.enums.CardType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class Card {
@@ -53,7 +56,7 @@ public class Card {
         return getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm();
     }
 
-    public String getBackPictureAddress(){
+    public String getBackPictureAddress() {
         return getClass().getResource("/images/CardBack.png").toExternalForm();
     }
 
