@@ -237,3 +237,11 @@
  .effectsStage {
     -fx-background-color: gray;
  }
+
+ .coinFlippingStage {
+    -fx-background-color: darkgray;
+ }
+
+ .duelSetup{
+     -fx-background-color: darkgray;
+ }

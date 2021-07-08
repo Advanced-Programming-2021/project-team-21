@@ -7,12 +7,10 @@ import controller.ProgramController;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.animation.Animation;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,12 +27,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.*;
-import javafx.scene.transform.Rotate;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import model.AI;
 import model.Duel;
 import model.User;
@@ -998,35 +998,34 @@ public class DuelMenu implements Menuable {
     private void showCoinFlipping(User starter, User invited) {
         VBox mainVBox = (VBox) ProgramController.currentScene.lookup("#mainVBox");
         mainVBox.getChildren().clear();
-        BorderPane borderPane = (BorderPane)ProgramController.currentScene.lookup("#mainPane");
-        Rectangle rectangle = new Rectangle(265,200,60 , 60);
+        BorderPane borderPane = (BorderPane) ProgramController.currentScene.lookup("#mainPane");
+        borderPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
+        borderPane.getStyleClass().add("coinFlippingStage");
+        Rectangle rectangle = new Rectangle(265, 200, 80, 80);
         HBox hBox = new HBox();
         Button heads = new Button("heads");
+        heads.getStyleClass().add("buttonEntrance");
         Button tails = new Button(("tails"));
-        Image headsImage = new Image(getClass().getResource("/images/head.jpg").toExternalForm());
-        Image tailsImage = new Image(getClass().getResource("/images/tails.jpg").toExternalForm());
-        Image coin = new Image(getClass().getResource("/images/coin.png").toExternalForm());
-        heads.setOnMouseClicked(event -> {
-            transition(rectangle , headsImage , tailsImage,0, starter , invited);
-        });
-        tails.setOnMouseClicked(event -> {
-            transition(rectangle , headsImage , tailsImage,1, starter , invited);
-        });
+        tails.getStyleClass().add("buttonEntrance");
+        Image headsImage = new Image(Objects.requireNonNull(getClass().getResource("/images/head.jpg")).toExternalForm());
+        Image tailsImage = new Image(Objects.requireNonNull(getClass().getResource("/images/tails.jpg")).toExternalForm());
+        Image coin = new Image(Objects.requireNonNull(getClass().getResource("/images/coin.png")).toExternalForm());
+        heads.setOnMouseClicked(event -> transition(rectangle, headsImage, tailsImage, 0, starter, invited));
+        tails.setOnMouseClicked(event -> transition(rectangle, headsImage, tailsImage, 1, starter, invited));
         rectangle.setFill(new ImagePattern(coin));
-         hBox.getChildren().add(heads);
+        hBox.getChildren().add(heads);
         hBox.getChildren().add(tails);
-        hBox.setPadding(new Insets(100 , 0 , 0, 0));
+        hBox.setPadding(new Insets(100, 0, 0, 0));
         hBox.setAlignment(Pos.BOTTOM_CENTER);
         hBox.setSpacing(150.0);
         borderPane.getChildren().add(rectangle);
         mainVBox.getChildren().add(hBox);
-        //todo A private field to store starting user (or returns the user)
     }
 
-    private void transition(Rectangle rectangle , Image heads , Image tails , int chosen , User starter , User invited) {
-        PathTransition pathTransition = getPathTransition(rectangle , 230 , 75);
-        PathTransition pathTransition1 = getPathTransition(rectangle , 75 , 230);
-         RotateTransition rotateTransition = new RotateTransition();
+    private void transition(Rectangle rectangle, Image heads, Image tails, int chosen, User starter, User invited) {
+        PathTransition pathTransition = getPathTransition(rectangle, 230, 75);
+        PathTransition pathTransition1 = getPathTransition(rectangle, 75, 230);
+        RotateTransition rotateTransition = new RotateTransition();
         rotateTransition.setNode(rectangle);
         rotateTransition.setAxis(Rotate.Y_AXIS);
         rotateTransition.setByAngle(360);
@@ -1034,33 +1033,33 @@ public class DuelMenu implements Menuable {
         rotateTransition.setCycleCount(40);
         rotateTransition.setDuration(Duration.millis(1200));
         rotateTransition.setAutoReverse(true);
-        ParallelTransition parallelTransition = new ParallelTransition(pathTransition , rotateTransition);
-        ParallelTransition parallelTransition1 = new ParallelTransition(pathTransition1 , rotateTransition);
-       SequentialTransition sequentialTransition = new SequentialTransition(parallelTransition , parallelTransition1);
-       sequentialTransition.setOnFinished(new EventHandler<ActionEvent>() {
-           @Override
-           public void handle(ActionEvent event) {
-               Random random = new Random();
-               int number = random.nextInt(2);
-               if (number == 0)rectangle.setFill(new ImagePattern(heads));
-               else rectangle.setFill(new ImagePattern(tails));
-               handleCreatingTwoStages();
-                       if (chosen == number)handleSuccessfulGameCreation(starter, invited);
-                       else handleSuccessfulGameCreation(invited , starter);
-           }
-       });
-       sequentialTransition.play();
+        ParallelTransition parallelTransition = new ParallelTransition(pathTransition, rotateTransition);
+        ParallelTransition parallelTransition1 = new ParallelTransition(pathTransition1, rotateTransition);
+        SequentialTransition sequentialTransition = new SequentialTransition(parallelTransition, parallelTransition1);
+        sequentialTransition.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Random random = new Random();
+                int number = random.nextInt(2);
+                if (number == 0) rectangle.setFill(new ImagePattern(heads));
+                else rectangle.setFill(new ImagePattern(tails));
+                handleCreatingTwoStages();
+                if (chosen == number) handleSuccessfulGameCreation(starter, invited);
+                else handleSuccessfulGameCreation(invited, starter);
+            }
+        });
+        sequentialTransition.play();
 
     }
 
-    private PathTransition getPathTransition(Rectangle rectangle , int start ,int end) {
+    private PathTransition getPathTransition(Rectangle rectangle, int start, int end) {
         PathTransition pathTransition = new PathTransition();
         pathTransition.setCycleCount(1);
         pathTransition.setDuration(Duration.millis(1200));
         pathTransition.setNode(rectangle);
         Path path = new Path();
-        path.getElements().add(new MoveTo(295 , start));
-        path.getElements().add(new LineTo(295 ,end));
+        path.getElements().add(new MoveTo(295, start));
+        path.getElements().add(new LineTo(295, end));
         pathTransition.setPath(path);
         return pathTransition;
     }
