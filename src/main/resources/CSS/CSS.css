@@ -204,3 +204,32 @@
  .choice-box > .label {
  -fx-text-fill: white;
  }
+
+ .green-bar  { -fx-accent: green;  }
+
+ .red-bar { -fx-accent: red; }
+
+ .menu-button {
+  -fx-background-color:black;
+ }
+ .menu-button .label {
+        -fx-text-fill: white;
+  }
+
+
+ .menu-item .label {
+     -fx-text-fill: white;
+ }
+
+ .menu-item:focused {
+      -fx-background-color: darkgray;
+ }
+
+ .menu-item:focused .label {
+     -fx-text-fill: blue;
+ }
+
+ .context-menu {
+     -fx-background-color: black;
+     -fx-background-radius: 10;
+ }

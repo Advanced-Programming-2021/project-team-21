@@ -160,7 +160,6 @@ public class DataController {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine())
                 data.append(scanner.nextLine());
-            System.out.println(Arrays.toString(fileInfo));
             if (fileInfo[3].equals("Monster"))
                 return new Gson().fromJson(data.toString(), Monster.class);
             else if (fileInfo[3].equals("Spell"))

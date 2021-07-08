@@ -5,126 +5,112 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundDuel" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="view.DuelMenu">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundDuel" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
 
     <stylesheets>
-        <URL value="@../CSS/CSS.css"/>
+        <URL value="@../CSS/CSS.css" />
     </stylesheets>
     <VBox>
 
-        <VBox prefHeight="110.0" prefWidth="133.0" spacing="5.0">
+        <VBox prefHeight="152.0" prefWidth="133.0" spacing="5.0">
             <padding>
-                <Insets bottom="5.0" left="5.0"/>
+                <Insets bottom="5.0" left="5.0" />
             </padding>
-            <Label id="rivalUsername" prefHeight="19.0" prefWidth="141.0" text="Rival Username"/>
-            <Label id="rivalNickname" prefHeight="16.0" prefWidth="140.0" text="Rival Nickname"/>
-            <Label id="rivalLP" prefHeight="16.0" prefWidth="138.0" text="Rival LP"/>
+         <ProgressBar id="rivalLPBar" prefWidth="200.0" progress="1.0" styleClass="green-bar" />
+            <Label id="rivalLP" prefHeight="16.0" prefWidth="138.0" text="Rival LP" />
+         <Rectangle id="rivalAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK" strokeType="INSIDE" width="55.0" />
+            <Label id="rivalUsername" prefHeight="19.0" prefWidth="141.0" text="Rival Username" />
+            <Label id="rivalNickname" prefHeight="16.0" prefWidth="140.0" text="Rival Nickname" />
         </VBox>
-        <VBox alignment="CENTER" prefHeight="180.0" spacing="10.0">
-            <Label id="phaseLabel" text="Current Phase"/>
-            <Button id="nextPhaseButton" styleClass="buttonEntrance" text="Next Phase"/>
-         <Button styleClass="buttonEntrance" text="Settings" onMouseClicked="#showSettings"/>
+        <VBox alignment="CENTER" prefHeight="96.0" prefWidth="133.0" spacing="10.0">
+            <Label id="phaseLabel" text="Current Phase" />
+            <Button id="nextPhaseButton" styleClass="buttonEntrance" text="Next Phase" />
+         <Button onMouseClicked="#showSettings" styleClass="buttonEntrance" text="Settings" />
         </VBox>
-        <VBox alignment="BOTTOM_LEFT" layoutY="259.0" prefHeight="110.0" prefWidth="133.0" spacing="5.0">
+        <VBox alignment="BOTTOM_LEFT" layoutY="259.0" prefHeight="152.0" prefWidth="133.0" spacing="5.0">
             <padding>
-                <Insets bottom="5.0" left="5.0"/>
+                <Insets bottom="5.0" left="5.0" />
             </padding>
-            <Label id="ownLP" prefHeight="16.0" prefWidth="138.0" text="Own LP"/>
-            <Label id="ownNickname" prefHeight="16.0" prefWidth="140.0" text="Own Nickname"/>
-            <Label id="ownUsername" prefHeight="19.0" prefWidth="141.0" text="Own Username"/>
+            <Label id="ownNickname" prefHeight="16.0" prefWidth="140.0" text="Own Nickname" />
+            <Label id="ownUsername" prefHeight="19.0" prefWidth="141.0" text="Own Username" />
+         <Rectangle id="ownAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK" strokeType="INSIDE" width="55.0" />
+            <Label id="ownLP" prefHeight="16.0" prefWidth="138.0" text="Own LP" />
+         <ProgressBar id="ownLPBar" prefWidth="200.0" progress="1.0" styleClass="green-bar" />
         </VBox>
 
     </VBox>
     <VBox alignment="CENTER" layoutX="133.0" prefHeight="400.0" prefWidth="467.0" spacing="1.0">
-        <ListView id="rivalHandListView" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0"/>
+        <ListView id="rivalHandListView" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0" />
         <HBox id="rivalSpellsHBox" alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="467.0" spacing="10.0">
             <padding>
-                <Insets left="4.0"/>
+                <Insets left="4.0" />
             </padding>
             <StackPane>
-                <Rectangle id="rivalDeck" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0"
-                           stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-                <Label id="numberOfRivalDeckCards" text="Label" textFill="WHITE"/>
+                <Rectangle id="rivalDeck" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" width="57.0" />
+                <Label id="numberOfRivalDeckCards" text="Label" textFill="WHITE" />
             </StackPane>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="226.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="226.0" layoutY="10.0" width="57.0" />
         </HBox>
         <HBox id="rivalMonsterHBox" alignment="CENTER_LEFT" prefHeight="67.0" prefWidth="467.0" spacing="10.0">
             <padding>
-                <Insets left="4.0"/>
+                <Insets left="4.0" />
             </padding>
-            <Rectangle id="rivalFieldZone" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0"
-                       stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="226.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle id="rivalGraveyard" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0"
-                       layoutX="280.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
+            <Rectangle id="rivalFieldZone" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="226.0" layoutY="10.0" width="57.0" />
+         <StackPane>
+            <children>
+                  <Rectangle id="rivalGraveyard" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" width="57.0" />
+               <Label id="rivalGraveyardNumber" text="0" textFill="#bbd01d" StackPane.alignment="CENTER" />
+            </children>
+         </StackPane>
         </HBox>
         <HBox id="ownMonsterHBox" alignment="CENTER_RIGHT" prefHeight="66.0" prefWidth="467.0" spacing="10.0">
             <padding>
-                <Insets right="4.0"/>
+                <Insets right="4.0" />
             </padding>
-            <Rectangle id="ownGraveyard" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0"
-                       stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="226.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle id="ownFieldZone" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0"
-                       layoutX="280.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
+         <StackPane>
+            <children>
+                  <Rectangle id="ownGraveyard" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" width="57.0" />
+               <Label id="ownGraveyardNumber" text="0" textFill="#bbd01d" StackPane.alignment="CENTER" />
+            </children>
+         </StackPane>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="226.0" layoutY="10.0" width="57.0" />
+            <Rectangle id="ownFieldZone" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="280.0" layoutY="10.0" width="57.0" />
         </HBox>
-        <HBox id="ownSpellsHBox" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="209.0" prefHeight="66.0"
-              prefWidth="467.0" spacing="10.0">
+        <HBox id="ownSpellsHBox" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="209.0" prefHeight="66.0" prefWidth="467.0" spacing="10.0">
             <padding>
-                <Insets right="4.0"/>
+                <Insets right="4.0" />
             </padding>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" stroke="BLACK"
-                       strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0"
-                       layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="57.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="10.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="64.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="118.0" layoutY="10.0" width="57.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" layoutX="172.0" layoutY="10.0" width="57.0" />
             <StackPane>
-                <Rectangle id="ownDeck" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0"
-                           stroke="BLACK" strokeType="INSIDE" width="57.0"/>
-                <Label id="numberOfOwnDeckCards" text="Label" textFill="WHITE"/>
+                <Rectangle id="ownDeck" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="66.0" width="57.0" />
+                <Label id="numberOfOwnDeckCards" text="Label" textFill="WHITE" />
             </StackPane>
         </HBox>
-        <ListView id="ownHandListView" layoutX="10.0" layoutY="10.0" orientation="HORIZONTAL" prefHeight="66.0"
-                  prefWidth="467.0"/>
+        <ListView id="ownHandListView" layoutX="10.0" layoutY="10.0" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0" />
     </VBox>
     <stylesheets>
         <URL value="@../CSS/CSS.css" />

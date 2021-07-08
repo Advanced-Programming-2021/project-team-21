@@ -10,66 +10,58 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="cardCreator" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundImport" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CreateCard">
-   <children>
-      <Label layoutX="205.0" layoutY="6.0" style="-fx-text-fill: GOLD" text="Create Card">
+    <children>
+        <Label layoutX="205.0" layoutY="6.0" styleClass="title-label" text="Create Card">
+            <font>
+                <Font size="35.0" />
+            </font>
+        </Label>
+        <MenuButton fx:id="cardType" alignment="CENTER" layoutX="165.0" layoutY="67.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="145.0" style="-fx-background-radius: 10; -fx-font-size: 15" text="card type" textAlignment="CENTER">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#setMonster" text="Monster" />
+                <MenuItem mnemonicParsing="false" onAction="#setSpellAndTrap" text="Spell" />
+                <MenuItem mnemonicParsing="false" onAction="#setSpellAndTrap" text="Trap" />
+            </items>
+            <font>
+                <Font size="14.0" />
+            </font>
+        </MenuButton>
+        <TextField fx:id="name" alignment="CENTER" layoutX="16.0" layoutY="66.0" prefHeight="32.0" prefWidth="120.0" promptText="Name" style="-fx-background-radius: 10" />
+        <TextField fx:id="description" alignment="TOP_LEFT" layoutX="20.0" layoutY="125.0" prefHeight="120.0" prefWidth="291.0" promptText="Card Description" style="-fx-wrap-text: true">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </TextField>
+        <Button layoutX="401.0" layoutY="157.0" mnemonicParsing="false" onMouseClicked="#chooseEffect" prefHeight="28.0" prefWidth="145.0" style="-fx-background-radius: 15" styleClass="buttonEntrance" text="Select Effect">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button layoutX="360.0" layoutY="68.0" mnemonicParsing="false" onMouseClicked="#chooseImage" prefHeight="28.0" prefWidth="227.0" style="-fx-background-radius: 15" styleClass="buttonEntrance" text="Choose Card Image">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button layoutX="373.0" layoutY="318.0" mnemonicParsing="false" onMouseClicked="#create" prefHeight="39.0" prefWidth="179.0" styleClass="buttonEntrance" text="create">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Button>
+        <Label layoutX="373.0" layoutY="277.0" prefHeight="32.0" prefWidth="62.0" style="-fx-background-color: rgba(223, 139, 43, 0.842);" styleClass="title-label" text="Price:">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Label>
+        <Button layoutX="24.0" layoutY="318.0" onMouseClicked="#back" prefHeight="44.0" prefWidth="76.0" styleClass="buttonEntrance" text="Back">
          <font>
-            <Font size="35.0" />
-         </font>
-      </Label>
-      <MenuButton fx:id="cardType" alignment="CENTER" layoutX="165.0" layoutY="67.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="145.0" style="-fx-background-radius: 10; -fx-font-size: 15" text="card type" textAlignment="CENTER">
-        <items>
-          <MenuItem mnemonicParsing="false" onAction="#setMonster" text="Monster" />
-          <MenuItem mnemonicParsing="false" onAction="#setSpellAndTrap" text="Spell" />
-            <MenuItem mnemonicParsing="false" onAction="#setSpellAndTrap" text="Trap" />
-        </items>
-         <font>
-            <Font size="14.0" />
-         </font>
-      </MenuButton>
-      <TextField fx:id="name" alignment="CENTER" layoutX="16.0" layoutY="66.0" prefHeight="32.0" prefWidth="120.0" promptText="Name" style="-fx-background-radius: 10" />
-      <TextField fx:id="description" alignment="TOP_LEFT" layoutX="20.0" layoutY="125.0" prefHeight="120.0" prefWidth="291.0" promptText="Card Description" style="-fx-wrap-text: true">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
-      <Button layoutX="401.0" layoutY="157.0" mnemonicParsing="false" onMouseClicked="#chooseEffect" prefHeight="28.0" prefWidth="145.0" style="-fx-background-radius: 15" styleClass="buttonEntrance" text="Select Effect">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="360.0" layoutY="68.0" mnemonicParsing="false" onMouseClicked="#chooseImage" prefHeight="28.0" prefWidth="227.0" style="-fx-background-radius: 15" styleClass="buttonEntrance" text="Choose Card Image">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="373.0" layoutY="318.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="179.0" styleClass="buttonEntrance" text="create" onMouseClicked="#create" >
+            <Font size="16.0" />
+         </font></Button>
+        <Label alignment="CENTER" layoutX="444.0" layoutY="277.0" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: rgba(223, 139, 43, 0.842);" styleClass="title-label" text="0" textFill="BLACK">
          <font>
             <Font size="20.0" />
-         </font>
-      </Button>
-      <Label layoutX="373.0" layoutY="277.0" text="Price :">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <Label layoutX="490.0" layoutY="252.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="515.0" layoutY="28.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Button layoutX="24.0" layoutY="318.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="155.0"
-              styleClass="buttonEntrance" text="Back to main menu" onMouseClicked="#back">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Label alignment="CENTER" layoutX="448.0" layoutY="280.0" prefHeight="32.0" prefWidth="102.0" text="Price" />
-   </children>
-   <stylesheets>
-      <URL value="@../CSS/CSS.css" />
-   </stylesheets>
+         </font></Label>
+    </children>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css" />
+    </stylesheets>
 </AnchorPane>

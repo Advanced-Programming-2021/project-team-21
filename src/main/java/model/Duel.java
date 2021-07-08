@@ -2,13 +2,13 @@ package model;
 
 
 import controller.Effects.*;
-import view.DuelMenu;
-import org.apache.commons.math3.util.Pair;
 import model.card.Card;
 import model.card.Chain;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.enums.CardType;
+import org.apache.commons.math3.util.Pair;
+import view.DuelMenu;
 import view.Responses;
 
 import java.util.ArrayList;
@@ -36,6 +36,10 @@ public class Duel {
         initializeUser(SECOND_USER);
         setHasChangedPositionOnce(false);
         setNumberOfTurnsPlayedUpToNow(0);
+    }
+
+    public static int getInitialLifePoints() {
+        return INITIAL_LIFE_POINTS;
     }
 
     private void initializeUser(User user) {
@@ -67,7 +71,6 @@ public class Duel {
         hasChangedPositionOnce = false;
 
     }
-
 
     public User getRival() {
         if (userWhoPlaysNow.equals(FIRST_USER))
@@ -423,7 +426,11 @@ public class Duel {
     public User getUserWhoPlaysNow() {
         return userWhoPlaysNow;
     }
-    
+
+    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
+        this.userWhoPlaysNow = userWhoPlaysNow;
+    }
+
     public User getSECOND_USER() {
         return SECOND_USER;
     }
@@ -572,7 +579,6 @@ public class Duel {
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(placeOnBoard);
     }
 
-
     @Override
     public String toString() {
         return getRival().getNickname() + ":" + getRival().getLifePoints() +
@@ -597,14 +603,9 @@ public class Duel {
         this.numberOfTurnsPlayedUpToNow = numberOfTurnsPlayedUpToNow;
     }
 
-
     private void resetCards() {
         Card[] cards = userWhoPlaysNow.getBoard().getMonsters();
         Arrays.stream(cards).filter(Objects::nonNull).forEach(card -> ((Monster) card).setHasAttackedOnceInTurn(false));
-    }
-
-    public void setUserWhoPlaysNow(User userWhoPlaysNow) {
-        this.userWhoPlaysNow = userWhoPlaysNow;
     }
 }
 
