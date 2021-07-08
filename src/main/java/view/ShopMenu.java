@@ -32,7 +32,9 @@ import javafx.util.Duration;
 import model.User;
 import model.card.Card;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class ShopMenu implements Menuable {
+    public static HashMap<String , String> paths = new HashMap<>();
     public static ArrayList<String> cardsName;
     public TextField moneyCheat = new TextField();
     private HashMap<String, Label> countToUpdate = new HashMap<>();
@@ -63,7 +66,11 @@ public class ShopMenu implements Menuable {
             vBox.setAlignment(Pos.CENTER);
             vBox.setSpacing(20);
             Rectangle cardPicture = new Rectangle(100, 150);
-            cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm())));
+            try {
+                cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + name + ".jpg").toExternalForm())));
+            }catch (Exception e){
+                cardPicture.setFill(new ImagePattern(new Image(new FileInputStream(paths.get(name)))));
+            }
             cardPicture.setOnMouseEntered(event -> enlargeCardPicture(cardPicture, event));
             vBox.getChildren().add(cardPicture);
             addLabelsToVBox(name, vBox);

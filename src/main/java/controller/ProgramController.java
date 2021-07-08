@@ -38,6 +38,7 @@ public class ProgramController {
     public void run() throws IOException {
         DataController.createDirectories();
         allCards = DataController.getAllCards();
+        DataController.initializeEffectHolders();
         ProgramController.createNewScene(getClass().getResource("/FXMLs/entrance.fxml"));
         ProgramController.stage.show();
     }
@@ -53,10 +54,6 @@ public class ProgramController {
         Media media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
-    }
-
-    private String getCommand() {
-        return scanner.nextLine();
     }
 
 }

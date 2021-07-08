@@ -7,9 +7,9 @@ Change of Heart,Normal,Target 1 monster your opponent controls.  take control of
 Swords of Revealing Light,Normal,"After this card's activation, it remains on the field, but destroy it during the End Phase of your opponent's 3rd turn. When this card is activated: If your opponent controls a face-down monster, flip all monsters they control face-up. While this card is face-up on the field, your opponent's monsters cannot declare an attack.",Unlimited,2500,canChangeFaceOFOpponent=1_4*canMakeMonstersUndefeatable=1_4
 Harpie's Feather Duster,Normal,Destroy all Spells and Traps your opponent controls.,Limited,2500,canDestroyOpponentSpellAndTrap=6_0
 Dark Hole,Normal,Destroy all monsters on the field.,Unlimited,2500,canDestroyMyMonster=6_0*canDestroyOpponentMonster=6_0
-Supply Squad,Continuous,"Once per turn, if a monster(s) you control is destroyed by battle or card effect: Draw 1 card.",Unlimited,4000,canDrawACardWhenAMonsterIsDead=2_1
-Spell Absorption,Continuous,"Each time a Spell Card is activated, gain 500 Life Points immediately after it resolves.",Unlimited,4000,getLPForEverySpellActivation=501_1
-Messenger of peace,Continuous,"Monsters with 1500 or more ATK cannot declare an attack. Once per turn, during your Standby Phase, pay 100 LP or destroy this card.",Unlimited,4000,monstersCanNotAttack=1501_1*costLP=101_1
+Supply Squad,Continuous,"Once per turn, if a monster(s) you control is destroyed by battle or card effect: Draw 1 card.",Unlimited,4000,canDrawACardWhenAMonsterIsDead=2_0
+Spell Absorption,Continuous,"Each time a Spell Card is activated, gain 500 Life Points immediately after it resolves.",Unlimited,4000,getLPForEverySpellActivation=501_0
+Messenger of peace,Continuous,"Monsters with 1500 or more ATK cannot declare an attack. Once per turn, during your Standby Phase, pay 100 LP or destroy this card.",Unlimited,4000,monstersCanNotAttack=1501_1*costLP=101_0
 Twin Twisters,Quick_play,"Discard 1 card, then target up to 2 Spells/Traps on the field; destroy them.",Unlimited,3500,canDestroyOpponentSpellAndTrap=3_0*discardACardToActivate=2_0
 Mystical space typhoon,Quick_play,Target 1 Spell/Trap on the field.  destroy that target.,Unlimited,3500,canDestroyOpponentSpellAndTrap=2_0
 Ring of defense,Quick_play,When a Trap effect that inflicts damage is activated: Make that effect damage 0.,Unlimited,3500,negateTrap=1_0

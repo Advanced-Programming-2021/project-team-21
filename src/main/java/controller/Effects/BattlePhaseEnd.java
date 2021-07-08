@@ -12,7 +12,7 @@ public class BattlePhaseEnd {
             defense.getCanChangeTheAttackersATK().setNeedsToBeReset(true);
         }
         if (defense.getNotDestroyable().hasEffect()) {
-            if (defense.getNotDestroyable().getContinuousNumber() == 0) {
+            if (defense.getNotDestroyable().getContinuousNumber() == 1) {
                 defense.getNotDestroyable().finishEffect();
                 defense.getNotDestroyable().setNeedsToBeReset(true);
             }

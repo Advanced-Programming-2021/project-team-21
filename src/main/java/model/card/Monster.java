@@ -136,6 +136,33 @@ public class Monster extends Card {
         }
     }
 
+    public static ArrayList<String> getBoolean(String nameEffect) {
+        ArrayList<String>strings = new ArrayList<>();
+        if (nameEffect.equals("canKillTheAttacker")||
+        nameEffect.equals("alteringAttack") ||
+        nameEffect.equals("disableTrapSummon") ||
+        nameEffect.equals("canDestroyBothWithoutLosingLP") ||
+        nameEffect.equals("canIncreaseATK"))strings.add("isDeathEffect");
+        if (nameEffect.equals("canChangeTheAttackersATK")) strings.add("isChangeTurnEffect");
+        if (nameEffect.equals("canChangeTheAttackersATK") ||
+        nameEffect.equals("summonACardFromEveryWhere") ||
+        nameEffect.equals("undefeatable")) strings.add("isBattlePhaseEffectStart");
+        if (nameEffect.equals("canChangeTheAttackersATK")||
+        nameEffect.equals("notDestroyable"))strings.add("isBattlePhaseEffectEnd");
+        if (nameEffect.equals("canDestroyMonster"))strings.add("isFlipSummonEffect");
+        if (nameEffect.equals("canScan") ||
+        nameEffect.equals("canGetFromGYByLevelToHand"))strings.add("isSelectEffect");
+        if (nameEffect.equals("canDecreaseLP"))strings.add("isFlipSetEffect");
+        if (nameEffect.equals("canBeNotTribute") ||
+        nameEffect.equals("tributeToKillAllMonsterOfOpponent")||
+        nameEffect.equals("discardToSpecialSummon"))strings.add("isCanHaveDifferentTribute");
+        if (nameEffect.equals("alteringAttack") ||
+        nameEffect.equals("disableTrapSummon")||
+        nameEffect.equals("canSetFromDeckByMaxLevel")||
+        nameEffect.equals("canIncreaseATK"))strings.add("isSummonEffect");
+        return strings;
+    }
+
 
     public int getAtkHolder() {
         return atkHolder;

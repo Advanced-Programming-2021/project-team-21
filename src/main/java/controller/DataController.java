@@ -3,6 +3,8 @@ package controller;
 import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
+import controller.Effects.EffectsHolder;
 import model.AI;
 import model.Deck;
 import model.User;
@@ -12,8 +14,13 @@ import model.card.Spell;
 import model.card.Trap;
 import model.card.effects.Effect;
 import view.Regex;
+import view.ShopMenu;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -24,8 +31,9 @@ public class DataController {
             "src/main/resources/cards/Spell.csv",
             "src/main/resources/cards/Trap.csv"};
     private static final String USER_PATH = "src/main/resources/users";
-
-
+    public static EffectsHolder monster;
+    public static EffectsHolder spell;
+    public static EffectsHolder trap;
     public static ArrayList<User> getAllUsers() {
         String[] fileNames = getAllUserFileNames();
         ArrayList<User> allUsers = new ArrayList<>();
@@ -240,4 +248,91 @@ public class DataController {
     }
 
 
+    public static void initializeEffectHolders() {
+        extractMonsterJson();
+        extractSpellJson();
+        extractTrapJson();
+    }
+
+    private static void extractTrapJson() {
+        try {
+            StringBuilder data = getStringBuilder("TrapEffects");
+            trap = new Gson().fromJson(data.toString(), EffectsHolder.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void extractSpellJson() {
+        try {
+            StringBuilder data = getStringBuilder("SpellEffects");
+            spell = new Gson().fromJson(data.toString(), EffectsHolder.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void extractMonsterJson() {
+        try {
+            StringBuilder data = getStringBuilder("MonsterEffects");
+            monster = new Gson().fromJson(data.toString(), EffectsHolder.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void addSpellAndTrap(String where , String name , String group , String Description
+            , int price , String effects , File image){
+        setImage(name, image);
+        File file = new File("src/main/resources/cards/" + where + ".csv");
+        try {
+            FileWriter outfile = new FileWriter(file , true);
+            CSVWriter writer = new CSVWriter(outfile);
+            String[] data = { name, group, Description , "Unlimited" , String.valueOf(price) , effects };
+            writer.writeNext(data);
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setImage(String name, File image) {
+        Path oldFile
+                = image.toPath();
+        Path newFile = Paths.get("src/main/resources/images/cards/" + name + ".jpg");
+        try {
+            Files.copy(oldFile ,newFile  ,StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (IOException ignored) {
+        }
+        ShopMenu.paths.put(name , newFile.toString());
+    }
+
+    private static StringBuilder getStringBuilder(String where) throws FileNotFoundException {
+        File file = new File("src/main/resources/cards/" + where + ".json");
+        StringBuilder data = new StringBuilder();
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine())
+            data.append(scanner.nextLine());
+        return data;
+    }
+
+    public static void addMonster(String name, String level, String attribute, String monsterType, String effectsGroup,
+                                  int atk, int defense, String descriptions, int price, String booleans,
+                                  StringBuilder finalEffect, File image) {
+        setImage(name , image);
+        File file = new File("src/main/resources/cards/Monster.csv");
+        try {
+            FileWriter outfile = new FileWriter(file , true);
+            CSVWriter writer = new CSVWriter(outfile);
+            String[] data = { name, level,attribute , monsterType , effectsGroup ,
+                   String.valueOf(atk) , String.valueOf(defense),  descriptions, String.valueOf(price) ,booleans,
+                    finalEffect.toString() };
+            writer.writeNext(data);
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

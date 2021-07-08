@@ -1,6 +1,11 @@
 package model.card.effects;
 
+import javafx.util.Pair;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Effect {
     private int isEffect;
@@ -114,55 +119,22 @@ public class Effect {
         this.isEffect = isEffectHolder;
         this.isContinuous = isContinuousHolder;
     }
-    public static ArrayList<String> getEffectsWithNoSetter(){
-        ArrayList<String>effects = new ArrayList<>();
-        effects.add("isRitual");
-        effects.add("canKillTheAttacker");
-        effects.add("canScan");
-        effects.add("disableTrapSummon");
-        effects.add("canDestroyBothWithoutLosingLP");
-        effects.add("canControlOpponentMonster");
-        effects.add("negateTrap");
-        effects.add("canDestroyAll");
-        effects.add("canSummonFromGY");
-        effects.add("canNegateWholeAttack");
-        effects.add("canAttackLP");
-        effects.add("canNegateWholeAttack");
-        effects.add("negateASummon");
-        effects.add("negateSpellActivation");
-        effects.add("canSummonFromGY");
-        return effects;
-    }
-    public static ArrayList<String> getEffectsWithOneSetter(){
-        ArrayList<String>effects = new ArrayList<>();
+    public static ArrayList<String>getEffectsThatCanHaveMinusEntry(){
+        ArrayList<String> effects =  new ArrayList<>();
         effects.add("canChangeTheAttackersATK");
-        effects.add("canDestroyMonster");
-        effects.add("notDestroyable");
         effects.add("canDecreaseLP");
-        effects.add("canBeNotTribute");
-        effects.add("tributeToKillAllMonsterOfOpponent");
-        effects.add("undefeatable");
-        effects.add("canGetFromGYByLevelToHand");
-        effects.add("canSetFromDeckByMaxLevel");
-        effects.add("discardToSpecialSummon");
-        effects.add("canIncreaseATK");
-        effects.add("canAddFieldSpellFromDeck");
-        effects.add("canAddFromDeckToHand");
-        effects.add("canDestroyOpponentMonster");
-        effects.add("canChangeFaceOFOpponent");
-        effects.add("canMakeMonstersUndefeatable");
-        effects.add("canDestroyOpponentSpellAndTrap");
-        effects.add("canDestroyMyMonster");
-        effects.add("canDrawACardWhenAMonsterIsDead");
-        effects.add("getLPForEverySpellActivation");
-        effects.add("monstersCanNotAttack");
-        effects.add("costLP");
-        effects.add("discardACardToActivate");
-        effects.add("canDestroyMonsterSummonWithATK");
-        effects.add("canDestroyFromDeckAndHand");
-        effects.add("canNotDraw");
-        effects.add("discardACard");
-
+        effects.add("fieldSpellType1");
+        effects.add("fieldSpellType2");
+        effects.add("fieldSpellType3");
+        effects.add("fieldSpellType4");
+        effects.add("fieldSpellType5");
+        effects.add("fieldATKIncreaseGY1");
+        effects.add("fieldATKIncreaseGY2");
+        effects.add("equipCardNormal1");
+        effects.add("equipCardNormal2");
+        effects.add("equipCardNormal3");
+        effects.add("equipBasedMyUpMonsters");
+        effects.add("equipBasedOnPosition");
         return effects;
     }
 }

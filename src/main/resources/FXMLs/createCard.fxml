@@ -27,7 +27,7 @@
          </font>
       </MenuButton>
       <TextField fx:id="name" alignment="CENTER" layoutX="16.0" layoutY="66.0" prefHeight="32.0" prefWidth="120.0" promptText="Name" style="-fx-background-radius: 10" />
-      <TextField alignment="TOP_LEFT" layoutX="20.0" layoutY="125.0" prefHeight="120.0" prefWidth="291.0" promptText="Card Description">
+      <TextField fx:id="description" alignment="TOP_LEFT" layoutX="20.0" layoutY="125.0" prefHeight="120.0" prefWidth="291.0" promptText="Card Description" style="-fx-wrap-text: true">
          <font>
             <Font size="15.0" />
          </font></TextField>
@@ -41,7 +41,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="373.0" layoutY="318.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="179.0" styleClass="buttonEntrance" text="create">
+      <Button layoutX="373.0" layoutY="318.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="179.0" styleClass="buttonEntrance" text="create" onMouseClicked="#create" >
          <font>
             <Font size="20.0" />
          </font>
@@ -61,7 +61,8 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button layoutX="24.0" layoutY="318.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="155.0" styleClass="buttonEntrance" text="Back to main menu">
+      <Button layoutX="24.0" layoutY="318.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="155.0"
+              styleClass="buttonEntrance" text="Back to main menu" onMouseClicked="#back">
          <font>
             <Font size="14.0" />
          </font>

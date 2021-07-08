@@ -17,8 +17,7 @@
         <VBox alignment="TOP_CENTER" spacing="10" prefHeight="400"
               prefWidth="600"  id="mainVBox">
             <HBox spacing="100">
-                <Button text="Back" styleClass="buttonEntrance"/>
-                <ChoiceBox value="Groups" id="effectChoiceBox" styleClass="choice-box" minWidth="100"/>
+                <ChoiceBox  value="Groups" id="effectChoiceBox" styleClass="choice-box" minWidth="100"/>
             </HBox>
 
         </VBox>
