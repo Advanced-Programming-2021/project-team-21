@@ -52,6 +52,7 @@ public class ImportAndExport implements Menuable {
     }
 
     public void exportCard() {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         clearPreviousErrors();
         if (cardToExport == null) {
             ((Label) ProgramController.currentScene.lookup("#errorExport")).setText("*:You must fill these fields!");
@@ -67,6 +68,7 @@ public class ImportAndExport implements Menuable {
     }
 
     public void importCard() {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         clearPreviousErrors();
         if (cardToImport == null) {
             ((Label) ProgramController.currentScene.lookup("#errorImport")).setText("*:You must fill these fields!");
@@ -120,6 +122,7 @@ public class ImportAndExport implements Menuable {
 
 
     public void toExport() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         Stage stage = new Stage();
         Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/ChooseCardToExport.fxml"));
         Scene scene = new Scene(pane);
@@ -157,24 +160,32 @@ public class ImportAndExport implements Menuable {
     }
 
     public void back() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
 
 
     public void toImport(MouseEvent mouseEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Json Files (*.Json)",
-                "*.Json");
-        fileChooser.getExtensionFilters().add(extensionFilter);
-        fileChooser.setSelectedExtensionFilter(extensionFilter);
-        Stage stage = new Stage();
-        File json = fileChooser.showOpenDialog(stage);
-        cardToImport = json;
-        ((Label) ProgramController.currentScene.lookup("#cardImport")).setText("");
-        Rectangle cardPicture = ((Rectangle) ProgramController.currentScene.lookup("#imageImport"));
-        cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + DataController.importCardFromJson(cardToImport.getPath()).getName() + ".jpg").toExternalForm())));
-        cardPicture.setOnMouseEntered(event1 -> enlargeCardPicture(cardPicture, event1));
+        try {
+            ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Json Files (*.Json)",
+                    "*.Json");
+            fileChooser.getExtensionFilters().add(extensionFilter);
+            fileChooser.setSelectedExtensionFilter(extensionFilter);
+            Stage stage = new Stage();
+            File json = fileChooser.showOpenDialog(stage);
+            cardToImport = json;
+            ((Label) ProgramController.currentScene.lookup("#cardImport")).setText("");
+            Rectangle cardPicture = ((Rectangle) ProgramController.currentScene.lookup("#imageImport"));
+            cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + DataController.importCardFromJson(cardToImport.getPath()).getName() + ".jpg").toExternalForm())));
+            cardPicture.setOnMouseEntered(event1 -> enlargeCardPicture(cardPicture, event1));
+        }
+        catch (Exception e) {
+
+        }
+
     }
 }

@@ -101,15 +101,15 @@ public class LoginMenu implements Menuable {
     }
 
     public void goToSignup() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/signup.fxml"));
         ProgramController.stage.show();
     }
 
-    public void exitProgram() {
-        System.exit(0);
-    }
+    public void exitProgram() { System.exit(0); }
 
     public void passSignupInformationToCheck() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         if (!agreeToPolicies.isSelected()) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : You must agree to policies!");
@@ -131,11 +131,14 @@ public class LoginMenu implements Menuable {
     }
 
     public void backToEntrance() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/entrance.fxml"));
         ProgramController.stage.show();
     }
 
     public void policies() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/policies.fxml"));
         Scene scene = new Scene(pane);
         Stage stagePopUp = new Stage();
@@ -146,6 +149,7 @@ public class LoginMenu implements Menuable {
     }
 
     public void passLoginInformationToCheck() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         String commandLogin = "user login --username " + usernameLogin.getText() + " --password " + passwordLogin.getText();
         run(commandLogin);
     }

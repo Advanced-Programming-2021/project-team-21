@@ -147,6 +147,7 @@ public class ShopMenu implements Menuable {
     }
 
     private void buy(Card card) {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         User user = ProgramController.userInGame;
         ProgramController.userInGame.addCard(card);
         user.setCoins(user.getCoins() - (card != null ? card.getPrice() : 0));
@@ -160,11 +161,13 @@ public class ShopMenu implements Menuable {
     }
 
     public void back() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
 
     public void showIncreaseMoneyStage() {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UNDECORATED);
@@ -174,6 +177,7 @@ public class ShopMenu implements Menuable {
         amount.setPromptText("Amount");
         Button submitButton = new Button("Submit"), closeButton = new Button("Close");
         closeButton.setOnAction(e -> {
+            ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
             stage.close();
             ProgramController.currentScene.getRoot().setEffect(null);
         });
@@ -198,6 +202,7 @@ public class ShopMenu implements Menuable {
         hbox.setAlignment(Pos.BOTTOM_CENTER);
 
         submitButton.setOnAction(e -> {
+            ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
             increaseMoney(Integer.parseInt(amount.getText()));
             stage.close();
             ProgramController.currentScene.getRoot().setEffect(null);
