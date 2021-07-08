@@ -95,6 +95,7 @@ public class LoginMenu implements Menuable {
 
 
     public void goToLogin() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/login.fxml"));
         ProgramController.stage.show();
     }

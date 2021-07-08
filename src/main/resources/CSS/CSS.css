@@ -8,6 +8,11 @@
     -fx-background-size: cover;
 }
 
+.backgroundDuel {
+    -fx-background-image: url("../images/backgroundDuel.jpg");
+    -fx-background-size: cover;
+}
+
 .backgroundSignup {
     -fx-background-image: url("../images/signup.gif");
     -fx-background-size: cover;

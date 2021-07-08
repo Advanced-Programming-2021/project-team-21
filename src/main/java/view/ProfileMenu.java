@@ -90,7 +90,14 @@ public class ProfileMenu implements Menuable {
         ((Label) ProgramController.currentScene.lookup("#usernameProfile")).setText(" username : " + ProgramController.userInGame.getUsername());
         ProgramController.currentScene.lookup("#usernameProfile").setStyle("-fx-border-color: black; -fx-background-color: white;");
         ((TextField) ProgramController.currentScene.lookup("#nicknameProfile")).setText(ProgramController.userInGame.getNickname());
-        ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image((getClass().getResource(ProgramController.userInGame.getAvatar()).toExternalForm())));
+        try {
+            ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image((getClass().getResource(ProgramController.userInGame.getAvatar()).toExternalForm())));
+
+        }
+        catch (Exception e) {
+            ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image(ProgramController.userInGame.getAvatar()));
+
+        }
         ProgramController.stage.show();
     }
 
@@ -170,7 +177,12 @@ public class ProfileMenu implements Menuable {
         Stage stage = new Stage();
         File image;
         image = fileChooser.showOpenDialog(stage);
-        ProgramController.userInGame.setAvatar(image.getPath());
-        // todo
+        ProgramController.userInGame.setAvatar(image.toURI().toString());
+        ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image(image.toURI().toString()));
+        clearPreviousErrorsInProfileMenu();
+        ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("Profile image successfully changed!");
+        ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: green; -fx-background-color: white; -fx-text-fill: green;");
+
+
     }
 }

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundDuel" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.DuelMenu">
 
     <stylesheets>
@@ -126,4 +126,7 @@
         <ListView id="ownHandListView" layoutX="10.0" layoutY="10.0" orientation="HORIZONTAL" prefHeight="66.0"
                   prefWidth="467.0"/>
     </VBox>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css" />
+    </stylesheets>
 </AnchorPane>
