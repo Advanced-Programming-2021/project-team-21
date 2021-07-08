@@ -257,6 +257,7 @@ public class DeckMenu implements Menuable {
 
 
     public void createDeck() {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UNDECORATED);
@@ -265,7 +266,10 @@ public class DeckMenu implements Menuable {
         name.setMaxWidth(150);
         name.setPromptText("Name");
         Button submitButton = new Button("Submit"), closeButton = new Button("Close");
-        closeButton.setOnAction(e -> stage.close());
+        closeButton.setOnAction(e -> {
+            stage.close();
+            ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        });
         closeButton.getStyleClass().add("buttonEntrance");
         submitButton.getStyleClass().add("buttonEntrance");
         Platform.runLater(submitButton::requestFocus);
@@ -287,6 +291,7 @@ public class DeckMenu implements Menuable {
         hbox.setAlignment(Pos.BOTTOM_CENTER);
 
         submitButton.setOnAction(e -> {
+            ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
             if (canCreateDeck(name.getText())) {
                 createNewDeck(name.getText());
                 stage.close();
@@ -307,6 +312,7 @@ public class DeckMenu implements Menuable {
 
 
     public void goToMainMenu() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
         ProgramController.stage.show();

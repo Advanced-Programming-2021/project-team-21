@@ -93,6 +93,7 @@ public class ScoreBoard implements Menuable {
     }
 
     public void handleBackToMenu() throws IOException {
+        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
         ProgramController.stage.show();
     }
