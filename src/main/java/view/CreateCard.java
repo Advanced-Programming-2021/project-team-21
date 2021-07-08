@@ -3,24 +3,27 @@ package view;
 import controller.DataController;
 import controller.Effects.EffectsHolder;
 import controller.ProgramController;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import model.card.Card;
 import model.card.Monster;
 import model.card.Spell;
@@ -35,27 +38,32 @@ import java.util.*;
 
 public class CreateCard implements Menuable {
     public TextField description;
-    Scene sceneSave;
     public Label Name;
     public MenuButton cardType;
     public AnchorPane cardCreator;
     public TextField name;
+    Scene sceneSave;
     int atk;
     int defense;
     TextField atkSet;
     TextField defenseSet;
     ChoiceBox<String> monsterTypes;
-    ChoiceBox<String>attribute;
+    ChoiceBox<String> attribute;
     File image;
     Stage effectsStage;
-    private String cardTypeString;
-    private int price;
-    private int priceEffect;
-    private HashMap<String , String >chosenEffects;
     EffectsHolder effectsHolder;
     StringBuilder finalEffect;
     String effectsGroup;
-    HashMap<TextField , Integer> setters;
+    HashMap<TextField, Integer> setters;
+    private String cardTypeString;
+    private int price;
+    private int priceEffect;
+    private HashMap<String, String> chosenEffects;
+    private final ArrayList<Animation> delays = new ArrayList<>();
+    private final ArrayList<Stage> stages = new ArrayList<>();
+    private boolean canShowDetail = true;
+
+
     {
         finalEffect = new StringBuilder();
         setters = new HashMap<>();
@@ -87,28 +95,28 @@ public class CreateCard implements Menuable {
             Scene scene = new Scene(parent);
             sceneSave = scene;
             effectsStage.setScene(scene);
+            effectsStage.setResizable(false);
             effectsStage.setTitle("Effects");
-            effectsStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    ButtonType aContinue = new ButtonType("continue");
-                    ButtonType exit = new ButtonType("exit");
-                    ButtonType save = new ButtonType("save");
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                            "If you exit now your progress will not be saved",
-                            aContinue, exit , save);
-                    alert.setTitle("Game");
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.isPresent() && result.get() == exit) {
-                        effectsStage.close();
-                    } else if (result.isPresent() && result.get() == save) {
-                        event.consume();
-                        saveEffects();
-                        effectsStage.close();
-                    }
-                    else {
-                        event.consume();
-                    }
+            effectsStage.getScene().addEventFilter(MouseEvent.MOUSE_MOVED, event2 -> closeAllStages());
+
+            effectsStage.setOnCloseRequest(event1 -> {
+                ButtonType aContinue = new ButtonType("continue");
+                ButtonType exit = new ButtonType("exit");
+                ButtonType save = new ButtonType("save");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        "If you exit now your progress will not be saved",
+                        aContinue, exit, save);
+                alert.initStyle(StageStyle.UNDECORATED);
+                alert.getDialogPane().getStylesheets().add(getClass().getResource("/CSS/CSS.css").toExternalForm());
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == exit) {
+                    effectsStage.close();
+                } else if (result.isPresent() && result.get() == save) {
+                    event1.consume();
+                    saveEffects();
+                    effectsStage.close();
+                } else {
+                    event1.consume();
                 }
             });
             effectsStage.show();
@@ -142,22 +150,28 @@ public class CreateCard implements Menuable {
 
     private void getEffectVBox(VBox mainVBox, String effect) {
         VBox effectVbox = new VBox();
+        effectVbox.setSpacing(15);
+        effectVbox.setAlignment(Pos.CENTER);
         HBox textFieldsHBox = new HBox();
+        textFieldsHBox.setAlignment(Pos.CENTER);
         CheckBox checkBox = new CheckBox();
         checkBox.setText(effect);
+        checkBox.setPrefWidth(300);
+        checkBox.setStyle("-fx-text-fill: white");
+        effectVbox.setOnMouseEntered(event -> showDetails(effect, event));
         checkBox.setOnAction(event -> {
-            if (checkBox.isSelected()){
+            if (checkBox.isSelected()) {
                 for (TextField setter : setters.keySet()) {
-                    if (setter.getText().equals("")){
-                        alert("Error!" , "You should enter all the fields of an effect" +
+                    if (setter.getText().equals("")) {
+                        alert("You should enter all the fields of an effect" +
                                 " before checking another one");
                         checkBox.setSelected(false);
                         return;
                     }
                 }
             }
-            if (effectsHolder.getDescription().get(checkBox.getText()).get(0).equals("")){
-                checkIsEffectFinished(checkBox , textFieldsHBox);
+            if (effectsHolder.getDescription().get(checkBox.getText()).get(0).equals("")) {
+                checkIsEffectFinished(checkBox, textFieldsHBox);
             }
             checkBoxAction(checkBox);
         });
@@ -168,18 +182,14 @@ public class CreateCard implements Menuable {
             textField.setPrefHeight(5);
             textField.setEffect(new GaussianBlur());
             int finalJ = j;
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    if (textField.isDisable())return;
-                    if (textField.getText().equals(""))setters.remove(textField);
-                    else setters.put(textField , finalJ);
-                    if (event.getCode().equals(KeyCode.ENTER))
-                    {
-                        checkIsEffectFinished(checkBox , textFieldsHBox);
-                    }
-                    findOutPrice( textField);
+            textField.setOnKeyReleased(event -> {
+                if (textField.isDisable()) return;
+                if (textField.getText().equals("")) setters.remove(textField);
+                else setters.put(textField, finalJ);
+                if (event.getCode().equals(KeyCode.ENTER)) {
+                    checkIsEffectFinished(checkBox, textFieldsHBox);
                 }
+                findOutPrice(textField);
             });
             textFieldsHBox.getChildren().add(textField);
         }
@@ -190,53 +200,54 @@ public class CreateCard implements Menuable {
     private void checkIsEffectFinished(CheckBox checkBox, HBox textFieldsHBox) {
         for (Node child : textFieldsHBox.getChildren()) {
             TextField textField = (TextField) child;
-            if (!textField.isDisable() && textField.getText().equals(""))return;
+            if (!textField.isDisable() && textField.getText().equals("")) return;
         }
         String effectName = checkBox.getText();
-        if (checkForValidEntry(effectName , textFieldsHBox)){
-            alert("Error!" , "You should enter a valid entry otherwise the effect will not be created");
+        if (checkForValidEntry(effectName, textFieldsHBox)) {
+            alert("You should enter a valid entry otherwise the effect will not be created");
             return;
         }
         StringBuilder effect = new StringBuilder(effectName + "=");
         for (int i = 0; i < textFieldsHBox.getChildren().size(); i++) {
-            if (effectsHolder.getDescription().get(effectName).get(0).equals("")){
+            if (effectsHolder.getDescription().get(effectName).get(0).equals("")) {
                 effect.append("1_0");
                 break;
             }
             TextField textField = (TextField) textFieldsHBox.getChildren().get(i);
-            if (textField.isDisable())continue;
-            if (effectsHolder.getDescription().get(effectName).size() == 1){
-                if (effectName.equals("summonACardFromEveryWhere")){
+            if (textField.isDisable()) continue;
+            if (effectsHolder.getDescription().get(effectName).size() == 1) {
+                if (effectName.equals("summonACardFromEveryWhere")) {
                     effect.append("1_\"0\"_\"").append(textField.getText()).append("\"");
                 }
-                if (effectName.equals("notDestroyable") || effectName.equals("undefeatable")||
-                effectName.equals("canChangeFaceOFOpponent") || effectName.equals("canMakeMonstersUndefeatable")){
+                if (effectName.equals("notDestroyable") || effectName.equals("undefeatable") ||
+                        effectName.equals("canChangeFaceOFOpponent") || effectName.equals("canMakeMonstersUndefeatable")) {
                     effect.append("1_").append(Integer.parseInt(textField.getText()) + 1);
-                }else {
+                } else {
                     effect.append(Integer.parseInt(textField.getText()) + 1).append("_0");
                 }
-            }else if (effectsHolder.getDescription().get(effectName).size() == 2){
+            } else if (effectsHolder.getDescription().get(effectName).size() == 2) {
                 effect.append(Integer.parseInt(textField.getText()) + 1);
                 if (i == 0) effect.append("_");
-            }else {
-                if (i!= 2)effect.append(Integer.parseInt(textField.getText() + 1)).append("_");
+            } else {
+                if (i != 2) effect.append(Integer.parseInt(textField.getText() + 1)).append("_");
                 else effect.append("\"").append(textField.getText()).append("\"");
             }
         }
-        chosenEffects.put(effectName , effect.toString());
+        chosenEffects.put(effectName, effect.toString());
     }
+
     private boolean checkForValidEntry(String effectName, HBox textFieldsHBox) {
         for (Node child : textFieldsHBox.getChildren()) {
             TextField textField = (TextField) child;
-            if (textField.isDisable())continue;
-            if (!textField.getText().matches("-?\\d+" )&& !textField.getPromptText().equals("type")){
+            if (textField.isDisable()) continue;
+            if (!textField.getText().matches("-?\\d+") && !textField.getPromptText().equals("type")) {
                 return true;
             }
-            if (textField.getPromptText().equals("type") && !textField.getText().matches("[A-Za-z -]")&&
-            !checkForMonsterType(textField.getText())){
+            if (textField.getPromptText().equals("type") && !textField.getText().matches("[A-Za-z -]") &&
+                    !checkForMonsterType(textField.getText())) {
                 return true;
             }
-            if (!textField.getPromptText().equals("type") &&Integer.parseInt(textField.getText()) < 0 &&
+            if (!textField.getPromptText().equals("type") && Integer.parseInt(textField.getText()) < 0 &&
                     !Effect.getEffectsThatCanHaveMinusEntry().contains(effectName)) {
                 return true;
             }
@@ -248,34 +259,35 @@ public class CreateCard implements Menuable {
         return MonsterTypes.monsterTypes().contains(text);
     }
 
-    private void findOutPrice( TextField textField) {
+    private void findOutPrice(TextField textField) {
         int wholePrice = 0;
         for (TextField setter : setters.keySet()) {
-            int number = effectsHolder.getPrice().get(((CheckBox)((VBox)setter.getParent().getParent()).getChildren().get(0)).getText()).get(setters.get(setter));
-            if (setter.getText().matches("\\d+")){
+            int number = effectsHolder.getPrice().get(((CheckBox) ((VBox) setter.getParent().getParent()).getChildren().get(0)).getText()).get(setters.get(setter));
+            if (setter.getText().matches("\\d+")) {
                 wholePrice += number * Integer.parseInt(setter.getText());
             }
         }
-        changePrice(String.valueOf(wholePrice) ,"effect" );
+        changePrice(String.valueOf(wholePrice), "effect");
     }
 
     private void checkBoxAction(CheckBox checkBox) {
         for (int i = 0; i < ((HBox) checkBox.getParent().getChildrenUnmodifiable().get(1)).getChildren().size(); i++) {
             TextField textField = (TextField) ((HBox) checkBox.getParent().getChildrenUnmodifiable().
                     get(1)).getChildren().get(i);
-            if (i >= effectsHolder.getDescription().get(checkBox.getText()).size())continue;
+            if (i >= effectsHolder.getDescription().get(checkBox.getText()).size()) continue;
             if (effectsHolder.getDescription().get(checkBox.getText()).get(i).equals("") ||
-                    checkBox.getText().equals("summonACardFromEveryWhere")){
-               if (checkBox.isSelected()) changePrice(String.valueOf(effectsHolder.getPrice().get(checkBox.getText()).get(0)) , "one");
-               else  changePrice(String.valueOf(-effectsHolder.getPrice().get(checkBox.getText()).get(0)) , "one");
-               if (!checkBox.getText().equals("summonACardFromEveryWhere"))continue;
+                    checkBox.getText().equals("summonACardFromEveryWhere")) {
+                if (checkBox.isSelected())
+                    changePrice(String.valueOf(effectsHolder.getPrice().get(checkBox.getText()).get(0)), "one");
+                else changePrice(String.valueOf(-effectsHolder.getPrice().get(checkBox.getText()).get(0)), "one");
+                if (!checkBox.getText().equals("summonACardFromEveryWhere")) continue;
             }
             textField.setPromptText(effectsHolder.getDescription().get(checkBox.getText()).get(i));
-            if (checkBox.isSelected()){
+            if (checkBox.isSelected()) {
                 textField.setDisable(false);
                 textField.setEffect(null);
-                setters.put(textField , i);
-            }else {
+                setters.put(textField, i);
+            } else {
                 textField.setDisable(true);
                 textField.setEffect(new GaussianBlur());
                 setters.remove(textField);
@@ -303,7 +315,7 @@ public class CreateCard implements Menuable {
     public void setMonster(ActionEvent actionEvent) {
         cardType.setText(((MenuItem) actionEvent.getSource()).getText());
         atkSet = new TextField();
-        setTextField(atkSet, 15.0, "Attack");
+        setTextField(atkSet, 20.0, "Attack");
         defenseSet = new TextField();
         setTextField(defenseSet, 105.0, "Defense");
         cardCreator.getChildren().add(atkSet);
@@ -314,21 +326,21 @@ public class CreateCard implements Menuable {
         }
         monsterTypes.setValue("Monster type");
         monsterTypes.setLayoutX(195.0);
-        monsterTypes.setLayoutY(100.0);
+        monsterTypes.setLayoutY(110.0);
         cardCreator.getChildren().add(monsterTypes);
         attribute = new ChoiceBox<>();
         for (String type : Attributes.getAttributes()) {
             attribute.getItems().add(type);
         }
         attribute.setValue("Attribute");
-        attribute.setLayoutX(305.0);
-        attribute.setLayoutY(100.0);
+        attribute.setLayoutX(320.0);
+        attribute.setLayoutY(110.0);
         cardCreator.getChildren().add(attribute);
     }
 
     private void setTextField(TextField setter, double v, String text) {
         setter.setLayoutX(v);
-        setter.setLayoutY(100.0);
+        setter.setLayoutY(110.0);
         setter.setPrefHeight(10.0);
         setter.setPrefWidth(75.0);
         setter.setPromptText(text);
@@ -343,16 +355,15 @@ public class CreateCard implements Menuable {
                 else defense = Integer.parseInt(text);
                 price = (int) getNumber(atk) + (int) getNumber(defense) + priceEffect;
             } catch (Exception e) {
-                alert("Error!", "Enter a valid number for Attack and Defense");
+                alert("Enter a valid number for Attack and Defense");
             }
-        }else if(type.equals("one")){
+        } else if (type.equals("one")) {
             price += Integer.parseInt(text);
-        }
-        else {
+        } else {
             price -= priceEffect;
             priceEffect = Integer.parseInt(text);
             price += priceEffect;
-            price = Math.max(0 , price);
+            price = Math.max(0, price);
         }
     }
 
@@ -373,15 +384,16 @@ public class CreateCard implements Menuable {
 
     private boolean errorNotChosen() {
         if (cardType.getText().equals("card type")) {
-            alert("Error!", "Please choose the card type first");
+            alert("Please choose the card type first");
             return true;
         }
         return false;
     }
 
-    private void alert(String header, String context) {
+    private void alert(String context) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setHeaderText(header);
+        errorAlert.initStyle(StageStyle.UNDECORATED);
+        errorAlert.getDialogPane().getStylesheets().add(getClass().getResource("/CSS/CSS.css").toExternalForm());
         errorAlert.setContentText(context);
         errorAlert.showAndWait();
     }
@@ -399,7 +411,7 @@ public class CreateCard implements Menuable {
     public void saveEffects() {
         for (int i = 0; i < chosenEffects.keySet().size(); i++) {
             finalEffect.append(chosenEffects.get((String) chosenEffects.keySet().toArray()[i]));
-            if ( i != chosenEffects.size() - 1)finalEffect.append("*");
+            if (i != chosenEffects.size() - 1) finalEffect.append("*");
         }
     }
 
@@ -407,29 +419,29 @@ public class CreateCard implements Menuable {
         if (name.getText().equals("") || cardType.getText().equals("card type") || image == null ||
                 description.getText().equals("") || (cardType.getText().equals("Monster") &&
                 (atkSet.getText().equals("") || defenseSet.getText().equals("") ||
-                        monsterTypes.getValue().equals("Monster type") || attribute.getValue().equals("Attribute")) )
+                        monsterTypes.getValue().equals("Monster type") || attribute.getValue().equals("Attribute")))
                 || ((!cardType.getText().equals("Monster")) &&
-                finalEffect.length() == 0)){
-            alert("Error" , "you have not set all the attributes");
+                finalEffect.length() == 0)) {
+            alert("you have not set all the attributes");
             return;
         }
-        if (ProgramController.userInGame.getCoins() < price){
-            alert("Error!" , "You do not have enough coins to create this card");
+        if (ProgramController.userInGame.getCoins() < price) {
+            alert("You do not have enough coins to create this card");
             return;
         }
-        if (Card.getCardByName(name.getText()) != null){
-            alert("Error!" , "There is card with this name in the game");
+        if (Card.getCardByName(name.getText()) != null) {
+            alert("There is card with this name in the game");
             return;
         }
-        if (!cardType.getText().equals("Monster")){
-            DataController.addSpellAndTrap(cardTypeString , name.getText() , effectsGroup , description.getText() ,
-                    price , finalEffect.toString() , image);
-        }else{
-            if (finalEffect.length() == 0)effectsGroup = "Normal";
+        if (!cardType.getText().equals("Monster")) {
+            DataController.addSpellAndTrap(cardTypeString, name.getText(), effectsGroup, description.getText(),
+                    price, finalEffect.toString(), image);
+        } else {
+            if (finalEffect.length() == 0) effectsGroup = "Normal";
             getBooleans(finalEffect);
-            DataController.addMonster(name.getText() , getLevel(atkSet , defenseSet) , attribute.getValue(),
-                    monsterTypes.getValue() , effectsGroup , atk , defense , description.getText() , price ,
-                    getBooleans(finalEffect) , finalEffect , image );
+            DataController.addMonster(name.getText(), getLevel(atkSet, defenseSet), attribute.getValue(),
+                    monsterTypes.getValue(), effectsGroup, atk, defense, description.getText(), price,
+                    getBooleans(finalEffect), finalEffect, image);
         }
         ProgramController.userInGame.setCoins(ProgramController.userInGame.getCoins() - price);
         ProgramController.allCards = DataController.getAllCards();
@@ -437,9 +449,9 @@ public class CreateCard implements Menuable {
 
     private String getBooleans(StringBuilder finalEffect) {
         String[] effects = finalEffect.toString().split("\\*");
-        ArrayList<String>booleanMap = new ArrayList<>();
+        ArrayList<String> booleanMap = new ArrayList<>();
         for (String effect : effects) {
-            String nameEffect = effect.replaceAll("=-?\\d+_-?\\d+" , "");
+            String nameEffect = effect.replaceAll("=-?\\d+_-?\\d+", "");
             booleanMap.addAll(Monster.getBoolean(nameEffect));
         }
         StringBuilder booleanCSV = new StringBuilder();
@@ -448,18 +460,51 @@ public class CreateCard implements Menuable {
         booleanMap.addAll(set);
         for (int i = 0; i < booleanMap.size(); i++) {
             booleanCSV.append(booleanMap.get(i));
-            if (i != booleanMap.size() - 1)booleanCSV.append("-");
+            if (i != booleanMap.size() - 1) booleanCSV.append("-");
         }
         return booleanCSV.toString();
     }
 
     private String getLevel(TextField atkSet, TextField defenseSet) {
-    int atk = Integer.parseInt(atkSet.getText()) , def = Integer.parseInt(defenseSet.getText());
-    return String.valueOf(((atk + def)/750) + 1);
+        int atk = Integer.parseInt(atkSet.getText()), def = Integer.parseInt(defenseSet.getText());
+        return String.valueOf(((atk + def) / 750) + 1);
     }
 
-    public void back(MouseEvent event) throws IOException {
+    public void back() throws IOException {
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
+
+    private void showDetails(String effectName, MouseEvent mouseEvent) {
+        if (!canShowDetail)
+            return;
+        Animation delay = new PauseTransition(Duration.seconds(1));
+        Stage stage = new Stage();
+        stage.setX(mouseEvent.getScreenX());
+        stage.setY(mouseEvent.getScreenY());
+        stage.initStyle(StageStyle.UNDECORATED);
+        BorderPane borderPane = new BorderPane();
+        Scene scene = new Scene(borderPane, 150, 100);
+        delay.setOnFinished(e -> {
+            delays.forEach(Animation::stop);
+            stages.forEach(Stage::close);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String s : DataController.monster.getDescription().get(effectName)) {
+                stringBuilder.append(s);
+            }
+            Label description = new Label(stringBuilder.toString());
+            borderPane.setCenter(description);
+            stage.setScene(scene);
+            stage.show();
+            stages.add(stage);
+            delays.add(delay);
+        });
+        delay.play();
+        ((VBox)mouseEvent.getSource()).setOnMouseExited(event -> delay.stop());
+    }
+
+    public void closeAllStages() {
+        stages.forEach(Stage::close);
+    }
+
 }
