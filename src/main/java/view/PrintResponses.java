@@ -1,9 +1,11 @@
 package view;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import model.Deck;
 import model.Duel;
 import model.Hand;
@@ -483,23 +485,26 @@ public class PrintResponses {
     }
 
     public static void showInformation(String informationContent){
-        Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-        errorAlert.initStyle(StageStyle.UNDECORATED);
-        errorAlert.getDialogPane().getStylesheets()
+        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+        informationAlert.initStyle(StageStyle.UNDECORATED);
+        informationAlert.getDialogPane().getStylesheets()
                 .add(Objects.requireNonNull(PrintResponses.class.getResource("/CSS/CSS.css")).toExternalForm());
-        errorAlert.setContentText(informationContent);
-        errorAlert.show();
+        informationAlert.setContentText(informationContent);
+        informationAlert.show();
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished( event -> informationAlert.close() );
+        delay.play();
     }
 
 
     public static boolean showConfirmation(String confirmationContent){
-        Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        errorAlert.initStyle(StageStyle.UNDECORATED);
-        errorAlert.getDialogPane().getStylesheets()
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.initStyle(StageStyle.UNDECORATED);
+        confirmationAlert.getDialogPane().getStylesheets()
                 .add(Objects.requireNonNull(PrintResponses.class.getResource("/CSS/CSS.css")).toExternalForm());
-        errorAlert.setContentText(confirmationContent);
-        errorAlert.showAndWait();
-        return errorAlert.getResult() == ButtonType.OK || errorAlert.getResult() == ButtonType.YES;
+        confirmationAlert.setContentText(confirmationContent);
+        confirmationAlert.showAndWait();
+        return confirmationAlert.getResult() == ButtonType.OK || confirmationAlert.getResult() == ButtonType.YES;
     }
 
     public static void printWrongChoice() {
