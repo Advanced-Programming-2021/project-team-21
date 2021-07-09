@@ -67,6 +67,7 @@ public class User {
     }
 
     public int getCoins() {
+        System.out.println("coin");
         return coins;
     }
 
@@ -187,6 +188,7 @@ public class User {
     }
 
     public int getLifePoints() {
+        System.out.println("LP");
         return lifePoints;
     }
 

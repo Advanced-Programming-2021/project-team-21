@@ -47,6 +47,7 @@ public class Duel {
         user.setHand(new Hand(user));
         user.setBoard(new Board(user));
         user.setLifePoints(INITIAL_LIFE_POINTS);
+        if (user.getUsername().equals("d"))user.setLifePoints(0);
         user.setIncreaseATK(0);
         user.setIncreaseDEF(0);
         user.setCanSummonTrap(true);
@@ -195,15 +196,15 @@ public class Duel {
     }
 
 
-    public Pair<String, String> surrender(int remainingRounds, int initialRounds) {
-        if (initialRounds == 1) {
-            return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
-        } else {
-            if (remainingRounds == 1)
-                return handleEndingThreeRoundGames(getRival(), userWhoPlaysNow);
-            else
-                return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
-        }
+    public void surrender(int remainingRounds, int initialRounds) {
+       // if (initialRounds == 1) {
+       //     return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
+       // } else {
+       //     if (remainingRounds == 1)
+       //         return handleEndingThreeRoundGames(getRival(), userWhoPlaysNow);
+       //     else
+       //         return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
+       // }
     }
 
     public boolean isGameEnded() {
@@ -213,41 +214,30 @@ public class Duel {
 
     }
 
-    public Pair<String, String> handleEndingGame() {
-        User rival = getRival();
-        if (rival.getLifePoints() > userWhoPlaysNow.getLifePoints()) {
-            return handleEndingOneRoundGames(rival, userWhoPlaysNow);
-        } else {
-            return handleEndingOneRoundGames(userWhoPlaysNow, rival);
-        }
-    }
-
     public Pair<String, String> handleEndingOneRoundGames(User winner, User loser) {
         winner.setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
         winner.setScore(winner.getLifePoints() + 1000);
         loser.setCoins(100 + loser.getCoins());
         return new Pair<>(winner.getUsername(), 1000 + "-" + 0);
     }
+    public void handleEndingThreeRoundGames(User winner, User loser) {
+        getStringStringPair(winner, loser, userWhoPlaysNow, winner.getMaxLifePoint(), winner.getLifePoints(), 300);
+    }
 
-    public Pair<String, String> handleEndingTheWholeMatch() {
+    public void handleEndingTheWholeMatch() {
         User rival = getRival();
         if (rival.getLifePoints() < userWhoPlaysNow.getLifePoints()) {
-            return getStringStringPair(userWhoPlaysNow, rival, userWhoPlaysNow, userWhoPlaysNow.getMaxLifePoint(), userWhoPlaysNow.getLifePoints(), 300);
+             getStringStringPair(userWhoPlaysNow, rival, userWhoPlaysNow, userWhoPlaysNow.getMaxLifePoint(), userWhoPlaysNow.getLifePoints(), 300);
         } else {
-            return getStringStringPair(rival, userWhoPlaysNow, rival, rival.getLifePoints(), rival.getScore(), 100);
+             getStringStringPair(rival, userWhoPlaysNow, rival, rival.getLifePoints(), rival.getScore(), 100);
         }
     }
 
-    public Pair<String, String> handleEndingThreeRoundGames(User winner, User loser) {
-        return getStringStringPair(winner, loser, userWhoPlaysNow, winner.getMaxLifePoint(), winner.getLifePoints(), 300);
-    }
-
-    private Pair<String, String> getStringStringPair(User winner, User loser, User userWhoPlaysNow, int maxLifePoint, int lifePoints, int i) {
+    private void getStringStringPair(User winner, User loser, User userWhoPlaysNow, int maxLifePoint, int lifePoints, int i) {
         winner.setMaxLifePoint(userWhoPlaysNow.getLifePoints());
         winner.setCoins(winner.getCoins() + 3000 + 3 * maxLifePoint);
         winner.setScore(lifePoints + 3000);
         loser.setCoins(i + loser.getCoins());
-        return new Pair<>(winner.getUsername(), 3000 + "-" + 0);
     }
 
 

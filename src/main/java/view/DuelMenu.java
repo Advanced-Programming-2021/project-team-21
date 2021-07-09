@@ -19,12 +19,10 @@ import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.LineTo;
@@ -60,8 +58,8 @@ public class DuelMenu implements Menuable {
     public static boolean isForSet;
     public static boolean isGetFroOpponentGY;
     private final Delta delta = new Delta();
-    private final Stage firstUserStage = new Stage();
-    private final Stage secondUserStage = new Stage();
+    private Stage firstUserStage = new Stage();
+    private Stage secondUserStage = new Stage();
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
     private Duel currentDuel;
@@ -250,6 +248,7 @@ public class DuelMenu implements Menuable {
         }
         User secondPlayer = User.getUserByUsername(otherPlayerUsername);
         initialRounds = remainingRounds;
+        this.remainingRounds = remainingRounds;
         if (ProgramController.userInGame.getActiveDeck() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printHasNoActiveDeck(ProgramController.userInGame));
             alert.showAndWait();
@@ -269,6 +268,7 @@ public class DuelMenu implements Menuable {
 
     private void createNewDuelWithAI(int remainingRounds) {
         initialRounds = remainingRounds;
+        this.remainingRounds = remainingRounds;
         if (ProgramController.userInGame.getActiveDeck() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR, PrintResponses.printHasNoActiveDeck(ProgramController.userInGame));
             alert.showAndWait();
@@ -338,22 +338,158 @@ public class DuelMenu implements Menuable {
         PrintResponses.printPhaseName(phase);
     }
 
-    public void endTheGame() {
+    public void endTheGame()  {
         remainingRounds--;
+        Stage stage = getStage();
+        Label label = getLabel();
+        AnchorPane b = new AnchorPane();
+        HBox hBox = gethBox();
+        ImageView first = getImageView(currentDuel.getFIRST_USER());
+        ImageView second = getImageView(currentDuel.getSECOND_USER());
+        b.getChildren().add(label);
+        Scene scene = getScene(b);
+        stage.setScene(scene);
+        User winner = getUser(currentDuel.getFIRST_USER() , currentDuel.getSECOND_USER() , true);
+        User loser = getUser(currentDuel.getFIRST_USER() , currentDuel.getSECOND_USER() , false);
         if (remainingRounds == 0) {
             if (initialRounds == 1)
-                PrintResponses.printEndingTheGame(currentDuel.handleEndingGame());
+            {
+                System.out.println(1);
+                System.out.println(winner.getUsername());
+                System.out.println(2);
+                label.setText("  I won and got \n " + (1000 +  winner.getLifePoints()) + " coins but\n you lost Ha Ha");
+                if (winner == currentDuel.getSECOND_USER()){
+                    hBox.getChildren().add(second);
+                    hBox.getChildren().add(first);
+                }else {
+                    hBox.getChildren().add(first);
+                    hBox.getChildren().add(second);
+                }
+                oneRound(winner, loser);
+            }
             else
-                PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingTheWholeMatch());
-            currentDuel = null;
+            {
+                label.setText("  Nice match but\nat last I won\nand got " +
+                        (winner.getCoins() + 3000 + 3 * winner.getMaxLifePoint()) + " coins");
+                if (winner == currentDuel.getSECOND_USER()){
+                        hBox.getChildren().add(second);
+                    hBox.getChildren().add(first);
+                }else {
+                    hBox.getChildren().add(first);
+                    hBox.getChildren().add(second);
+                }
+                currentDuel.handleEndingTheWholeMatch();
+            }
+            endStage(stage, b, hBox);
+               currentDuel = null;
         } else {
-            User winner = currentDuel.handleEndingARound();
-            PrintResponses.printWinnerInRound(winner);
-            if (winner.getWinsInAMatch() == 2) {
+            User winnerRound = currentDuel.handleEndingARound();
+            label.setText("   What a game\nAny way i won this round\nsee you in next one" );
+            if (winnerRound == currentDuel.getSECOND_USER()){
+                hBox.getChildren().add(second);
+                hBox.getChildren().add(first);
+            }else {
+                hBox.getChildren().add(first);
+                hBox.getChildren().add(second);
+            }
+            if (winnerRound.getWinsInAMatch() == 2) {
                 endTheGame();
             } else
-                handleSuccessfulGameCreation(ProgramController.userInGame, currentDuel.getSECOND_USER());
+            {
+                firstUserStage.close();
+                firstUserStage = new Stage();
+                secondUserStage = new Stage();
+                ProgramController.stage.show();
+                showCoinFlipping(loser , winner);
+            }
         }
+    }
+
+    private void oneRound(User winner, User loser) {
+        System.out.println("check0");
+        int number = winner.getCoins();
+        int tester = winner.getLifePoints();
+        currentDuel.getSECOND_USER().setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
+        System.out.println("check1");
+        winner.setScore(winner.getLifePoints() + 1000);
+        System.out.println("check2");
+        loser.setCoins(100 + loser.getCoins());
+        System.out.println("check3");
+    }
+
+    private void endStage(Stage stage, AnchorPane b, HBox hBox) {
+        b.getChildren().add(hBox);
+        System.out.println(10);
+        stage.show();
+        Animation delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(e -> {
+            stage.close();
+            ProgramController.currentMenu = new MainMenu();
+            try {
+                ProgramController.currentMenu.showMenu();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        delay.play();
+    }
+
+    private User getUser(User firstUser, User secondUser , boolean isWinner) {
+        if (firstUser.getLifePoints() > secondUser.getLifePoints()){
+            if (isWinner)return firstUser;
+            else return secondUser;
+        }
+        else{
+            if (isWinner)return secondUser;
+            else return firstUser;
+        }
+    }
+
+    private Scene getScene(AnchorPane b) {
+        Scene scene = new Scene(b);
+        Image cave = new Image(getClass().getResource("/images/cave.jpg").toExternalForm());
+        BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
+        b.setBackground(new Background(new BackgroundImage(cave,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                bSize)));
+        return scene;
+    }
+
+    private ImageView getImageView(User first_user) {
+        ImageView first = new ImageView(new Image(String.valueOf(getClass().getResource(first_user.getAvatar()))));
+        first.setFitHeight(140);
+        first.setFitWidth(140);
+        return first;
+    }
+
+    private HBox gethBox() {
+        HBox hBox =new HBox();
+        hBox.setLayoutY(190);
+        hBox.setSpacing(115);
+        return hBox;
+    }
+
+    private Label getLabel() {
+        Label label = new Label();
+        Image image = new Image(getClass().getResource("/images/dialogueBox.png").toExternalForm() , true);
+        label.setGraphic(new ImageView(image));
+        label.setContentDisplay(ContentDisplay.TOP);
+        label.setGraphicTextGap(-130.0);
+        label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-padding: 20 0 0 70; -fx-font-size: 22; -fx-text-fill: GOLD;");
+        return label;
+    }
+
+    private Stage getStage() {
+        firstUserStage.hide();
+        secondUserStage.close();
+        Stage stage = new Stage();
+        stage.setWidth(390);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setHeight(320);
+        return stage;
     }
 
     private void summon() {
@@ -579,7 +715,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void surrender(Matcher matcher) {
-        PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds));
+        //PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds));
         currentDuel = null;
     }
 
@@ -599,10 +735,10 @@ public class DuelMenu implements Menuable {
             winner = currentDuel.getRival();
             loser = currentDuel.getUserWhoPlaysNow();
         }
-        if (initialRounds == 1)
-            PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
-        else
-            PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
+     //  if (initialRounds == 1)
+     //      PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
+     //  else
+     //      PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
         currentDuel = null;
 
     }
@@ -1133,6 +1269,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void reloadLPLabels() {
+        if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0)endTheGame();
         ((Label) firstUserStage.getScene().lookup("#ownLP")).setText(String.valueOf(currentDuel.getFIRST_USER().getLifePoints()));
         ((ProgressBar) firstUserStage.getScene().lookup("#ownLPBar")).setProgress(((double) currentDuel.getFIRST_USER().getLifePoints() / Duel.getInitialLifePoints()));
         if ((double) currentDuel.getFIRST_USER().getLifePoints() / Duel.getInitialLifePoints() < 0.5)
@@ -1420,6 +1557,7 @@ public class DuelMenu implements Menuable {
 
     public void addCardToBoard(MouseEvent mouseEvent) {
         if (currentDuel.getSelectedCard() != null) {
+            if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0)endTheGame();
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY))
                 summon();
             else
