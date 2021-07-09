@@ -338,9 +338,6 @@ public class DuelMenu implements Menuable {
         if (remainingRounds == 0) {
             if (initialRounds == 1)
             {
-                System.out.println(1);
-                System.out.println(winner.getUsername());
-                System.out.println(2);
                 label.setText("  I won and got \n " + (1000 +  winner.getLifePoints()) + " coins but\n you lost Ha Ha");
                 if (winner == currentDuel.getSECOND_USER()){
                     hBox.getChildren().add(second);
@@ -380,38 +377,43 @@ public class DuelMenu implements Menuable {
                 endTheGame();
             } else
             {
-                firstUserStage.close();
-                firstUserStage = new Stage();
-                secondUserStage = new Stage();
-                ProgramController.stage.show();
-                showCoinFlipping(loser , winner);
+                b.getChildren().add(hBox);
+                stage.show();
+                Animation delay = new PauseTransition(Duration.seconds(4));
+                delay.play();
+                delay.setOnFinished(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        firstUserStage.close();
+                        currentDuel = null;
+                        firstUserStage = new Stage();
+                        secondUserStage = new Stage();
+                        ProgramController.stage.show();
+                        showCoinFlipping(loser , winner);
+                    }
+                });
             }
         }
     }
 
     private void oneRound(User winner, User loser) {
-        System.out.println("check0");
-        int number = winner.getCoins();
-        int tester = winner.getLifePoints();
         winner.setGraveyard(null);
         winner.setBoard(null);
         winner.setHand(null);
         winner.setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
-        System.out.println("check1");
         winner.setScore(winner.getLifePoints() + 1000);
-        System.out.println("check2");
         loser.setGraveyard(null);
         loser.setBoard(null);
         loser.setHand(null);
         loser.setCoins(100 + loser.getCoins());
-        System.out.println("check3");
     }
 
     private void endStage(Stage stage, AnchorPane b, HBox hBox) {
         b.getChildren().add(hBox);
         System.out.println(10);
         stage.show();
-        Animation delay = new PauseTransition(Duration.seconds(2));
+        Animation delay = new PauseTransition(Duration.seconds(4));
+        delay.play();
         delay.setOnFinished(e -> {
             stage.close();
             ProgramController.currentMenu = new MainMenu();
@@ -421,7 +423,6 @@ public class DuelMenu implements Menuable {
                 ioException.printStackTrace();
             }
         });
-        delay.play();
     }
 
     private User getUser(User firstUser, User secondUser , boolean isWinner) {
@@ -483,6 +484,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void summon() {
+        if (currentDuel == null)return;
         if (currentDuel.canNotSummonSelectedCard()) {
             PrintResponses.showError(Responses.unableToSummonCard, null);
         } else if (isNotInMainPhases()) {
@@ -1103,6 +1105,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void showCoinFlipping(User starter, User invited) {
+        BorderPane pane = (BorderPane) ProgramController.currentScene.lookup("#mainPane");
+        pane.getChildren().removeIf(child -> child instanceof Rectangle);
         VBox mainVBox = (VBox) ProgramController.currentScene.lookup("#mainVBox");
         mainVBox.getChildren().clear();
         BorderPane borderPane = (BorderPane) ProgramController.currentScene.lookup("#mainPane");

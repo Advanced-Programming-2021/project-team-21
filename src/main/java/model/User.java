@@ -67,7 +67,6 @@ public class User {
     }
 
     public int getCoins() {
-        System.out.println("coin");
         return coins;
     }
 

@@ -47,7 +47,6 @@ public class Duel {
         user.setHand(new Hand(user));
         user.setBoard(new Board(user));
         user.setLifePoints(INITIAL_LIFE_POINTS);
-        if (user.getUsername().equals("d"))user.setLifePoints(0);
         user.setIncreaseATK(0);
         user.setIncreaseDEF(0);
         user.setCanSummonTrap(true);
@@ -234,6 +233,12 @@ public class Duel {
     }
 
     private void getStringStringPair(User winner, User loser, User userWhoPlaysNow, int maxLifePoint, int lifePoints, int i) {
+        winner.setBoard(null);
+        loser.setBoard(null);
+        winner.setGraveyard(null);
+        loser.setGraveyard(null);
+        winner.setHand(null);
+        loser.setHand(null);
         winner.setMaxLifePoint(userWhoPlaysNow.getLifePoints());
         winner.setCoins(winner.getCoins() + 3000 + 3 * maxLifePoint);
         winner.setScore(lifePoints + 3000);
