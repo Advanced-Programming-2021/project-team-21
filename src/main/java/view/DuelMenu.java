@@ -5,6 +5,8 @@ import controller.Effects.SelectEffect;
 import controller.Effects.StandByEffects;
 import controller.ProgramController;
 import javafx.animation.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -18,7 +20,6 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -56,18 +57,18 @@ public class DuelMenu implements Menuable {
     public static boolean addToHand;
     public static boolean isForSet;
     public static boolean isGetFroOpponentGY;
-    private static Stage stageSettings = new Stage();
-    private static Scene sceneSettings;
     private final Delta delta = new Delta();
-    private final ArrayList<Animation> delays = new ArrayList<>();
-    private final ArrayList<Stage> stages = new ArrayList<>();
     private Stage firstUserStage = new Stage();
     private Stage secondUserStage = new Stage();
+    private final ArrayList<Animation> delays = new ArrayList<>();
+    private final ArrayList<Stage> stages = new ArrayList<>();
     private Duel currentDuel;
     private Phases phase;
     private int remainingRounds;
     private int initialRounds;
     private boolean isFirstRound = true;
+    private static Stage stageSettings = new Stage();
+    private static Scene sceneSettings;
     private boolean canEnlargeCard = true;
 
 
@@ -332,7 +333,7 @@ public class DuelMenu implements Menuable {
         PrintResponses.printPhaseName(phase);
     }
 
-    public void endTheGame() {
+    public void endTheGame()  {
         remainingRounds--;
         Stage stage = getStage();
         Label label = getLabel();
@@ -343,81 +344,87 @@ public class DuelMenu implements Menuable {
         b.getChildren().add(label);
         Scene scene = getScene(b);
         stage.setScene(scene);
-        User winner = getUser(currentDuel.getFIRST_USER(), currentDuel.getSECOND_USER(), true);
-        User loser = getUser(currentDuel.getFIRST_USER(), currentDuel.getSECOND_USER(), false);
+        User winner = getUser(currentDuel.getFIRST_USER() , currentDuel.getSECOND_USER() , true);
+        User loser = getUser(currentDuel.getFIRST_USER() , currentDuel.getSECOND_USER() , false);
         if (remainingRounds == 0) {
-            if (initialRounds == 1) {
-                System.out.println(1);
-                System.out.println(winner.getUsername());
-                System.out.println(2);
-                label.setText("  I won and got \n " + (1000 + winner.getLifePoints()) + " coins but\n you lost Ha Ha");
-                if (winner == currentDuel.getSECOND_USER()) {
+            if (initialRounds == 1)
+            {
+                label.setText("  I won and got \n " + (1000 +  winner.getLifePoints()) + " coins but\n you lost Ha Ha");
+                if (winner == currentDuel.getSECOND_USER()){
                     hBox.getChildren().add(second);
                     hBox.getChildren().add(first);
-                } else {
+                }else {
                     hBox.getChildren().add(first);
                     hBox.getChildren().add(second);
                 }
                 oneRound(winner, loser);
-            } else {
+            }
+            else
+            {
                 label.setText("  Nice match but\nat last I won\nand got " +
                         (winner.getCoins() + 3000 + 3 * winner.getMaxLifePoint()) + " coins");
-                if (winner == currentDuel.getSECOND_USER()) {
-                    hBox.getChildren().add(second);
+                if (winner == currentDuel.getSECOND_USER()){
+                        hBox.getChildren().add(second);
                     hBox.getChildren().add(first);
-                } else {
+                }else {
                     hBox.getChildren().add(first);
                     hBox.getChildren().add(second);
                 }
                 currentDuel.handleEndingTheWholeMatch();
             }
             endStage(stage, b, hBox);
-            currentDuel = null;
+               currentDuel = null;
         } else {
             User winnerRound = currentDuel.handleEndingARound();
-            label.setText("   What a game\nAny way i won this round\nsee you in next one");
-            if (winnerRound == currentDuel.getSECOND_USER()) {
+            label.setText("   What a game\nAny way i won this round\nsee you in next one" );
+            if (winnerRound == currentDuel.getSECOND_USER()){
                 hBox.getChildren().add(second);
                 hBox.getChildren().add(first);
-            } else {
+            }else {
                 hBox.getChildren().add(first);
                 hBox.getChildren().add(second);
             }
             if (winnerRound.getWinsInAMatch() == 2) {
                 endTheGame();
-            } else {
-                firstUserStage.close();
-                firstUserStage = new Stage();
-                secondUserStage = new Stage();
-                ProgramController.stage.show();
-                showCoinFlipping(loser, winner);
+            } else
+            {
+                b.getChildren().add(hBox);
+                stage.show();
+                Animation delay = new PauseTransition(Duration.seconds(4));
+                delay.play();
+                delay.setOnFinished(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        firstUserStage.close();
+                        currentDuel = null;
+                        firstUserStage = new Stage();
+                        secondUserStage = new Stage();
+                        ProgramController.stage.show();
+                        showCoinFlipping(loser , winner);
+                    }
+                });
             }
         }
     }
 
     private void oneRound(User winner, User loser) {
-        System.out.println("check0");
-        int number = winner.getCoins();
-        int tester = winner.getLifePoints();
         winner.setGraveyard(null);
         winner.setBoard(null);
         winner.setHand(null);
         winner.setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
-        System.out.println("check1");
         winner.setScore(winner.getLifePoints() + 1000);
-        System.out.println("check2");
         loser.setGraveyard(null);
         loser.setBoard(null);
         loser.setHand(null);
         loser.setCoins(100 + loser.getCoins());
-        System.out.println("check3");
     }
 
     private void endStage(Stage stage, AnchorPane b, HBox hBox) {
         b.getChildren().add(hBox);
         System.out.println(10);
         stage.show();
-        Animation delay = new PauseTransition(Duration.seconds(2));
+        Animation delay = new PauseTransition(Duration.seconds(4));
+        delay.play();
         delay.setOnFinished(e -> {
             stage.close();
             ProgramController.currentMenu = new MainMenu();
@@ -427,15 +434,15 @@ public class DuelMenu implements Menuable {
                 ioException.printStackTrace();
             }
         });
-        delay.play();
     }
 
-    private User getUser(User firstUser, User secondUser, boolean isWinner) {
-        if (firstUser.getLifePoints() > secondUser.getLifePoints()) {
-            if (isWinner) return firstUser;
+    private User getUser(User firstUser, User secondUser , boolean isWinner) {
+        if (firstUser.getLifePoints() > secondUser.getLifePoints()){
+            if (isWinner)return firstUser;
             else return secondUser;
-        } else {
-            if (isWinner) return secondUser;
+        }
+        else{
+            if (isWinner)return secondUser;
             else return firstUser;
         }
     }
@@ -460,7 +467,7 @@ public class DuelMenu implements Menuable {
     }
 
     private HBox gethBox() {
-        HBox hBox = new HBox();
+        HBox hBox =new HBox();
         hBox.setLayoutY(190);
         hBox.setSpacing(115);
         return hBox;
@@ -468,7 +475,7 @@ public class DuelMenu implements Menuable {
 
     private Label getLabel() {
         Label label = new Label();
-        Image image = new Image(getClass().getResource("/images/dialogueBox.png").toExternalForm(), true);
+        Image image = new Image(getClass().getResource("/images/dialogueBox.png").toExternalForm() , true);
         label.setGraphic(new ImageView(image));
         label.setContentDisplay(ContentDisplay.TOP);
         label.setGraphicTextGap(-130.0);
@@ -488,6 +495,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void summon() {
+        if (currentDuel == null)return;
         if (currentDuel.canNotSummonSelectedCard()) {
             PrintResponses.showError(Responses.unableToSummonCard, null);
         } else if (isNotInMainPhases()) {
@@ -1107,6 +1115,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void showCoinFlipping(User starter, User invited) {
+        BorderPane pane = (BorderPane) ProgramController.currentScene.lookup("#mainPane");
+        pane.getChildren().removeIf(child -> child instanceof Rectangle);
         VBox mainVBox = (VBox) ProgramController.currentScene.lookup("#mainVBox");
         mainVBox.getChildren().clear();
         BorderPane borderPane = (BorderPane) ProgramController.currentScene.lookup("#mainPane");
@@ -1453,7 +1463,6 @@ public class DuelMenu implements Menuable {
             cardOnBoard.setEffect(null);
             if (card.isFaceUp() && !card.isATK())
                 System.out.println(card);
-            System.out.println("fuuuuuuuuuuuuuuuuuuuuuuuuuckkkkkkkkkkkkkkkkkkk" + card.getName() + " " + card.isFaceUp() + " " + card.isATK());
             if (card.isFaceUp()) {
                 cardOnBoard.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
                 if (!card.isATK()) {
