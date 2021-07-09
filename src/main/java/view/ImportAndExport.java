@@ -10,12 +10,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -31,9 +28,6 @@ import model.card.Card;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.function.Consumer;
-import java.util.regex.Matcher;
 
 public class ImportAndExport implements Menuable {
     private static String cardToExport = null;
@@ -52,7 +46,7 @@ public class ImportAndExport implements Menuable {
     }
 
     public void exportCard() {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         clearPreviousErrors();
         if (cardToExport == null) {
             ((Label) ProgramController.currentScene.lookup("#errorExport")).setText("*:You must fill these fields!");
@@ -68,7 +62,7 @@ public class ImportAndExport implements Menuable {
     }
 
     public void importCard() {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         clearPreviousErrors();
         if (cardToImport == null) {
             ((Label) ProgramController.currentScene.lookup("#errorImport")).setText("*:You must fill these fields!");
@@ -122,7 +116,7 @@ public class ImportAndExport implements Menuable {
 
 
     public void toExport() throws IOException {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         Stage stage = new Stage();
         Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/ChooseCardToExport.fxml"));
         Scene scene = new Scene(pane);
@@ -160,7 +154,7 @@ public class ImportAndExport implements Menuable {
     }
 
     public void back() throws IOException {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
@@ -168,7 +162,7 @@ public class ImportAndExport implements Menuable {
 
     public void toImport(MouseEvent mouseEvent) {
         try {
-            ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Json Files (*.Json)",

@@ -102,7 +102,7 @@ public class ProfileMenu implements Menuable {
     }
 
     public void passInformationToChangeNickname() {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         if (((TextField) ProgramController.currentScene.lookup("#nicknameProfile")).getText().trim().isEmpty()) {
             ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : Nickname field is empty!");
             ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
@@ -126,7 +126,7 @@ public class ProfileMenu implements Menuable {
     }
 
     public void passInformationToChangePassword() {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         if (oldPassword.getText().trim().isEmpty()) {
             if (newPassword.getText().trim().isEmpty()) {
                 errorNewAndOldPassword("* : You must fill all password fields!");
@@ -165,13 +165,13 @@ public class ProfileMenu implements Menuable {
     }
 
     public void backToMainMenu() throws IOException {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
 
     public void changeAvatar(MouseEvent mouseEvent) {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("JPG Files (*.jpg)",

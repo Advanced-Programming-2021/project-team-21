@@ -115,4 +115,6 @@ public class Responses {
             "space then decide the format of the monster";
     public static String cardNotFoundInHand = "CHEAT: Card not found in hand.";
     public static String canNotAttackDueToEffect = "You can't attack due to an effect.";
+    public static String wrongTurn = "It's not your turn!";
+    public static String surrenderConfirmation = "Are you sure you want to surrender?";
 }
