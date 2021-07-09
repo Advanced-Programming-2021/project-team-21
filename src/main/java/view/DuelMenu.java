@@ -69,6 +69,8 @@ public class DuelMenu implements Menuable {
     private int remainingRounds;
     private int initialRounds;
     private boolean isFirstRound = true;
+    private static Stage stageSettings = new Stage();
+    private static Scene sceneSettings;
     private boolean canEnlargeCard = true;
 
 
@@ -1429,8 +1431,45 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    public void showSettings() {
-        //todo implement settings to display pause, surrender, sound off
+    public void showSettings() throws IOException {
+        Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/settings.fxml"));
+        Scene scene = new Scene(pane);
+        stageSettings.setScene(scene);
+        stageSettings.show();
+    }
+
+    public void setAudio() throws IOException {
+        Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/audio.fxml"));
+        sceneSettings = new Scene(pane);
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+        if (String.format("%.1f",ProgramController.mediaPlayer.getVolume()).equals("1"))
+        sceneSettings.lookup("#increaseVolume").setDisable(true);
+        stageSettings.setScene(sceneSettings);
+        stageSettings.show();
+    }
+
+    public void decreaseVolume() {
+        sceneSettings.lookup("#increaseVolume").setDisable(false);
+        ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
+        if (ProgramController.mediaPlayer.getVolume() == 0.1)
+            sceneSettings.lookup("#decreaseVolume").setDisable(true);
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+    }
+
+    public void increaseVolume() {
+        sceneSettings.lookup("#decreaseVolume").setDisable(false);
+        ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() + 0.1);
+        if (ProgramController.mediaPlayer.getVolume() == 0.1)
+            sceneSettings.lookup("#decreaseVolume").setDisable(true);
+        if (ProgramController.mediaPlayer.getVolume() == 1)
+            sceneSettings.lookup("#increaseVolume").setDisable(true);
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+    }
+
+    public void mute() {
+        ProgramController.mediaPlayer.setVolume(0);
+        sceneSettings.lookup("#decreaseVolume").setDisable(true);
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
 
     private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
