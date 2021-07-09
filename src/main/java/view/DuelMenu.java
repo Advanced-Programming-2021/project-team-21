@@ -393,10 +393,16 @@ public class DuelMenu implements Menuable {
         System.out.println("check0");
         int number = winner.getCoins();
         int tester = winner.getLifePoints();
-        currentDuel.getSECOND_USER().setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
+        winner.setGraveyard(null);
+        winner.setBoard(null);
+        winner.setHand(null);
+        winner.setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
         System.out.println("check1");
         winner.setScore(winner.getLifePoints() + 1000);
         System.out.println("check2");
+        loser.setGraveyard(null);
+        loser.setBoard(null);
+        loser.setHand(null);
         loser.setCoins(100 + loser.getCoins());
         System.out.println("check3");
     }
@@ -1403,6 +1409,8 @@ public class DuelMenu implements Menuable {
             }
             Rectangle cardOnBoard = ((Rectangle) ownMonsters.getChildren().get(convertNormalAddressToBoardAddress(i, card, isRival)));
             cardOnBoard.setEffect(null);
+            if (card.isFaceUp() && !card.isATK())
+                System.out.println(card);
             if (card.isFaceUp()) {
                 cardOnBoard.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
                 if (!card.isATK()) {
