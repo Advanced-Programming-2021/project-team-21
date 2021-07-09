@@ -5,6 +5,8 @@ import controller.Effects.SelectEffect;
 import controller.Effects.StandByEffects;
 import controller.ProgramController;
 import javafx.animation.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -57,8 +59,6 @@ public class DuelMenu implements Menuable {
     public static boolean addToHand;
     public static boolean isForSet;
     public static boolean isGetFroOpponentGY;
-    private static Stage stageSettings = new Stage();
-    private static Scene sceneSettings;
     private final Delta delta = new Delta();
     private final Stage firstUserStage = new Stage();
     private final Stage secondUserStage = new Stage();
@@ -69,6 +69,8 @@ public class DuelMenu implements Menuable {
     private int remainingRounds;
     private int initialRounds;
     private boolean isFirstRound = true;
+    private static Stage stageSettings = new Stage();
+    private static Scene sceneSettings;
     private boolean canEnlargeCard = true;
 
 
@@ -439,6 +441,7 @@ public class DuelMenu implements Menuable {
                 || currentDuel.getSelectedCard().isATK())) {
             PrintResponses.printUnableToFlipSummonCard();
         } else {
+            ProgramController.startNewAudio("src/main/resources/audios/flipSummon.m4a");
             currentDuel.flipSummon();
             PrintResponses.printSuccessfulFlipSummon();
         }
@@ -457,6 +460,7 @@ public class DuelMenu implements Menuable {
         } else if (!currentDuel.getUserWhoPlaysNow().isCanAttack()) {
             PrintResponses.showError(Responses.canNotAttackDueToEffect, null);
         } else {
+            ProgramController.startNewAudio("src/main/resources/audios/attack.m4a");
             handleSuccessfulAttack(address, monsterToAttack);
             reloadLPLabels();
         }
@@ -474,6 +478,7 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.showError(Responses.cardAttackedBefore, null);
         } else {
+            ProgramController.startNewAudio("src/main/resources/audios/directAttack.m4a");
             int damage = currentDuel.attackDirectly();
             PrintResponses.showInformation(PrintResponses.printDamageInAttackDirectly(damage));
             reloadLPLabels();
@@ -503,6 +508,7 @@ public class DuelMenu implements Menuable {
                 isRitualSummon();
                 return;
             }
+            ProgramController.startNewAudio("src/main/resources/audios/spellActivation.m4a");
             currentDuel.activateEffects();
             PrintResponses.printSuccessfulSpellActivation();
             PrintResponses.print(currentDuel);
@@ -539,6 +545,7 @@ public class DuelMenu implements Menuable {
         if (surrenders) {
             PrintResponses.showInformation(PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds)));
             currentDuel = null;
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         }
     }
 
@@ -745,6 +752,9 @@ public class DuelMenu implements Menuable {
 
     private void handleSuccessfulSummon() {
         currentDuel.summonMonster();
+        ProgramController.startNewAudio("src/main/resources/audios/summon.m4a");
+        PrintResponses.printSuccessfulSummon();
+        PrintResponses.print(currentDuel);
     }
 
     private void handleSuccessfulGameCreation(User firstPlayer, User secondPlayer) {
@@ -892,6 +902,7 @@ public class DuelMenu implements Menuable {
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
         } else {
+            ProgramController.startNewAudio("src/main/resources/audios/set.m4a");
             currentDuel.setMonster();
             PrintResponses.printSuccessfulCardSetting();
             PrintResponses.print(currentDuel);
@@ -904,6 +915,7 @@ public class DuelMenu implements Menuable {
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
         } else {
+            ProgramController.startNewAudio("src/main/resources/audios/set.m4a");
             currentDuel.setSpellOrTrap();
             PrintResponses.printSuccessfulCardSetting();
             PrintResponses.print(currentDuel);
@@ -916,7 +928,7 @@ public class DuelMenu implements Menuable {
     @SuppressWarnings("rawtypes")
     @Override
     public void showMenu() throws IOException {
-        ProgramController.startNewAudio("src/main/resources/audios/gameSound.mp3");
+        ProgramController.startNewAudioBackground("src/main/resources/audios/gameSound.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/DuelMenu.fxml"));
         ChoiceBox choiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
@@ -1455,9 +1467,10 @@ public class DuelMenu implements Menuable {
     }
 
     public void setAudio() throws IOException {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/Audio.fxml"));
         sceneSettings = new Scene(pane);
-        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
         checkVolumeButton();
         stageSettings.setScene(sceneSettings);
         stageSettings.show();
@@ -1469,24 +1482,29 @@ public class DuelMenu implements Menuable {
     }
 
     public void decreaseVolume() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
-        ProgramController.mediaPlayerBackground.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
-        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
+        ProgramController.volume = ProgramController.mediaPlayer.getVolume();
+        ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
         checkVolumeButton();
     }
 
     public void increaseVolume() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() + 0.1);
-        ProgramController.mediaPlayerBackground.setVolume(ProgramController.mediaPlayer.getVolume() + 0.1);
+        ProgramController.volume = ProgramController.mediaPlayer.getVolume();
+        ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
         checkVolumeButton();
-        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
 
     public void mute() {
         ProgramController.mediaPlayer.setVolume(0);
-        ProgramController.mediaPlayerBackground.setVolume(0);
+        ProgramController.volume = ProgramController.mediaPlayer.getVolume();
+        ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
         checkVolumeButton();
-        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
+        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
 
     private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
@@ -1519,6 +1537,7 @@ public class DuelMenu implements Menuable {
     }
 
     public void pause() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         // todo
         // salam
     }

@@ -27,7 +27,7 @@ public class ProgramController {
     public static Scene currentScene;
     public static MediaPlayer mediaPlayer;
     public static MediaPlayer mediaPlayerBackground;
-    public static double volume = 1.0;
+    public static double volume = 0.5;
 
     public static Scene createNewScene(URL url) throws IOException {
         Parent pane = FXMLLoader.load(url);
