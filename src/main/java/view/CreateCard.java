@@ -365,6 +365,7 @@ public class CreateCard implements Menuable {
             price += priceEffect;
             price = Math.max(0, price);
         }
+        ((Label) ProgramController.currentScene.lookup("#priceLabel")).setText(String.valueOf(price));
     }
 
     private double getNumber(int number) {
@@ -488,11 +489,7 @@ public class CreateCard implements Menuable {
         delay.setOnFinished(e -> {
             delays.forEach(Animation::stop);
             stages.forEach(Stage::close);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String s : DataController.monster.getDescription().get(effectName)) {
-                stringBuilder.append(s);
-            }
-            Label description = new Label(stringBuilder.toString());
+            Label description = new Label(effectsHolder.getEffect().get(effectName));
             borderPane.setCenter(description);
             stage.setScene(scene);
             stage.show();

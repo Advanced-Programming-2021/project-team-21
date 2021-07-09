@@ -56,7 +56,7 @@
          <font>
             <Font size="16.0" />
          </font></Button>
-        <Label alignment="CENTER" layoutX="444.0" layoutY="277.0" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: rgba(223, 139, 43, 0.842);" styleClass="title-label" text="0" textFill="BLACK">
+        <Label id="priceLabel" alignment="CENTER" layoutX="444.0" layoutY="277.0" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: rgba(223, 139, 43, 0.842);" styleClass="title-label" text="0" textFill="BLACK">
          <font>
             <Font size="20.0" />
          </font></Label>
