@@ -5,8 +5,6 @@ import controller.Effects.SelectEffect;
 import controller.Effects.StandByEffects;
 import controller.ProgramController;
 import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -20,6 +18,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -57,18 +56,18 @@ public class DuelMenu implements Menuable {
     public static boolean addToHand;
     public static boolean isForSet;
     public static boolean isGetFroOpponentGY;
+    private static Stage stageSettings = new Stage();
+    private static Scene sceneSettings;
     private final Delta delta = new Delta();
-    private Stage firstUserStage = new Stage();
-    private Stage secondUserStage = new Stage();
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
+    private Stage firstUserStage = new Stage();
+    private Stage secondUserStage = new Stage();
     private Duel currentDuel;
     private Phases phase;
     private int remainingRounds;
     private int initialRounds;
     private boolean isFirstRound = true;
-    private static Stage stageSettings = new Stage();
-    private static Scene sceneSettings;
     private boolean canEnlargeCard = true;
 
 
@@ -200,6 +199,18 @@ public class DuelMenu implements Menuable {
         return ProgramController.scanner.nextLine();
     }
 
+    public void run(String command) {
+        HashMap<String, Consumer<Matcher>> commandMap = createCommandMap();
+            for (String string : commandMap.keySet()) {
+                Matcher matcher = Regex.getMatcher(command, string);
+                 if (matcher.find()) {
+                    commandMap.get(string).accept(matcher);
+                }
+            }
+            reloadCardsOnBoard();
+            reloadHands();
+    }
+
 
     private HashMap<String, Consumer<Matcher>> createCommandMap() {
         HashMap<String, Consumer<Matcher>> commandMap = new HashMap<>();
@@ -208,7 +219,6 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.selectFromOpponentField, this::selectCardFromOpponentField);
         commandMap.put(Regex.selectFromOpponentField2, this::selectCardFromOpponentField);
         commandMap.put(Regex.flipSummon, this::flipSummon);
-        commandMap.put(Regex.activateSpell, this::activateSpell);
         commandMap.put(Regex.increaseLP, this::increaseLP);
         commandMap.put(Regex.setWinner, this::setWinner);
         commandMap.put(Regex.forceSelectHand, this::forceSelectHand);
@@ -322,7 +332,7 @@ public class DuelMenu implements Menuable {
         PrintResponses.printPhaseName(phase);
     }
 
-    public void endTheGame()  {
+    public void endTheGame() {
         remainingRounds--;
         Stage stage = getStage();
         Label label = getLabel();
@@ -333,58 +343,54 @@ public class DuelMenu implements Menuable {
         b.getChildren().add(label);
         Scene scene = getScene(b);
         stage.setScene(scene);
-        User winner = getUser(currentDuel.getFIRST_USER() , currentDuel.getSECOND_USER() , true);
-        User loser = getUser(currentDuel.getFIRST_USER() , currentDuel.getSECOND_USER() , false);
+        User winner = getUser(currentDuel.getFIRST_USER(), currentDuel.getSECOND_USER(), true);
+        User loser = getUser(currentDuel.getFIRST_USER(), currentDuel.getSECOND_USER(), false);
         if (remainingRounds == 0) {
-            if (initialRounds == 1)
-            {
+            if (initialRounds == 1) {
                 System.out.println(1);
                 System.out.println(winner.getUsername());
                 System.out.println(2);
-                label.setText("  I won and got \n " + (1000 +  winner.getLifePoints()) + " coins but\n you lost Ha Ha");
-                if (winner == currentDuel.getSECOND_USER()){
+                label.setText("  I won and got \n " + (1000 + winner.getLifePoints()) + " coins but\n you lost Ha Ha");
+                if (winner == currentDuel.getSECOND_USER()) {
                     hBox.getChildren().add(second);
                     hBox.getChildren().add(first);
-                }else {
+                } else {
                     hBox.getChildren().add(first);
                     hBox.getChildren().add(second);
                 }
                 oneRound(winner, loser);
-            }
-            else
-            {
+            } else {
                 label.setText("  Nice match but\nat last I won\nand got " +
                         (winner.getCoins() + 3000 + 3 * winner.getMaxLifePoint()) + " coins");
-                if (winner == currentDuel.getSECOND_USER()){
-                        hBox.getChildren().add(second);
+                if (winner == currentDuel.getSECOND_USER()) {
+                    hBox.getChildren().add(second);
                     hBox.getChildren().add(first);
-                }else {
+                } else {
                     hBox.getChildren().add(first);
                     hBox.getChildren().add(second);
                 }
                 currentDuel.handleEndingTheWholeMatch();
             }
             endStage(stage, b, hBox);
-               currentDuel = null;
+            currentDuel = null;
         } else {
             User winnerRound = currentDuel.handleEndingARound();
-            label.setText("   What a game\nAny way i won this round\nsee you in next one" );
-            if (winnerRound == currentDuel.getSECOND_USER()){
+            label.setText("   What a game\nAny way i won this round\nsee you in next one");
+            if (winnerRound == currentDuel.getSECOND_USER()) {
                 hBox.getChildren().add(second);
                 hBox.getChildren().add(first);
-            }else {
+            } else {
                 hBox.getChildren().add(first);
                 hBox.getChildren().add(second);
             }
             if (winnerRound.getWinsInAMatch() == 2) {
                 endTheGame();
-            } else
-            {
+            } else {
                 firstUserStage.close();
                 firstUserStage = new Stage();
                 secondUserStage = new Stage();
                 ProgramController.stage.show();
-                showCoinFlipping(loser , winner);
+                showCoinFlipping(loser, winner);
             }
         }
     }
@@ -424,13 +430,12 @@ public class DuelMenu implements Menuable {
         delay.play();
     }
 
-    private User getUser(User firstUser, User secondUser , boolean isWinner) {
-        if (firstUser.getLifePoints() > secondUser.getLifePoints()){
-            if (isWinner)return firstUser;
+    private User getUser(User firstUser, User secondUser, boolean isWinner) {
+        if (firstUser.getLifePoints() > secondUser.getLifePoints()) {
+            if (isWinner) return firstUser;
             else return secondUser;
-        }
-        else{
-            if (isWinner)return secondUser;
+        } else {
+            if (isWinner) return secondUser;
             else return firstUser;
         }
     }
@@ -455,7 +460,7 @@ public class DuelMenu implements Menuable {
     }
 
     private HBox gethBox() {
-        HBox hBox =new HBox();
+        HBox hBox = new HBox();
         hBox.setLayoutY(190);
         hBox.setSpacing(115);
         return hBox;
@@ -463,7 +468,7 @@ public class DuelMenu implements Menuable {
 
     private Label getLabel() {
         Label label = new Label();
-        Image image = new Image(getClass().getResource("/images/dialogueBox.png").toExternalForm() , true);
+        Image image = new Image(getClass().getResource("/images/dialogueBox.png").toExternalForm(), true);
         label.setGraphic(new ImageView(image));
         label.setContentDisplay(ContentDisplay.TOP);
         label.setGraphicTextGap(-130.0);
@@ -557,20 +562,19 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void setPosition(String position) {
+    private void setPosition(Card card) {
         // todo change position of a card
-        if (isSelectedCardNotInMonsterZone()) {
-            PrintResponses.showError(Responses.unableToChangePositionOfCard, null);
-        } else if (isNotInMainPhases()) {
+        if (isNotInMainPhases()) {
             PrintResponses.showError(Responses.setCardInWrongPhase, null);
         } else if (currentDuel.isHasChangedPositionOnce()) {
             PrintResponses.showError(Responses.unableToChangePositionInTurnTwice, null);
         } else {
-            if (position.equals("attack")) {
+            if (!card.isATK()) {
                 currentDuel.changeToAttackPosition();
             } else {
                 currentDuel.changeToDefensePosition();
             }
+            reloadCardsOnBoard();
         }
     }
 
@@ -594,7 +598,6 @@ public class DuelMenu implements Menuable {
     }
 
     private void attack(int address, Monster monsterToAttack) {
-        System.out.println("fuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuck");
         if (currentDuel.isNoCardSelected()) {
             PrintResponses.showError(Responses.noCardSelected, null);
         } else if (isNotInBattlePhase()) {
@@ -604,9 +607,12 @@ public class DuelMenu implements Menuable {
             return;
         } else if (!currentDuel.getUserWhoPlaysNow().isCanAttack()) {
             PrintResponses.showError(Responses.canNotAttackDueToEffect, null);
+        } else if (currentDuel.getRival().getBoard().getMonsterNumber() == 0){
+            attackDirectly();
         } else {
             ProgramController.startNewAudio("src/main/resources/audios/attack.m4a");
             handleSuccessfulAttack(address, monsterToAttack);
+            currentDuel.setSelectedCard(null);
             reloadLPLabels();
         }
         reloadCardsOnBoard();
@@ -627,27 +633,22 @@ public class DuelMenu implements Menuable {
             int damage = currentDuel.attackDirectly();
             PrintResponses.showInformation(PrintResponses.printDamageInAttackDirectly(damage));
             reloadLPLabels();
-            currentDuel.deselectACard();
         }
         reloadCardsOnBoard();
     }
 
-    private void activateSpell(Matcher matcher) {
+    private void activateSpell() {
         // todo handle activate effect
-        if (currentDuel.isNoCardSelected()) {
-            PrintResponses.printNoCardSelected();
-        } else if (!(currentDuel.getSelectedCard() instanceof Spell)) {
-            PrintResponses.printNonSpellCardsToActivateEffect();
-        } else if (isNotInMainPhases()) {
-            PrintResponses.printUnableToActivateEffectOnTurn();
+        if (isNotInMainPhases()) {
+            PrintResponses.showError(Responses.unableToActivateEffectOnTurn, null);
         } else if (currentDuel.getSelectedCard().isFaceUp()) {
-            PrintResponses.printUnableToActivateCardTwice();
+            PrintResponses.showError(Responses.unableToActivateCardTwice, null);
         } else if (isSpellZoneFullAndNeedsToBeOnBoard()) {
-            PrintResponses.printFullnessOfSpellCardZone();
+            PrintResponses.showError(Responses.fullnessOfSpellCardZone, null);
         } else if (isSpellNotPreparedToBeActivated()) {
-            PrintResponses.printUnfinishedPreparationOfSpell();
+            PrintResponses.showError(Responses.unfinishedPreparationOfSpell, null);
         } else if (currentDuel.getUserWhoPlaysNow().isCanNotSetSpell()) {
-            PrintResponses.printDisabledSummonSpell();
+            PrintResponses.showError(Responses.disabledSpellSummon, null);
         } else {
             if (((Spell) currentDuel.getSelectedCard()).getSpellTrapIcon().getName().equals("Ritual")) {
                 isRitualSummon();
@@ -655,10 +656,10 @@ public class DuelMenu implements Menuable {
             }
             ProgramController.startNewAudio("src/main/resources/audios/spellActivation.m4a");
             currentDuel.activateEffects();
-            PrintResponses.printSuccessfulSpellActivation();
-            PrintResponses.print(currentDuel);
+            PrintResponses.showInformation(Responses.successfulSpellActivation);
         }
         reloadCardsInGraveyard();
+        reloadCardsOnBoard();
     }
 
     private void showGraveyard(ArrayList<Card> graveyard) {
@@ -697,6 +698,7 @@ public class DuelMenu implements Menuable {
         int amount = Integer.parseInt(matcher.group("amount"));
         currentDuel.getUserWhoPlaysNow().setLifePoints(currentDuel.getUserWhoPlaysNow().getLifePoints() + amount);
         PrintResponses.print(Responses.increaseLP);
+        reloadLPLabels();
     }
 
     private void setWinner(Matcher matcher) {
@@ -712,8 +714,8 @@ public class DuelMenu implements Menuable {
         if (initialRounds == 1)
             PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
         else
-       //     PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
-        currentDuel = null;
+            //     PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
+            currentDuel = null;
 
     }
 
@@ -740,6 +742,7 @@ public class DuelMenu implements Menuable {
         currentDuel.summonMonster();
         PrintResponses.print(Responses.forceSelectHand);
         PrintResponses.print(currentDuel);
+        reloadCardsOnBoard();
     }
 
     private void addCardToHand(Matcher matcher) {
@@ -952,6 +955,7 @@ public class DuelMenu implements Menuable {
                 ((AI) currentDuel.getUserWhoPlaysNow()).run();
             }
             reloadCardsLeftInDeck();
+            reloadHands();
         }
     }
 
@@ -1209,9 +1213,36 @@ public class DuelMenu implements Menuable {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setY(200);
+            stage.getScene().setOnKeyPressed(event -> {
+                if (stage.getScene().getRoot().getEffect() == null){
+                    if (event.getCode().equals(KeyCode.C) && event.isControlDown() && event.isShiftDown()){
+                        showCheatStage();
+                    }
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showCheatStage() {
+        Stage stage = new Stage();
+        BorderPane borderPane = new BorderPane();
+        Scene scene = new Scene(borderPane,300,200);
+        TextField textField = new TextField();
+        textField.setPromptText("Enter cheat code");
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)){
+                String cheatCode = textField.getText();
+                stage.close();
+                run(cheatCode);
+            }
+        });
+        borderPane.setCenter(textField);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+
     }
 
     private boolean isTextFieldInvalid(String username) {
@@ -1245,7 +1276,10 @@ public class DuelMenu implements Menuable {
     }
 
     private void reloadLPLabels() {
-        if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0)endTheGame();
+        if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0) {
+            endTheGame();
+            return;
+        }
         ((Label) firstUserStage.getScene().lookup("#ownLP")).setText(String.valueOf(currentDuel.getFIRST_USER().getLifePoints()));
         ((ProgressBar) firstUserStage.getScene().lookup("#ownLPBar")).setProgress(((double) currentDuel.getFIRST_USER().getLifePoints() / Duel.getInitialLifePoints()));
         if ((double) currentDuel.getFIRST_USER().getLifePoints() / Duel.getInitialLifePoints() < 0.5)
@@ -1285,20 +1319,12 @@ public class DuelMenu implements Menuable {
     private void loadDeckPictures() {
         ((Rectangle) firstUserStage.getScene().lookup("#ownDeck"))
                 .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
-        ((Rectangle) firstUserStage.getScene().lookup("#ownGraveyard"))
-                .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/Graveyard.png")).toExternalForm())));
         ((Rectangle) firstUserStage.getScene().lookup("#rivalDeck"))
                 .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
-        ((Rectangle) firstUserStage.getScene().lookup("#rivalGraveyard"))
-                .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/Graveyard.png")).toExternalForm())));
         ((Rectangle) secondUserStage.getScene().lookup("#ownDeck"))
                 .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
-        ((Rectangle) secondUserStage.getScene().lookup("#ownGraveyard"))
-                .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/Graveyard.png")).toExternalForm())));
         ((Rectangle) secondUserStage.getScene().lookup("#rivalDeck"))
                 .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
-        ((Rectangle) secondUserStage.getScene().lookup("#rivalGraveyard"))
-                .setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/Graveyard.png")).toExternalForm())));
     }
 
     private void reloadCardsLeftInDeck() {
@@ -1313,6 +1339,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void reloadCardsInGraveyard() {
+        if (currentDuel == null)
+            return;
         ((Label) firstUserStage.getScene().lookup("#ownGraveyardNumber"))
                 .setText(String.valueOf(currentDuel.getFIRST_USER().getGraveyard().size()));
         firstUserStage.getScene().lookup("#ownGraveyard").setOnMouseClicked(event -> {
@@ -1354,23 +1382,31 @@ public class DuelMenu implements Menuable {
 
 
     private void reloadPhaseLabels() {
+        if (!firstUserStage.isShowing())
+            return;
         ((Label) firstUserStage.getScene().lookup("#phaseLabel")).setText(phase.getName());
         ((Label) secondUserStage.getScene().lookup("#phaseLabel")).setText(phase.getName());
     }
 
     private void reloadCardsOnBoard() {
-        showMonstersForFirstStage();
-        showMonstersForSecondStage();
-        showSpellsForFirstStage();
-        showSpellsForSecondStage();
+        if (currentDuel != null) {
+            showMonstersForFirstStage();
+            showMonstersForSecondStage();
+            showSpellsForFirstStage();
+            showSpellsForSecondStage();
+        }
     }
 
     private void showMonstersForFirstStage() {
+        if (!firstUserStage.isShowing())
+            return;
         HBox ownMonsters = (HBox) firstUserStage.getScene().lookup("#ownMonsterHBox");
         HBox rivalMonster = (HBox) firstUserStage.getScene().lookup("#rivalMonsterHBox");
         rivalMonster.setOnMouseClicked(event -> {
-            if (firstUserStage.getScene().getRoot().getEffect() == null)
-                attackDirectly();
+            if (firstUserStage.getScene().getRoot().getEffect() == null) {
+                if (currentDuel.getRival().getBoard().getMonsterNumber() == 0)
+                    attackDirectly();
+            }
             else
                 PrintResponses.showError(Responses.wrongTurn, event);
 
@@ -1380,6 +1416,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void showSpellsForFirstStage() {
+        if (!firstUserStage.isShowing())
+            return;
         HBox ownSpellsHBox = (HBox) firstUserStage.getScene().lookup("#ownSpellsHBox");
         HBox rivalSpellsHBox = (HBox) firstUserStage.getScene().lookup("#rivalSpellsHBox");
         showCardsOnBoard(ownSpellsHBox, currentDuel.getFIRST_USER().getBoard().getSpellsAndTraps(), false);
@@ -1387,6 +1425,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void showMonstersForSecondStage() {
+        if (!firstUserStage.isShowing())
+            return;
         HBox ownMonsters = (HBox) secondUserStage.getScene().lookup("#ownMonsterHBox");
         HBox rivalMonster = (HBox) secondUserStage.getScene().lookup("#rivalMonsterHBox");
         showCardsOnBoard(ownMonsters, currentDuel.getSECOND_USER().getBoard().getMonsters(), false);
@@ -1394,6 +1434,8 @@ public class DuelMenu implements Menuable {
     }
 
     private void showSpellsForSecondStage() {
+        if (!firstUserStage.isShowing())
+            return;
         HBox ownMonsters = (HBox) secondUserStage.getScene().lookup("#ownSpellsHBox");
         HBox rivalMonster = (HBox) secondUserStage.getScene().lookup("#rivalSpellsHBox");
         showCardsOnBoard(ownMonsters, currentDuel.getSECOND_USER().getBoard().getSpellsAndTraps(), false);
@@ -1411,6 +1453,7 @@ public class DuelMenu implements Menuable {
             cardOnBoard.setEffect(null);
             if (card.isFaceUp() && !card.isATK())
                 System.out.println(card);
+            System.out.println("fuuuuuuuuuuuuuuuuuuuuuuuuuckkkkkkkkkkkkkkkkkkk" + card.getName() + " " + card.isFaceUp() + " " + card.isATK());
             if (card.isFaceUp()) {
                 cardOnBoard.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
                 if (!card.isATK()) {
@@ -1449,10 +1492,27 @@ public class DuelMenu implements Menuable {
             if (!isRival && card instanceof Monster) {
                 cardOnBoard.setOnMouseClicked(event -> {
                     if (cardOnBoard.getScene().getRoot().getEffect() == null) {
-                        handleSelectingCard(finalI, card, cardOnBoard);
-//                        if (event.getButton() == )
-                    }
-                    else
+                        handleSelectingCard(finalI + 1, card, cardOnBoard, "monster");
+                        System.out.println(currentDuel.getSelectedCard());
+                        if (event.getButton() == MouseButton.SECONDARY) {
+                            ContextMenu menu = new ContextMenu();
+                            handleContextMenuWhenRightClicked(card, menu, cardOnBoard);
+                        }
+                    } else
+                        PrintResponses.showError(Responses.wrongTurn, event);
+
+                });
+            }
+            if (card instanceof Spell) {
+                cardOnBoard.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.SECONDARY) {
+                        if (cardOnBoard.getScene().getRoot().getEffect() == null) {
+                            handleSelectingCard(finalI + 1, card, cardOnBoard, "spell");
+                            System.out.println(currentDuel.getSelectedCard());
+                            ContextMenu menu = new ContextMenu();
+                            handleContextMenuWhenRightClicked(card, menu, cardOnBoard);
+                        }
+                    } else
                         PrintResponses.showError(Responses.wrongTurn, event);
 
                 });
@@ -1468,6 +1528,27 @@ public class DuelMenu implements Menuable {
         }
     }
 
+    private void handleContextMenuWhenRightClicked(Card card, ContextMenu menu, Rectangle cardPicture) {
+        if (card instanceof Monster) {
+            MenuItem changeFacePosition = new MenuItem("Change Face Position");
+            menu.getItems().add(changeFacePosition);
+            changeFacePosition.setOnAction(event -> setPosition(card));
+        } else if (card instanceof Spell) {
+            MenuItem activateEffects = new MenuItem("Activate Effects");
+            if (card.isFaceUp())
+                activateEffects.setDisable(true);
+            menu.getItems().add(activateEffects);
+            activateEffects.setOnAction(event -> activateSpell());
+        }
+
+        cardPicture.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                menu.show(cardPicture, event.getScreenX(), event.getScreenY());
+            } else if (event.getButton() == MouseButton.PRIMARY)
+                menu.hide();
+        });
+    }
+
     private void calibrateBoard(HBox ownMonsters) {
         for (Node child : ownMonsters.getChildren()) {
             if (child instanceof Rectangle) {
@@ -1477,10 +1558,10 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void handleSelectingCard(int index, Card card, Rectangle cardOnBoard) {
+    private void handleSelectingCard(int index, Card card, Rectangle cardOnBoard, String where) {
         cardOnBoard.setEffect(new Glow(5));
         System.out.println(convertNormalAddressToBoardAddress(index, card, false));
-        selectCardFromOwn(index + 1, "monster");
+        selectCardFromOwn(index, where);
     }
 
 
@@ -1593,7 +1674,8 @@ public class DuelMenu implements Menuable {
 
     public void addCardToBoard(MouseEvent mouseEvent) {
         if (currentDuel.getSelectedCard() != null) {
-            if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0)endTheGame();
+            if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0)
+                endTheGame();
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY))
                 summon();
             else
@@ -1618,7 +1700,7 @@ public class DuelMenu implements Menuable {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/Audio.fxml"));
         sceneSettings = new Scene(pane);
-        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
         checkVolumeButton();
         stageSettings.setScene(sceneSettings);
         stageSettings.show();
@@ -1634,7 +1716,7 @@ public class DuelMenu implements Menuable {
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
         ProgramController.volume = ProgramController.mediaPlayer.getVolume();
         ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
-        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
         checkVolumeButton();
     }
 
@@ -1644,7 +1726,7 @@ public class DuelMenu implements Menuable {
         ProgramController.volume = ProgramController.mediaPlayer.getVolume();
         ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
         checkVolumeButton();
-        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
     }
 
     public void mute() {
@@ -1652,7 +1734,7 @@ public class DuelMenu implements Menuable {
         ProgramController.volume = ProgramController.mediaPlayer.getVolume();
         ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
         checkVolumeButton();
-        ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+        ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
     }
 
     private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {

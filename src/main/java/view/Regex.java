@@ -58,7 +58,7 @@ public class Regex {
     public static final String parseTwoNumberOneString = "(?<effectName>\\w+)=(?<firstNumber>-?\\d+)_(?<secondNumber>-?\\d+)_\"(?<string>\\w*)\"";
     //These are some commands that are not in the doc, including cheat-commands.
     public static final String increaseMoney = "increase --money (?<amount>\\d+)";
-    public static final String increaseLP = "increase --LP (?<amount>\\d+)";
+    public static final String increaseLP = "increase --LP (?<amount>-?\\d+)";
     public static final String setWinner = "duel set-winner (?<nickname>\\S+)";
     public static final String forceSelectHand = "select (?=.*--hand (?<cardName>.[^-]+))(?=.*--force)";
     public static final String addCardToHand = "add-to-hand (?<cardName>.+)";

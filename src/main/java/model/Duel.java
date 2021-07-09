@@ -47,7 +47,6 @@ public class Duel {
         user.setHand(new Hand(user));
         user.setBoard(new Board(user));
         user.setLifePoints(INITIAL_LIFE_POINTS);
-        if (user.getUsername().equals("d"))user.setLifePoints(0);
         user.setIncreaseATK(0);
         user.setIncreaseDEF(0);
         user.setCanSummonTrap(true);
@@ -562,7 +561,7 @@ public class Duel {
         if (monster.isFlipSetEffect()) {
             SetFlip.run(monster, userWhoPlaysNow, this);
         }
-        getRival().getBoard().changeFacePositionToAttackForMonsters(placeOnBoard);
+        getRival().getBoard().changeFacePositionToDefenceForMonsters(placeOnBoard);
     }
 
     public void flipSetForSpells(int placeOnBoard) {
