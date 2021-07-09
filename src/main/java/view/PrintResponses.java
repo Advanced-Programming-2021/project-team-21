@@ -1,5 +1,9 @@
 package view;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import model.Deck;
 import model.Duel;
 import model.Hand;
@@ -10,6 +14,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PrintResponses {
     public static void printInvalidFormat() {
@@ -427,8 +432,8 @@ public class PrintResponses {
         System.out.print("opponent’s monster card was " + cardName + " and ");
     }
 
-    public static void printDamageInAttackDirectly(int damage) {
-        System.out.println("you opponent receives " + damage + " battle damage");
+    public static String printDamageInAttackDirectly(int damage) {
+        return "you opponent receives " + damage + " battle damage";
     }
 
     public static void showGraveyard(String graveyardToShow) {
@@ -439,8 +444,8 @@ public class PrintResponses {
         System.out.println(selectedCardToShow);
     }
 
-    public static void printEndingTheGame(Pair<String, String> pair) {
-        System.out.println(pair.getFirst() + " won the game and the score is: " + pair.getSecond());
+    public static String printEndingTheGame(Pair<String, String> pair) {
+        return pair.getFirst() + " won the game and the score is: " + pair.getSecond();
     }
 
     public static void printEndingTheWholeMatch(Pair<String, String> pair) {
@@ -461,6 +466,40 @@ public class PrintResponses {
             System.out.println(i + ": \n" + monsters.get(i));
             System.out.println("-------------------------------------------------------------------------------------");
         }
+    }
+
+
+    public static void showError(String errorContent, MouseEvent mouseEvent){
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        if (mouseEvent != null) {
+            errorAlert.setX(mouseEvent.getScreenX());
+            errorAlert.setY(mouseEvent.getScreenY());
+        }
+        errorAlert.initStyle(StageStyle.UNDECORATED);
+        errorAlert.getDialogPane().getStylesheets()
+                .add(Objects.requireNonNull(PrintResponses.class.getResource("/CSS/CSS.css")).toExternalForm());
+        errorAlert.setContentText(errorContent);
+        errorAlert.show();
+    }
+
+    public static void showInformation(String informationContent){
+        Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+        errorAlert.initStyle(StageStyle.UNDECORATED);
+        errorAlert.getDialogPane().getStylesheets()
+                .add(Objects.requireNonNull(PrintResponses.class.getResource("/CSS/CSS.css")).toExternalForm());
+        errorAlert.setContentText(informationContent);
+        errorAlert.show();
+    }
+
+
+    public static boolean showConfirmation(String confirmationContent){
+        Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        errorAlert.initStyle(StageStyle.UNDECORATED);
+        errorAlert.getDialogPane().getStylesheets()
+                .add(Objects.requireNonNull(PrintResponses.class.getResource("/CSS/CSS.css")).toExternalForm());
+        errorAlert.setContentText(confirmationContent);
+        errorAlert.showAndWait();
+        return errorAlert.getResult() == ButtonType.OK || errorAlert.getResult() == ButtonType.YES;
     }
 
     public static void printWrongChoice() {
@@ -579,4 +618,8 @@ public class PrintResponses {
     public static void printEnterTributeOrRitual() {
         System.out.println(Responses.enterTribute);
     }
+
+
+    ///////////
+    // todo handle **chat box**
 }
