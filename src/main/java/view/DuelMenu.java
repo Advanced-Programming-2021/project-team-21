@@ -682,7 +682,6 @@ public class DuelMenu implements Menuable {
     public void surrender() {
         boolean surrenders = PrintResponses.showConfirmation(Responses.surrenderConfirmation);
         if (surrenders) {
-            PrintResponses.showInformation(PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds)));
             currentDuel = null;
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         }
@@ -707,7 +706,7 @@ public class DuelMenu implements Menuable {
         if (initialRounds == 1)
             PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
         else
-            PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
+       //     PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
         currentDuel = null;
 
     }
