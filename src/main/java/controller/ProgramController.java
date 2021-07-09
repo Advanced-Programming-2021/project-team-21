@@ -27,6 +27,7 @@ public class ProgramController {
     public static Scene currentScene;
     public static MediaPlayer mediaPlayer;
     public static MediaPlayer mediaPlayerBackground;
+    public static double volume = 1.0;
 
     public static Scene createNewScene(URL url) throws IOException {
         Parent pane = FXMLLoader.load(url);
@@ -37,7 +38,7 @@ public class ProgramController {
     }
 
     public void run() throws IOException {
-        startNewAudio("src/main/resources/audios/menuSound.mp3");
+        startNewAudioBackground("src/main/resources/audios/menuSound.mp3");
         DataController.createDirectories();
         allCards = DataController.getAllCards();
         DataController.initializeEffectHolders();
@@ -45,7 +46,7 @@ public class ProgramController {
         ProgramController.stage.show();
     }
 
-    public static void startNewAudio(String path) {
+    public static void startNewAudioBackground(String path) {
         try {
             mediaPlayerBackground.stop();
         }
@@ -53,14 +54,14 @@ public class ProgramController {
         }
         Media media = new Media(new File(path).toURI().toString());
         mediaPlayerBackground = new MediaPlayer(media);
+        mediaPlayerBackground.setVolume(volume);
         mediaPlayerBackground.setAutoPlay(true);
-        mediaPlayerBackground.setCycleCount(10000);
-
     }
 
-    public static void startNewAudioWithoutStopPrevious(String path) {
+    public static void startNewAudio(String path) {
         Media media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(volume);
         mediaPlayer.setAutoPlay(true);
     }
 

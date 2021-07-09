@@ -5,8 +5,6 @@ import controller.ProgramController;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -93,7 +91,7 @@ public class ScoreBoard implements Menuable {
     }
 
     public void handleBackToMenu() throws IOException {
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
         ProgramController.stage.show();
     }
