@@ -132,7 +132,6 @@ public class LoginMenu implements Menuable {
 
     public void backToEntrance() throws IOException {
         ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
-        ProgramController.startNewAudioWithoutStopPrevious("src/main/resources/audios/click.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/entrance.fxml"));
         ProgramController.stage.show();
     }

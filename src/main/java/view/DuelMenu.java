@@ -967,6 +967,7 @@ public class DuelMenu implements Menuable {
     @SuppressWarnings("rawtypes")
     @Override
     public void showMenu() throws IOException {
+        ProgramController.startNewAudio("src/main/resources/audios/gameSound.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/DuelMenu.fxml"));
         ChoiceBox choiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
@@ -1453,18 +1454,21 @@ public class DuelMenu implements Menuable {
 
     public void decreaseVolume() {
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
+        ProgramController.mediaPlayerBackground.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
         checkVolumeButton();
     }
 
     public void increaseVolume() {
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() + 0.1);
+        ProgramController.mediaPlayerBackground.setVolume(ProgramController.mediaPlayer.getVolume() + 0.1);
         checkVolumeButton();
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
 
     public void mute() {
         ProgramController.mediaPlayer.setVolume(0);
+        ProgramController.mediaPlayerBackground.setVolume(0);
         checkVolumeButton();
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
