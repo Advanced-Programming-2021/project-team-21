@@ -398,6 +398,7 @@ public class DuelMenu implements Menuable {
                     public void handle(ActionEvent event) {
                         firstUserStage.close();
                         currentDuel = null;
+                        stage.close();
                         firstUserStage = new Stage();
                         secondUserStage = new Stage();
                         ProgramController.stage.show();
@@ -1163,9 +1164,13 @@ public class DuelMenu implements Menuable {
             int number = random.nextInt(2);
             if (number == 0) rectangle.setFill(new ImagePattern(heads));
             else rectangle.setFill(new ImagePattern(tails));
-            handleCreatingTwoStages();
-            if (chosen == number) handleSuccessfulGameCreation(starter, invited);
-            else handleSuccessfulGameCreation(invited, starter);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1.5));
+            pauseTransition.play();
+            pauseTransition.setOnFinished(event1 -> {
+                handleCreatingTwoStages();
+                if (chosen == number) handleSuccessfulGameCreation(starter, invited);
+                else handleSuccessfulGameCreation(invited, starter);
+            });
         });
         sequentialTransition.play();
 
