@@ -187,7 +187,6 @@ public class User {
     }
 
     public int getLifePoints() {
-        System.out.println("LP");
         return lifePoints;
     }
 

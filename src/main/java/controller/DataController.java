@@ -133,9 +133,7 @@ public class DataController {
 
     //is called for saving User and Card objects as json
     public static void saveData(Object object) {
-        System.out.println("savingggg");
         String dataToWrite = new Gson().toJson(object);
-        System.out.println("still savinggggggg");
         String fileName = "";
         if (object instanceof AI)
             return;
