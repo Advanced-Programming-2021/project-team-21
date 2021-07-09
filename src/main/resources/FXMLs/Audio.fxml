@@ -7,9 +7,9 @@
 
 
 <?import java.net.URL?>
-<AnchorPane prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
+<AnchorPane prefHeight="200.0" prefWidth="300.0" styleClass="backgroundAudio" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
    <children>
-      <Label layoutX="124.0" layoutY="14.0" styleClass="title-label" text="Audio">
+      <Label layoutX="124.0" layoutY="14.0"  styleClass="title-label" text="Audio">
          <font>
             <Font size="20.0" />
          </font>
@@ -39,7 +39,7 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <Label id="volume" layoutX="193.0" layoutY="65.0">
+      <Label id="volume" layoutX="193.0" style="-fx-border-color:black; -fx-background-color: white;" layoutY="65.0">
          <font>
             <Font size="15.0" />
          </font>
@@ -47,5 +47,8 @@
    </children>
    <stylesheets>
       <URL value="@../CSS/CSS.css"/>
+   </stylesheets>
+   <stylesheets>
+      <URL value="@../CSS/CSS.css" />
    </stylesheets>
 </AnchorPane>

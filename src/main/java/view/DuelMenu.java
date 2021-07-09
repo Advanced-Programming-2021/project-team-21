@@ -213,7 +213,6 @@ public class DuelMenu implements Menuable {
         commandMap.put(Regex.flipSummon, this::flipSummon);
         commandMap.put(Regex.activateSpell, this::activateSpell);
         commandMap.put(Regex.showSelectedCard, this::showSelectedCard);
-        commandMap.put(Regex.surrender, this::surrender);
         commandMap.put(Regex.increaseLP, this::increaseLP);
         commandMap.put(Regex.setWinner, this::setWinner);
         commandMap.put(Regex.forceSelectHand, this::forceSelectHand);
@@ -580,7 +579,7 @@ public class DuelMenu implements Menuable {
         PrintResponses.printSelectedCard(currentDuel.showSelectedCard());
     }
 
-    private void surrender(Matcher matcher) {
+    public void surrender() {
         PrintResponses.printEndingTheGame(currentDuel.surrender(remainingRounds, initialRounds));
         currentDuel = null;
     }
@@ -1442,33 +1441,31 @@ public class DuelMenu implements Menuable {
         Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/audio.fxml"));
         sceneSettings = new Scene(pane);
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
-        if (String.format("%.1f",ProgramController.mediaPlayer.getVolume()).equals("1"))
-        sceneSettings.lookup("#increaseVolume").setDisable(true);
+        checkVolumeButton();
         stageSettings.setScene(sceneSettings);
         stageSettings.show();
     }
 
+    private void checkVolumeButton() {
+        sceneSettings.lookup("#increaseVolume").setDisable(String.format("%.1f", ProgramController.mediaPlayer.getVolume()).equals("1.0"));
+        sceneSettings.lookup("#decreaseVolume").setDisable(String.format("%.1f", ProgramController.mediaPlayer.getVolume()).equals("0.0"));
+    }
+
     public void decreaseVolume() {
-        sceneSettings.lookup("#increaseVolume").setDisable(false);
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() - 0.1);
-        if (ProgramController.mediaPlayer.getVolume() == 0.1)
-            sceneSettings.lookup("#decreaseVolume").setDisable(true);
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
+        checkVolumeButton();
     }
 
     public void increaseVolume() {
-        sceneSettings.lookup("#decreaseVolume").setDisable(false);
         ProgramController.mediaPlayer.setVolume(ProgramController.mediaPlayer.getVolume() + 0.1);
-        if (ProgramController.mediaPlayer.getVolume() == 0.1)
-            sceneSettings.lookup("#decreaseVolume").setDisable(true);
-        if (ProgramController.mediaPlayer.getVolume() == 1)
-            sceneSettings.lookup("#increaseVolume").setDisable(true);
+        checkVolumeButton();
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
 
     public void mute() {
         ProgramController.mediaPlayer.setVolume(0);
-        sceneSettings.lookup("#decreaseVolume").setDisable(true);
+        checkVolumeButton();
         ((Label)sceneSettings.lookup("#volume")).setText(String.format("%.1f",ProgramController.mediaPlayer.getVolume()));
     }
 
@@ -1499,6 +1496,10 @@ public class DuelMenu implements Menuable {
 
     public void closeAllStages() {
         stages.forEach(Stage::close);
+    }
+
+    public void pause() {
+        // todo
     }
 }
 

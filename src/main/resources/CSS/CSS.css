@@ -8,6 +8,16 @@
     -fx-background-size: cover;
 }
 
+.backgroundSettings {
+    -fx-background-image: url("../images/settings.jfif");
+    -fx-background-size: cover;
+}
+
+.backgroundAudio {
+    -fx-background-image: url("../images/audio.png");
+    -fx-background-size: cover;
+}
+
 .backgroundDuel {
     -fx-background-image: url("../images/backgroundDuel.jpg");
     -fx-background-size: cover;
