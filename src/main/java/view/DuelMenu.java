@@ -1519,6 +1519,7 @@ public class DuelMenu implements Menuable {
     public void pause() {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         // todo
+        // salam
     }
 }
 
