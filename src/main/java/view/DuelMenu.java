@@ -575,7 +575,6 @@ public class DuelMenu implements Menuable {
                 currentDuel.changeToDefensePosition();
             }
             reloadCardsOnBoard();
-            System.out.println(currentDuel);
         }
     }
 
@@ -600,7 +599,7 @@ public class DuelMenu implements Menuable {
 
     private void attack(int address, Monster monsterToAttack, MouseEvent event) {
         if (currentDuel.isNoCardSelected()) {
-            PrintResponses.showError(Responses.noCardSelected, null);
+            return;
         } else if (isNotInBattlePhase()) {
             PrintResponses.showError(Responses.attackInWrongPhase, null);
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
@@ -667,8 +666,9 @@ public class DuelMenu implements Menuable {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
+        borderPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
+        borderPane.getStyleClass().add("grave-yard");
         Button backButton = new Button("Back");
-        backButton.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
         backButton.getStyleClass().add("buttonEntrance");
         borderPane.setBottom(backButton);
         backButton.setOnMouseClicked(event -> stage.close());
@@ -677,7 +677,6 @@ public class DuelMenu implements Menuable {
         ListView<Rectangle> cards = new ListView<>();
         cards.setOrientation(Orientation.HORIZONTAL);
         for (Card card : graveyard) {
-            System.out.println(card);
             Rectangle cardPicture = new Rectangle(180, 200);
             cardPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
             cards.getItems().add(cardPicture);
@@ -1248,10 +1247,12 @@ public class DuelMenu implements Menuable {
     private void showCheatStage() {
         //todo STYLE
         Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
+        borderPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
+        borderPane.getStyleClass().add("cheat-stage");
         Scene scene = new Scene(borderPane, 300, 200);
-        TextField textField = new TextField();
-        textField.setPromptText("Enter cheat code");
+        TextField textField = new TextField("Enter cheat code and hit enter to exit.");
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 String cheatCode = textField.getText();
@@ -1487,8 +1488,6 @@ public class DuelMenu implements Menuable {
             }
             Rectangle cardOnBoard = ((Rectangle) hBox.getChildren().get(convertNormalAddressToBoardAddress(i, card, isRival)));
             cardOnBoard.setEffect(null);
-            if (card.isFaceUp() && !card.isATK())
-                System.out.println(card);
             if (card.isFaceUp()) {
                 cardOnBoard.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
                 if (card.isATK() && cardOnBoard.getTransforms().size() != 0){
@@ -1521,8 +1520,7 @@ public class DuelMenu implements Menuable {
             if (!isRival && card instanceof Monster) {
                 cardOnBoard.setOnMouseClicked(event -> {
                     if (cardOnBoard.getScene().getRoot().getEffect() == null) {
-                        handleSelectingCard(finalI, card, cardOnBoard, "monster");
-                        System.out.println(currentDuel.getSelectedCard());
+                        handleSelectingCard(finalI, cardOnBoard, "monster");
                         if (event.getButton() == MouseButton.SECONDARY) {
                             ContextMenu menu = new ContextMenu();
                             handleContextMenuWhenRightClicked(card, menu, cardOnBoard);
@@ -1535,8 +1533,7 @@ public class DuelMenu implements Menuable {
                 cardOnBoard.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.SECONDARY) {
                         if (cardOnBoard.getScene().getRoot().getEffect() == null) {
-                            handleSelectingCard(finalI, card, cardOnBoard, "spell");
-                            System.out.println(currentDuel.getSelectedCard());
+                            handleSelectingCard(finalI, cardOnBoard, "spell");
                             ContextMenu menu = new ContextMenu();
                             handleContextMenuWhenRightClicked(card, menu, cardOnBoard);
                         }
@@ -1555,8 +1552,9 @@ public class DuelMenu implements Menuable {
     }
 
     private void showFieldSpellOnBoard(HBox hBox, Card fieldSpell) {
-        Rectangle fieldZoneCardPicture;
-        fieldZoneCardPicture = (Rectangle) ((hBox.lookup("#ownFieldZone" )!= null) ?
+        if (hBox.lookup("#ownFieldZone" ) == null || hBox.lookup("#rivalFieldZone" ) == null)
+            return;
+        Rectangle fieldZoneCardPicture = (Rectangle) ((hBox.lookup("#ownFieldZone" )!= null) ?
                 hBox.lookup("#ownFieldZone" ): hBox.lookup("#rivalFieldZone" ));
         if (fieldSpell != null) {
             fieldZoneCardPicture.setFill(new ImagePattern(new Image(fieldSpell.getCardImageAddress())));
@@ -1612,9 +1610,8 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void handleSelectingCard(int index, Card card, Rectangle cardOnBoard, String where) {
+    private void handleSelectingCard(int index, Rectangle cardOnBoard, String where) {
         cardOnBoard.setEffect(new Glow(5));
-        System.out.println(convertNormalAddressToBoardAddress(index, card, false));
         selectCardFromOwn(index + 1, where);
     }
 
@@ -1691,7 +1688,6 @@ public class DuelMenu implements Menuable {
             Stage stage = (firstUserStage.getScene().getRoot().getEffect() == null) ? firstUserStage : secondUserStage;
             cardPicture.setCursor(Cursor.OPEN_HAND);
             HBox ownMonsters = (HBox) stage.getScene().lookup("#ownMonsterHBox");
-            System.out.println(mouseEvent.getTarget().equals(mouseEvent.getSource()));
             if (ownMonsters.contains(mouseEvent.getX(), mouseEvent.getY())) {
                 addCardToBoard(mouseEvent);
                 ((AnchorPane) stage.getScene().getRoot()).getChildren().remove(cardPicture);
@@ -1748,6 +1744,7 @@ public class DuelMenu implements Menuable {
         Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXMLs/settings.fxml")));
         Scene scene = new Scene(pane);
         stageSettings.setScene(scene);
+        stageSettings.setResizable(false);
         stageSettings.show();
         scene.lookup("#pause").setOnMouseClicked(event -> pause());
     }
@@ -1796,7 +1793,7 @@ public class DuelMenu implements Menuable {
     private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
         if (!canEnlargeCard)
             return;
-        Animation delay = new PauseTransition(Duration.seconds(1));
+        Animation delay = new PauseTransition(Duration.seconds(2));
         Stage stage = new Stage();
         stage.setX(mouseEvent.getScreenX());
         stage.setY(mouseEvent.getScreenY());

@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundDuel" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
 
@@ -105,10 +106,13 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="118.0" layoutY="10.0" width="50.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="172.0" layoutY="10.0" width="50.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="226.0" layoutY="10.0" width="50.0" />
-         <StackPane>
+         <StackPane id="rivalGraveyard">
             <children>
-                  <Rectangle id="rivalGraveyard" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="60.0" width="50.0" />
-               <Label id="rivalGraveyardNumber" text="0" textFill="#bbd01d" StackPane.alignment="CENTER" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="60.0" width="50.0" />
+               <Label id="rivalGraveyardNumber" styleClass="grave-yard-label" text="0" StackPane.alignment="CENTER">
+                  <font>
+                     <Font size="20.0" />
+                  </font></Label>
             </children>
          </StackPane>
          <padding>
@@ -119,10 +123,13 @@
             <padding>
                 <Insets bottom="12.0" right="4.0" />
             </padding>
-         <StackPane>
+         <StackPane id="ownGraveyard">
             <children>
-                  <Rectangle id="ownGraveyard" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="60.0" width="50.0" />
-               <Label id="ownGraveyardNumber" text="0" textFill="#bbd01d" StackPane.alignment="CENTER" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="60.0" width="50.0" />
+               <Label id="ownGraveyardNumber" styleClass="grave-yard-label" text="0" StackPane.alignment="CENTER">
+                  <font>
+                     <Font size="20.0" />
+                  </font></Label>
             </children>
          </StackPane>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="10.0" layoutY="10.0" width="50.0" />

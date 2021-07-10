@@ -255,3 +255,19 @@
  .duelSetup{
      -fx-background-color: darkgray;
  }
+
+ .cheat-stage {
+     -fx-background-image: url("../images/Cheat.jpg");
+     -fx-background-size: cover;
+ }
+
+ .grave-yard {
+      -fx-background-image: url("../images/Graveyard.jpg");
+      -fx-background-size: cover;
+ }
+
+ .grave-yard-label {
+    -fx-background-color: rgba(0, 0, 0, 0.836);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+ }

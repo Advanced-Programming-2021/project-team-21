@@ -13,7 +13,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button layoutX="90.0" layoutY="68.0" mnemonicParsing="false" prefWidth="120.0" styleClass="buttonEntrance" onMouseClicked="#pause" text="Pause">
+      <Button layoutX="90.0" layoutY="68.0" mnemonicParsing="false" prefWidth="120.0" styleClass="buttonEntrance" id="pause" text="Pause">
          <font>
             <Font size="15.0" />
          </font>
