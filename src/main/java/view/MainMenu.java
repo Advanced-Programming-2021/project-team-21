@@ -1,10 +1,8 @@
 package view;
 
 import controller.ProgramController;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -74,20 +72,19 @@ public class MainMenu implements Menuable {
             try {
                 ProgramController.mediaPlayer.setVolume(0);
             }
-            catch (Exception e) {
+            catch (Exception ignored) {
             }
             ProgramController.volume = 0;
-            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
         }
         else {
             ((ImageView) ProgramController.currentScene.lookup("#soundIcon")).setImage(new Image(getClass().getResource("/images/soundIcon.png").toExternalForm()));
             try {
                 ProgramController.mediaPlayer.setVolume(0.5);
             }
-            catch (Exception e) {
+            catch (Exception ignored) {
             }
             ProgramController.volume = 0.5;
-            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
         }
+        ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
     }
 }

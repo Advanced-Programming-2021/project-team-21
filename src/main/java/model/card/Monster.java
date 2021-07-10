@@ -87,15 +87,12 @@ public class Monster extends Card {
     //The Tricky +
     private Effect discardToSpecialSummon;              //(1, 0)        in mainPhase
 
-    private Effect isRitual;
-
     public Monster(Object[] parameters) {
         setName((String) parameters[0]);
         setLevel(Integer.parseInt((String) parameters[1]));
         setAttribute(Attributes.valueOf(((String) parameters[2]).toUpperCase()));
         setMonsterType(MonsterTypes.valueOf(((String) parameters[3]).toUpperCase()));
         setCardType(CardType.valueOf(((String) parameters[4]).toUpperCase()));
-        if (cardType.getName().equals("Effect")) this.setHasEffect(true);
         setAtk(Integer.parseInt((String) parameters[5]));
         setAtkHolder(Integer.parseInt((String) parameters[5]));
         setDef(Integer.parseInt((String) parameters[6]));
@@ -343,7 +340,6 @@ public class Monster extends Card {
     }
 
     public void setIsRitual(Effect isRitual) {
-        this.isRitual = isRitual;
     }
 
     public boolean isBattlePhaseEffectEnd() {

@@ -1,6 +1,5 @@
 package controller.Effects;
 
-import controller.ProgramController;
 import view.DuelMenu;
 import model.Duel;
 import model.User;

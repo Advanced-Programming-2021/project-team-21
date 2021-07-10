@@ -58,22 +58,22 @@ public class CreateCard implements Menuable {
     private String cardTypeString;
     private int price;
     private int priceEffect;
-    private HashMap<String, String> chosenEffects;
+    private final HashMap<String, String> CHOSEN_EFFECTS;
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
-    private boolean canShowDetail = true;
 
 
     {
         finalEffect = new StringBuilder();
         setters = new HashMap<>();
-        chosenEffects = new HashMap<>();
+        CHOSEN_EFFECTS = new HashMap<>();
     }
 
     public void chooseImage() {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
+        String string = "Open Resource File";
+        fileChooser.setTitle(string);
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("JPG Files (*.jpg)",
                 "*.jpg");
         fileChooser.getExtensionFilters().add(extensionFilter);
@@ -88,7 +88,7 @@ public class CreateCard implements Menuable {
         ProgramController.stage.show();
     }
 
-    public void chooseEffect(MouseEvent event) throws IOException {
+    public void chooseEffect() throws IOException {
         if (effectsStage == null) {
             if (errorNotChosen()) return;
             effectsStage = new Stage();
@@ -190,7 +190,7 @@ public class CreateCard implements Menuable {
                 if (event.getCode().equals(KeyCode.ENTER)) {
                     checkIsEffectFinished(checkBox, textFieldsHBox);
                 }
-                findOutPrice(textField);
+                findOutPrice();
             });
             textFieldsHBox.getChildren().add(textField);
         }
@@ -234,7 +234,7 @@ public class CreateCard implements Menuable {
                 else effect.append("\"").append(textField.getText()).append("\"");
             }
         }
-        chosenEffects.put(effectName, effect.toString());
+        CHOSEN_EFFECTS.put(effectName, effect.toString());
     }
 
     private boolean checkForValidEntry(String effectName, HBox textFieldsHBox) {
@@ -260,7 +260,7 @@ public class CreateCard implements Menuable {
         return MonsterTypes.monsterTypes().contains(text);
     }
 
-    private void findOutPrice(TextField textField) {
+    private void findOutPrice() {
         int wholePrice = 0;
         for (TextField setter : setters.keySet()) {
             int number = effectsHolder.getPrice().get(((CheckBox) ((VBox) setter.getParent().getParent()).getChildren().get(0)).getText()).get(setters.get(setter));
@@ -411,9 +411,9 @@ public class CreateCard implements Menuable {
     }
 
     public void saveEffects() {
-        for (int i = 0; i < chosenEffects.keySet().size(); i++) {
-            finalEffect.append(chosenEffects.get((String) chosenEffects.keySet().toArray()[i]));
-            if (i != chosenEffects.size() - 1) finalEffect.append("*");
+        for (int i = 0; i < CHOSEN_EFFECTS.keySet().size(); i++) {
+            finalEffect.append(CHOSEN_EFFECTS.get((String) CHOSEN_EFFECTS.keySet().toArray()[i]));
+            if (i != CHOSEN_EFFECTS.size() - 1) finalEffect.append("*");
         }
     }
 
@@ -480,15 +480,14 @@ public class CreateCard implements Menuable {
     }
 
     private void showDetails(String effectName, MouseEvent mouseEvent) {
-        if (!canShowDetail)
-            return;
         Animation delay = new PauseTransition(Duration.seconds(1));
+        int notToBeDuplicate = 150;
         Stage stage = new Stage();
         stage.setX(mouseEvent.getScreenX());
         stage.setY(mouseEvent.getScreenY());
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
-        Scene scene = new Scene(borderPane, 150, 100);
+        Scene scene = new Scene(borderPane, notToBeDuplicate, 100);
         delay.setOnFinished(e -> {
             delays.forEach(Animation::stop);
             stages.forEach(Stage::close);

@@ -4,14 +4,12 @@ package model;
 import controller.Effects.*;
 import controller.ProgramController;
 import model.card.Card;
-import model.card.Chain;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.DuelMenu;
 import view.PrintResponses;
-import view.Responses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -24,7 +22,6 @@ public class Duel {
     private User userWhoPlaysNow;
     private Card selectedCard;
     private int placeOfSelectedCard;
-    private boolean isSelectedCardForOpponent;
     private boolean hasSummonedOrSetOnce;
     private boolean hasChangedPositionOnce;
     private int numberOfTurnsPlayedUpToNow;
@@ -94,7 +91,6 @@ public class Duel {
             Hand currentHand = userWhoPlaysNow.getHand();
             selectedCard = currentHand.selectACard(cardAddress);
         } else if (ownOrOpponent.equals("own")) {
-            isSelectedCardForOpponent = false;
             if (fromWhere.equals("monster")) {
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
                 if (selectedCard == null) return;
@@ -106,7 +102,6 @@ public class Duel {
             } else
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'S');
         } else if (ownOrOpponent.equals("opponent")) {
-            isSelectedCardForOpponent = true;
             if (fromWhere.equals("monster"))
                 selectedCard = getRival().getBoard().getCard(cardAddress, 'M');
             else
@@ -122,9 +117,6 @@ public class Duel {
     }
 
     public void summonMonster() throws FileNotFoundException {
-     // if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
-     //         WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
-     //         new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
             SummonEffects.run((Monster) selectedCard, userWhoPlaysNow, getRival(), this);
         int placeInBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
@@ -141,9 +133,6 @@ public class Duel {
     }
 
     public void flipSummon() throws FileNotFoundException {
-     // if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
-     //         WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
-     //         new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
             SummonEffects.run((Monster) selectedCard, userWhoPlaysNow, getRival(), this);
         if (((Monster) selectedCard).isFlipSummonEffect())
@@ -156,7 +145,7 @@ public class Duel {
 
     public void tribute(int[] placesOnBoard) throws FileNotFoundException {
         for (int placeOnBoard : placesOnBoard) {
-            if (placeOnBoard == -1)continue;
+            if (placeOnBoard == -1) continue;
             Card cardToTribute = userWhoPlaysNow.getBoard().getCard(placeOnBoard, 'M');
             addCardToGraveyard(cardToTribute, placeOnBoard, userWhoPlaysNow);
         }
@@ -178,7 +167,7 @@ public class Duel {
     }
 
     private void handleSuccessfulSummonOrSet() {
-        if (selectedCard instanceof  Monster)hasSummonedOrSetOnce = true;
+        if (selectedCard instanceof Monster) hasSummonedOrSetOnce = true;
         userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
         deselectACard();
     }
@@ -200,41 +189,12 @@ public class Duel {
         setHasChangedPositionOnce(true);
     }
 
-
-    public void surrender(int remainingRounds, int initialRounds) {
-//        if (initialRounds == 1) {
-//            return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
-//        } else {
-//            if (remainingRounds == 1)
-//                return handleEndingThreeRoundGames(getRival(), userWhoPlaysNow);
-//            else
-//                return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
-//        }
-    }
-
-    public boolean isGameEnded() {
-        return userWhoPlaysNow.getLifePoints() == 0 || getRival().getLifePoints() == 0
-                || userWhoPlaysNow.getHand().getNumberOfRemainingCardsInDeck() == 0
-                || getRival().getHand().getNumberOfRemainingCardsInDeck() == 0;
-
-    }
-
-    public Pair<String, String> handleEndingOneRoundGames(User winner, User loser) {
-        winner.setCoins(winner.getCoins() + 1000 + winner.getLifePoints());
-        winner.setScore(winner.getLifePoints() + 1000);
-        loser.setCoins(100 + loser.getCoins());
-        return new Pair<>(winner.getUsername(), 1000 + "-" + 0);
-    }
-    public void handleEndingThreeRoundGames(User winner, User loser) {
-        getStringStringPair(winner, loser, userWhoPlaysNow, winner.getMaxLifePoint(), winner.getLifePoints(), 300);
-    }
-
     public void handleEndingTheWholeMatch() {
         User rival = getRival();
         if (rival.getLifePoints() < userWhoPlaysNow.getLifePoints()) {
-             getStringStringPair(userWhoPlaysNow, rival, userWhoPlaysNow, userWhoPlaysNow.getMaxLifePoint(), userWhoPlaysNow.getLifePoints(), 300);
+            getStringStringPair(userWhoPlaysNow, rival, userWhoPlaysNow, userWhoPlaysNow.getMaxLifePoint(), userWhoPlaysNow.getLifePoints(), 300);
         } else {
-             getStringStringPair(rival, userWhoPlaysNow, rival, rival.getLifePoints(), rival.getScore(), 100);
+            getStringStringPair(rival, userWhoPlaysNow, rival, rival.getLifePoints(), rival.getScore(), 100);
         }
     }
 
@@ -266,11 +226,6 @@ public class Duel {
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
-     //   if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-     //           getRival(), getUserWhoPlaysNow(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
-     //           rival, new Chain(attackingMonster, null, ""), WhereToChain.ATTACK)) {
-     //       return new Pair<>(0, 0);
-     //   }
         checkForDisabledAttack();
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
             if (BattlePhaseStart.run(attackingMonster, monsterToAttack, rival, this))
@@ -316,14 +271,7 @@ public class Duel {
             userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
             flipSetForSpells(addressToPut);
         }
-     //   boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-     //           getRival(), userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
-     //           userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
-     //           WhereToChain.EFFECT_ACTIVATE);
-     //   if (isCancelled) {
-     //       addCardToGraveyard(spellToActivate, 10, userWhoPlaysNow);
-     //       return false;
-     //   }
+
         if (spellToActivate.isFieldZone()) {
             if (userWhoPlaysNow.getBoard().getFieldZone() != null) {
                 SpellActivation.run((Spell) userWhoPlaysNow.getBoard().getFieldZone(), userWhoPlaysNow, getRival()
@@ -338,7 +286,7 @@ public class Duel {
             return true;
         } else if (spellToActivate.isEquipSpell()) {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
-            if (monster == null)return false;
+            if (monster == null) return false;
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, monster, null);
             userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
@@ -347,41 +295,13 @@ public class Duel {
         SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                 false, null, null);
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
-        return  true;
+        return true;
     }
 
     public void changeLP(User player, int amount) {
         player.setLifePoints(Math.max(player.getLifePoints() + amount, 0));
     }
 
-
-    public String showGraveyard() {
-        StringBuilder graveyardToShow = new StringBuilder();
-        int i = 1;
-        if (userWhoPlaysNow.getGraveyard().size() == 0)
-            return Responses.emptinessOfGraveyard;
-        for (Card card : userWhoPlaysNow.getGraveyard()) {
-            if (card == null) continue;
-            graveyardToShow.append(i).append(". ").append(card.getName()).append(":")
-                    .append(card.getDescription()).append("\n");
-            i++;
-        }
-        return graveyardToShow.toString();
-    }
-
-    public String showSelectedCard() {
-        //casting is necessary but the IDE does not understand.
-        if (selectedCard == null) return Responses.noSelect;
-        if (!selectedCard.isFaceUp() && isSelectedCardForOpponent)
-            return Responses.unableToShowOpponentCard;
-        if (selectedCard instanceof Monster) {
-            return selectedCard.toString();
-        } else if (selectedCard instanceof Spell) {
-            return selectedCard.toString();
-        } else {
-            return selectedCard.toString();
-        }
-    }
 
     public void addCardToGraveyard(Card card, int placeInBoard, User user) {
         if (placeInBoard == 10) {
@@ -400,7 +320,7 @@ public class Duel {
                     try {
                         SpellActivation.run(spell, userWhoPlaysNow, getRival(), this, placeInBoard,
                                 false, monster, null);
-                    }catch (Exception ignored){
+                    } catch (Exception ignored) {
 
                     }
                 }
@@ -513,7 +433,7 @@ public class Duel {
     }
 
     private Pair<Integer, Integer> handleAttackPositionAttack(Monster attackingMonster, Monster monsterToAttack,
-                                                              int placeInBoard, User rival) throws FileNotFoundException {
+                                                              int placeInBoard, User rival) {
         int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
         int toBeNotDuplicate = 0;
         if (differenceOfATK > 0) {

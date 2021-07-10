@@ -38,7 +38,6 @@ public class Trap extends Card {
     /*done*/private Effect negateASummon;          //(2 , 0)
     //Call of the Haunted
     private Effect canSummonFromGY;            //( 2 , 1)
-    private Effect killTheSummoned;            //(2 , 1)
 
     public Trap(Object[] parameters) {
         setName((String) parameters[0]);
@@ -62,7 +61,7 @@ public class Trap extends Card {
     }
 
     public void setKillTheSummoned(Effect killTheSummoned) {
-        this.killTheSummoned = killTheSummoned;
+        //(2 , 1)
     }
 
     public SpellTrapIcon getSpellTrapIcon() {

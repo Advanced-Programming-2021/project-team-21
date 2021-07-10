@@ -6,7 +6,6 @@ import model.card.Card;
 import model.card.Monster;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Deck {
     private ArrayList<Card> mainDeckCards;
@@ -26,21 +25,8 @@ public class Deck {
     }
 
 
-    public static ArrayList<Deck> deckSort(ArrayList<Deck> decks) {
-        ArrayList<Deck> sort = new ArrayList<>(decks);
-        for (int i = 0; i < sort.size(); i++) {
-            for (int j = i + 1; j < sort.size(); j++) {
-                if (checkDecksSort(sort.get(i), sort.get(j))) Collections.swap(sort, i, j);
-            }
-        }
-        return sort;
-    }
 
-    public static boolean checkDecksSort(Deck deck, Deck deck1) {
-        if (deck1.isActive()) return true;
-        else if (deck.isActive()) return false;
-        return deck.getName().compareTo(deck1.getName()) < 0;
-    }
+
 
     public String getName() {
         return name;
@@ -118,43 +104,9 @@ public class Deck {
                 "Spell and Traps:\n" +
                 spellAndTrapToString;
     }
-
-    public int getCardNumber(String cardName) {
-        int number = 0;
-        for (Card mainDeckCard : mainDeckCards) {
-            if (mainDeckCard.getName().equals(cardName)) number++;
-        }
-        for (Card sideDeckCard : sideDeckCards) {
-            if (sideDeckCard.getName().equals(cardName)) number++;
-        }
-        return number;
-    }
-
-    public Card checkCardInDeck(String cardName, String type) {
-        ArrayList<Card> cards;
-        if (type.equals("side")) cards = this.mainDeckCards;
-        else cards = this.sideDeckCards;
-        for (Card card : cards) {
-            if (card.getName().equals(cardName)) return card;
-        }
-        return null;
-    }
-
-    public String showIsValid() {
-        if (isValid())
-            return "valid";
-        return "invalid";
-    }
-
     public boolean isValid() {
-        return this.getNumberOfMainDeckCards() > 39 &&
-                this.getNumberOfMainDeckCards() < 61 &&
-                this.getNumberOfSideDeckCards() < 16;
-    }
-
-
-    public String deckShow() {
-        return this.getName() + ": main deck " + this.getMainDeckCards().size() + ", side deck " +
-                this.getSideDeckCards().size() + ", " + this.showIsValid();
+        return this.getNumberOfMainDeckCards() <= 39 ||
+                this.getNumberOfMainDeckCards() >= 61 ||
+                this.getNumberOfSideDeckCards() >= 16;
     }
 }

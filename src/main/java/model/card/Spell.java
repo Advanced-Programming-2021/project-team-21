@@ -61,8 +61,6 @@ public class Spell extends Card {
     //Magnum Shield
     /*done*/private Effect equipBasedOnPosition;            //(0 , 0 , "Warrior")
 
-    private Effect isRitual;
-
     public Spell(Object[] parameters) {
         setName((String) parameters[0]);
         setSpellTrapIcon(SpellTrapIcon.valueOf(((String) parameters[1]).toUpperCase()));
@@ -167,7 +165,6 @@ public class Spell extends Card {
     }
 
     public void setIsRitual(Effect isRitual) {
-        this.isRitual = isRitual;
     }
 
     public Effect getCanDestroyOpponentSpellAndTrap() {

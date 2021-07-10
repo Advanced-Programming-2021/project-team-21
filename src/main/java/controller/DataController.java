@@ -134,7 +134,6 @@ public class DataController {
 
     //is called for saving User and Card objects as json
     public static void saveData(Object object) {
-        System.out.println("savingggg");
         if (object instanceof User) {
             User user = (User) object;
             user.setHand(null);

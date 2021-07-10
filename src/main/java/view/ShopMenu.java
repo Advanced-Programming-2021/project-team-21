@@ -38,15 +38,14 @@ public class ShopMenu implements Menuable {
     public static HashMap<String , String> paths = new HashMap<>();
     public static ArrayList<String> cardsName;
     public TextField moneyCheat = new TextField();
-    private HashMap<String, Label> countToUpdate = new HashMap<>();
-    private static HashMap<String, Button> buttonToUpdate = new HashMap<>();
+    private final HashMap<String, Label> countToUpdate = new HashMap<>();
+    private static final HashMap<String, Button> buttonToUpdate = new HashMap<>();
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
-    private boolean canEnlargeCard = true;
 
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/shopMenu.fxml"));
-        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + String.valueOf(ProgramController.userInGame.getCoins()));
+        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + ProgramController.userInGame.getCoins());
         ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> closeAllStages());
         cardsName = new ArrayList<>(DataController.getAllCards().keySet());
         Collections.sort(cardsName);
@@ -84,8 +83,6 @@ public class ShopMenu implements Menuable {
     }
 
     private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
-        if (!canEnlargeCard)
-            return;
         Animation delay = new PauseTransition(Duration.seconds(1));
         Stage stage = new Stage();
         stage.setX(mouseEvent.getScreenX());
@@ -110,7 +107,7 @@ public class ShopMenu implements Menuable {
 
     private void updateButtons() {
         for (String name : cardsName) {
-            if (Card.getCardByName(name).getPrice() > ProgramController.userInGame.getCoins()) {
+            if (Objects.requireNonNull(Card.getCardByName(name)).getPrice() > ProgramController.userInGame.getCoins()) {
                 buttonToUpdate.get(name).setDisable(true);
                 buttonToUpdate.get(name).setStyle("-fx-background-color: rgb(212, 29, 29,0.877);");
             }
@@ -130,11 +127,11 @@ public class ShopMenu implements Menuable {
         for (Card card : ProgramController.userInGame.getCards())
             if (card.getName().equals(name))
                 countBought++;
-        Label labelCount = new Label("Count : " + String.valueOf(countBought));
+        Label labelCount = new Label("Count : " + countBought);
         countToUpdate.put(name, labelCount);
         labelCount.setStyle("-fx-text-fill: white;");
         vBox.getChildren().add(labelCount);
-        Label labelPrice = new Label("Price : " + String.valueOf(Card.getCardByName(name).getPrice()));
+        Label labelPrice = new Label("Price : " + Objects.requireNonNull(Card.getCardByName(name)).getPrice());
         labelPrice.setStyle("-fx-text-fill: white;");
         vBox.getChildren().add(labelPrice);
     }
@@ -144,12 +141,15 @@ public class ShopMenu implements Menuable {
         User user = ProgramController.userInGame;
         ProgramController.userInGame.addCard(card);
         user.setCoins(user.getCoins() - (card != null ? card.getPrice() : 0));
-        ((Label) ProgramController.currentScene.lookup("#coin")).setText(String.valueOf("Coins : " + ProgramController.userInGame.getCoins()));
+        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + ProgramController.userInGame.getCoins());
         int countBought = 0;
-        for (Card cardToCheck : ProgramController.userInGame.getCards())
+        for (Card cardToCheck : ProgramController.userInGame.getCards()) {
+            assert card != null;
             if (cardToCheck.getName().equals(card.getName()))
                 countBought++;
-        countToUpdate.get(card.getName()).setText("Count : " + String.valueOf(countBought));
+        }
+        assert card != null;
+        countToUpdate.get(card.getName()).setText("Count : " + countBought);
         updateButtons();
     }
 
@@ -213,7 +213,7 @@ public class ShopMenu implements Menuable {
 
     public void increaseMoney(int amount) {
         ProgramController.userInGame.setCoins(ProgramController.userInGame.getCoins() + amount);
-        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + String.valueOf(ProgramController.userInGame.getCoins()));
+        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + ProgramController.userInGame.getCoins());
         updateButtons();
     }
 }

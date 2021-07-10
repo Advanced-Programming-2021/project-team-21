@@ -1,6 +1,5 @@
 package controller.Effects;
 
-import controller.ProgramController;
 import view.DuelMenu;
 import model.Duel;
 import model.User;
@@ -29,7 +28,7 @@ public class SelectEffect {
             scannerHolder = Monster.copy(selected);
             scannerHolder.setATK(selected.isATK());
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon( duel, false);
+                DuelMenu.checkSpecialSummon(duel, false);
         } else if (selected.getCanGetFromGYByLevelToHand().hasEffect()) {
             Card card = player.getHand().selectARandomCardFromHand();
             int i;
@@ -44,7 +43,7 @@ public class SelectEffect {
             if (DuelMenu.specialSummonsedCards.size() > 0)
                 PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon( duel, false);
+                DuelMenu.checkSpecialSummon(duel, false);
             selected.getCanGetFromGYByLevelToHand().finishEffect();
             selected.getCanGetFromGYByLevelToHand().setNeedsToBeReset(true);
             selected.setSelectEffect(false);

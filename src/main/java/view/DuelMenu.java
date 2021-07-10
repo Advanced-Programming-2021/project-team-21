@@ -60,7 +60,7 @@ public class DuelMenu implements Menuable {
     public static boolean addToHand;
     public static boolean isForSet;
     public static boolean isGetFroOpponentGY;
-    private static Stage stageSettings = new Stage();
+    private final static Stage STAGE_SETTINGS = new Stage();
     private static Scene sceneSettings;
     private final Delta delta = new Delta();
     private static final ArrayList<Animation> delays = new ArrayList<>();
@@ -74,7 +74,6 @@ public class DuelMenu implements Menuable {
     private boolean isFirstRound = true;
     private static boolean canEnlargeCard = true;
     public int numberOfTribute;
-    public static int selectedCardsTillNow;
 
 
     public static Monster getMonsterForEquip(Duel duel, Spell spell) throws FileNotFoundException {
@@ -120,7 +119,6 @@ public class DuelMenu implements Menuable {
                 int finalJ = j;
                 rectangle.setOnMouseClicked(event -> {
                     chosenCards.add(cardsToSelect.get(finalJ));
-                    System.out.println(chosenCards.size() + " " + number);
                     if (chosenCards.size() == number) stage.close();
                 });
                 hBox.getChildren().add(rectangle);
@@ -137,7 +135,6 @@ public class DuelMenu implements Menuable {
     }
 
     public static boolean checkSpecialSummon(Duel currentDuel, boolean isInRivalTurn) throws FileNotFoundException {
-        Matcher matcher;
         if (specialSummonsedCards != null) {
             Card card = currentDuel.getSelectedCard();
             if (specialSummonsedCards.size() == 0) {
@@ -163,7 +160,7 @@ public class DuelMenu implements Menuable {
                 int tempPlace = currentDuel.getPlaceOfSelectedCard();
                 currentDuel.setSelectedCard(monster);
                 if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
-                    PrintResponses.printUnableToSpecialSummonMonster();
+                    PrintResponses.showError(PrintResponses.printUnableToSpecialSummonMonster() , null);
                     specialSummonsedCards = null;
                     return true;
                 }
@@ -176,7 +173,7 @@ public class DuelMenu implements Menuable {
             } else {
                 currentDuel.setSelectedCard(monster);
                 if (currentDuel.getUserWhoPlaysNow().getBoard().getAddressToSummon() == 0) {
-                    PrintResponses.printUnableToSpecialSummonMonster();
+                    PrintResponses.showError(PrintResponses.printUnableToSpecialSummonMonster() , null);
                     return true;
                 }
                 removeTheSpecialSummoned(monster, currentDuel);
@@ -254,23 +251,6 @@ public class DuelMenu implements Menuable {
         return commandMap;
     }
 
-    private void selectCardFromOpponentField(Matcher matcher) throws FileNotFoundException {
-        currentDuel.selectCard(1, "field", "opponent");
-        if (currentDuel.getSelectedCard() == null) {
-            PrintResponses.printNoCardInPosition();
-        } else {
-            PrintResponses.printSuccessfulCardSelection();
-        }
-    }
-
-    private void selectCardFromOwnField(Matcher matcher) throws FileNotFoundException {
-        currentDuel.selectCard(1, "field", "own");
-        if (currentDuel.getSelectedCard() == null) {
-            PrintResponses.printNoCardInPosition();
-        } else {
-            PrintResponses.printSuccessfulCardSelection();
-        }
-    }
 
 
     private void createNewDuel(String otherPlayerUsername, int remainingRounds) {
@@ -281,9 +261,9 @@ public class DuelMenu implements Menuable {
             PrintResponses.showError(PrintResponses.printHasNoActiveDeck(ProgramController.userInGame), null);
         } else if (secondPlayer.getActiveDeck() == null) {
             PrintResponses.showError(PrintResponses.printHasNoActiveDeck(secondPlayer), null);
-        } else if (!ProgramController.userInGame.getActiveDeck().isValid()) {
+        } else if (ProgramController.userInGame.getActiveDeck().isValid()) {
             PrintResponses.showError(PrintResponses.printInvalidDeck(ProgramController.userInGame), null);
-        } else if (!secondPlayer.getActiveDeck().isValid()) {
+        } else if (secondPlayer.getActiveDeck().isValid()) {
             PrintResponses.showError(PrintResponses.printInvalidDeck(secondPlayer), null);
         } else {
             showCoinFlipping(ProgramController.userInGame, secondPlayer);
@@ -295,11 +275,10 @@ public class DuelMenu implements Menuable {
         this.remainingRounds = remainingRounds;
         if (ProgramController.userInGame.getActiveDeck() == null) {
             PrintResponses.showError(PrintResponses.printHasNoActiveDeck(ProgramController.userInGame), null);
-        } else if (!ProgramController.userInGame.getActiveDeck().isValid()) {
+        } else if (ProgramController.userInGame.getActiveDeck().isValid()) {
             PrintResponses.showError(PrintResponses.printInvalidDeck(ProgramController.userInGame), null);
         } else {
             AI ai = new AI("AI", "AI", "AI");
-            ai.setCurrentDuel(currentDuel);
             showCoinFlipping(ProgramController.userInGame, ai);
         }
     }
@@ -308,33 +287,6 @@ public class DuelMenu implements Menuable {
         currentDuel.selectCard(cardAddress, whereToSelectFrom, "own");
     }
 
-    private void selectCardFromOpponent(Matcher matcher) throws FileNotFoundException {
-        String whereToSelectFrom = matcher.group("where");
-        if (whereToSelectFrom.equals("field")) {
-            PrintResponses.printInvalidFormat();
-            return;
-        }
-        int cardAddress = Integer.parseInt(matcher.group("number"));
-        if (!(whereToSelectFrom.equals("monster") || whereToSelectFrom.equals("spell"))) {
-            PrintResponses.printInvalidSelection();
-        } else {
-            currentDuel.selectCard(cardAddress, whereToSelectFrom, "opponent");
-            if (currentDuel.getSelectedCard() == null) {
-                PrintResponses.printNoCardInPosition();
-            } else {
-                PrintResponses.printSuccessfulCardSelection();
-            }
-        }
-    }
-
-    private void deselectCard() {
-        if (currentDuel.isNoCardSelected()) {
-            PrintResponses.printNoCardSelected();
-        } else {
-            currentDuel.deselectACard();
-            PrintResponses.printSuccessfulCardDeselection();
-        }
-    }
 
     private void goToNextPhase() {
         if (phase.equals(Phases.DRAW_PHASE)) {
@@ -576,7 +528,6 @@ public class DuelMenu implements Menuable {
             if (cardToTributeAddress == null)return;
             if (areCardAddressesEmpty(cardToTributeAddress)) return;
             currentDuel.tribute(cardToTributeAddress);
-            System.out.println(monster.getRequiredCardsFOrTribute() + " " + monster.getTributeToKillAllMonsterOfOpponent().getEffectNumber());
             if (monster.getTributeToKillAllMonsterOfOpponent().hasEffect() && monster.getRequiredCardsFOrTribute() == monster.getTributeToKillAllMonsterOfOpponent().getEffectNumber()) {
                 for (int i = 1; i < 6; i++) {
                     Card card = currentDuel.getRival().getBoard().getCard(i, 'm');
@@ -610,8 +561,9 @@ public class DuelMenu implements Menuable {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
+        String title = "cheat-stage";
         borderPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
-        borderPane.getStyleClass().add("cheat-stage");
+        borderPane.getStyleClass().add(title);
         Scene scene = new Scene(borderPane, 300, 200);
         TextField textField = new TextField("Enter cheat code and hit enter to exit.");
         textField.setOnKeyPressed(event -> {
@@ -657,23 +609,6 @@ public class DuelMenu implements Menuable {
         }
     }
 
-    private void flipSummon(Matcher matcher) throws FileNotFoundException {
-        if (currentDuel.isNoCardSelected()) {
-            PrintResponses.printNoCardSelected();
-        } else if (isSelectedCardNotInMonsterZone()) {
-            PrintResponses.printUnableToChangePositionOfCard();
-        } else if (isNotInMainPhases()) {
-            PrintResponses.printFlipSummonInWrongPhase();
-        } else if (currentDuel.isSelectedCardSummonedInThisTurn() || (currentDuel.getSelectedCard().isFaceUp()
-                || currentDuel.getSelectedCard().isATK())) {
-            PrintResponses.printUnableToFlipSummonCard();
-        } else {
-            ProgramController.startNewAudio("src/main/resources/audios/flipSummon.wav");
-            currentDuel.flipSummon();
-            PrintResponses.printSuccessfulFlipSummon();
-        }
-
-    }
 
     private void attack(int address, Monster monsterToAttack, MouseEvent event) throws FileNotFoundException {
         if (currentDuel.isNoCardSelected()) {
@@ -1413,6 +1348,7 @@ public class DuelMenu implements Menuable {
     @SuppressWarnings("rawtypes")
     private void reloadHands() {
         if (firstUserStage == null && secondUserStage == null) return;
+        assert firstUserStage != null;
         ((ListView) firstUserStage.getScene().lookup("#rivalHandListView")).getItems().clear();
         ((ListView) firstUserStage.getScene().lookup("#rivalHandListView")).getItems().addAll(getHandCardPictures(currentDuel.getSECOND_USER(), "hide"));
         ((ListView) firstUserStage.getScene().lookup("#ownHandListView")).getItems().clear();
@@ -1847,9 +1783,9 @@ public class DuelMenu implements Menuable {
         }
         Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXMLs/settings.fxml")));
         Scene scene = new Scene(pane);
-        stageSettings.setScene(scene);
-        stageSettings.setResizable(false);
-        stageSettings.show();
+        STAGE_SETTINGS.setScene(scene);
+        STAGE_SETTINGS.setResizable(false);
+        STAGE_SETTINGS.show();
         scene.lookup("#pause").setOnMouseClicked(event -> pause());
     }
 
@@ -1859,8 +1795,8 @@ public class DuelMenu implements Menuable {
         sceneSettings = new Scene(pane);
         ((Label) sceneSettings.lookup("#volume")).setText(String.format("%.1f", ProgramController.mediaPlayer.getVolume()));
         checkVolumeButton();
-        stageSettings.setScene(sceneSettings);
-        stageSettings.show();
+        STAGE_SETTINGS.setScene(sceneSettings);
+        STAGE_SETTINGS.show();
     }
 
     private void checkVolumeButton() {
@@ -1899,15 +1835,16 @@ public class DuelMenu implements Menuable {
             return;
         Animation delay = new PauseTransition(Duration.seconds(2));
         Stage stage = new Stage();
+        int toBeNotDuplicate = 300;
         stage.setX(mouseEvent.getScreenX());
         stage.setY(mouseEvent.getScreenY());
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
-        Scene scene = new Scene(borderPane, 300, 400);
+        Scene scene = new Scene(borderPane, toBeNotDuplicate, 400);
         delay.setOnFinished(e -> {
             delays.forEach(Animation::stop);
             stages.forEach(Stage::close);
-            Rectangle enlargedPicture = new Rectangle(300, 400);
+            Rectangle enlargedPicture = new Rectangle(toBeNotDuplicate, 400);
             enlargedPicture.setFill(rectangle.getFill());
             borderPane.setCenter(enlargedPicture);
             stage.setScene(scene);
@@ -1927,7 +1864,7 @@ public class DuelMenu implements Menuable {
         firstUserStage.close();
         secondUserStage.close();
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
-        stageSettings.close();
+        STAGE_SETTINGS.close();
         ProgramController.gameToContinue = this;
         try {
             goToMainMenu();
@@ -1938,8 +1875,8 @@ public class DuelMenu implements Menuable {
 
     public void continuePausedGame() {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
-        ProgramController.gameToContinue.firstUserStage.show();
-        ProgramController.gameToContinue.secondUserStage.show();
+        firstUserStage.show();
+        secondUserStage.show();
     }
 }
 

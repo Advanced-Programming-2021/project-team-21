@@ -1,6 +1,5 @@
 package controller.Effects;
 
-import controller.ProgramController;
 import view.DuelMenu;
 import model.Board;
 import model.Duel;
@@ -28,7 +27,7 @@ public class BattlePhaseStart {
             DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
             if (cards.size() != 0) PrintResponses.printSpecialSummonCards(cards);
             while (DuelMenu.specialSummonsedCards != null) {
-                DuelMenu.checkSpecialSummon( duel, true);
+                DuelMenu.checkSpecialSummon(duel, true);
             }
             defense.getSummonACardFromEveryWhere().finishEffect();
             defense.getSummonACardFromEveryWhere().setNeedsToBeReset(true);

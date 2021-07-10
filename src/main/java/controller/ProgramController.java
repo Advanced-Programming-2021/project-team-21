@@ -4,7 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.util.Duration;
-import model.Duel;
 import view.DuelMenu;
 import view.LoginMenu;
 import view.Menuable;
@@ -23,7 +22,6 @@ import javafx.scene.media.MediaPlayer;
 
 public class ProgramController {
     public static Scanner scanner = new Scanner(System.in);
-    public static boolean gameOn = true;
     public static Menuable currentMenu = new LoginMenu();
     public static User userInGame;
     public static HashMap<String, Card> allCards;
@@ -59,7 +57,7 @@ public class ProgramController {
         try {
             mediaPlayerBackground.stop();
         }
-        catch (Exception e) {
+        catch (Exception ignored) {
         }
         Media media = new Media(new File(path).toURI().toString());
         mediaPlayerBackground = new MediaPlayer(media);

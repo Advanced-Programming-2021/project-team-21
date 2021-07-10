@@ -60,7 +60,7 @@ public class Hand {
 
     public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0) {
-            ((DuelMenu) ProgramController.currentMenu).endTheGame(false);
+            ((DuelMenu) ProgramController.currentMenu).endTheGame(false , null , null);
             return null;
         }
         for (int i = 0; i < cardsInHand.length; i++) {
@@ -130,14 +130,12 @@ public class Hand {
             if (card != null)
                 countCardsInHand++;
         StringBuilder showCardsInHand = new StringBuilder();
-        for (int i = 0; i < countCardsInHand; i++)
-            showCardsInHand.append("C   ");
+        showCardsInHand.append("C   ".repeat(Math.max(0, countCardsInHand)));
         int countCInString = 0;
         for (int i = 0; i < showCardsInHand.length(); i++)
             if (showCardsInHand.charAt(i) == 'C')
                 countCInString++;
-        for (int i = 1; i <= 6 - countCInString; i++)
-            showCardsInHand.append("    ");
+        showCardsInHand.append("    ".repeat(Math.max(0, 6 - countCInString)));
         return showCardsInHand.toString();
     }
 

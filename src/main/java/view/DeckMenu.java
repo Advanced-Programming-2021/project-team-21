@@ -39,7 +39,6 @@ import java.util.Objects;
 public class DeckMenu implements Menuable {
     private static Deck deckToShow;
     private final User USER = ProgramController.userInGame;
-    private final int DECK_WIDTH = 90, DECK_HEIGHT = 100;
     private final int CARD_WIDTH = 80, CARD_HEIGHT = 90;
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
@@ -168,6 +167,8 @@ public class DeckMenu implements Menuable {
                 vBox.setEffect(new Glow(0.9));
             handleContextMenuWhenRightClicked(deck, menu, vBox);
             vBox.setAlignment(Pos.CENTER);
+            int DECK_HEIGHT = 100;
+            int DECK_WIDTH = 90;
             Rectangle deckPicture = new Rectangle(DECK_WIDTH, DECK_HEIGHT);
             deckPicture.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/deck.png")).toExternalForm())));
             Label deckName = new Label(deck.getName());
@@ -271,7 +272,8 @@ public class DeckMenu implements Menuable {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setResizable(false);
         TextField name = new TextField();
-        name.setMaxWidth(150);
+        int notToBeDuplicate = 150;
+        name.setMaxWidth(notToBeDuplicate);
         name.setPromptText("Name");
         Button submitButton = new Button("Submit"), closeButton = new Button("Close");
         closeButton.setOnAction(e -> {
@@ -281,18 +283,18 @@ public class DeckMenu implements Menuable {
         closeButton.getStyleClass().add("buttonEntrance");
         submitButton.getStyleClass().add("buttonEntrance");
         Platform.runLater(submitButton::requestFocus);
-
+        int notToBeDuplicate2 = 40;
         HBox hbox = new HBox();
         hbox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
-        hbox.setSpacing(40);
+        hbox.setSpacing(notToBeDuplicate2);
         hbox.getChildren().addAll(closeButton, submitButton);
-
         BorderPane borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: rgb(255, 237, 137);");
         borderPane.setCenter(name);
         borderPane.setBottom(hbox);
-        ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
-        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        int notBeDuplicate3 = 0;
+        ColorAdjust adj = new ColorAdjust(notBeDuplicate3, -0.9, -0.5, 0);
+        GaussianBlur blur = new GaussianBlur(notToBeDuplicate2 - 15); // 55 is just to show edge effect more clearly.
         adj.setInput(blur);
         ProgramController.currentScene.getRoot().setEffect(blur);
         name.setAlignment(Pos.CENTER);
@@ -422,13 +424,14 @@ public class DeckMenu implements Menuable {
         Stage stage = new Stage();
         stage.setX(mouseEvent.getScreenX());
         stage.setY(mouseEvent.getScreenY());
+        int notToBeDuplicate = 400;
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
-        Scene scene = new Scene(borderPane, 300, 400);
+        Scene scene = new Scene(borderPane, 300, notToBeDuplicate);
         delay.setOnFinished(e -> {
             delays.forEach(Animation::stop);
             stages.forEach(Stage::close);
-            Rectangle enlargedPicture = new Rectangle(300, 400);
+            Rectangle enlargedPicture = new Rectangle(300, notToBeDuplicate);
             enlargedPicture.setFill(rectangle.getFill());
             borderPane.setCenter(enlargedPicture);
             stage.setScene(scene);

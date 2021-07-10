@@ -13,7 +13,7 @@ public class Board {
     private final Card[] spellsAndTraps;
     private final String[] showSpellsAndTraps;
     private final ArrayList<Integer> order;
-    private User boardOwner;
+    private final User boardOwner;
     private Card fieldZone;
     private String showFieldZone;
 
@@ -32,6 +32,7 @@ public class Board {
     }
 
     public Board(User boardOwner) {
+        this.boardOwner = boardOwner;
         boardOwner.setBoard(this);
     }
 
@@ -52,13 +53,8 @@ public class Board {
         return showFieldZone;
     }
 
-    public String[] getShowMonsters() {
-        return showMonsters;
-    }
 
-    public String[] getShowSpellsAndTraps() {
-        return showSpellsAndTraps;
-    }
+
 
     public void addMonsterFaceUp(int placeInBoard, Card selectedMonsterCard) {
         monsters[placeInBoard - 1] = selectedMonsterCard;

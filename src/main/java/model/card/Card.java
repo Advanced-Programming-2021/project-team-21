@@ -19,7 +19,6 @@ public class Card {
     private String description;
     private boolean isFaceUp;
     private int price;
-    private boolean hasEffect;
     private boolean isATK;
 
     public static Card getCardByName(String name) {
@@ -93,9 +92,6 @@ public class Card {
     }
 
 
-    public void setHasEffect(boolean hasEffect) {
-        this.hasEffect = hasEffect;
-    }
 
 
     public boolean isATK() {

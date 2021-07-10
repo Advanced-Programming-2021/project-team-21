@@ -1,11 +1,7 @@
 package model.card.effects;
 
-import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 public class Effect {
     private int isEffect;

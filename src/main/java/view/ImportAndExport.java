@@ -28,13 +28,13 @@ import model.card.Card;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ImportAndExport implements Menuable {
     private static String cardToExport = null;
     private static File cardToImport = null;
     private static final ArrayList<Animation> delays = new ArrayList<>();
     private static final ArrayList<Stage> stages = new ArrayList<>();
-    private boolean canEnlargeCard = true;
 
     private void clearPreviousErrors() {
         ((Label) ProgramController.currentScene.lookup("#errorExport")).setText("");
@@ -80,9 +80,7 @@ public class ImportAndExport implements Menuable {
     @Override
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/ImportAndExport.fxml"));
-        ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
-            closeAllStages();
-        });
+        ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> closeAllStages());
     }
 
     private void closeAllStages() {
@@ -90,19 +88,19 @@ public class ImportAndExport implements Menuable {
     }
 
     private void enlargeCardPicture(Rectangle rectangle, MouseEvent mouseEvent) {
-        if (!canEnlargeCard)
-            return;
         Animation delay = new PauseTransition(Duration.seconds(1));
         Stage stage = new Stage();
         stage.setX(mouseEvent.getScreenX());
         stage.setY(mouseEvent.getScreenY());
+        int notBeDuplicate = 300;
+        int notBeDuplicate2 = 400;
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
-        Scene scene = new Scene(borderPane, 300, 400);
+        Scene scene = new Scene(borderPane, notBeDuplicate, notBeDuplicate2);
         delay.setOnFinished(e -> {
             delays.forEach(Animation::stop);
             stages.forEach(Stage::close);
-            Rectangle enlargedPicture = new Rectangle(300, 400);
+            Rectangle enlargedPicture = new Rectangle(notBeDuplicate, notBeDuplicate2);
             enlargedPicture.setFill(rectangle.getFill());
             borderPane.setCenter(enlargedPicture);
             stage.setScene(scene);
@@ -132,24 +130,23 @@ public class ImportAndExport implements Menuable {
             vBox.getChildren().add(hBox);
             listView.getItems().add(vBox);
         }
-        listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event1) {
-                    if (event1.getClickCount() == 2) {
-                        VBox currentItemSelected = listView.getSelectionModel().getSelectedItem();
-                        String name = null;
-                        for (Node node : currentItemSelected.getChildren()) {
-                            for (Node node1 : ((HBox) node).getChildren())
-                                cardToExport = ((Label) node1).getText();
-                            ((Label) ProgramController.currentScene.lookup("#cardExport")).setText("");
-                            Rectangle cardPicture = ((Rectangle) ProgramController.currentScene.lookup("#imageExport"));
-                            cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + cardToExport + ".jpg").toExternalForm())));
-                            cardPicture.setOnMouseEntered(event -> enlargeCardPicture(cardPicture, event));
-                        }
-                        stage.close();
+        listView.setOnMouseClicked(new EventHandler<>() {
+            @Override
+            public void handle(MouseEvent event1) {
+                if (event1.getClickCount() == 2) {
+                    VBox currentItemSelected = listView.getSelectionModel().getSelectedItem();
+                    for (Node node : currentItemSelected.getChildren()) {
+                        for (Node node1 : ((HBox) node).getChildren())
+                            cardToExport = ((Label) node1).getText();
+                        ((Label) ProgramController.currentScene.lookup("#cardExport")).setText("");
+                        Rectangle cardPicture = ((Rectangle) ProgramController.currentScene.lookup("#imageExport"));
+                        cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + cardToExport + ".jpg").toExternalForm())));
+                        cardPicture.setOnMouseEntered(event -> enlargeCardPicture(cardPicture, event));
                     }
+                    stage.close();
                 }
-            });
+            }
+        });
         stage.show();
     }
 
@@ -160,7 +157,7 @@ public class ImportAndExport implements Menuable {
     }
 
 
-    public void toImport(MouseEvent mouseEvent) {
+    public void toImport() {
         try {
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
             FileChooser fileChooser = new FileChooser();
@@ -170,14 +167,13 @@ public class ImportAndExport implements Menuable {
             fileChooser.getExtensionFilters().add(extensionFilter);
             fileChooser.setSelectedExtensionFilter(extensionFilter);
             Stage stage = new Stage();
-            File json = fileChooser.showOpenDialog(stage);
-            cardToImport = json;
+            cardToImport = fileChooser.showOpenDialog(stage);
             ((Label) ProgramController.currentScene.lookup("#cardImport")).setText("");
             Rectangle cardPicture = ((Rectangle) ProgramController.currentScene.lookup("#imageImport"));
-            cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + DataController.importCardFromJson(cardToImport.getPath()).getName() + ".jpg").toExternalForm())));
+            cardPicture.setFill(new ImagePattern(new Image(getClass().getResource("/images/cards/" + Objects.requireNonNull(DataController.importCardFromJson(cardToImport.getPath())).getName() + ".jpg").toExternalForm())));
             cardPicture.setOnMouseEntered(event1 -> enlargeCardPicture(cardPicture, event1));
         }
-        catch (Exception e) {
+        catch (Exception ignored) {
 
         }
 

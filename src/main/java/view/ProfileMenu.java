@@ -170,7 +170,7 @@ public class ProfileMenu implements Menuable {
         ProgramController.currentMenu.showMenu();
     }
 
-    public void changeAvatar(MouseEvent mouseEvent) {
+    public void changeAvatar() {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
