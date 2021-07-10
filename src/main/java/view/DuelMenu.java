@@ -360,7 +360,7 @@ public class DuelMenu implements Menuable {
         PrintResponses.printPhaseName(phase);
     }
 
-    public void endTheGame(boolean isSurrender) {
+    public void endTheGame(boolean isSurrender , User winnerCheat , User loserCheat) {
         remainingRounds--;
         Stage stage = getStage();
         Label label = getLabel();
@@ -375,6 +375,9 @@ public class DuelMenu implements Menuable {
         if (isSurrender) {
             winner = currentDuel.getRival();
             loser = currentDuel.getUserWhoPlaysNow();
+        }else if (winnerCheat != null){
+            winner = winnerCheat;
+            loser = loserCheat;
         } else {
             winner = getUser(currentDuel.getFIRST_USER(), currentDuel.getSECOND_USER(), true);
             loser = getUser(currentDuel.getFIRST_USER(), currentDuel.getSECOND_USER(), false);
@@ -416,7 +419,7 @@ public class DuelMenu implements Menuable {
                 hBox.getChildren().add(second);
             }
             if (winnerRound.getWinsInAMatch() == 2) {
-                endTheGame(false);
+                endTheGame(false , null , null);
             } else {
                 b.getChildren().add(hBox);
                 stage.show();
@@ -767,7 +770,7 @@ public class DuelMenu implements Menuable {
     public void surrender() {
         boolean surrenders = PrintResponses.showConfirmation(Responses.surrenderConfirmation);
         if (surrenders) {
-            endTheGame(true);
+            endTheGame(true , null , null);
             currentDuel = null;
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         }
@@ -781,7 +784,6 @@ public class DuelMenu implements Menuable {
     }
 
     private void setWinner(Matcher matcher) {
-        // todo end the game.
         String nickname = matcher.group("nickname");
         User winner, loser;
         if (currentDuel.getUserWhoPlaysNow().getNickname().equals(nickname)) {
@@ -791,10 +793,7 @@ public class DuelMenu implements Menuable {
             winner = currentDuel.getRival();
             loser = currentDuel.getUserWhoPlaysNow();
         }
-        if (initialRounds == 1)
-            PrintResponses.printEndingTheGame(currentDuel.handleEndingOneRoundGames(winner, loser));
-        else
-            //     PrintResponses.printEndingTheWholeMatch(currentDuel.handleEndingThreeRoundGames(winner, loser));
+        endTheGame(false , winner , loser);
             currentDuel = null;
 
     }
@@ -1026,7 +1025,7 @@ public class DuelMenu implements Menuable {
 
     private void handleDrawingACard(Card card) {
         if (card == null) {
-            endTheGame(false);
+            endTheGame(false , null , null);
         } else {
             PrintResponses.printDrawnCard(card);
             PrintResponses.printBoard(currentDuel);
@@ -1376,7 +1375,7 @@ public class DuelMenu implements Menuable {
 
     private void reloadLPLabels() {
         if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0) {
-            endTheGame(false);
+            endTheGame(false , null , null);
             return;
         }
         ((Label) firstUserStage.getScene().lookup("#ownLP")).setText(String.valueOf(currentDuel.getFIRST_USER().getLifePoints()));
@@ -1830,7 +1829,7 @@ public class DuelMenu implements Menuable {
     public void addCardToBoard(MouseEvent mouseEvent) throws FileNotFoundException {
         if (currentDuel.getSelectedCard() != null) {
             if (currentDuel.getFIRST_USER().getLifePoints() <= 0 || currentDuel.getSECOND_USER().getLifePoints() <= 0)
-                endTheGame(false);
+                endTheGame(false , null , null);
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY))
                 summon();
             else
