@@ -629,7 +629,7 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.showError(Responses.cardAttackedBefore, null);
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/directAttack.wav");
+            ProgramController.startNewAudio("src/main/resources/audios/directAttack.mp3");
             int damage = currentDuel.attackDirectly();
             PrintResponses.showInformation(PrintResponses.printDamageInAttackDirectly(damage));
             reloadLPLabels();
