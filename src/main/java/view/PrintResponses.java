@@ -1,9 +1,16 @@
 package view;
 
+import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.Deck;
@@ -414,24 +421,35 @@ public class PrintResponses {
         System.out.println("its " + user.getNickname() + "’s turn");
     }
 
-    public static void printOpponentMonsterDestroyedWithDamage(int damage) {
-        System.out.println("your opponent’s monster is destroyed and your opponent receives " + damage + " battle damage");
+    public static String printOpponentMonsterDestroyedWithDamage(int damage) {
+        return "your opponent’s monster is destroyed and your opponent receives " + damage + " battle damage";
     }
 
-    public static void printOwnMonsterDestroyedInAttackWithDamage(int damage) {
-        System.out.println("Your monster card is destroyed and you received " + damage + " battle damage");
+    public static String printOwnMonsterDestroyedInAttackWithDamage(int damage) {
+        return "Your monster card is destroyed and you received " + damage + " battle damage";
     }
 
-    public static void printNoCardDestroyedInDefence() {
-        System.out.println(Responses.noDestruction);
+
+
+    public static String printNoCardDestroyedButReceivedDamage(int damage) {
+        return "no card is destroyed and you received " + damage + " battle damage";
     }
 
-    public static void printNoCardDestroyedButReceivedDamage(int damage) {
-        System.out.println("no card is destroyed and you received " + damage + " battle damage");
-    }
-
-    public static void printCardNameInAttackIfIsDefenceHide(String cardName) {
-        System.out.print("opponent’s monster card was " + cardName + " and ");
+    public static void printCardNameInAttackIfIsDefenceHide(Card card, MouseEvent mouseEvent) {
+        Animation delay = new PauseTransition(Duration.seconds(3));
+        Stage stage = new Stage();
+        stage.setX(mouseEvent.getScreenX());
+        stage.setY(mouseEvent.getScreenY());
+        stage.initStyle(StageStyle.UNDECORATED);
+        BorderPane borderPane = new BorderPane();
+        Scene scene = new Scene(borderPane, 300, 400);
+        Rectangle enlargedPicture = new Rectangle(300, 400);
+        enlargedPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
+        borderPane.setCenter(enlargedPicture);
+        stage.setScene(scene);
+        stage.show();
+        delay.setOnFinished(e -> stage.close());
+        delay.play();
     }
 
     public static String printDamageInAttackDirectly(int damage) {
@@ -471,7 +489,7 @@ public class PrintResponses {
     }
 
 
-    public static void showError(String errorContent, MouseEvent mouseEvent){
+    public static void showError(String errorContent, MouseEvent mouseEvent) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         if (mouseEvent != null) {
             errorAlert.setX(mouseEvent.getScreenX());
@@ -484,7 +502,7 @@ public class PrintResponses {
         errorAlert.show();
     }
 
-    public static void showInformation(String informationContent){
+    public static void showInformation(String informationContent) {
         Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
         informationAlert.initStyle(StageStyle.UNDECORATED);
         informationAlert.getDialogPane().getStylesheets()
@@ -492,12 +510,12 @@ public class PrintResponses {
         informationAlert.setContentText(informationContent);
         informationAlert.show();
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
-        delay.setOnFinished( event -> informationAlert.close() );
+        delay.setOnFinished(event -> informationAlert.close());
         delay.play();
     }
 
 
-    public static boolean showConfirmation(String confirmationContent){
+    public static boolean showConfirmation(String confirmationContent) {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.initStyle(StageStyle.UNDECORATED);
         confirmationAlert.getDialogPane().getStylesheets()
