@@ -662,7 +662,6 @@ public class DuelMenu implements Menuable {
     }
 
     private void showGraveyard(ArrayList<Card> graveyard) {
-        // todo STYLE
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
@@ -1245,7 +1244,6 @@ public class DuelMenu implements Menuable {
     }
 
     private void showCheatStage() {
-        //todo STYLE
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
