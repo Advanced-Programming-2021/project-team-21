@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.net.URL?>
-<AnchorPane prefHeight="200.0" prefWidth="300.0" styleClass="backgroundSettings" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
+<AnchorPane prefHeight="200.0" prefWidth="300.0" styleClass="backgroundSettings" xmlns="http://javafx.com/javafx/8">
    <children>
       <Label layoutX="114.0" layoutY="14.0" styleClass="title-label" text="Settings">
          <font>
@@ -18,12 +18,12 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <Button layoutX="90.0" layoutY="110.0" mnemonicParsing="false" onMouseClicked="#setAudio" styleClass="buttonEntrance" prefWidth="120.0" text="Audio">
+      <Button layoutX="90.0" layoutY="110.0" mnemonicParsing="false" id="setAudio" styleClass="buttonEntrance" prefWidth="120.0" text="Audio">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Button layoutX="90.0" layoutY="154.0" mnemonicParsing="false" prefWidth="120.0" styleClass="buttonEntrance" onMouseClicked="#surrender" text="Surrender" textFill="RED">
+      <Button layoutX="90.0" layoutY="154.0" mnemonicParsing="false" prefWidth="120.0" styleClass="buttonEntrance" id="surrender" text="Surrender" textFill="RED">
          <font>
             <Font size="15.0" />
          </font>

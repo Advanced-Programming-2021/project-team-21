@@ -98,8 +98,8 @@ public class DuelMenu implements Menuable {
         int cardIndex = 0;
         VBox vBox = new VBox();
         vBox.setLayoutY(50);
-        borderPane.getChildren().add(new Label("Choose"));
-        borderPane.getChildren().add(vBox);
+        borderPane.setTop(new Label("Choose:"));
+        borderPane.setCenter(vBox);
         for (int i = 0; i < Math.ceil(cardsToSelect.size() / 5.0); i++) {
             HBox hBox = new HBox();
             hBox.setSpacing(10);
@@ -118,6 +118,7 @@ public class DuelMenu implements Menuable {
                 rectangle.setOnMouseEntered(event -> enlargeCardPicture(rectangle, event));
                 int finalJ = j;
                 rectangle.setOnMouseClicked(event -> {
+                    rectangle.setEffect(new Glow(3));
                     chosenCards.add(cardsToSelect.get(finalJ));
                     if (chosenCards.size() == number) stage.close();
                 });
@@ -706,7 +707,6 @@ public class DuelMenu implements Menuable {
         boolean surrenders = PrintResponses.showConfirmation(Responses.surrenderConfirmation);
         if (surrenders) {
             endTheGame(true , null , null);
-            currentDuel = null;
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         }
     }
@@ -926,12 +926,9 @@ public class DuelMenu implements Menuable {
         loadInformationForBothUsers(firstPlayer, secondPlayer);
         phase = Phases.DRAW_PHASE;
         if (isFirstRound) {
-            PrintResponses.printGameSuccessfullyCreated();
             isFirstRound = false;
             currentDuel.getSECOND_USER().setWinsInAMatch(0);
             currentDuel.getFIRST_USER().setWinsInAMatch(0);
-        } else {
-            PrintResponses.printRoundNumber(remainingRounds);
         }
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -962,8 +959,6 @@ public class DuelMenu implements Menuable {
         if (card == null) {
             endTheGame(false , null , null);
         } else {
-            PrintResponses.printDrawnCard(card);
-            PrintResponses.printBoard(currentDuel);
             if (currentDuel.getUserWhoPlaysNow() instanceof AI) {
                 ((AI) currentDuel.getUserWhoPlaysNow()).run();
             }
@@ -1268,7 +1263,7 @@ public class DuelMenu implements Menuable {
         borderPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/CSS.css")).toExternalForm());
         borderPane.getStyleClass().add("cheat-stage");
         Scene scene = new Scene(borderPane, 300, 200);
-        TextField textField = new TextField("Enter cheat code and hit enter to exit.");
+        TextField textField = new TextField("Pick a number to choose how many monsters to tribute");
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 String cheatCode = textField.getText();
@@ -1787,6 +1782,14 @@ public class DuelMenu implements Menuable {
         STAGE_SETTINGS.setResizable(false);
         STAGE_SETTINGS.show();
         scene.lookup("#pause").setOnMouseClicked(event -> pause());
+        scene.lookup("#surrender").setOnMouseClicked(event -> surrender());
+        scene.lookup("#setAudio").setOnMouseClicked(event -> {
+            try {
+                setAudio();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void setAudio() throws IOException {

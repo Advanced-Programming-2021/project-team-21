@@ -15,7 +15,4 @@ module Yu.Gi.Oh {
     exports model;
     exports view;
     exports model.card;
-    exports controller.Effects;
-    exports model.card.enums;
-    exports model.card.effects;
 }
