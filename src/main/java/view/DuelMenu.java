@@ -662,6 +662,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void showGraveyard(ArrayList<Card> graveyard) {
+        ProgramController.startNewAudio("src/main/resources/audios/graveyard.m4a");
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
