@@ -573,6 +573,7 @@ public class DuelMenu implements Menuable {
             if (cardToTributeAddress == null)return;
             if (areCardAddressesEmpty(cardToTributeAddress)) return;
             currentDuel.tribute(cardToTributeAddress);
+            System.out.println(monster.getRequiredCardsFOrTribute() + " " + monster.getTributeToKillAllMonsterOfOpponent().getEffectNumber());
             if (monster.getTributeToKillAllMonsterOfOpponent().hasEffect() && monster.getRequiredCardsFOrTribute() == monster.getTributeToKillAllMonsterOfOpponent().getEffectNumber()) {
                 for (int i = 1; i < 6; i++) {
                     Card card = currentDuel.getRival().getBoard().getCard(i, 'm');
@@ -591,8 +592,8 @@ public class DuelMenu implements Menuable {
         ArrayList<Card> cards = new ArrayList<>();
         ArrayList<Card>cardsToSelect = Arrays.stream(currentDuel.getUserWhoPlaysNow().getBoard().getMonsters())
                 .filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
-        if (cardsToSelect.size() == 0) {
-            PrintResponses.showError(PrintResponses.printNotToEquip(), null);
+        if (cardsToSelect.size() < number) {
+            PrintResponses.showError(PrintResponses.printNotTpTribute(), null);
             return null;
         }
         getCards(number,cardsToSelect , cards);
