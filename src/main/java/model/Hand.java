@@ -60,7 +60,7 @@ public class Hand {
 
     public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0) {
-            ((DuelMenu) ProgramController.currentMenu).endTheGame();
+            ((DuelMenu) ProgramController.currentMenu).endTheGame(false);
             return null;
         }
         for (int i = 0; i < cardsInHand.length; i++) {
