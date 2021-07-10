@@ -671,7 +671,10 @@ public class DuelMenu implements Menuable {
         Button backButton = new Button("Back");
         backButton.getStyleClass().add("buttonEntrance");
         borderPane.setBottom(backButton);
-        backButton.setOnMouseClicked(event -> stage.close());
+        backButton.setOnMouseClicked(event -> {
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            stage.close();
+        });
         Scene scene = new Scene(borderPane, 400, 300);
 
         ListView<Rectangle> cards = new ListView<>();
@@ -1317,6 +1320,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void playAnimationForChangeOfLP(ProgressBar lpBar, User user) {
+        ProgramController.startNewAudio("src/main/resources/audios/lpLost.mp3");
         if ((double) user.getLifePoints() / Duel.getInitialLifePoints() < 0.5) {
             lpBar.getStyleClass().add("red-bar");
         } else {
