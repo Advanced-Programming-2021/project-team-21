@@ -80,7 +80,10 @@
 
     </VBox>
     <VBox alignment="CENTER" layoutX="133.0" prefHeight="400.0" prefWidth="467.0" spacing="1.0">
-        <ListView id="rivalHandListView" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0" />
+        <ListView id="rivalHandListView" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0">
+         <VBox.margin>
+            <Insets left="30.0" />
+         </VBox.margin></ListView>
         <HBox id="rivalSpellsHBox" alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="467.0" spacing="9.0">
             <StackPane>
                 <Rectangle id="rivalDeck" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="60.0" width="50.0" />
@@ -143,7 +146,10 @@
                 <Label id="numberOfOwnDeckCards" text="Label" textFill="WHITE" />
             </StackPane>
         </HBox>
-        <ListView id="ownHandListView" layoutX="10.0" layoutY="10.0" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0" />
+        <ListView id="ownHandListView" layoutX="10.0" layoutY="10.0" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0">
+         <VBox.margin>
+            <Insets left="30.0" />
+         </VBox.margin></ListView>
     </VBox>
     <stylesheets>
         <URL value="@../CSS/CSS.css" />

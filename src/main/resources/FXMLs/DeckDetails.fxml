@@ -10,7 +10,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<!-- todo style this page (all elements)-->
 
 <AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="deck-detail" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DeckMenu">
         <Label alignment="CENTER" prefHeight="25.0" prefWidth="123.0" styleClass="title-label" text="Main deck">

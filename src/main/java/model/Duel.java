@@ -182,7 +182,7 @@ public class Duel {
 
 
     public void changeToAttackPosition() {
-        ProgramController.startNewAudio("src/main/resources/audios/changePosition.wav");
+        ProgramController.startNewAudio("src/main/resources/audios/ChangePosition.wav");
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
@@ -190,7 +190,7 @@ public class Duel {
     }
 
     public void changeToDefensePosition() {
-        ProgramController.startNewAudio("src/main/resources/audios/changePosition.wav");
+        ProgramController.startNewAudio("src/main/resources/audios/ChangePosition.wav");
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToDefenceForMonsters(placeInBoard);
@@ -199,14 +199,14 @@ public class Duel {
 
 
     public void surrender(int remainingRounds, int initialRounds) {
-       // if (initialRounds == 1) {
-       //     return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
-       // } else {
-       //     if (remainingRounds == 1)
-       //         return handleEndingThreeRoundGames(getRival(), userWhoPlaysNow);
-       //     else
-       //         return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
-       // }
+//        if (initialRounds == 1) {
+//            return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
+//        } else {
+//            if (remainingRounds == 1)
+//                return handleEndingThreeRoundGames(getRival(), userWhoPlaysNow);
+//            else
+//                return handleEndingOneRoundGames(getRival(), userWhoPlaysNow);
+//        }
     }
 
     public boolean isGameEnded() {
@@ -462,7 +462,6 @@ public class Duel {
         return selectedCard == null;
     }
 
-    //TODO implement this
     public boolean isSelectedCardSummonedInThisTurn() {
         return placeOfSelectedCard == summonedOrSetPlace;
     }

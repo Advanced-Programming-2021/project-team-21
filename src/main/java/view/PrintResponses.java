@@ -436,6 +436,8 @@ public class PrintResponses {
     }
 
     public static void printCardNameInAttackIfIsDefenceHide(Card card, MouseEvent mouseEvent) {
+        if (card.isFaceUp())
+            return;
         Animation delay = new PauseTransition(Duration.seconds(3));
         Stage stage = new Stage();
         stage.setX(mouseEvent.getScreenX());

@@ -7,7 +7,6 @@
 <?import java.net.URL?>
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.DeckMenu" styleClass="deck-menu-background">
-    <!--    todo style this page (all elements)-->
     <top>
         <VBox alignment="CENTER">
             <Label alignment="CENTER" text="Deck menu" style="-fx-background-color: rgba(31, 17, 8, 0.685);-fx-text-fill: rgb(255, 255, 255);"
