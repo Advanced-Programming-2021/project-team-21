@@ -1,19 +1,22 @@
 package view;
 
 import controller.ProgramController;
-import javafx.animation.PauseTransition;
+import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.User;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.regex.Matcher;
 public class LoginMenu implements Menuable {
 
@@ -152,4 +155,29 @@ public class LoginMenu implements Menuable {
         String commandLogin = "user login --username " + usernameLogin.getText() + " --password " + passwordLogin.getText();
         run(commandLogin);
     }
+
+    public void mute() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+        if (ProgramController.volume != 0) {
+            try {
+                ProgramController.mediaPlayer.setVolume(0);
+            }
+            catch (Exception e) {
+            }
+            ProgramController.volume = 0;
+            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
+        }
+        else {
+            System.out.println("yes");
+            try {
+                ProgramController.mediaPlayer.setVolume(0.5);
+            }
+            catch (Exception e) {
+            }
+            ProgramController.volume = 0.5;
+            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
+        }
+    }
+
+
 }

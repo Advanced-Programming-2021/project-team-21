@@ -591,7 +591,7 @@ public class DuelMenu implements Menuable {
                 || currentDuel.getSelectedCard().isATK())) {
             PrintResponses.printUnableToFlipSummonCard();
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/flipSummon.m4a");
+            ProgramController.startNewAudio("src/main/resources/audios/flipSummon.wav");
             currentDuel.flipSummon();
             PrintResponses.printSuccessfulFlipSummon();
         }
@@ -611,7 +611,7 @@ public class DuelMenu implements Menuable {
         } else if (currentDuel.getRival().getBoard().getMonsterNumber() == 0) {
             attackDirectly();
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/attack.m4a");
+            ProgramController.startNewAudio("src/main/resources/audios/attack.wav");
             handleSuccessfulAttack(address, monsterToAttack, event);
             currentDuel.setSelectedCard(null);
             reloadLPLabels();
@@ -630,7 +630,7 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.showError(Responses.cardAttackedBefore, null);
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/directAttack.m4a");
+            ProgramController.startNewAudio("src/main/resources/audios/directAttack.wav");
             int damage = currentDuel.attackDirectly();
             PrintResponses.showInformation(PrintResponses.printDamageInAttackDirectly(damage));
             reloadLPLabels();
@@ -655,7 +655,7 @@ public class DuelMenu implements Menuable {
                 isRitualSummon();
                 return;
             }
-            ProgramController.startNewAudio("src/main/resources/audios/spellActivation.m4a");
+            ProgramController.startNewAudio("src/main/resources/audios/spellActivation.wav");
             currentDuel.activateEffects();
             PrintResponses.showInformation(Responses.successfulSpellActivation);
         }
@@ -901,7 +901,7 @@ public class DuelMenu implements Menuable {
 
     private void handleSuccessfulSummon() {
         currentDuel.summonMonster();
-        ProgramController.startNewAudio("src/main/resources/audios/summon.m4a");
+        ProgramController.startNewAudio("src/main/resources/audios/summon.wav");
     }
 
     private void handleSuccessfulGameCreation(User firstPlayer, User secondPlayer) {
@@ -1046,7 +1046,7 @@ public class DuelMenu implements Menuable {
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/set.m4a");
+            ProgramController.startNewAudio("src/main/resources/audios/set.wav");
             currentDuel.setMonster();
             PrintResponses.printSuccessfulCardSetting();
             PrintResponses.print(currentDuel);
@@ -1059,7 +1059,7 @@ public class DuelMenu implements Menuable {
         } else if (currentDuel.isHasSummonedOrSetOnce()) {
             PrintResponses.printUnableToSummonInTurn();
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/set.m4a");
+            ProgramController.startNewAudio("src/main/resources/audios/set.wav");
             currentDuel.setSpellOrTrap();
             PrintResponses.printSuccessfulCardSetting();
             PrintResponses.print(currentDuel);
@@ -1074,6 +1074,11 @@ public class DuelMenu implements Menuable {
     public void showMenu() throws IOException {
         ProgramController.startNewAudioBackground("src/main/resources/audios/gameSound.mp3");
         ProgramController.createNewScene(getClass().getResource("/FXMLs/DuelMenu.fxml"));
+        if (ProgramController.gameToContinue == null) {
+            ProgramController.currentScene.lookup("#toContinue").setDisable(true);
+            ProgramController.currentScene.lookup("#toContinue").setStyle("-fx-background-color: rgb(212, 29, 29,0.877);");
+        }
+
         ChoiceBox choiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
         choiceBox.getSelectionModel().selectedIndexProperty().addListener((ov, value, new_value) -> {
@@ -1084,6 +1089,7 @@ public class DuelMenu implements Menuable {
 
     @SuppressWarnings("rawtypes")
     public void startNewGame() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ChoiceBox userChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox"),
                 roundChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#roundChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
@@ -1119,8 +1125,14 @@ public class DuelMenu implements Menuable {
         Image headsImage = new Image(Objects.requireNonNull(getClass().getResource("/images/head.jpg")).toExternalForm());
         Image tailsImage = new Image(Objects.requireNonNull(getClass().getResource("/images/tails.jpg")).toExternalForm());
         Image coin = new Image(Objects.requireNonNull(getClass().getResource("/images/coin.png")).toExternalForm());
-        heads.setOnMouseClicked(event -> transition(rectangle, headsImage, tailsImage, 0, starter, invited));
-        tails.setOnMouseClicked(event -> transition(rectangle, headsImage, tailsImage, 1, starter, invited));
+        heads.setOnMouseClicked(event -> {
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            transition(rectangle, headsImage, tailsImage, 0, starter, invited);
+        });
+        tails.setOnMouseClicked(event -> {
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            transition(rectangle, headsImage, tailsImage, 1, starter, invited);
+        });
         rectangle.setFill(new ImagePattern(coin));
         hBox.getChildren().add(heads);
         hBox.getChildren().add(tails);
@@ -1175,6 +1187,7 @@ public class DuelMenu implements Menuable {
     }
 
     public void goToMainMenu() throws IOException {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
         ProgramController.stage.show();
@@ -1190,6 +1203,7 @@ public class DuelMenu implements Menuable {
         firstUserStage.show();
         secondUserStage.getScene().getRoot().setEffect(new GaussianBlur());
         firstUserStage.getScene().lookup("#nextPhaseButton").setOnMouseClicked(event -> {
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
             if (firstUserStage.getScene().getRoot().getEffect() == null) {
                 goToNextPhase();
                 reloadPhaseLabels();
@@ -1198,6 +1212,7 @@ public class DuelMenu implements Menuable {
             }
         });
         secondUserStage.getScene().lookup("#nextPhaseButton").setOnMouseClicked(event -> {
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
             if (secondUserStage.getScene().getRoot().getEffect() == null) {
                 goToNextPhase();
                 reloadPhaseLabels();
@@ -1704,6 +1719,7 @@ public class DuelMenu implements Menuable {
     }
 
     public void showSettings(MouseEvent mouseEvent) throws IOException {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         if (((Button) mouseEvent.getSource()).getScene().getRoot().getEffect() != null) {
             PrintResponses.showError(Responses.wrongTurn, mouseEvent);
             return;
@@ -1784,10 +1800,19 @@ public class DuelMenu implements Menuable {
         stages.forEach(Stage::close);
     }
 
-    public void pause() {
+    public void pause() throws IOException {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
-        // todo
-        // salam
+        ProgramController.gameToContinue = this;
+        firstUserStage.close();
+        secondUserStage.close();
+        goToMainMenu();
+    }
+
+    public void continuePausedGame() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+        //this.currentDuel = ProgramController.gameToContinue;
+        firstUserStage.show();
+        secondUserStage.show();
     }
 }
 

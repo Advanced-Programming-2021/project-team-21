@@ -2,6 +2,7 @@ package model;
 
 
 import controller.Effects.*;
+import controller.ProgramController;
 import model.card.Card;
 import model.card.Chain;
 import model.card.Monster;
@@ -181,6 +182,7 @@ public class Duel {
 
 
     public void changeToAttackPosition() {
+        ProgramController.startNewAudio("src/main/resources/audios/changePosition.wav");
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
@@ -188,6 +190,7 @@ public class Duel {
     }
 
     public void changeToDefensePosition() {
+        ProgramController.startNewAudio("src/main/resources/audios/changePosition.wav");
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToDefenceForMonsters(placeInBoard);

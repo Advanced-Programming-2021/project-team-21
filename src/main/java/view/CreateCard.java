@@ -71,6 +71,7 @@ public class CreateCard implements Menuable {
     }
 
     public void chooseImage() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("JPG Files (*.jpg)",
@@ -417,6 +418,7 @@ public class CreateCard implements Menuable {
     }
 
     public void create() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         if (name.getText().equals("") || cardType.getText().equals("card type") || image == null ||
                 description.getText().equals("") || (cardType.getText().equals("Monster") &&
                 (atkSet.getText().equals("") || defenseSet.getText().equals("") ||
@@ -472,6 +474,7 @@ public class CreateCard implements Menuable {
     }
 
     public void back() throws IOException {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }

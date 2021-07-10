@@ -24,24 +24,57 @@
                 <Insets bottom="5.0" left="5.0" top="5.0" />
             </padding>
          <ProgressBar id="rivalLPBar" prefWidth="200.0" progress="1.0" styleClass="green-bar" />
-            <Label id="rivalLP" prefHeight="16.0" prefWidth="138.0" text="Rival LP" />
-         <Rectangle id="rivalAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK" strokeType="INSIDE" width="55.0" />
-            <Label id="rivalUsername" prefHeight="19.0" prefWidth="141.0" text="Rival Username" />
-            <Label id="rivalNickname" prefHeight="16.0" prefWidth="140.0" text="Rival Nickname" />
+            <Label id="rivalLP" prefHeight="16.0" prefWidth="138.0" text="Rival LP">
+            <VBox.margin>
+               <Insets left="50.0" />
+            </VBox.margin></Label>
+         <Rectangle id="rivalAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK" strokeType="INSIDE" width="55.0">
+            <VBox.margin>
+               <Insets left="42.0" />
+            </VBox.margin></Rectangle>
+            <Label id="rivalUsername" prefHeight="19.0" prefWidth="141.0" text="Rival Username">
+            <VBox.margin>
+               <Insets left="45.0" />
+            </VBox.margin></Label>
+            <Label id="rivalNickname" prefHeight="16.0" prefWidth="140.0" text="Rival Nickname">
+            <VBox.margin>
+               <Insets left="45.0" />
+            </VBox.margin></Label>
         </VBox>
         <VBox alignment="CENTER" prefHeight="96.0" prefWidth="133.0" spacing="10.0">
-            <Label id="phaseLabel" text="Current Phase" />
-            <Button id="nextPhaseButton" styleClass="buttonEntrance" text="Next Phase" />
-         <Button onMouseClicked="#showSettings" styleClass="buttonEntrance" text="Settings" />
+            <Label id="phaseLabel" text="Current Phase">
+            <VBox.margin>
+               <Insets left="15.0" />
+            </VBox.margin></Label>
+            <Button id="nextPhaseButton" styleClass="buttonEntrance" text="Next Phase">
+            <VBox.margin>
+               <Insets left="15.0" />
+            </VBox.margin></Button>
+         <Button onMouseClicked="#showSettings" styleClass="buttonEntrance" text="Settings">
+            <VBox.margin>
+               <Insets left="15.0" />
+            </VBox.margin></Button>
         </VBox>
         <VBox alignment="BOTTOM_LEFT" layoutY="259.0" prefHeight="152.0" prefWidth="133.0" spacing="5.0">
             <padding>
                 <Insets bottom="5.0" left="5.0" />
             </padding>
-            <Label id="ownNickname" prefHeight="16.0" prefWidth="140.0" text="Own Nickname" />
-            <Label id="ownUsername" prefHeight="19.0" prefWidth="141.0" text="Own Username" />
-         <Rectangle id="ownAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK" strokeType="INSIDE" width="55.0" />
-            <Label id="ownLP" prefHeight="16.0" prefWidth="138.0" text="Own LP" />
+            <Label id="ownNickname" prefHeight="16.0" prefWidth="140.0" text="Own Nickname">
+            <VBox.margin>
+               <Insets left="45.0" />
+            </VBox.margin></Label>
+            <Label id="ownUsername" prefHeight="19.0" prefWidth="141.0" text="Own Username">
+            <VBox.margin>
+               <Insets left="45.0" />
+            </VBox.margin></Label>
+         <Rectangle id="ownAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK" strokeType="INSIDE" width="55.0">
+            <VBox.margin>
+               <Insets left="42.0" />
+            </VBox.margin></Rectangle>
+            <Label id="ownLP" prefHeight="16.0" prefWidth="138.0" text="Own LP">
+            <VBox.margin>
+               <Insets left="50.0" />
+            </VBox.margin></Label>
          <ProgressBar id="ownLPBar" prefWidth="200.0" progress="1.0" styleClass="green-bar" />
         </VBox>
 

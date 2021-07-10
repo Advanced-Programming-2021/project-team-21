@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import java.lang.String?>
 <?import java.net.URL?>
-<?import javafx.scene.text.Font?>
 <?import javafx.collections.FXCollections?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.DuelMenu"
-            prefHeight="400.0" prefWidth="600.0" id="mainPane" styleClass="duelSetup">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="mainPane" prefHeight="400.0" prefWidth="600.0" styleClass="duelSetup" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
     <top>
-        <Label text="Duel Setup" styleClass="title-label" alignment="CENTER" BorderPane.alignment="CENTER">
+        <Label alignment="CENTER" styleClass="title-label" text="Duel Setup" BorderPane.alignment="CENTER">
             <font>
-                <Font size="40.0"/>
+                <Font size="40.0" />
             </font>
         </Label>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="40" id="mainVBox">
-            <ChoiceBox value="Another Player" id="playerChoiceBox" styleClass="choice-box">
+        <VBox id="mainVBox" alignment="CENTER" spacing="40">
+            <ChoiceBox id="playerChoiceBox" styleClass="choice-box" value="Another Player">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Another Player"/>
-                        <String fx:value="AI"/>
+                        <String fx:value="Another Player" />
+                        <String fx:value="AI" />
                     </FXCollections>
                 </items>
-            </ChoiceBox >
-            <TextField promptText="Username of Rival" maxWidth="200" alignment="CENTER" id="usernameTextField"/>
-            <ChoiceBox value="1 round" styleClass="choice-box" id="roundChoiceBox">
+            </ChoiceBox>
+            <TextField id="usernameTextField" alignment="CENTER" maxWidth="200" promptText="Username of Rival" />
+            <ChoiceBox id="roundChoiceBox" styleClass="choice-box" value="1 round">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="1 round"/>
-                        <String fx:value="3 rounds"/>
+                        <String fx:value="1 round" />
+                        <String fx:value="3 rounds" />
                     </FXCollections>
                 </items>
             </ChoiceBox>
             <VBox alignment="CENTER" spacing="10">
-                <Button text="Start" onMouseClicked="#startNewGame" styleClass="buttonEntrance" minWidth="80"/>
-                <Button text="Back" onMouseClicked="#goToMainMenu" styleClass="buttonEntrance" minWidth="80"/>
+                <Button minWidth="80" onMouseClicked="#startNewGame" styleClass="buttonEntrance" text="Start" />
+                <Button id="toContinue" minWidth="80" onMouseClicked="#continuePausedGame" styleClass="buttonEntrance" text="Continue" />
+            <Button minWidth="80" onMouseClicked="#goToMainMenu" styleClass="buttonEntrance" text="Back" />
 
             </VBox>
         </VBox>
 
     </center>
     <stylesheets>
-        <URL value="@../CSS/CSS.css"/>
+        <URL value="@../CSS/CSS.css" />
     </stylesheets>
 </BorderPane>

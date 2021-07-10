@@ -1,7 +1,11 @@
 package controller;
 
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.util.Duration;
+import model.Duel;
+import view.DuelMenu;
 import view.LoginMenu;
 import view.Menuable;
 import javafx.scene.Scene;
@@ -28,9 +32,14 @@ public class ProgramController {
     public static MediaPlayer mediaPlayer;
     public static MediaPlayer mediaPlayerBackground;
     public static double volume = 0.5;
+    public static DuelMenu gameToContinue = null;
 
     public static Scene createNewScene(URL url) throws IOException {
         Parent pane = FXMLLoader.load(url);
+        FadeTransition ft = new FadeTransition(Duration.millis(1000), pane);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
         Scene scene = new Scene(pane);
         ProgramController.stage.setScene(scene);
         ProgramController.currentScene = scene;
