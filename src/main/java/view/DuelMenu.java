@@ -629,7 +629,7 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.showError(Responses.cardAttackedBefore, null);
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/directAttack.wav");
+            ProgramController.startNewAudio("src/main/resources/audios/directAttack.mp3");
             int damage = currentDuel.attackDirectly();
             PrintResponses.showInformation(PrintResponses.printDamageInAttackDirectly(damage));
             reloadLPLabels();
@@ -1129,10 +1129,12 @@ public class DuelMenu implements Menuable {
         Image coin = new Image(Objects.requireNonNull(getClass().getResource("/images/coin.png")).toExternalForm());
         heads.setOnMouseClicked(event -> {
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            ProgramController.startNewAudio("src/main/resources/audios/coinFlip.mp3");
             transition(rectangle, headsImage, tailsImage, 0, starter, invited);
         });
         tails.setOnMouseClicked(event -> {
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            ProgramController.startNewAudio("src/main/resources/audios/coinFlip.mp3");
             transition(rectangle, headsImage, tailsImage, 1, starter, invited);
         });
         rectangle.setFill(new ImagePattern(coin));
