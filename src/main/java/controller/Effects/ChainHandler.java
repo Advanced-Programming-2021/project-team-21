@@ -26,16 +26,24 @@ public class ChainHandler {
             if (chain.getCard() instanceof Spell) {
                 Spell spell = (Spell) chain.getCard();
                 checkForSpellNegate(spell, chainCards, i);
-                temp = SpellActivation.run(spell, getUserNow(user, rival, i),
-                        getRival(user, rival, i), duel,
-                        getUserNow(user, rival, i).getBoard().getAddressByCard(spell),
-                        false, null, chain);
+                try {
+                    temp = SpellActivation.run(spell, getUserNow(user, rival, i),
+                            getRival(user, rival, i), duel,
+                            getUserNow(user, rival, i).getBoard().getAddressByCard(spell),
+                            false, null, chain);
+                }catch (Exception ignored){
+
+                }
             }
             if (chain.getCard() instanceof Trap) {
                 Trap trap = (Trap) chain.getCard();
                 if (checkForTrapNegate(trap, chainCards, i)) return true;
-                temp = TrapActivation.run(trap, getUserNow(user, rival, i), getRival(user, rival, i)
-                        , duel, chain, card);
+                try {
+                    temp = TrapActivation.run(trap, getUserNow(user, rival, i), getRival(user, rival, i)
+                            , duel, chain, card);
+                }catch (Exception ignored){
+
+                }
             }
             if (i == 0) isCanceled = temp;
             duel.addCardToGraveyard(card.getCard(), 10, getUserNow(user, rival, i));

@@ -13,6 +13,7 @@ import model.card.Monster;
 import model.card.Spell;
 import model.card.Trap;
 import model.card.effects.Effect;
+import view.DeckMenu;
 import view.Regex;
 import view.ShopMenu;
 
@@ -312,6 +313,7 @@ public class DataController {
         catch (IOException ignored) {
         }
         ShopMenu.paths.put(name , newFile.toString());
+        DeckMenu.paths.put(name , newFile.toString());
     }
 
     private static StringBuilder getStringBuilder(String where) throws FileNotFoundException {

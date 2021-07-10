@@ -8,13 +8,14 @@ import model.card.Card;
 import model.card.Monster;
 import view.PrintResponses;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class SelectEffect {
     public static int scannerPlace;
     public static Monster scannerHolder;
 
-    public static void run(Monster selected, User rival, User player, Duel duel, int selectedPlace) {
+    public static void run(Monster selected, User rival, User player, Duel duel, int selectedPlace) throws FileNotFoundException {
         if (selected.getCanScan().hasEffect()) {
             DuelMenu.specialSummonsedCards = selectMonstersFromGY(rival);
             if (DuelMenu.specialSummonsedCards.size() == 0) {
@@ -28,7 +29,7 @@ public class SelectEffect {
             scannerHolder = Monster.copy(selected);
             scannerHolder.setATK(selected.isATK());
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
+                DuelMenu.checkSpecialSummon( duel, false);
         } else if (selected.getCanGetFromGYByLevelToHand().hasEffect()) {
             Card card = player.getHand().selectARandomCardFromHand();
             int i;
@@ -43,7 +44,7 @@ public class SelectEffect {
             if (DuelMenu.specialSummonsedCards.size() > 0)
                 PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
+                DuelMenu.checkSpecialSummon( duel, false);
             selected.getCanGetFromGYByLevelToHand().finishEffect();
             selected.getCanGetFromGYByLevelToHand().setNeedsToBeReset(true);
             selected.setSelectEffect(false);

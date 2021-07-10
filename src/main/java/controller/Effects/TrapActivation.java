@@ -10,11 +10,12 @@ import model.card.Monster;
 import model.card.Trap;
 import view.PrintResponses;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class TrapActivation {
 
-    public static boolean run(Trap trap, User userNow, User rival, Duel duel, Chain card, Chain first) {
+    public static boolean run(Trap trap, User userNow, User rival, Duel duel, Chain card, Chain first) throws FileNotFoundException {
         if (trap.getCanAttackLP().hasEffect()) {
             handleAttackLP(trap, rival, duel, (Monster) first.getCard());
         }
@@ -51,7 +52,7 @@ public class TrapActivation {
             DuelMenu.isGetFroOpponentGY = true;
             PrintResponses.printSpecialSummonCards(cards);
             while (true) {
-                if (!DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false)) break;
+                if (!DuelMenu.checkSpecialSummon( duel, false)) break;
             }
         }
         return false;

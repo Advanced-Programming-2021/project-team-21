@@ -15,17 +15,17 @@ public class User {
     private String avatar;
     private int score;
     private int coins;
-    private Board board;
-    private Hand hand;
-    private ArrayList<Card> graveyard;
+    transient private Board board;
+    transient private Hand hand;
+    transient private ArrayList<Card> graveyard;
     private int lifePoints;
     private int maxLifePoint = 0;
-    private boolean canSummonMonster = true, canSummonSpell = true, canSummonTrap = true, canAttack = true;
+    transient private boolean canSummonMonster = true, canSummonSpell = true, canSummonTrap = true, canAttack = true;
     private int winsInAMatch;
-    private int CanNotDrawRounds;
-    private int increaseATK, increaseDEF;
-    private boolean hasSummonedAlteringATK;
-    private int alteringATKPlace = -1;
+    transient private int CanNotDrawRounds;
+    transient private int increaseATK, increaseDEF;
+    transient private boolean hasSummonedAlteringATK;
+    transient private int alteringATKPlace = -1;
 
     {
         coins = 100000;

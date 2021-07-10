@@ -29,6 +29,8 @@ import model.Deck;
 import model.User;
 import model.card.Card;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +44,7 @@ public class DeckMenu implements Menuable {
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
     private boolean canEnlargeCard = true;
-
+    public static HashMap<String , String> paths = new HashMap<>();
 
     private void deleteCard(Card card, String mainOrSide) {
         Deck deck = deckToShow;
@@ -224,12 +226,18 @@ public class DeckMenu implements Menuable {
         }
     }
 
-    private Rectangle getCardToShow(ArrayList<Card> cards, int index, String mainOrSide) {
+    private Rectangle getCardToShow(ArrayList<Card> cards, int index, String mainOrSide) throws FileNotFoundException {
         Rectangle card = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
         card.setOnMouseEntered(event -> enlargeCardPicture(card, event));
         card.setOnMouseClicked(event -> openContextMenuForCards(cards, index, card, mainOrSide, event));
         String cardImageAddress = "/images/cards/" + cards.get(index).getName() + ".jpg";
-        ImagePattern cardPicture = new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource(cardImageAddress)).toExternalForm()));
+        ImagePattern cardPicture;
+        try {
+            cardPicture = new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource(cardImageAddress)).toExternalForm()));
+        }catch (Exception e){
+             cardPicture = new ImagePattern(new Image(new FileInputStream(paths.get(cards.get(index).getName()))));
+        }
+
         card.setFill(cardPicture);
         return card;
     }
@@ -318,7 +326,7 @@ public class DeckMenu implements Menuable {
         ProgramController.stage.show();
     }
 
-    public void addCardToDeck() {
+    public void addCardToDeck() throws FileNotFoundException {
         BorderPane borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: rgba(155, 155, 155, 0.877);");
         ColorAdjust adj = new ColorAdjust(0, 0, 0.5, 0);
@@ -377,11 +385,15 @@ public class DeckMenu implements Menuable {
         borderPane.setBottom(buttonHBox);
     }
 
-    private HashMap<Rectangle, Card> getRectangleCardHashMap(ListView<Rectangle> userCardsListView) {
+    private HashMap<Rectangle, Card> getRectangleCardHashMap(ListView<Rectangle> userCardsListView) throws FileNotFoundException {
         HashMap<Rectangle, Card> allUserCards = new HashMap<>();
         for (Card card : ProgramController.userInGame.getCards()) {
             Rectangle cardPicture = new Rectangle(CARD_WIDTH * 2, CARD_HEIGHT * 2);
-            cardPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
+            try {
+                cardPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
+            }catch (Exception e){
+                cardPicture.setFill(new ImagePattern(new Image(new FileInputStream(paths.get(card.getName())))));
+            }
             userCardsListView.getItems().add(cardPicture);
             allUserCards.put(cardPicture, card);
         }

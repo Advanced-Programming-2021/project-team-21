@@ -287,8 +287,8 @@ public class PrintResponses {
         System.out.println(Responses.inequalityOfLevelsOfSelectedAndRitualMonster);
     }
 
-    public static void printUnableToSpecialSummonMonster() {
-        System.out.println(Responses.unableToSpecialSummonMonster);
+    public static String printUnableToSpecialSummonMonster() {
+        return Responses.unableToSpecialSummonMonster;
     }
 
     public static void printEmergencySpecialSummon() {
@@ -490,7 +490,9 @@ public class PrintResponses {
         }
     }
 
-
+    public static String printNotToEquip(){
+        return "You can not use equip spell right now";
+    }
     public static void showError(String errorContent, MouseEvent mouseEvent) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         if (mouseEvent != null) {

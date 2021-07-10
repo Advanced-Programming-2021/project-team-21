@@ -10,8 +10,10 @@ import model.card.Spell;
 import model.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
 import view.DuelMenu;
+import view.PrintResponses;
 import view.Responses;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -87,7 +89,7 @@ public class Duel {
     }
 
 
-    public void selectCard(int cardAddress, String fromWhere, String ownOrOpponent) {
+    public void selectCard(int cardAddress, String fromWhere, String ownOrOpponent) throws FileNotFoundException {
         if (fromWhere.equals("hand")) {
             Hand currentHand = userWhoPlaysNow.getHand();
             selectedCard = currentHand.selectACard(cardAddress);
@@ -97,7 +99,7 @@ public class Duel {
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
                 if (selectedCard == null) return;
                 if (((Monster) selectedCard).isSelectEffect()) {
-                    if (DuelMenu.askForEffectMonster().equals("Yes")) {
+                    if (PrintResponses.showConfirmation("Are you sure to activate this card's effect?")) {
                         SelectEffect.run((Monster) selectedCard, getRival(), getUserWhoPlaysNow(), this, cardAddress);
                     }
                 }
@@ -119,10 +121,10 @@ public class Duel {
         setPlaceOfSelectedCard(0);
     }
 
-    public void summonMonster() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
-                WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
-                new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
+    public void summonMonster() throws FileNotFoundException {
+     // if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
+     //         WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
+     //         new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
             SummonEffects.run((Monster) selectedCard, userWhoPlaysNow, getRival(), this);
         int placeInBoard = userWhoPlaysNow.getBoard().getAddressToSummon();
@@ -138,10 +140,10 @@ public class Duel {
         handleSuccessfulSummonOrSet();
     }
 
-    public void flipSummon() {
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
-                WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
-                new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
+    public void flipSummon() throws FileNotFoundException {
+     // if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(), userWhoPlaysNow, getRival(), this,
+     //         WhereToChain.SUMMON, selectedCard), userWhoPlaysNow, getRival(),
+     //         new Chain(selectedCard, null, null), WhereToChain.SUMMON)) return;
         if (((Monster) selectedCard).isSummonEffect())
             SummonEffects.run((Monster) selectedCard, userWhoPlaysNow, getRival(), this);
         if (((Monster) selectedCard).isFlipSummonEffect())
@@ -152,8 +154,9 @@ public class Duel {
         currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
     }
 
-    public void tribute(int[] placesOnBoard) {
+    public void tribute(int[] placesOnBoard) throws FileNotFoundException {
         for (int placeOnBoard : placesOnBoard) {
+            if (placeOnBoard == -1)continue;
             Card cardToTribute = userWhoPlaysNow.getBoard().getCard(placeOnBoard, 'M');
             addCardToGraveyard(cardToTribute, placeOnBoard, userWhoPlaysNow);
         }
@@ -175,7 +178,7 @@ public class Duel {
     }
 
     private void handleSuccessfulSummonOrSet() {
-        hasSummonedOrSetOnce = true;
+        if (selectedCard instanceof  Monster)hasSummonedOrSetOnce = true;
         userWhoPlaysNow.getHand().removeCardFromHand(placeOfSelectedCard);
         deselectACard();
     }
@@ -258,16 +261,16 @@ public class Duel {
         return winner;
     }
 
-    public Pair<Integer, Integer> attack(int placeInBoard) {
+    public Pair<Integer, Integer> attack(int placeInBoard) throws FileNotFoundException {
         User rival = getRival();
         Board rivalBoard = rival.getBoard();
         Monster monsterToAttack = (Monster) rivalBoard.getCard(placeInBoard, 'M');
         Monster attackingMonster = (Monster) selectedCard;
-        if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-                getRival(), getUserWhoPlaysNow(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
-                rival, new Chain(attackingMonster, null, ""), WhereToChain.ATTACK)) {
-            return new Pair<>(0, 0);
-        }
+     //   if (ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
+     //           getRival(), getUserWhoPlaysNow(), this, WhereToChain.ATTACK, attackingMonster), userWhoPlaysNow,
+     //           rival, new Chain(attackingMonster, null, ""), WhereToChain.ATTACK)) {
+     //       return new Pair<>(0, 0);
+     //   }
         checkForDisabledAttack();
         if (monsterToAttack.isBattlePhaseEffectStart() || attackingMonster.isBattlePhaseEffectStart()) {
             if (BattlePhaseStart.run(attackingMonster, monsterToAttack, rival, this))
@@ -305,7 +308,7 @@ public class Duel {
         return ((Monster) selectedCard).getAtk();
     }
 
-    public void activateEffects() {
+    public boolean activateEffects() throws FileNotFoundException {
         Spell spellToActivate = (Spell) selectedCard;
         int addressToPut = placeOfSelectedCard;
         if (userWhoPlaysNow.getHand().isCardInHand(selectedCard)) {
@@ -313,15 +316,14 @@ public class Duel {
             userWhoPlaysNow.getBoard().addSpellAndTrap(addressToPut, spellToActivate);
             flipSetForSpells(addressToPut);
         }
-        userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
-        boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
-                getRival(), userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
-                userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
-                WhereToChain.EFFECT_ACTIVATE);
-        if (isCancelled) {
-            addCardToGraveyard(spellToActivate, 10, userWhoPlaysNow);
-            return;
-        }
+     //   boolean isCancelled = ChainHandler.run(this, ChainHandler.getChainCommand(new ArrayList<>(),
+     //           getRival(), userWhoPlaysNow, this, WhereToChain.EFFECT_ACTIVATE, spellToActivate),
+     //           userWhoPlaysNow, getRival(), new Chain(spellToActivate, null, null),
+     //           WhereToChain.EFFECT_ACTIVATE);
+     //   if (isCancelled) {
+     //       addCardToGraveyard(spellToActivate, 10, userWhoPlaysNow);
+     //       return false;
+     //   }
         if (spellToActivate.isFieldZone()) {
             if (userWhoPlaysNow.getBoard().getFieldZone() != null) {
                 SpellActivation.run((Spell) userWhoPlaysNow.getBoard().getFieldZone(), userWhoPlaysNow, getRival()
@@ -333,15 +335,19 @@ public class Duel {
             userWhoPlaysNow.getBoard().removeSpellAndTrap(placeOfSelectedCard);
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, null, null);
-            return;
+            return true;
         } else if (spellToActivate.isEquipSpell()) {
             Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
+            if (monster == null)return false;
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, monster, null);
-            return;
+            userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
+            return true;
         }
         SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                 false, null, null);
+        userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
+        return  true;
     }
 
     public void changeLP(User player, int amount) {
@@ -391,8 +397,12 @@ public class Duel {
                 if (card instanceof Spell && ((Spell) card).isEquipSpell()) {
                     Spell spell = (Spell) card;
                     Monster monster = (Monster) userWhoPlaysNow.getBoard().getCard(spell.getEquippedPlace(), 'm');
-                    SpellActivation.run(spell, userWhoPlaysNow, getRival(), this, placeInBoard,
-                            false, monster, null);
+                    try {
+                        SpellActivation.run(spell, userWhoPlaysNow, getRival(), this, placeInBoard,
+                                false, monster, null);
+                    }catch (Exception ignored){
+
+                    }
                 }
             }
         }
@@ -467,7 +477,7 @@ public class Duel {
     }
 
     private Pair<Integer, Integer> handleDefencePositionAttack(Monster monsterToAttack, int placeInBoard, User
-            rival, boolean isFaceUp) {
+            rival, boolean isFaceUp) throws FileNotFoundException {
         int key = 4;
         if (!isFaceUp) {
             key += 3;
@@ -503,7 +513,7 @@ public class Duel {
     }
 
     private Pair<Integer, Integer> handleAttackPositionAttack(Monster attackingMonster, Monster monsterToAttack,
-                                                              int placeInBoard, User rival) {
+                                                              int placeInBoard, User rival) throws FileNotFoundException {
         int differenceOfATK = attackingMonster.getAtk() - monsterToAttack.getAtk();
         int toBeNotDuplicate = 0;
         if (differenceOfATK > 0) {
@@ -558,7 +568,7 @@ public class Duel {
         }
     }
 
-    public void flipSetForMonsters(int placeOnBoard) {
+    public void flipSetForMonsters(int placeOnBoard) throws FileNotFoundException {
         Monster monster = (Monster) getRival().getBoard().getCard(placeOnBoard, 'm');
         if (monster == null)
             return;

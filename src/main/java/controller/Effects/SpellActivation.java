@@ -12,6 +12,7 @@ import model.card.Spell;
 import model.card.effects.Effect;
 import view.PrintResponses;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class SpellActivation {
     public static int newPlaceHolder = -1;
     public static int changeSpellPlace;
 
-    public static boolean run(Spell spell, User userNow, User rival, Duel duel, int place, boolean fieldAndEquipSpellAdd, Monster equipped, Chain chain) {
+    public static boolean run(Spell spell, User userNow, User rival, Duel duel, int place, boolean fieldAndEquipSpellAdd, Monster equipped, Chain chain) throws FileNotFoundException {
         ArrayList<Card> deckCards = userNow.getHand().getDeckToDraw().getMainDeckCards();
         if (spell.getCanSummonFromGY().hasEffect()) {
             handleSummonFromGY(spell, userNow, rival, duel, place);
@@ -36,10 +37,10 @@ public class SpellActivation {
         if (spell.getCanAddFromDeckToHand().hasEffect()) {
             handleDraw(spell, userNow, deckCards, duel, place);
         }
-        if (spell.getCanDestroyOpponentMonster().hasEffect()) {
-            destroyMonsters(spell, rival, duel, place);
+        if (spell.getCanDestroyOpponentMonster().hasEffect() && spell.getCanDestroyMyMonster().hasEffect()) {
+            destroyAllMonsters(spell,userNow ,  rival, duel, place);
         }
-        if (spell.getCanDestroyMyMonster().hasEffect()) {
+        if (spell.getCanDestroyOpponentMonster().hasEffect()) {
             destroyMonsters(spell, userNow, duel, place);
         }
         if (spell.getCanControlOpponentMonster().hasEffect()) {
@@ -76,6 +77,20 @@ public class SpellActivation {
         checkSpells(userNow, duel);
         checkSpells(rival, duel);
         return false;
+    }
+
+    private static void destroyAllMonsters(Spell spell, User userNow, User rival, Duel duel, int place) {
+        for (Card rivalCard : userNow.getBoard().getMonsters()) {
+            if (!(rivalCard instanceof Monster)) continue;
+            Monster monster = (Monster) rivalCard;
+            duel.addCardToGraveyard(monster, userNow.getBoard().getAddressByCard(monster), userNow);
+        }
+        for (Card rivalCard : rival.getBoard().getMonsters()) {
+            if (!(rivalCard instanceof Monster)) continue;
+            Monster monster = (Monster) rivalCard;
+            duel.addCardToGraveyard(monster, rival.getBoard().getAddressByCard(monster), rival);
+        }
+            duel.addCardToGraveyard(spell, place, userNow);
     }
 
     private static void thirdEquipSpell(Monster equipped, Spell spell, boolean fieldAndEquipSpellAdd) {
@@ -186,7 +201,7 @@ public class SpellActivation {
         rival.setCanAttack(false);
     }
 
-    private static void handleFaceChange(User rival, Duel duel) {
+    private static void handleFaceChange(User rival, Duel duel) throws FileNotFoundException {
         Board board = rival.getBoard();
         for (Card monster : board.getMonsters()) {
             if (monster != null && !monster.isFaceUp()) duel.flipSetForMonsters(board.getAddressByCard(monster));
@@ -295,7 +310,7 @@ public class SpellActivation {
         duel.addCardToGraveyard(spell, place, userNow);
     }
 
-    private static void handleSummonFromGY(Spell spell, User userNow, User rival, Duel duel, int place) {
+    private static void handleSummonFromGY(Spell spell, User userNow, User rival, Duel duel, int place) throws FileNotFoundException {
         ArrayList<Monster> cards = new ArrayList<>();
         for (Card card : userNow.getGraveyard()) {
             if (card instanceof Monster) cards.add((Monster) card);
@@ -307,7 +322,7 @@ public class SpellActivation {
         DuelMenu.isGetFroOpponentGY = true;
         PrintResponses.printSpecialSummonCards(cards);
         while (DuelMenu.specialSummonsedCards != null) {
-            DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
+            DuelMenu.checkSpecialSummon( duel, false);
         }
         duel.addCardToGraveyard(spell, place, userNow);
     }

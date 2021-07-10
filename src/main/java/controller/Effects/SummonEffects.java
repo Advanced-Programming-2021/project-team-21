@@ -9,6 +9,7 @@ import model.card.Monster;
 import model.card.Spell;
 import view.PrintResponses;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,7 +19,7 @@ public class SummonEffects {
     // the calculator
     // terra tiger
     //swords of revealing light
-    public static void run(Monster summoned, User user, User rival, Duel duel) {
+    public static void run(Monster summoned, User user, User rival, Duel duel) throws FileNotFoundException {
         if (summoned.getCanIncreaseATK().hasEffect()) {
             ArrayList<Card> monsters = new ArrayList<>();
             Collections.addAll(monsters, user.getBoard().getMonsters());
@@ -55,12 +56,12 @@ public class SummonEffects {
             if (handSpecial.size() != 0) PrintResponses.printSpecialSummonCards(handSpecial);
             DuelMenu.specialSummonsedCards = handSpecial;
             while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, false);
+                DuelMenu.checkSpecialSummon( duel, false);
         }
         checkHasContinuousSpell(summoned, rival, user, duel);
     }
 
-    private static void checkHasContinuousSpell(Monster monster, User rival, User userNow, Duel duel) {
+    private static void checkHasContinuousSpell(Monster monster, User rival, User userNow, Duel duel) throws FileNotFoundException {
         Card[] spells = rival.getBoard().getSpellsAndTraps();
         for (Card spell : spells) {
             if (spell instanceof Spell) {

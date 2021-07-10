@@ -8,13 +8,14 @@ import model.User;
 import model.card.Monster;
 import view.PrintResponses;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class BattlePhaseStart {
     //command Knight
     // texchanger
     // suijin
-    public static boolean run(Monster attack, Monster defense, User secondUser, Duel duel) {
+    public static boolean run(Monster attack, Monster defense, User secondUser, Duel duel) throws FileNotFoundException {
         Board board = secondUser.getBoard();
         // for summoning with specific type
         if (defense.getSummonACardFromEveryWhere().hasEffect()) {
@@ -27,7 +28,7 @@ public class BattlePhaseStart {
             DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
             if (cards.size() != 0) PrintResponses.printSpecialSummonCards(cards);
             while (DuelMenu.specialSummonsedCards != null) {
-                DuelMenu.checkSpecialSummon(ProgramController.scanner.nextLine(), duel, true);
+                DuelMenu.checkSpecialSummon( duel, true);
             }
             defense.getSummonACardFromEveryWhere().finishEffect();
             defense.getSummonACardFromEveryWhere().setNeedsToBeReset(true);
