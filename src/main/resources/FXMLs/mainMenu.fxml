@@ -4,70 +4,79 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
-            fx:controller="view.MainMenu" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundMainMenu" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <Label text="Main menu" BorderPane.alignment="TOP_LEFT" styleClass="title-label">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-   </top>
-   <left>
-      <VBox prefHeight="342.0" prefWidth="194.0" spacing="6.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" text="Duel menu" onMouseClicked="#goToDuelMenu">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToDeckMenu" text="Deck menu">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToScoreboard" text="Scoreboard">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToProfileMenu" text="Profile menu">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToShopMenu" text="Shop menu">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToCreateCard" text="Create Card">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#goToImportAndExportMenu" text="Import/Export">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundMainMenu" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainMenu">
+    <top>
+        <Label styleClass="title-label" text="Main menu" BorderPane.alignment="TOP_LEFT">
             <font>
-               <Font size="20.0" />
+                <Font size="36.0" />
             </font>
-         </Button>
-            <Button mnemonicParsing="false" prefWidth="200.0" styleClass="buttonEntrance" onMouseClicked="#logout" text="Log out">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="8.0" left="5.0" />
-         </BorderPane.margin>
-      </VBox>
-   </left>
-   <stylesheets>
-      <URL value="@../CSS/CSS.css" />
-   </stylesheets>
+        </Label>
+    </top>
+    <left>
+        <VBox prefHeight="342.0" prefWidth="194.0" spacing="6.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onMouseClicked="#goToDuelMenu" prefWidth="200.0" styleClass="buttonEntrance" text="Duel menu">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#goToDeckMenu" prefWidth="200.0" styleClass="buttonEntrance" text="Deck menu">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#goToScoreboard" prefWidth="200.0" styleClass="buttonEntrance" text="Scoreboard">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#goToProfileMenu" prefWidth="200.0" styleClass="buttonEntrance" text="Profile menu">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#goToShopMenu" prefWidth="200.0" styleClass="buttonEntrance" text="Shop menu">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#goToCreateCard" prefWidth="200.0" styleClass="buttonEntrance" text="Create Card">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#goToImportAndExportMenu" prefWidth="200.0" styleClass="buttonEntrance" text="Import/Export">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#logout" prefWidth="200.0" styleClass="buttonEntrance" text="Log out">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </Button>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="5.0" top="29.0" />
+            </BorderPane.margin>
+        </VBox>
+    </left>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css" />
+    </stylesheets>
+    <bottom>
+        <ImageView id="soundIcon" fitHeight="31.0" fitWidth="32.0" onMouseClicked="#muteOrUnmute" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets left="565.0" />
+            </BorderPane.margin>
+        </ImageView>
+    </bottom>
 </BorderPane>

@@ -691,7 +691,7 @@ public class DuelMenu implements Menuable {
         } else if (((Monster) currentDuel.getSelectedCard()).isHasAttackedOnceInTurn()) {
             PrintResponses.showError(Responses.cardAttackedBefore, null);
         } else {
-            ProgramController.startNewAudio("src/main/resources/audios/directAttack.wav");
+            ProgramController.startNewAudio("src/main/resources/audios/directAttack.mp3");
             int damage = currentDuel.attackDirectly();
             PrintResponses.showInformation(PrintResponses.printDamageInAttackDirectly(damage));
             reloadLPLabels();
@@ -724,6 +724,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void showGraveyard(ArrayList<Card> graveyard) {
+        ProgramController.startNewAudio("src/main/resources/audios/graveyard.m4a");
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
@@ -732,7 +733,10 @@ public class DuelMenu implements Menuable {
         Button backButton = new Button("Back");
         backButton.getStyleClass().add("buttonEntrance");
         borderPane.setBottom(backButton);
-        backButton.setOnMouseClicked(event -> stage.close());
+        backButton.setOnMouseClicked(event -> {
+            ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            stage.close();
+        });
         Scene scene = new Scene(borderPane, 400, 300);
 
         ListView<Rectangle> cards = new ListView<>();
@@ -1193,10 +1197,12 @@ public class DuelMenu implements Menuable {
         Image coin = new Image(Objects.requireNonNull(getClass().getResource("/images/coin.png")).toExternalForm());
         heads.setOnMouseClicked(event -> {
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            ProgramController.startNewAudio("src/main/resources/audios/coinFlip.mp3");
             transition(rectangle, headsImage, tailsImage, 0, starter, invited);
         });
         tails.setOnMouseClicked(event -> {
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+            ProgramController.startNewAudio("src/main/resources/audios/coinFlip.mp3");
             transition(rectangle, headsImage, tailsImage, 1, starter, invited);
         });
         rectangle.setFill(new ImagePattern(coin));
@@ -1375,6 +1381,7 @@ public class DuelMenu implements Menuable {
     }
 
     private void playAnimationForChangeOfLP(ProgressBar lpBar, User user) {
+        ProgramController.startNewAudio("src/main/resources/audios/lpLost.mp3");
         if ((double) user.getLifePoints() / Duel.getInitialLifePoints() < 0.5) {
             lpBar.getStyleClass().add("red-bar");
         } else {

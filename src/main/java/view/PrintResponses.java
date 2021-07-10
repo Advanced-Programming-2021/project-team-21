@@ -1,5 +1,6 @@
 package view;
 
+import controller.ProgramController;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
@@ -494,6 +495,7 @@ public class PrintResponses {
         return "You can not use equip spell right now";
     }
     public static void showError(String errorContent, MouseEvent mouseEvent) {
+        ProgramController.startNewAudio("src/main/resources/audios/error.mp3");
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         if (mouseEvent != null) {
             errorAlert.setX(mouseEvent.getScreenX());

@@ -155,29 +155,4 @@ public class LoginMenu implements Menuable {
         String commandLogin = "user login --username " + usernameLogin.getText() + " --password " + passwordLogin.getText();
         run(commandLogin);
     }
-
-    public void mute() {
-        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
-        if (ProgramController.volume != 0) {
-            try {
-                ProgramController.mediaPlayer.setVolume(0);
-            }
-            catch (Exception e) {
-            }
-            ProgramController.volume = 0;
-            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
-        }
-        else {
-            System.out.println("yes");
-            try {
-                ProgramController.mediaPlayer.setVolume(0.5);
-            }
-            catch (Exception e) {
-            }
-            ProgramController.volume = 0.5;
-            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
-        }
-    }
-
-
 }

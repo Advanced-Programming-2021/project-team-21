@@ -1,6 +1,10 @@
 package view;
 
 import controller.ProgramController;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -8,6 +12,9 @@ public class MainMenu implements Menuable {
     @Override
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
+        if (ProgramController.volume == 0)
+            ((ImageView) ProgramController.currentScene.lookup("#soundIcon")).setImage(new Image(getClass().getResource("/images/soundIconMute.png").toExternalForm()));
+        else ((ImageView) ProgramController.currentScene.lookup("#soundIcon")).setImage(new Image(getClass().getResource("/images/soundIcon.png").toExternalForm()));
         ProgramController.stage.show();
     }
 
@@ -58,5 +65,29 @@ public class MainMenu implements Menuable {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new ImportAndExport();
         ProgramController.currentMenu.showMenu();
+    }
+
+    public void muteOrUnmute() {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+        if (ProgramController.volume != 0) {
+            ((ImageView) ProgramController.currentScene.lookup("#soundIcon")).setImage(new Image(getClass().getResource("/images/soundIconMute.png").toExternalForm()));
+            try {
+                ProgramController.mediaPlayer.setVolume(0);
+            }
+            catch (Exception e) {
+            }
+            ProgramController.volume = 0;
+            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
+        }
+        else {
+            ((ImageView) ProgramController.currentScene.lookup("#soundIcon")).setImage(new Image(getClass().getResource("/images/soundIcon.png").toExternalForm()));
+            try {
+                ProgramController.mediaPlayer.setVolume(0.5);
+            }
+            catch (Exception e) {
+            }
+            ProgramController.volume = 0.5;
+            ProgramController.mediaPlayerBackground.setVolume(ProgramController.volume);
+        }
     }
 }

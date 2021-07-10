@@ -18,6 +18,11 @@
     -fx-background-size: cover;
 }
 
+.backgroundSoundIcon {
+    -fx-background-image: url("../images/soundIcon.png");
+    -fx-background-size: cover;
+}
+
 .backgroundDuel {
     -fx-background-image: url("../images/backgroundDuel.jpg");
     -fx-background-size: cover;
