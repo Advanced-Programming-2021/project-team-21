@@ -263,7 +263,7 @@ public class DataController {
     private static void extractTrapJson() {
         try {
             StringBuilder data = getStringBuilder("TrapEffects");
-            trap = new Gson().fromJson(data.toString(), EffectsHolder.class);
+            //trap = new Gson().fromJson(data.toString(), EffectsHolder.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -272,7 +272,7 @@ public class DataController {
     private static void extractSpellJson() {
         try {
             StringBuilder data = getStringBuilder("SpellEffects");
-            spell = new Gson().fromJson(data.toString(), EffectsHolder.class);
+            //spell = new Gson().fromJson(data.toString(), EffectsHolder.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -281,7 +281,7 @@ public class DataController {
     private static void extractMonsterJson() {
         try {
             StringBuilder data = getStringBuilder("MonsterEffects");
-            monster = new Gson().fromJson(data.toString(), EffectsHolder.class);
+            //monster = new Gson().fromJson(data.toString(), EffectsHolder.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

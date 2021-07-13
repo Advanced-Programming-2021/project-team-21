@@ -32,6 +32,7 @@ public class ProgramController {
     public static MediaPlayer mediaPlayerBackground;
     public static double volume = 0.5;
     public static DuelMenu gameToContinue = null;
+    public static String currentToken;
 
     public static Scene createNewScene(URL url) throws IOException {
         Parent pane = FXMLLoader.load(url);

@@ -29,7 +29,6 @@ public class LoginMenu implements Menuable {
 
     }
 
-
     private void createNewUser(String command) throws IOException {
         AppController.dataOutputStream.writeUTF(command);
         AppController.dataOutputStream.flush();
@@ -50,6 +49,7 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
+        ProgramController.currentToken = result.substring(0, 31);
         backToEntrance();
         showPopUpSuccessfulSignUp();
     }

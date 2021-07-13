@@ -1,6 +1,11 @@
 package view;
 
 public class Responses {
+    public static String changeToCurrentNickname = "This is your nickname";
+    public static String emptyNicknameField = "Nickname field is empty";
+    public static String invalidToken = "Token is invalid";
+    public static String invalidPassword = "Password is wrong";
+    public static String equalityOfNewAndOldPassword = "New and old password are equal";
     public static String successful = "Successful";
     public static String userExists = "User already exists";
     public static String nicknameExists = "Nickname already exists";
