@@ -17,6 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        AppController.initializeNetwork();
         primaryStage.setResizable(false);
         ProgramController.stage = primaryStage;
         Scene scene = ProgramController.createNewScene(getClass().getResource("/FXMLs/welcome.fxml"));
