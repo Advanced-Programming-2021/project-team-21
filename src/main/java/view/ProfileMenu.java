@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 
 import static view.Regex.changePassword;
 
-public class ProfileMenu implements Menuable {
+public class ProfileMenu {
 
 
     public void run(String command) {

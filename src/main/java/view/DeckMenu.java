@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class DeckMenu implements Menuable {
+public class DeckMenu {
     private static Deck deckToShow;
     private final User USER = ProgramController.userInGame;
     private final int CARD_WIDTH = 80, CARD_HEIGHT = 90;

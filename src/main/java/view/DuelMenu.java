@@ -51,7 +51,7 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class DuelMenu implements Menuable {
+public class DuelMenu {
     public static ArrayList<Monster> specialSummonsedCards;
     public static boolean isForScan;
     public static boolean isGetFromGY;

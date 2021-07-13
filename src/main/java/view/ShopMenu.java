@@ -5,7 +5,7 @@ import model.User;
 import model.card.Card;
 
 
-public class ShopMenu implements Menuable {
+public class ShopMenu {
     private void buy(String command) {
         // parse regex of command
         Card card = Card.getCardByName(command);

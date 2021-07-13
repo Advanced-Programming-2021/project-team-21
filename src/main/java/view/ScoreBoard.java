@@ -1,23 +1,13 @@
 package view;
 
 import controller.DataController;
-import controller.ProgramController;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import model.User;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ScoreBoard implements Menuable {
+public class ScoreBoard {
 
 
     private ArrayList<User> getSortedUsers() {

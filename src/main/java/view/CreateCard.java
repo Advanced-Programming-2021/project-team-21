@@ -36,7 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class CreateCard implements Menuable {
+public class CreateCard {
     public TextField description;
     public Label Name;
     public MenuButton cardType;
