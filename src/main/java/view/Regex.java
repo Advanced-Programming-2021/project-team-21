@@ -7,7 +7,6 @@ public class Regex {
     public static final String userLogin = "user login (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))";
     public static final String userLoginShort = "user login (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))";
     public static final String userCreate = "user create (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))" + "(?=.*--nickname (?<nickname>\\S+))";
-    public static final String userCreateShort = "user create (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))" + "(?=.*-n (?<nickname>\\S+))";
     public static final String userChangeNickname = "profile change --nickname (?<nickname>\\S+)";
     public static final String changePassword = "profile change (?=.*--password)(?=.*--current (?<password>\\S+))(?=.*--new (?<newPassword>\\S+))";
     public static final String changePasswordShort = "profile change (?=.*-p (?<password>\\S+))(?=.*-n (?<newPassword>\\S+))";

@@ -2,12 +2,6 @@ package view;
 
 import controller.DataController;
 import controller.ProgramController;
-import javafx.animation.FadeTransition;
-import javafx.animation.Transition;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,7 +11,7 @@ import java.net.Socket;
 
 public class Main {
 
-    private static ServerController serverController = new ServerController();
+    public static ServerController serverController = new ServerController();
 
     public static void main(String[] args) {
         runApp();
@@ -62,10 +56,8 @@ public class Main {
         }
     }
 
-    static String process(String command) {
+    static String process(String command) throws IOException {
         return serverController.run(command);
     }
-
-
 }
 
