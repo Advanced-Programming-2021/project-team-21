@@ -4,6 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.util.Duration;
+import view.AppController;
 import view.DuelMenu;
 import view.LoginMenu;
 import view.Menuable;

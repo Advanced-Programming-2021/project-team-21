@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class AppController {
-    private static Socket socket;
-    private static DataInputStream dataInputStream;
-    private static DataOutputStream dataOutputStream;
+    public static Socket socket;
+    public static DataInputStream dataInputStream;
+    public static DataOutputStream dataOutputStream;
 
     public static void initializeNetwork() {
         try {

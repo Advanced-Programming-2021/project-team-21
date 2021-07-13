@@ -24,28 +24,17 @@ public class LoginMenu implements Menuable {
     public TextField usernameLogin = new TextField();
     public PasswordField passwordLogin = new PasswordField();
 
-    public void run(String command) throws IOException {
-        Matcher matcher;
-        if ((matcher = Regex.getMatcher(command, Regex.userLogin)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.userLoginShort)).find()) {
-            loginNewUser(matcher);
-        }
-        else if ((matcher = Regex.getMatcher(command, Regex.userCreate)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.userCreateShort)).find()) {
-            createNewUser(matcher);
-        }
-    }
-
     @Override
     public void showMenu() {
 
     }
 
 
-    private void createNewUser(Matcher matcher) throws IOException {
-        String username = matcher.group("username"), password = matcher.group("password"),
-                nickname = matcher.group("nickname");
-        if (User.getUserByUsername(username) != null) {
+    private void createNewUser(String command) throws IOException {
+        AppController.dataOutputStream.writeUTF(command);
+        AppController.dataOutputStream.flush();
+        String result = AppController.dataInputStream.readUTF();
+        if (result.equals(Responses.userExists)) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : This username already exists!");
             ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
@@ -53,7 +42,7 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
-        if (User.getUserByNickname(nickname) != null) {
+        if (result.equals(Responses.nicknameExists)) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : This nickname already exists!");
             ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
@@ -61,7 +50,6 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
-        new User(username, password, nickname);
         backToEntrance();
         showPopUpSuccessfulSignUp();
     }
@@ -79,16 +67,16 @@ public class LoginMenu implements Menuable {
         delay.play();
     }
 
-    private void loginNewUser(Matcher matcher) throws IOException {
-        String username = matcher.group("username"), password = matcher.group("password");
-        User user = User.getUserByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) {
+    private void loginNewUser(String command) throws IOException {
+        AppController.dataOutputStream.writeUTF(command);
+        AppController.dataOutputStream.flush();
+        String result = AppController.dataInputStream.readUTF();
+        if (result.equals(Responses.errorLogin)) {
             ((Label) ProgramController.currentScene.lookup("#errorLogin")).setText("Username and password didn't match!");
             ProgramController.currentScene.lookup("#errorLogin").setStyle("-fx-border-color: red; -fx-background-color: white;");
             ProgramController.stage.show();
             return;
         }
-        ProgramController.userInGame = user;
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
@@ -119,7 +107,7 @@ public class LoginMenu implements Menuable {
             return;
         }
         String commandSignup = "user create --username " + usernameSignUp.getText() + " --nickname " + nicknameSignUp.getText() + " --password " + passwordSignUp.getText();
-        run(commandSignup);
+        createNewUser(commandSignup);
     }
 
     public void clearPreviousErrorsInSignup() {
@@ -150,6 +138,6 @@ public class LoginMenu implements Menuable {
     public void passLoginInformationToCheck() throws IOException {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         String commandLogin = "user login --username " + usernameLogin.getText() + " --password " + passwordLogin.getText();
-        run(commandLogin);
+        loginNewUser(commandLogin);
     }
 }
