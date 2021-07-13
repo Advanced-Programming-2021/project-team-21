@@ -1,9 +1,0 @@
-ShopMenu implements Menuable:
-
------------------------------
--buyCard(matcher:Matcher):void
--showAllCards(matcher:Matcher):void
--increaseMoney(matcher:Matcher):void
-
--canBuyCard(cardName:String):boolean
-
