@@ -43,56 +43,5 @@ public class ScoreBoard implements Menuable {
         return ranks;
     }
 
-    @Override
-    public void showMenu() throws IOException {
-        ProgramController.createNewScene(getClass().getResource("/FXMLs/ScoreboardMenu.fxml"));
-        ProgramController.stage.show();
-        VBox mainVBox = (VBox) ProgramController.currentScene.lookup("#mainVBox");
-        ArrayList<User> users = getSortedUsers();
-        String[] ranks = getRanks(Objects.requireNonNull(users));
-        for (int i = 0; i < ranks.length; i++) {
-            mainVBox.getChildren().add(getHBoxForUser(users.get(i), ranks[i]));
-        }
 
-    }
-
-    private HBox getHBoxForUser(User user, String rank) {
-        HBox hBox = new HBox();
-        if (user.getUsername().equals(ProgramController.userInGame.getUsername()))
-            hBox.getStyleClass().add("scoreboard-user-in-game");
-        else
-            hBox.getStyleClass().add("scoreboard-users");
-        hBox.setAlignment(Pos.CENTER);
-        hBox.setMaxWidth(350);
-        ArrayList<Node> labelsForUser = getLabelsForUser(user, rank);
-        ImageView avatar = new ImageView(new Image(String.valueOf(getClass().getResource(user.getAvatar()))));
-        avatar.setFitHeight(50);
-        avatar.setFitWidth(50);
-        hBox.getChildren().add(avatar);
-        ((Label) labelsForUser.get(0)).setMinWidth(30);
-        ((Label) labelsForUser.get(1)).setMinWidth(200);
-        ((Label) labelsForUser.get(2)).setMinWidth(60);
-        hBox.getChildren().addAll(labelsForUser);
-        hBox.setSpacing(20);
-        return hBox;
-    }
-
-    private ArrayList<Node> getLabelsForUser(User user, String rank) {
-        ArrayList<Node> labels = new ArrayList<>();
-        labels.add(new Label(rank + "."));
-        labels.add(new Label(user.getNickname()));
-        labels.add(new Label(String.valueOf(user.getScore())));
-        return labels;
-    }
-
-    public void back() throws IOException {
-        ProgramController.currentMenu = new MainMenu();
-        ProgramController.currentMenu.showMenu();
-    }
-
-    public void handleBackToMenu() throws IOException {
-        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
-        ProgramController.createNewScene(getClass().getResource("/FXMLs/mainMenu.fxml"));
-        ProgramController.stage.show();
-    }
 }
