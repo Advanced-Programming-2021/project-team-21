@@ -6,57 +6,50 @@ import model.User;
 
 import java.util.regex.Matcher;
 
+import static view.Regex.changeAvatar;
 import static view.Regex.changePassword;
 
-public class ProfileMenu {
+public class ProfileMenu implements Menuable {
 
-
-    public void run(String command) {
+    @Override
+    public String run(String command) {
         Matcher matcher;
-        if ((matcher = Regex.getMatcher(command, Regex.userChangeNickname)).find()) {
-            changeNickname(matcher);
-        } else if ((matcher = Regex.getMatcher(command, changePassword)).find() ||
-                (matcher = Regex.getMatcher(command, Regex.changePasswordShort)).find()) {
-            newPassword(matcher);
-        }
-
+        if ((matcher = Regex.getMatcher(command, Regex.userChangeNickname)).find())
+            return changeNickname(matcher);
+        else if ((matcher = Regex.getMatcher(command, changePassword)).find() ||
+                (matcher = Regex.getMatcher(command, Regex.changePasswordShort)).find())
+            return newPassword(matcher);
+        else if ((matcher = Regex.getMatcher(command, changeAvatar)).find())
+            return changeAvatar(matcher);
+        return Responses.invalidFormat;
     }
 
-    private void newPassword(Matcher matcher) {
+    private String newPassword(Matcher matcher) {
         String oldPassword = matcher.group("password"), newPassword = matcher.group("newPassword");
-        if (!ProgramController.userInGame.getPassword().equals(oldPassword)) {
-            //
-            return;
-        }
-        if (newPassword.equals(oldPassword)) {
-            //
-        }
+        if (!ProgramController.userInGame.getPassword().equals(oldPassword))
+            return Responses.invalidPassword;
+        if (newPassword.equals(oldPassword))
+            return Responses.equalityOfNewAndOldPassword;
         ProgramController.userInGame.setPassword(newPassword);
+        return Responses.successful;
     }
 
-    private void changeNickname(Matcher matcher) {
+    private String changeNickname(Matcher matcher) {
         String nickname = matcher.group("nickname");
-        //parse command
-        if (User.getUserByNickname(nickname) != null) {
-
-        }
+        if (nickname.equals(""))
+            return Responses.emptyNicknameField;
+        if (nickname.equals(ProgramController.userInGame.getNickname()))
+            return Responses.changeToCurrentNickname;
+        if (User.getUserByNickname(nickname) != null)
+            return Responses.nicknameExists;
         ProgramController.userInGame.setNickname(nickname);
+        return Responses.successful;
     }
 
 
-
-    public void  passInformationToChangeNickname() {
-       //
-    }
-
-    public void passInformationToChangePassword() {
-        // parse command
-
-       //
-    }
-
-    public void changeAvatar() {
-
-
+    public String changeAvatar(Matcher matcher) {
+        String url = matcher.group(1);
+        ProgramController.userInGame.setAvatar(url);
+        return Responses.successful;
     }
 }

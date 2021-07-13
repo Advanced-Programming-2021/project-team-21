@@ -1,6 +1,10 @@
 package view;
 
-public class ImportAndExport {
+public class ImportAndExport implements Menuable{
+    @Override
+    public String run(String command) {
+        return null;
+    }
 
    /* public void exportCard() {
         if (cardToExport == null) {

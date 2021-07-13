@@ -4,6 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regex {
+    public static final String logout = "logout";
+    public static final String menuEnter = "menu enter (?<menuName>\\S+)";
+    public static final String menuExit = "menu exit";
+    public static final String changeAvatar = "change avatar (.+)";
     public static final String userLogin = "user login (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))";
     public static final String userLoginShort = "user login (?=.*-u (?<username>\\S+))(?=.*-p (?<password>\\S+))";
     public static final String userCreate = "user create (?=.*--username (?<username>\\S+))(?=.*--password (?<password>\\S+))" + "(?=.*--nickname (?<nickname>\\S+))";

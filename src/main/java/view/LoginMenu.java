@@ -1,16 +1,14 @@
 package view;
 
-import controller.DataController;
 import controller.ProgramController;
-import javafx.scene.control.Label;
 import model.User;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 public class LoginMenu implements Menuable{
-    private Matcher matcher;
 
+    @Override
     public String run(String command){
+        Matcher  matcher;
         if ((matcher = Regex.getMatcher(command, Regex.userCreate)).find())
             return LoginMenu.createNewUser(matcher);
         else if ((matcher = Regex.getMatcher(command, Regex.userLogin)).find())
@@ -36,11 +34,8 @@ public class LoginMenu implements Menuable{
             return Responses.errorLogin;
         }
         ProgramController.userInGame = user;
-        return Responses.successful;
+        ProgramController.currentToken = ProgramController.generateNewToken();
+        return ProgramController.currentToken + " " + Responses.successful;
     }
-
-
-
-    public void exitProgram() { System.exit(0); }
 
 }
