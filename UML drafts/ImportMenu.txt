@@ -1,5 +1,0 @@
-ImportMenu implements Menuable:
-
-------------------------------
--importCard(matcher:Matcher):void
--exportCard(matcher:Matcher):void

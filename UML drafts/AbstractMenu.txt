@@ -1,7 +1,0 @@
-Menuable INTERFACE:
-
--------------------
-+run():void
--showCurrentMenu():void
--enterMenu():void
--exitMenu():void
