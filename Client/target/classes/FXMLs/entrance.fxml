@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundEntrance" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginMenu">
+    <top>
+        <Label styleClass="title-label" text="Entrance menu" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="40.0" />
+            </font>
+        </Label>
+    </top>
+    <center>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" maxWidth="200.0" mnemonicParsing="false" onMouseClicked="#goToLogin" styleClass="buttonEntrance" text="Login">
+                    <font>
+                        <Font size="20.0" />
+                    </font></Button>
+                <Button maxHeight="50.0" maxWidth="200.0" mnemonicParsing="false" onMouseClicked="#goToSignup" styleClass="buttonEntrance" text="Sign up">
+                    <font>
+                        <Font size="20.0" />
+                    </font></Button>
+            <Button maxHeight="50.0" maxWidth="200.0" mnemonicParsing="false" onMouseClicked="#exitProgram" styleClass="buttonEntrance" text="Exit">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            </children>
+        </VBox>
+    </center>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css" />
+    </stylesheets>
+</BorderPane>

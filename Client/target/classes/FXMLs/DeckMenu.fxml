@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="view.DeckMenu" styleClass="deck-menu-background">
+    <top>
+        <VBox alignment="CENTER">
+            <Label alignment="CENTER" text="Deck menu" style="-fx-background-color: rgba(31, 17, 8, 0.685);-fx-text-fill: rgb(255, 255, 255);"
+                   styleClass="title-label">
+                <font>
+                    <Font size="40.0"/>
+                </font>
+            </Label>
+        </VBox>
+    </top>
+    <center>
+        <VBox maxHeight="200.0" maxWidth="600.0" alignment="CENTER">
+            <HBox alignment="TOP_CENTER" maxHeight="150.0" minWidth="540.0" id="mainHBox" styleClass="decks">
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox minWidth="600.0" alignment="CENTER" spacing="400">
+            <Button text="Back" onMouseClicked="#goToMainMenu" styleClass="buttonEntrance"/>
+            <Button text="Create new deck" onMouseClicked="#createDeck" styleClass="buttonEntrance"/>
+        </HBox>
+    </bottom>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css"/>
+    </stylesheets>
+</BorderPane>

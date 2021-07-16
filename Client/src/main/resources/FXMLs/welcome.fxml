@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import java.net.URL?>
+<BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundWelcome" xmlns="http://javafx.com/javafx/11" >
+   <bottom>
+      <VBox spacing="30">
+         <Label prefHeight="18.0" id="pressKey" prefWidth="200.0" text="Press any key to start" textFill="WHITE" BorderPane.alignment="BOTTOM_CENTER">
+            <BorderPane.margin>
+               <Insets left="100" />
+            </BorderPane.margin>
+            <font>
+               <Font size="20.0" />
+            </font>
+            <VBox.margin>
+               <Insets left="200.0" />
+            </VBox.margin>
+         </Label>
+         <Label prefHeight="18.0" prefWidth="146.0" text="Yu-Gi-Oh! version 2.0" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT">
+            <BorderPane.margin>
+               <Insets />
+            </BorderPane.margin>
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Label>
+      </VBox>
+   </bottom>
+   <center>
+      <ImageView fitHeight="150.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+         <Image url="@../images/welcomeLogo.png" />
+         <BorderPane.margin>
+            <Insets top="50.0" />
+         </BorderPane.margin>
+      </ImageView>
+   </center>
+   <stylesheets>
+      <URL value="@../CSS/CSS.css"/>
+   </stylesheets>
+</BorderPane>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="backgroundDuel" xmlns="http://javafx.com/javafx/16"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.DuelMenu">
+
+    <stylesheets>
+        <URL value="@../CSS/CSS.css"/>
+    </stylesheets>
+    <VBox>
+
+        <VBox prefHeight="152.0" prefWidth="133.0" spacing="5.0">
+            <padding>
+                <Insets bottom="5.0" left="5.0" top="5.0"/>
+            </padding>
+            <ProgressBar id="rivalLPBar" prefWidth="200.0" progress="1.0" styleClass="green-bar"/>
+            <Label id="rivalLP" prefHeight="16.0" prefWidth="138.0" text="Rival LP">
+                <VBox.margin>
+                    <Insets left="50.0"/>
+                </VBox.margin>
+            </Label>
+            <Rectangle id="rivalAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK"
+                       strokeType="INSIDE" width="55.0">
+                <VBox.margin>
+                    <Insets left="42.0"/>
+                </VBox.margin>
+            </Rectangle>
+            <Label id="rivalUsername" prefHeight="19.0" prefWidth="141.0" text="Rival Username">
+                <VBox.margin>
+                    <Insets left="45.0"/>
+                </VBox.margin>
+            </Label>
+            <Label id="rivalNickname" prefHeight="16.0" prefWidth="140.0" text="Rival Nickname">
+                <VBox.margin>
+                    <Insets left="45.0"/>
+                </VBox.margin>
+            </Label>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="96.0" prefWidth="133.0" spacing="10.0">
+            <Label id="phaseLabel" text="Current Phase">
+                <VBox.margin>
+                    <Insets left="15.0"/>
+                </VBox.margin>
+            </Label>
+            <Button id="nextPhaseButton" styleClass="buttonEntrance" text="Next Phase">
+                <VBox.margin>
+                    <Insets left="15.0"/>
+                </VBox.margin>
+            </Button>
+            <Button onMouseClicked="#showSettings" styleClass="buttonEntrance" text="Settings">
+                <VBox.margin>
+                    <Insets left="15.0"/>
+                </VBox.margin>
+            </Button>
+        </VBox>
+        <VBox alignment="BOTTOM_LEFT" layoutY="259.0" prefHeight="152.0" prefWidth="133.0" spacing="5.0">
+            <padding>
+                <Insets bottom="5.0" left="5.0"/>
+            </padding>
+            <Label id="ownNickname" prefHeight="16.0" prefWidth="140.0" text="Own Nickname">
+                <VBox.margin>
+                    <Insets left="45.0"/>
+                </VBox.margin>
+            </Label>
+            <Label id="ownUsername" prefHeight="19.0" prefWidth="141.0" text="Own Username">
+                <VBox.margin>
+                    <Insets left="45.0"/>
+                </VBox.margin>
+            </Label>
+            <Rectangle id="ownAvatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="47.0" stroke="BLACK"
+                       strokeType="INSIDE" width="55.0">
+                <VBox.margin>
+                    <Insets left="42.0"/>
+                </VBox.margin>
+            </Rectangle>
+            <Label id="ownLP" prefHeight="16.0" prefWidth="138.0" text="Own LP">
+                <VBox.margin>
+                    <Insets left="50.0"/>
+                </VBox.margin>
+            </Label>
+            <ProgressBar id="ownLPBar" prefWidth="200.0" progress="1.0" styleClass="green-bar"/>
+        </VBox>
+
+    </VBox>
+    <VBox alignment="CENTER" layoutX="133.0" prefHeight="400.0" prefWidth="467.0" spacing="1.0">
+        <ListView id="rivalHandListView" orientation="HORIZONTAL" prefHeight="66.0" prefWidth="467.0">
+            <VBox.margin>
+                <Insets left="30.0"/>
+            </VBox.margin>
+        </ListView>
+        <HBox id="rivalSpellsHBox" alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="467.0" spacing="9.0">
+            <StackPane>
+                <Rectangle id="rivalDeck" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="60.0" width="50.0"/>
+                <Label id="numberOfRivalDeckCards" text="Label" textFill="WHITE"/>
+            </StackPane>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="10.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="64.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="118.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="172.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="226.0" layoutY="10.0"
+                       width="50.0"/>
+            <padding>
+                <Insets bottom="9.0" left="58.0" top="9.0"/>
+            </padding>
+        </HBox>
+        <HBox id="rivalMonsterHBox" alignment="CENTER_LEFT" prefHeight="67.0" prefWidth="467.0" spacing="9.0">
+            <Rectangle id="rivalFieldZone" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="10.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="64.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="118.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="172.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="226.0" layoutY="10.0"
+                       width="50.0"/>
+            <StackPane id="rivalGraveyard">
+                <children>
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="60.0" width="50.0"/>
+                    <Label id="rivalGraveyardNumber" styleClass="grave-yard-label" text="0"
+                           StackPane.alignment="CENTER">
+                        <font>
+                            <Font size="20.0"/>
+                        </font>
+                    </Label>
+                </children>
+            </StackPane>
+            <padding>
+                <Insets bottom="22.0" left="58.0"/>
+            </padding>
+        </HBox>
+        <HBox id="ownMonsterHBox" alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="467.0" spacing="9.0">
+            <padding>
+                <Insets bottom="12.0" right="4.0"/>
+            </padding>
+            <StackPane id="ownGraveyard">
+                <children>
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="60.0" width="50.0"/>
+                    <Label id="ownGraveyardNumber" styleClass="grave-yard-label" text="0" StackPane.alignment="CENTER">
+                        <font>
+                            <Font size="20.0"/>
+                        </font>
+                    </Label>
+                </children>
+            </StackPane>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="10.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="64.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="118.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="172.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="226.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle id="ownFieldZone" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="280.0"
+                       layoutY="10.0" width="50.0"/>
+        </HBox>
+        <HBox id="ownSpellsHBox" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="209.0" prefHeight="45.0"
+              prefWidth="467.0" spacing="9.0">
+            <padding>
+                <Insets bottom="1.0" right="4.0"/>
+            </padding>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="10.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="64.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="118.0" layoutY="10.0"
+                       width="50.0"/>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" layoutX="172.0" layoutY="10.0"
+                       width="50.0"/>
+            <StackPane>
+                <Rectangle id="ownDeck" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="60.0" width="50.0"/>
+                <Label id="numberOfOwnDeckCards" text="Label" textFill="WHITE"/>
+            </StackPane>
+        </HBox>
+        <ListView id="ownHandListView" layoutX="10.0" layoutY="10.0" orientation="HORIZONTAL" prefHeight="66.0"
+                  prefWidth="467.0">
+            <VBox.margin>
+                <Insets left="30.0"/>
+            </VBox.margin>
+        </ListView>
+    </VBox>
+    <stylesheets>
+        <URL value="@../CSS/CSS.css"/>
+    </stylesheets>
+</AnchorPane>

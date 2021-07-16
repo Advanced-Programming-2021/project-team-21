@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            styleClass="backgroundProfileMenu" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="view.ProfileMenu">
+   <center>
+      <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <ImageView id="imageProfile" fitHeight="102.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#changeAvatar"/>
+                  <Label id="usernameProfile">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="40.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="30.0" prefWidth="539.0" spacing="30.0">
+               <children>
+                  <Label alignment="TOP_LEFT" text="nickname :">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <TextField id="nicknameProfile">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin></TextField>
+                  <Button id="buttonNickname" mnemonicParsing="false" styleClass="buttonProfileMenu" onMouseClicked="#passInformationToChangeNickname" prefWidth="130.0" text="Change nickname">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="42.0" prefWidth="500.0" spacing="22.0">
+                     <children>
+                        <Label text="old password :">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <PasswordField fx:id="oldPassword" />
+                        <Button id="buttonPassword" mnemonicParsing="false" prefWidth="130.0" styleClass="buttonProfileMenu" onMouseClicked="#passInformationToChangePassword" text="Change password">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="8.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="57.0" prefWidth="500.0" spacing="15.0">
+                     <children>
+                        <Label text="new password :">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <PasswordField fx:id="newPassword" />
+                        <Button mnemonicParsing="false" prefWidth="130.0" styleClass="buttonProfileMenu" onMouseClicked="#backToMainMenu" text="Back">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="14.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <VBox prefHeight="106.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Profile menu" textAlignment="CENTER">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
+            <Label id="errorProfile" alignment="CENTER" textFill="RED">
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets left="180.0" />
+         </padding>
+      </VBox>
+   </top>
+   <left>
+      <VBox prefHeight="0.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label id="errorNickname" prefHeight="30.0" prefWidth="15.0" textFill="RED">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="80.0" />
+               </VBox.margin>
+            </Label>
+            <Label id="errorOldPassword" textFill="RED">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="80.0" />
+               </VBox.margin>
+            </Label>
+            <Label id="errorNewPassword" textFill="RED">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="80.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+         <BorderPane.margin>
+            <Insets top="150.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <stylesheets>
+      <URL value="@../CSS/CSS.css" />
+   </stylesheets>
+</BorderPane>
