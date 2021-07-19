@@ -1,7 +1,6 @@
 package controller.Effects;
 
 import controller.ProgramController;
-import view.DuelMenu;
 import model.Board;
 import model.Duel;
 import model.User;
@@ -10,7 +9,6 @@ import model.card.Chain;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.effects.Effect;
-import view.PrintResponses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -239,13 +237,14 @@ public class SpellActivation {
     }
 
     public static int getPlace(Card[] spellsAndTraps) {
-        PrintResponses.printSpellsToDestroy(Arrays.asList(spellsAndTraps));
-        int selected = Integer.parseInt(ProgramController.scanner.nextLine());
-        if (selected < 0 || selected > spellsAndTraps.length) {
-            PrintResponses.printNoSpellFound();
-            return -1;
-        }
-        return selected;
+//        PrintResponses.printSpellsToDestroy(Arrays.asList(spellsAndTraps));
+//        int selected = Integer.parseInt(ProgramController.scanner.nextLine());
+//        if (selected < 0 || selected > spellsAndTraps.length) {
+////            PrintResponses.printNoSpellFound();
+//            return -1;
+//        }
+//        return selected;
+        return 0;
     }
 
     private static void destroySpell(Card card, User userNow, Duel duel) {
@@ -255,20 +254,20 @@ public class SpellActivation {
     }
 
     private static void handleControl(Spell spell, User userNow, User rival, Duel duel, int place) {
-        PrintResponses.printChangeOfHeart();
+//        PrintResponses.printChangeOfHeart();
         if (rival.getBoard().getMonsters().length == 0) {
-            PrintResponses.printCanNotControl();
+//            PrintResponses.printCanNotControl();
             duel.addCardToGraveyard(spell, place, userNow);
             return;
         }
         boolean isChosen = false;
         int monsterPlace = 0;
-        while (!isChosen) {
-            monsterPlace = Integer.parseInt(ProgramController.scanner.nextLine());
-            if (monsterPlace > 5 || monsterPlace < 1 || userNow.getBoard().getCard(monsterPlace, 'M') == null) {
-                PrintResponses.printWrongControl();
-            } else isChosen = true;
-        }
+//        while (!isChosen) {
+//            monsterPlace = Integer.parseInt(ProgramController.scanner.nextLine());
+//            if (monsterPlace > 5 || monsterPlace < 1 || userNow.getBoard().getCard(monsterPlace, 'M') == null) {
+//                PrintResponses.printWrongControl();
+//            } else isChosen = true;
+//        }
         Monster monster = (Monster) userNow.getBoard().getCard(monsterPlace, 'M');
         rival.getBoard().removeMonster(monsterPlace);
         int newPlace = userNow.getBoard().getAddressToSummon();
@@ -318,13 +317,13 @@ public class SpellActivation {
         for (Card card : rival.getGraveyard()) {
             if (card instanceof Monster) cards.add((Monster) card);
         }
-        DuelMenu.specialSummonsedCards = cards;
-        DuelMenu.isGetFroOpponentGY = true;
-        PrintResponses.printSpecialSummonCards(cards);
-        while (DuelMenu.specialSummonsedCards != null) {
-            DuelMenu.checkSpecialSummon( duel, false);
-        }
-        duel.addCardToGraveyard(spell, place, userNow);
+//        DuelMenu.specialSummonsedCards = cards;
+//        DuelMenu.isGetFroOpponentGY = true;
+//        PrintResponses.printSpecialSummonCards(cards);
+//        while (DuelMenu.specialSummonsedCards != null) {
+//            DuelMenu.checkSpecialSummon( duel, false);
+//        }
+//        duel.addCardToGraveyard(spell, place, userNow);
     }
 
     private static void destroyMonsters(Spell spell, User userNow, Duel duel, int place) {

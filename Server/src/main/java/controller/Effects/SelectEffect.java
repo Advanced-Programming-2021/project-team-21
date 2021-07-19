@@ -1,11 +1,9 @@
 package controller.Effects;
 
-import view.DuelMenu;
 import model.Duel;
 import model.User;
 import model.card.Card;
 import model.card.Monster;
-import view.PrintResponses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -16,19 +14,19 @@ public class SelectEffect {
 
     public static void run(Monster selected, User rival, User player, Duel duel, int selectedPlace) throws FileNotFoundException {
         if (selected.getCanScan().hasEffect()) {
-            DuelMenu.specialSummonsedCards = selectMonstersFromGY(rival);
-            if (DuelMenu.specialSummonsedCards.size() == 0) {
-                PrintResponses.printNoSpecialEffect();
-                DuelMenu.specialSummonsedCards = null;
-                return;
-            }
-            PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
-            DuelMenu.isForScan = true;
+//            DuelMenu.specialSummonsedCards = selectMonstersFromGY(rival);
+//            if (DuelMenu.specialSummonsedCards.size() == 0) {
+//                PrintResponses.printNoSpecialEffect();
+//                DuelMenu.specialSummonsedCards = null;
+//                return;
+//            }
+//            PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
+//            DuelMenu.isForScan = true;
             scannerPlace = selectedPlace;
             scannerHolder = Monster.copy(selected);
             scannerHolder.setATK(selected.isATK());
-            while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(duel, false);
+//            while (DuelMenu.specialSummonsedCards != null)
+//                DuelMenu.checkSpecialSummon(duel, false);
         } else if (selected.getCanGetFromGYByLevelToHand().hasEffect()) {
             Card card = player.getHand().selectARandomCardFromHand();
             int i;
@@ -37,13 +35,13 @@ public class SelectEffect {
                     break;
             }
             player.getHand().discardACard(i);
-            DuelMenu.specialSummonsedCards = getCardsFromGYByLevel(
-                    selected.getCanGetFromGYByLevelToHand().getEffectNumber(), player);
-            DuelMenu.addToHand = true;
-            if (DuelMenu.specialSummonsedCards.size() > 0)
-                PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
-            while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon(duel, false);
+//            DuelMenu.specialSummonsedCards = getCardsFromGYByLevel(
+//                    selected.getCanGetFromGYByLevelToHand().getEffectNumber(), player);
+//            DuelMenu.addToHand = true;
+//            if (DuelMenu.specialSummonsedCards.size() > 0)
+//                PrintResponses.printSpecialSummonCards(DuelMenu.specialSummonsedCards);
+//            while (DuelMenu.specialSummonsedCards != null)
+//                DuelMenu.checkSpecialSummon(duel, false);
             selected.getCanGetFromGYByLevelToHand().finishEffect();
             selected.getCanGetFromGYByLevelToHand().setNeedsToBeReset(true);
             selected.setSelectEffect(false);

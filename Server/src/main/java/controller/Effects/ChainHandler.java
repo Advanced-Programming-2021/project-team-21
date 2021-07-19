@@ -7,7 +7,6 @@ import model.User;
 import model.WhereToChain;
 import model.card.*;
 import model.card.effects.Effect;
-import view.PrintResponses;
 
 import java.util.ArrayList;
 
@@ -131,13 +130,14 @@ public class ChainHandler {
 
         }
         if (user.getBoard().getSpellsAndTraps().length == 0) return "no";
-        PrintResponses.printAskToChain(user, duel);
-        String input = ProgramController.scanner.nextLine();
-        while (true) {
-            if (input.equals("no")) return input;
-            else if (input.equals("yes")) return ProgramController.scanner.nextLine();
-            PrintResponses.printInvalidFormat();
-        }
+//        PrintResponses.printAskToChain(user, duel);
+//        String input = ProgramController.scanner.nextLine();
+//        while (true) {
+//            if (input.equals("no")) return input;
+//            else if (input.equals("yes")) return ProgramController.scanner.nextLine();
+//            PrintResponses.printInvalidFormat();
+//        }
+        return "0";
     }
 
     public static ArrayList<model.card.Chain> getChain(Duel duel, String choose, User user, User rival
@@ -159,13 +159,13 @@ public class ChainHandler {
             spellOrTrap = getSpellOrTrap(choose, userNow);
             while (spellOrTrap == null || checkSpell(speed, spellOrTrap)
                     || !checkIsRightPlace(chainCards, where, spellOrTrap, firstCard.getCard(), userNow, otherUser)) {
-                PrintResponses.printWrongSpell();
+//                PrintResponses.printWrongSpell();
                 choose = getNumber(chainCards, choose, userNow, otherUser, where, firstCard.getCard());
                 spellOrTrap = getSpellOrTrap(choose, userNow);
             }
             if ((spellOrTrap instanceof Trap) && ((Trap) spellOrTrap).getSpellTrapIcon().getName().equals("Counter"))
                 speed = 3;
-            PrintResponses.printChainComplete(chainCount);
+//            PrintResponses.printChainComplete(chainCount);
             model.card.Chain chain = getOtherInputs(spellOrTrap, userNow, otherUser, firstCard);
             chainCards.add(chain);
             choose = getChainCommand(chainCards, otherUser, userNow, currentDuel, where, firstCard.getCard());
@@ -181,12 +181,12 @@ public class ChainHandler {
 
     private static String getCardName(Card spellOrTrap) {
         if (spellOrTrap instanceof Trap && ((Trap) spellOrTrap).getCanDestroyFromDeckAndHand().hasEffect()) {
-            PrintResponses.printAskTpGetCardName();
+//            PrintResponses.printAskTpGetCardName();
             Card card;
-            while ((card = Card.getCardByName(ProgramController.scanner.nextLine())) == null) {
-                PrintResponses.printWrongCardName();
-            }
-            return card.getName();
+//            while ((card = Card.getCardByName(ProgramController.scanner.nextLine())) == null) {
+//                PrintResponses.printWrongCardName();
+//            }
+//            return card.getName();
         }
         return null;
     }
@@ -240,20 +240,20 @@ public class ChainHandler {
     private static void discard(User userNow, int effectNumber) {
         for (int i = 0; i < effectNumber; i++) {
             Hand hand = userNow.getHand();
-            PrintResponses.printAskToDiscard();
+//            PrintResponses.printAskToDiscard();
             int place;
             while (true) {
                 try {
-                    place = Integer.parseInt(ProgramController.scanner.nextLine());
-                    if (place < 5 && place >= 0 && hand.getCardsInHand()[place] != null)
+//                    place = Integer.parseInt(ProgramController.scanner.nextLine());
+//                    if (place < 5 && place >= 0 && hand.getCardsInHand()[place] != null)
                         break;
                 } catch (Exception e) {
-                    PrintResponses.printWrongSpellFormat();
+//                    PrintResponses.printWrongSpellFormat();
                 }
             }
-            Card card = hand.getCardsInHand()[place];
-            currentDuel.addCardToGraveyard(card, 10, userNow);
-            hand.removeCardFromHand(place);
+//            Card card = hand.getCardsInHand()[place];
+//            currentDuel.addCardToGraveyard(card, 10, userNow);
+//            hand.removeCardFromHand(place);
         }
     }
 
@@ -268,7 +268,7 @@ public class ChainHandler {
 
     private static String getNumber(ArrayList<Chain> chains, String which, User user,User rival ,  WhereToChain where, Card card) {
         while (!which.matches("\\d+")) {
-            PrintResponses.printWrongSpellFormat();
+//            PrintResponses.printWrongSpellFormat();
             which = getChainCommand(chains, user,rival ,currentDuel, where, card );
         }
         return which;

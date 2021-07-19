@@ -2,7 +2,6 @@ package model;
 
 import com.rits.cloning.Cloner;
 import controller.ProgramController;
-import view.DuelMenu;
 import model.card.Card;
 import model.card.Monster;
 import model.card.enums.CardType;
@@ -60,7 +59,7 @@ public class Hand {
 
     public Card drawACard() {
         if (deckToDraw.getMainDeckCards().size() == 0) {
-            ((DuelMenu) ProgramController.currentMenu).endTheGame(false , null , null);
+//            ((DuelMenu) ProgramController.currentMenu).endTheGame(false , null , null);
             return null;
         }
         for (int i = 0; i < cardsInHand.length; i++) {

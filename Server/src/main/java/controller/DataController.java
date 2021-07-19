@@ -1,11 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.CSVWriter;
 import controller.Effects.EffectsHolder;
-import model.AI;
 import model.Deck;
 import model.User;
 import model.card.Card;
@@ -13,63 +9,225 @@ import model.card.Monster;
 import model.card.Spell;
 import model.card.Trap;
 import model.card.effects.Effect;
-import view.DeckMenu;
 import view.Regex;
-import view.ShopMenu;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class DataController {
 
 
-    private static final String[] CARD_PATHS = {"src/main/resources/cards/Monster.csv",
-            "src/main/resources/cards/Spell.csv",
-            "src/main/resources/cards/Trap.csv"};
-    private static final String USER_PATH = "src/main/resources/users";
+    private static final String[] CARD_TABLE_NAMES = {"Monsters", "Spells", "Traps"};
     public static EffectsHolder monster;
     public static EffectsHolder spell;
     public static EffectsHolder trap;
-    public static ArrayList<User> getAllUsers() {
-        String[] fileNames = getAllUserFileNames();
-        ArrayList<User> allUsers = new ArrayList<>();
-        if (fileNames == null)
-            return null;
-        for (String fileName : fileNames) {
-            allUsers.add(getUserByUsername(fileName.replaceAll("src/main/resources/users", "")
-                    .replaceAll(".user.json", "")));
+
+
+    //is called when we want to update user information or we want to add a deck
+    public static void updateUserInformation(User user) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+
+            updateOrCreateUser(user, connection);
+            Statement stmt;
+            String query;
+
+            query = "SELECT user_id FROM users WHERE username = '" + user.getUsername() + "';";
+            stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+            ArrayList<Deck> decks = user.getDecks();
+            int user_id = 0;
+            if (resultSet.next())
+                user_id = resultSet.getInt(1);
+            for (Deck deck : decks) {
+                if (!doesDeckExist(connection, deck)) {
+                    addDeck(connection, user_id, deck);
+                }
+            }
+
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return allUsers;
     }
 
+    private static void updateOrCreateUser(User user, Connection connection) throws SQLException {
+        String query = "SELECT * FROM users WHERE username = '" + user.getUsername() + "';";
+        ResultSet resultSet = getResultSet(connection, query);
+        if (!resultSet.next()) {
+            query = "INSERT INTO users (username, nickname, password, score, coins)"
+                    + " VALUES (?, ?, ?, ?, ?)";
+        } else {
+            query = "UPDATE users SET username = ?, nickname = ?, password = ?, score = ?, coins = ? WHERE user_id = '" + resultSet.getInt(1) + "'";
+        }
+
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, user.getUsername());
+        preparedStatement.setString(2, user.getNickname());
+        preparedStatement.setString(3, user.getPassword());
+        preparedStatement.setInt(4, user.getScore());
+        preparedStatement.setInt(5, user.getCoins());
+        preparedStatement.execute();
+
+    }
+
+    private static void addDeck(Connection connection, int user_id, Deck deck) throws SQLException {
+        String query;
+        PreparedStatement preparedStatement;
+        query = "INSERT INTO decks (owner_id, name, is_active)" +
+                "VALUES (?, ?, ?)";
+        preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, user_id);
+        preparedStatement.setString(2, deck.getName());
+        preparedStatement.setBoolean(3, deck.isActive());
+        preparedStatement.execute();
+    }
+
+    private static boolean doesDeckExist(Connection connection, Deck deck) throws SQLException {
+        ResultSet resultSet;
+        String query;
+        Statement stmt;
+        query = "SELECT * FROM decks WHERE name = '" + deck.getName() + "'";
+        stmt = connection.createStatement();
+        resultSet = stmt.executeQuery(query);
+        return resultSet.next();
+    }
+
+
+    //is called when user toggles deck-activation
+    public static void updateDeck(Deck deck) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            int is_active = (deck.isActive()) ? 1 : 0;
+            String query = "UPDATE decks SET is_active = '" + is_active + "' WHERE name = '" + deck.getName() + "';";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+            connection.close();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
+    //is called when user buys a new card from shop
+    public static void addCardToUser(Card card, User user) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "SELECT user_id FROM users WHERE username = '" + user.getUsername() + "'";
+            Statement statement = connection.createStatement();
+            String cardClassName = card.getClass().getSimpleName();
+            int user_id = statement.executeQuery(query).getInt(1);
+            query = "SELECT " + cardClassName + "_id FROM " + cardClassName + "s WHERE Name = '" + card.getName() + "'";
+            int card_id = statement.executeQuery(query).getInt(1);
+            query = "INSERT INTO users_has_" + card.getClass().getSimpleName() + "s (users_user_id, " + cardClassName + "s_" + cardClassName + "_id) " +
+                    "VALUES(?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(user_id, card_id);
+            preparedStatement.execute();
+            query = "UPDATE " + cardClassName + "s SET Amount = '" + (card.getAmountInShop() - 1) + "' WHERE Name = '" + card.getName() + "'";
+            connection.prepareStatement(query).execute();
+            connection.close();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
+    //is called when admin wants to ban users from buying a card
+    public static void toggleCanBuyCard(Card card, boolean canBuy) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            int canBuyInt = (canBuy) ? 1 : 0;
+            String query = "UPDATE " + card.getClass().getSimpleName() + "s SET can_buy = '" + canBuyInt + "' WHERE Name = '" + card.getName() + "'";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+            connection.close();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
+    // is called when admin wants to change the amount of a card in shop
+    public static void setAmountForCard(Card card, int amount) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "UPDATE " + card.getClass().getSimpleName() + "s SET Amount = '" + amount + "' WHERE Name = '" + card.getName() + "'";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+            connection.close();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
+    // is called when we want to get all users (i.e. in scoreboard)
+    public static ArrayList<User> getAllUsers() {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "SELECT username FROM users";
+            ResultSet resultSet = getResultSet(connection, query);
+            ArrayList<String> usernames = new ArrayList<>();
+            while (resultSet.next()) {
+                usernames.add(resultSet.getString(1));
+            }
+            ArrayList<User> allUsers;
+            if (usernames.isEmpty())
+                return null;
+            allUsers = usernames.stream().map(DataController::getUserByUsername).collect(Collectors.toCollection(ArrayList::new));
+            connection.close();
+            return allUsers;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return null;
+        }
+    }
+
+    // is called when we want to get all cards (i.e. in shop)
     public static HashMap<String, Card> getAllCards() {
         HashMap<String, Card> allCards = new HashMap<>();
-        for (String path : CARD_PATHS) {
-            allCards.putAll(getCardsFromTable(path));
+        for (String tableName : CARD_TABLE_NAMES) {
+            allCards.putAll(getCardsFromTable(tableName));
         }
         return allCards;
     }
 
-    private static HashMap<String, Card> getCardsFromTable(String path) {
+    private static HashMap<String, Card> getCardsFromTable(String tableName) {
         HashMap<String, Card> cards = new HashMap<>();
         try {
-            File file = new File(path);
-            FileReader filereader = new FileReader(file);
-            CSVReader csvReader = new CSVReaderBuilder(filereader).withSkipLines(1).build();
-            List<String[]> allData = csvReader.readAll();
-            for (String[] allDatum : allData) {
-                Object[] parameters = new Object[allData.get(0).length];
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "SELECT * FROM " + tableName;
+            ResultSet resultSet = getResultSet(connection, query);
+            if (resultSet == null)
+                return null;
+            int size = resultSet.getMetaData().getColumnCount() - 1;
+            while (resultSet.next()) {
+                Object[] parameters = new Object[size];
+                for (int i = 0; i < parameters.length; i++) {
+                    parameters[i] = resultSet.getString(i + 2);
+                }
                 //checking which constructor to call
-                System.arraycopy(allDatum, 0, parameters, 0, allData.get(0).length);
-                if (path.equals(CARD_PATHS[0])) {
+                if (tableName.equals(CARD_TABLE_NAMES[0])) {
                     Monster monster = new Monster(parameters);
                     cards.put(monster.getName(), monster);
-                } else if (path.equals(CARD_PATHS[1])) {
+                } else if (tableName.equals(CARD_TABLE_NAMES[1])) {
                     Spell spell = new Spell(parameters);
                     cards.put(spell.getName(), spell);
                 } else {
@@ -77,84 +235,110 @@ public class DataController {
                     cards.put(trap.getName(), trap);
                 }
             }
+            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return cards;
     }
 
-    //returns what is in the file as an User object
+    //is called when we want to get a user with it's username
     public static User getUserByUsername(String username) {
-        String[] fileNames = getAllUserFileNames();
-        if (fileNames == null)
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "SELECT * FROM users WHERE username = '" + username + "';";
+            ResultSet resultSet = getResultSet(connection, query);
+            Statement stmt;
+            int user_id = 0;
+            User user = null;
+            if (resultSet.next()) {
+                user = new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("nickname"));
+                user.setScore(resultSet.getInt("score"));
+                user.setCoins(resultSet.getInt("coins"));
+                user_id = resultSet.getInt("user_id");
+            }
+            if (user == null)
+                return null;
+            query = "SELECT * FROM decks WHERE owner_id = '" + user_id + "';";
+            stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                Deck deck = new Deck(resultSet.getString("name"));
+                deck.setActive(resultSet.getBoolean("is_active"));
+                user.addDeck(deck);
+            }
+            addCardsToUserObject(connection, user_id, user);
+            return user;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
             return null;
-        String givenUserFileName = username + ".user.json";
-        for (String fileName : fileNames) {
-            if (givenUserFileName.equals(fileName)) {
-                String filePath = "src/main/resources/users/" + givenUserFileName;
-                File file = new File(filePath);
-                try {
-                    StringBuilder data = new StringBuilder();
-                    Scanner scanner = new Scanner(file);
-                    while (scanner.hasNextLine())
-                        data.append(scanner.nextLine());
-                    User user = new Gson().fromJson(data.toString(), User.class);
-                    addCardsToDeck(user);
-                    return user;
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+        }
+    }
+
+    private static void addCardsToUserObject(Connection connection, int user_id, User user) throws SQLException {
+        String query;
+        Statement stmt;
+        ResultSet resultSet;
+        String[] cardTypes = {"Monster", "Spell", "Trap"};
+        for (String cardType : cardTypes) {
+            query = "SELECT " + cardType + "s_" + cardType + "_id FROM users_has_" + cardType + "s WHERE users_user_id = '" + user_id + "'";
+            stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(query);
+            ArrayList<Integer> cardIds = new ArrayList<>();
+            while (resultSet.next()) {
+                cardIds.add(resultSet.getInt(1));
+            }
+            for (Integer cardId : cardIds) {
+                query = "SELECT Name FROM " + cardType + "s WHERE " + cardType + "_id = '" + cardId + "'";
+                if (resultSet.next()) {
+                    resultSet = stmt.executeQuery(query);
+                    user.addCard(Card.getCardByName(getAllCards().get(resultSet.getString(1)).getName()));
                 }
             }
+        }
+    }
+
+    // is called when we want to delete a deck
+    public static void deleteDeck(String deckName) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "DELETE FROM decks WHERE name = '" + deckName + "';";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
+    }
+
+    // is called when we want to get a user with it's username
+    public static User getUserByNickname(String nickname) {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "SELECT nickname FROM users WHERE nickname = '" + nickname + "'";
+            ResultSet resultSet = getResultSet(connection, query);
+            return getUserByUsername(resultSet.getString("username"));
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
         return null;
     }
 
-    public static User getUserByNickname(String nickname) {
-        String[] fileNames = getAllUserFileNames();
-        if (fileNames == null)
-            return null;
-        for (String fileName : fileNames) {
-            User user = getUserByUsername(fileName.replaceAll(".user.json", ""));
-            if (user != null && user.getNickname().equals(nickname))
-                return user;
-        }
-        return null;
+    private static ResultSet getResultSet(Connection connection, String query) throws SQLException {
+        Statement statement = connection.createStatement();
+        return statement.executeQuery(query);
     }
 
     //creates necessary directories for storing data
     public static void createDirectories() {
-        String[] directoryNames = {"src/main/resources/users", "src/main/resources/exported cards"
-                , "src/main/resources/cards"};
+        String[] directoryNames = {"src/main/resources/exported cards"};
         for (String directoryName : directoryNames) {
             File directory = new File(directoryName);
             //noinspection ResultOfMethodCallIgnored
             directory.mkdir();
-        }
-    }
-
-    //is called for saving User and Card objects as json
-    public static void saveData(Object object) {
-        if (object instanceof User) {
-            User user = (User) object;
-            user.setHand(null);
-            user.setBoard(null);
-            user.setGraveyard(null);
-        }
-        String dataToWrite = new Gson().toJson(object);
-        String fileName = "";
-        if (object instanceof AI)
-            return;
-        if (object instanceof User)
-            fileName = "src/main/resources/users/" + ((User) object).getUsername() + ".user.json";
-        else if (object instanceof Card)
-            fileName = "src/main/resources/exported cards/" + ((Card) object).getName() + "." + object.getClass()
-                    .toString().replaceAll("class module\\.card\\.", "") + ".json";
-        try {
-            FileWriter fileWriter = new FileWriter(fileName);
-            fileWriter.write(dataToWrite);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -179,39 +363,15 @@ public class DataController {
         return null;
     }
 
-    private static String[] getAllUserFileNames() {
-        File file = new File(USER_PATH);
-        return file.list();
-    }
-
-
-    private static void addCardsToDeck(User user) {
-        for (int i = 0; i < user.getDecks().size(); i++) {
-            Deck deck = user.getDecks().get(i);
-            ArrayList<Card> newMainDeckCards = new ArrayList<>();
-            for (int i1 = 0; i1 < deck.getMainDeckCards().size(); i1++) {
-                String cardName = deck.getMainDeckCards().get(i1).getName();
-                newMainDeckCards.add(Card.getCardByName(cardName));
-            }
-            ArrayList<Card> newSideDeckCards = new ArrayList<>();
-            for (int i1 = 0; i1 < user.getDecks().get(i).getSideDeckCards().size(); i1++) {
-                String cardName = deck.getSideDeckCards().get(i1).getName();
-                newSideDeckCards.add(Card.getCardByName(cardName));
-            }
-            deck.setMainDeckCards(newMainDeckCards);
-            deck.setSideDeckCards(newSideDeckCards);
-        }
-    }
-
     public static void monsterEffectParser(String information, Monster monster) {
-        if (information.isEmpty())
+        if (information == null || information.isEmpty())
             return;
         String[] effects = information.split("-");
         Arrays.stream(effects).forEach(effect -> monster.getBooleanMap().get(effect).accept(true));
     }
 
     public static void cardPairsParser(String information, Card card) {
-        if (information.isEmpty())
+        if (information == null || information.isEmpty())
             return;
         String[] pairs = information.split("\\*");
         String[] parserRegexes = {Regex.parseTwoNumberEffects, Regex.parseOneNumberTwoStrings, Regex.parseTwoNumberOneString};
@@ -286,33 +446,18 @@ public class DataController {
             e.printStackTrace();
         }
     }
-    public static void addSpellAndTrap(String where , String name , String group , String Description
-            , int price , String effects , File image){
-        setImage(name, image);
-        File file = new File("src/main/resources/cards/" + where + ".csv");
-        try {
-            FileWriter outfile = new FileWriter(file , true);
-            CSVWriter writer = new CSVWriter(outfile);
-            String[] data = { name, group, Description , "Unlimited" , String.valueOf(price) , effects };
-            writer.writeNext(data);
-            writer.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private static void setImage(String name, File image) {
         Path oldFile
                 = image.toPath();
         Path newFile = Paths.get("src/main/resources/images/cards/" + name + ".jpg");
         try {
-            Files.copy(oldFile ,newFile  ,StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(oldFile, newFile, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ignored) {
         }
-        catch (IOException ignored) {
-        }
-        ShopMenu.paths.put(name , newFile.toString());
-        DeckMenu.paths.put(name , newFile.toString());
+//        ShopMenu.paths.put(name , newFile.toString());
+//        DeckMenu.paths.put(name , newFile.toString());
     }
 
     private static StringBuilder getStringBuilder(String where) throws FileNotFoundException {
@@ -324,22 +469,4 @@ public class DataController {
         return data;
     }
 
-    public static void addMonster(String name, String level, String attribute, String monsterType, String effectsGroup,
-                                  int atk, int defense, String descriptions, int price, String booleans,
-                                  StringBuilder finalEffect, File image) {
-        setImage(name , image);
-        File file = new File("src/main/resources/cards/Monster.csv");
-        try {
-            FileWriter outfile = new FileWriter(file , true);
-            CSVWriter writer = new CSVWriter(outfile);
-            String[] data = { name, level,attribute , monsterType , effectsGroup ,
-                   String.valueOf(atk) , String.valueOf(defense),  descriptions, String.valueOf(price) ,booleans,
-                    finalEffect.toString() };
-            writer.writeNext(data);
-            writer.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

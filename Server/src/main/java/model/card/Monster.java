@@ -105,6 +105,8 @@ public class Monster extends Card {
         }
         DataController.monsterEffectParser((String) parameters[9], this);
         DataController.cardPairsParser((String) parameters[10], this);
+        setAmountInShop(Integer.parseInt((String) parameters[11]));
+        setCanBuyCard(parameters[12].equals("1"));
         setHasAttackedOnceInTurn(false);
     }
 

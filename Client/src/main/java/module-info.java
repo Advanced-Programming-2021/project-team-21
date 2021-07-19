@@ -15,4 +15,5 @@ module Yu.Gi.Oh {
     exports model;
     exports view;
     exports model.card;
+    exports model.message;
 }

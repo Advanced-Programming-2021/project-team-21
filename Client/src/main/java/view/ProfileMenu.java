@@ -6,72 +6,67 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.User;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Matcher;
-
-import static view.Regex.changePassword;
 
 public class ProfileMenu implements Menuable {
     public PasswordField oldPassword = new PasswordField();
     public PasswordField newPassword = new PasswordField();
 
     private void newPassword(String command) throws IOException {
-        AppController.dataOutputStream.writeUTF(ProgramController.currentToken + " " + command);
-        AppController.dataOutputStream.flush();
-        String result = AppController.dataInputStream.readUTF();
-        if (result.equals(Responses.invalidPassword)) {
-            clearPreviousErrorsInProfileMenu();
-            ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : Old password is wrong!");
-            ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
-            ((Label) ProgramController.currentScene.lookup("#errorOldPassword")).setText("*");
-            ProgramController.currentScene.lookup("#buttonPassword").setStyle("-fx-background-color: red;");
-            ProgramController.stage.show();
-            return;
-        }
-        if (result.equals(Responses.equalityOfNewAndOldPassword)) {
-            errorNewAndOldPassword("* : Old and new passwords are equal!");
-            ProgramController.stage.show();
-            return;
-        }
-        clearPreviousErrorsInProfileMenu();
-        ProgramController.currentScene.lookup("#buttonPassword").setStyle("-fx-background-color: green;");
-        ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("Password changed successfully!");
-        ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: green; -fx-background-color: white; -fx-text-fill: green;");
-        ProgramController.stage.show();
+        //todo fix this command
+//        AppController.sendMessageToServer(ProgramController.currentToken + " " + command);
+//        String result = AppController.receiveMessageFromServer();
+//        if (result.equals(Responses.invalidPassword)) {
+//            clearPreviousErrorsInProfileMenu();
+//            ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : Old password is wrong!");
+//            ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
+//            ((Label) ProgramController.currentScene.lookup("#errorOldPassword")).setText("*");
+//            ProgramController.currentScene.lookup("#buttonPassword").setStyle("-fx-background-color: red;");
+//            ProgramController.stage.show();
+//            return;
+//        }
+//        if (result.equals(Responses.equalityOfNewAndOldPassword)) {
+//            errorNewAndOldPassword("* : Old and new passwords are equal!");
+//            ProgramController.stage.show();
+//            return;
+//        }
+//        clearPreviousErrorsInProfileMenu();
+//        ProgramController.currentScene.lookup("#buttonPassword").setStyle("-fx-background-color: green;");
+//        ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("Password changed successfully!");
+//        ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: green; -fx-background-color: white; -fx-text-fill: green;");
+//        ProgramController.stage.show();
     }
 
     private void changeNickname(String command) throws IOException {
-        AppController.dataOutputStream.writeUTF(ProgramController.currentToken + " " + command);
-        AppController.dataOutputStream.flush();
-        String result = AppController.dataInputStream.readUTF();
-        if (result.equals(Responses.changeToCurrentNickname)) {
-            clearPreviousErrorsInProfileMenu();
-            ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : This is your nickname!");
-            ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
-            ((Label) ProgramController.currentScene.lookup("#errorNickname")).setText("*");
-            ProgramController.currentScene.lookup("#buttonNickname").setStyle("-fx-background-color: red;");
-            ProgramController.stage.show();
-        }
-        if (result.equals(Responses.nicknameExists)) {
-            clearPreviousErrorsInProfileMenu();
-            ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : This nickname already exists!");
-            ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
-            ((Label) ProgramController.currentScene.lookup("#errorNickname")).setText("*");
-            ProgramController.currentScene.lookup("#buttonNickname").setStyle("-fx-background-color: red;");
-            ProgramController.stage.show();
-            return;
-        }
-        clearPreviousErrorsInProfileMenu();
-        ProgramController.currentScene.lookup("#buttonNickname").setStyle("-fx-background-color: green;");
-        ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("Nickname changed successfully!");
-        ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: green; -fx-background-color: white; -fx-text-fill: green;");
-        ProgramController.stage.show();
+        //todo to be fixed
+//        AppController.sendMessageToServer(ProgramController.currentToken + " " + command);
+//        String result = AppController.receiveMessageFromServer();
+//        if (result.equals(Responses.changeToCurrentNickname)) {
+//            clearPreviousErrorsInProfileMenu();
+//            ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : This is your nickname!");
+//            ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
+//            ((Label) ProgramController.currentScene.lookup("#errorNickname")).setText("*");
+//            ProgramController.currentScene.lookup("#buttonNickname").setStyle("-fx-background-color: red;");
+//            ProgramController.stage.show();
+//        }
+//        if (result.equals(Responses.NICKNAME_EXISTS)) {
+//            clearPreviousErrorsInProfileMenu();
+//            ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("* : This nickname already exists!");
+//            ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: red; -fx-background-color: white;");
+//            ((Label) ProgramController.currentScene.lookup("#errorNickname")).setText("*");
+//            ProgramController.currentScene.lookup("#buttonNickname").setStyle("-fx-background-color: red;");
+//            ProgramController.stage.show();
+//            return;
+//        }
+//        clearPreviousErrorsInProfileMenu();
+//        ProgramController.currentScene.lookup("#buttonNickname").setStyle("-fx-background-color: green;");
+//        ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("Nickname changed successfully!");
+//        ProgramController.currentScene.lookup("#errorProfile").setStyle("-fx-border-color: green; -fx-background-color: white; -fx-text-fill: green;");
+//        ProgramController.stage.show();
     }
 
     public void clearPreviousErrorsInProfileMenu() {
@@ -169,9 +164,9 @@ public class ProfileMenu implements Menuable {
             Stage stage = new Stage();
             File image;
             image = fileChooser.showOpenDialog(stage);
-            AppController.dataOutputStream.writeUTF(ProgramController.currentToken + " change avatar " + image.toURI().toString());
-            AppController.dataOutputStream.flush();
-            String result = AppController.dataInputStream.readUTF();
+            //todo fix this
+//            AppController.sendMessageToServer(ProgramController.currentToken + " change avatar " + image.toURI().toString());
+//            String result = AppController.receiveMessageFromServer();
             ((ImageView) ProgramController.currentScene.lookup("#imageProfile")).setImage(new Image(image.toURI().toString()));
             clearPreviousErrorsInProfileMenu();
             ((Label) ProgramController.currentScene.lookup("#errorProfile")).setText("Profile image successfully changed!");

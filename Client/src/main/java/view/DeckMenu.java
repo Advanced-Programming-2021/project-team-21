@@ -7,6 +7,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
@@ -28,6 +29,11 @@ import javafx.util.Duration;
 import model.Deck;
 import model.User;
 import model.card.Card;
+import model.message.Message;
+import model.message.MessageInstruction;
+import model.message.MessageLabel;
+import model.message.MessageTag;
+import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,7 +44,7 @@ import java.util.Objects;
 
 public class DeckMenu implements Menuable {
     private static Deck deckToShow;
-    private final User USER = ProgramController.userInGame;
+//    private final User USER = ProgramController.userInGame;
     private final int CARD_WIDTH = 80, CARD_HEIGHT = 90;
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
@@ -65,7 +71,7 @@ public class DeckMenu implements Menuable {
             return false;
         }
         cards.forEach(card -> deckToShow.addCardToMainDeck(card));
-        DataController.saveData(USER);
+//        DataController.saveData(USER); todo to fix
         return true;
     }
 
@@ -78,7 +84,7 @@ public class DeckMenu implements Menuable {
             return false;
         }
         selectedCards.forEach(card -> deckToShow.addCardToSideDeck(card));
-        DataController.saveData(USER);
+//        DataController.saveData(USER); todo to fix
         return true;
     }
 
@@ -112,9 +118,12 @@ public class DeckMenu implements Menuable {
 
     private void activateDeck(Deck deckToActivate) {
         if (deckToActivate == null) return;
-        deckToActivate.setActive(true);
-        USER.deactivateDecks(deckToActivate.getName());
-        reloadMenu();
+        Message message = new Message(MessageInstruction.DECK, MessageLabel.ACTIVATE, MessageTag.TOKEN,MessageTag.NAME);
+        message.setTagsInOrder(ProgramController.currentToken, deckToActivate.getName());
+        AppController.sendMessageToServer(message);
+        String result = (String) AppController.receiveMessageFromServer();
+        if (result != null && !result.startsWith("Error"))
+            reloadMenu();
     }
 
     private void reloadMenu() {
@@ -128,21 +137,22 @@ public class DeckMenu implements Menuable {
 
     private void deleteDeck(Deck deck) {
         if (deck == null) return;
-        USER.removeDeck(deck);
-        reloadMenu();
+        Message message = new Message(MessageInstruction.DECK,MessageLabel.DELETE, MessageTag.TOKEN ,MessageTag.NAME);
+        message.setTagsInOrder(ProgramController.currentToken, deck.getName());
+        AppController.sendMessageToServer(message);
+        String result = (String) AppController.receiveMessageFromServer();
+        if (result != null && !result.startsWith("Error"))
+            reloadMenu();
     }
 
-    private void createNewDeck(String name) {
-        if (!canCreateDeck(name)) {
-            return;
-        }
-        Deck deck = new Deck(name);
-        USER.addDeck(deck);
-        DataController.saveData(USER);
-    }
+
 
     private boolean canCreateDeck(String name) {
-        return USER.getDeckByName(name) == null;
+        Message message = new Message(MessageInstruction.DECK, MessageLabel.CREATE, MessageTag.TOKEN ,MessageTag.NAME);
+        message.setTagsInOrder(ProgramController.currentToken ,name);
+        AppController.sendMessageToServer(message);
+        String result = (String) AppController.receiveMessageFromServer();
+        return !(result != null && result.startsWith("Error"));
     }
 
 
@@ -155,8 +165,12 @@ public class DeckMenu implements Menuable {
         listView.getStyleClass().add("list-view");
         listView.setOrientation(Orientation.HORIZONTAL);
         listView.setMinWidth(500);
-        ArrayList<Deck> decks = USER.getDecks();
-        placeAllDecks(mainHBox, listView, decks);
+        Message message = new Message(MessageInstruction.DECK, MessageLabel.ALL, MessageTag.TOKEN);
+        message.setTagsInOrder(ProgramController.currentToken);
+        AppController.sendMessageToServer(message);
+        ArrayList<Deck> decks = (ArrayList<Deck>) AppController.receiveMessageFromServer();
+        if (decks != null)
+            placeAllDecks(mainHBox, listView, decks);
     }
 
     private void placeAllDecks(HBox mainHBox, ListView<VBox> listView, ArrayList<Deck> decks) {
@@ -303,7 +317,6 @@ public class DeckMenu implements Menuable {
         submitButton.setOnAction(e -> {
             ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
             if (canCreateDeck(name.getText())) {
-                createNewDeck(name.getText());
                 stage.close();
             } else
                 name.setStyle("-fx-text-fill: rgb(250, 0, 0);");
@@ -388,8 +401,14 @@ public class DeckMenu implements Menuable {
     }
 
     private HashMap<Rectangle, Card> getRectangleCardHashMap(ListView<Rectangle> userCardsListView) throws FileNotFoundException {
-        HashMap<Rectangle, Card> allUserCards = new HashMap<>();
-        for (Card card : ProgramController.userInGame.getCards()) {
+        HashMap<Rectangle, Card> rectangleCardHashMap = new HashMap<>();
+        Message message = new Message(MessageInstruction.DECK, MessageLabel.AVAILABLE_CARDS, MessageTag.TOKEN);
+        message.setTagsInOrder(ProgramController.currentToken);
+        AppController.sendMessageToServer(message);
+        ArrayList<Card> userCards = (ArrayList<Card>) AppController.receiveMessageFromServer();
+        if (userCards == null)
+            return rectangleCardHashMap;
+        for (Card card : userCards) {
             Rectangle cardPicture = new Rectangle(CARD_WIDTH * 2, CARD_HEIGHT * 2);
             try {
                 cardPicture.setFill(new ImagePattern(new Image(card.getCardImageAddress())));
@@ -397,9 +416,9 @@ public class DeckMenu implements Menuable {
                 cardPicture.setFill(new ImagePattern(new Image(new FileInputStream(paths.get(card.getName())))));
             }
             userCardsListView.getItems().add(cardPicture);
-            allUserCards.put(cardPicture, card);
+            rectangleCardHashMap.put(cardPicture, card);
         }
-        return allUserCards;
+        return rectangleCardHashMap;
     }
 
 

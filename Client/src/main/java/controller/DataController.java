@@ -109,6 +109,7 @@ public class DataController {
         return null;
     }
 
+
     public static User getUserByNickname(String nickname) {
         String[] fileNames = getAllUserFileNames();
         if (fileNames == null)

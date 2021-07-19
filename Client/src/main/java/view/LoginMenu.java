@@ -1,6 +1,6 @@
 package view;
 
-import controller.ProgramController;
+import controller.*;
 import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,10 +11,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.User;
+import model.message.Message;
+import model.message.MessageInstruction;
+import model.message.MessageLabel;
+import model.message.MessageTag;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
+import java.util.Objects;
+
 public class LoginMenu implements Menuable {
 
     public TextField usernameSignUp = new TextField();
@@ -29,11 +33,10 @@ public class LoginMenu implements Menuable {
 
     }
 
-    private void createNewUser(String command) throws IOException {
-        AppController.dataOutputStream.writeUTF(command);
-        AppController.dataOutputStream.flush();
-        String result = AppController.dataInputStream.readUTF();
-        if (result.equals(Responses.userExists)) {
+    private void createNewUser(Message message) throws IOException {
+        AppController.sendMessageToServer(message);
+        Object result = AppController.receiveMessageFromServer();
+        if (result instanceof String && result.equals(Responses.userExists)) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : This username already exists!");
             ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
@@ -41,7 +44,7 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
-        if (result.equals(Responses.nicknameExists)) {
+        if (result instanceof String && result.equals(Responses.NICKNAME_EXISTS)) {
             clearPreviousErrorsInSignup();
             ((Label) ProgramController.currentScene.lookup("#errorSignUp")).setText("* : This nickname already exists!");
             ProgramController.currentScene.lookup("#errorSignUp").setStyle("-fx-border-color: red; -fx-background-color: white;");
@@ -49,13 +52,12 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
-        ProgramController.currentToken = result.substring(0, 31);
         backToEntrance();
         showPopUpSuccessfulSignUp();
     }
 
     private void showPopUpSuccessfulSignUp() throws IOException {
-        Parent pane = FXMLLoader.load(getClass().getResource("/FXMLs/succussfulSignup.fxml"));
+        Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/FXMLs/successfulSignup.fxml")));
         Scene scene = new Scene(pane);
         Stage stagePopUp = new Stage();
         stagePopUp.setScene(scene);
@@ -67,16 +69,21 @@ public class LoginMenu implements Menuable {
         delay.play();
     }
 
-    private void loginNewUser(String command) throws IOException {
-        AppController.dataOutputStream.writeUTF(command);
-        AppController.dataOutputStream.flush();
-        String result = AppController.dataInputStream.readUTF();
-        if (result.equals(Responses.errorLogin)) {
+    private void loginNewUser(Message message) throws IOException {
+        AppController.sendMessageToServer(message);
+        Object result = AppController.receiveMessageFromServer();
+        if (result != null && result.equals(Responses.LOGIN_ERROR)) {
             ((Label) ProgramController.currentScene.lookup("#errorLogin")).setText("Username and password didn't match!");
             ProgramController.currentScene.lookup("#errorLogin").setStyle("-fx-border-color: red; -fx-background-color: white;");
             ProgramController.stage.show();
             return;
+        } if (result != null && result.equals(Responses.ALREADY_LOGGED_IN)){
+            ((Label) ProgramController.currentScene.lookup("#errorLogin")).setText((String) result);
+            ProgramController.currentScene.lookup("#errorLogin").setStyle("-fx-border-color: red; -fx-background-color: white;");
+            ProgramController.stage.show();
+            return;
         }
+        ProgramController.currentToken = (String) result;
         ProgramController.currentMenu = new MainMenu();
         ProgramController.currentMenu.showMenu();
     }
@@ -106,8 +113,10 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
-        String commandSignup = "user create --username " + usernameSignUp.getText() + " --nickname " + nicknameSignUp.getText() + " --password " + passwordSignUp.getText();
-        createNewUser(commandSignup);
+        String commandSignup = "user --create --username " + usernameSignUp.getText() + " --nickname " + nicknameSignUp.getText() + " --password " + passwordSignUp.getText();
+        Message message = new Message(MessageInstruction.USER, MessageLabel.CREATE, MessageTag.USERNAME, MessageTag.NICKNAME, MessageTag.PASSWORD);
+        message.setTagsInOrder(usernameSignUp.getText(), nicknameSignUp.getText(), passwordSignUp.getText());
+        createNewUser(message);
     }
 
     public void clearPreviousErrorsInSignup() {
@@ -137,7 +146,9 @@ public class LoginMenu implements Menuable {
 
     public void passLoginInformationToCheck() throws IOException {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
-        String commandLogin = "user login --username " + usernameLogin.getText() + " --password " + passwordLogin.getText();
-        loginNewUser(commandLogin);
+        String commandLogin = "user --login --username " + usernameLogin.getText() + " --password " + passwordLogin.getText();
+        Message message = new Message(MessageInstruction.USER, MessageLabel.LOGIN, MessageTag.USERNAME, MessageTag.PASSWORD);
+        message.setTagsInOrder(usernameLogin.getText(), passwordLogin.getText());
+        loginNewUser(message);
     }
 }

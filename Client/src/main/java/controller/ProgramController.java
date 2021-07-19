@@ -73,5 +73,4 @@ public class ProgramController {
         mediaPlayer.setVolume(volume);
         mediaPlayer.setAutoPlay(true);
     }
-
 }

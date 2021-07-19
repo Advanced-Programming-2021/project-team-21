@@ -3,6 +3,10 @@ package view;
 import controller.ProgramController;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import model.message.Message;
+import model.message.MessageInstruction;
+import model.message.MessageLabel;
+import model.message.MessageTag;
 
 import java.io.IOException;
 
@@ -19,8 +23,14 @@ public class MainMenu implements Menuable {
     public void logout() throws IOException {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new LoginMenu();
-        ProgramController.userInGame = null;
-        ((LoginMenu) ProgramController.currentMenu).backToEntrance();
+        Message message = new Message(MessageInstruction.USER, MessageLabel.LOGOUT, MessageTag.TOKEN);
+        message.setTagsInOrder(ProgramController.currentToken);
+        AppController.sendMessageToServer(message);
+        Object result = AppController.receiveMessageFromServer();
+        if (result instanceof String && !((String) result).startsWith("Error")) {
+            ProgramController.userInGame = null;
+            ((LoginMenu) ProgramController.currentMenu).backToEntrance();
+        }
     }
 
     public void goToShopMenu() throws IOException {

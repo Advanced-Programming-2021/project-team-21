@@ -50,6 +50,9 @@ public class Trap extends Card {
             this.getEffectsMap().get(key).accept(new Effect(0, 0));
         }
         DataController.cardPairsParser((String) parameters[5], this);
+        setAmountInShop(Integer.parseInt((String) parameters[6]));
+        setCanBuyCard(parameters[7].equals("1"));
+
     }
 
     public static String getWhichGroup(String string) {

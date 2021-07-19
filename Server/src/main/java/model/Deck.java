@@ -5,9 +5,10 @@ import controller.ProgramController;
 import model.card.Card;
 import model.card.Monster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Deck {
+public class Deck implements Serializable {
     private ArrayList<Card> mainDeckCards;
     private ArrayList<Card> sideDeckCards;
     private String name;
@@ -21,12 +22,7 @@ public class Deck {
 
     public Deck(String name) {
         setName(name);
-        DataController.saveData(ProgramController.userInGame);
     }
-
-
-
-
 
     public String getName() {
         return name;

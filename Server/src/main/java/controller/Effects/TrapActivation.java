@@ -1,13 +1,11 @@
 package controller.Effects;
 
-import view.DuelMenu;
 import model.Duel;
 import model.User;
 import model.card.Card;
 import model.card.Chain;
 import model.card.Monster;
 import model.card.Trap;
-import view.PrintResponses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -47,12 +45,12 @@ public class TrapActivation {
             for (Card card1 : userNow.getGraveyard()) {
                 if (card1 instanceof Monster) cards.add((Monster) card1);
             }
-            DuelMenu.specialSummonsedCards = cards;
-            DuelMenu.isGetFroOpponentGY = true;
-            PrintResponses.printSpecialSummonCards(cards);
-            while (true) {
-                if (!DuelMenu.checkSpecialSummon( duel, false)) break;
-            }
+//            DuelMenu.specialSummonsedCards = cards;
+//            DuelMenu.isGetFroOpponentGY = true;
+//            PrintResponses.printSpecialSummonCards(cards);
+//            while (true) {
+//                if (!DuelMenu.checkSpecialSummon( duel, false)) break;
+//            }
         }
         return false;
     }

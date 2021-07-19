@@ -1,12 +1,10 @@
 package controller.Effects;
 
-import view.DuelMenu;
 import model.Duel;
 import model.User;
 import model.card.Card;
 import model.card.Monster;
 import model.card.Spell;
-import view.PrintResponses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -42,8 +40,8 @@ public class SummonEffects {
             }
         }
         if (summoned.getCanSetFromDeckByMaxLevel().hasEffect()) {
-            DuelMenu.isGetFromHand = true;
-            DuelMenu.isForSet = true;
+//            DuelMenu.isGetFromHand = true;
+//            DuelMenu.isForSet = true;
             ArrayList<Monster> handSpecial = new ArrayList<>();
             for (Card card : user.getHand().getCardsInHand()) {
                 if (!(card instanceof Monster)) continue;
@@ -51,11 +49,11 @@ public class SummonEffects {
                 if (monster.getLevel() <= summoned.getCanSetFromDeckByMaxLevel().getEffectNumber())
                     handSpecial.add(monster);
             }
-            DuelMenu.specialSummonsedCards = handSpecial;
-            if (handSpecial.size() != 0) PrintResponses.printSpecialSummonCards(handSpecial);
-            DuelMenu.specialSummonsedCards = handSpecial;
-            while (DuelMenu.specialSummonsedCards != null)
-                DuelMenu.checkSpecialSummon( duel, false);
+//            DuelMenu.specialSummonsedCards = handSpecial;
+//            if (handSpecial.size() != 0) PrintResponses.printSpecialSummonCards(handSpecial);
+//            DuelMenu.specialSummonsedCards = handSpecial;
+//            while (DuelMenu.specialSummonsedCards != null)
+//                DuelMenu.checkSpecialSummon( duel, false);
         }
         checkHasContinuousSpell(summoned, rival, user, duel);
     }

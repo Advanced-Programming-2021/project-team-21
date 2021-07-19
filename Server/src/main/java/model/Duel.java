@@ -8,8 +8,6 @@ import model.card.Monster;
 import model.card.Spell;
 import model.card.enums.CardType;
 import org.apache.commons.math3.util.Pair;
-import view.DuelMenu;
-import view.PrintResponses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -95,9 +93,9 @@ public class Duel {
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'M');
                 if (selectedCard == null) return;
                 if (((Monster) selectedCard).isSelectEffect()) {
-                    if (PrintResponses.showConfirmation("Are you sure to activate this card's effect?")) {
-                        SelectEffect.run((Monster) selectedCard, getRival(), getUserWhoPlaysNow(), this, cardAddress);
-                    }
+//                    if (PrintResponses.showConfirmation("Are you sure to activate this card's effect?")) {
+//                        SelectEffect.run((Monster) selectedCard, getRival(), getUserWhoPlaysNow(), this, cardAddress);
+//                    }
                 }
             } else
                 selectedCard = userWhoPlaysNow.getBoard().getCard(cardAddress, 'S');
@@ -174,7 +172,6 @@ public class Duel {
 
 
     public void changeToAttackPosition() {
-        ProgramController.startNewAudio("src/main/resources/audios/ChangePosition.wav");
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToAttackForMonsters(placeInBoard);
@@ -182,7 +179,6 @@ public class Duel {
     }
 
     public void changeToDefensePosition() {
-        ProgramController.startNewAudio("src/main/resources/audios/ChangePosition.wav");
         int placeInBoard = getPlaceOfSelectedCard();
         Board currentBoard = userWhoPlaysNow.getBoard();
         currentBoard.changeFacePositionToDefenceForMonsters(placeInBoard);
@@ -284,14 +280,15 @@ public class Duel {
             SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                     true, null, null);
             return true;
-        } else if (spellToActivate.isEquipSpell()) {
-            Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
-            if (monster == null) return false;
-            SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
-                    true, monster, null);
-            userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
-            return true;
         }
+//        else if (spellToActivate.isEquipSpell()) {
+//            Monster monster = DuelMenu.getMonsterForEquip(this, spellToActivate);
+//            if (monster == null) return false;
+//            SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
+//                    true, monster, null);
+//            userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);
+//            return true;
+//        }
         SpellActivation.run(spellToActivate, userWhoPlaysNow, getRival(), this, placeOfSelectedCard,
                 false, null, null);
         userWhoPlaysNow.getBoard().changeFacePositionToAttackForSpells(addressToPut);

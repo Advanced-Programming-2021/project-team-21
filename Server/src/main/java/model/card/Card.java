@@ -20,6 +20,8 @@ public class Card {
     private boolean isFaceUp;
     private int price;
     private boolean isATK;
+    private int amountInShop;
+    private boolean canBuyCard;
 
     public static Card getCardByName(String name) {
         HashMap<String, Card> allCards = ProgramController.allCards;
@@ -105,5 +107,21 @@ public class Card {
 
     public Map<String, Consumer<Effect>> getEffectsMap() {
         return null;
+    }
+
+    public int getAmountInShop() {
+        return amountInShop;
+    }
+
+    public void setAmountInShop(int amountInShop) {
+        this.amountInShop = amountInShop;
+    }
+
+    public boolean isCanBuyCard() {
+        return canBuyCard;
+    }
+
+    public void setCanBuyCard(boolean canBuyCard) {
+        this.canBuyCard = canBuyCard;
     }
 }

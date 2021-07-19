@@ -1,11 +1,9 @@
 package controller.Effects;
 
-import view.DuelMenu;
 import model.Board;
 import model.Duel;
 import model.User;
 import model.card.Monster;
-import view.PrintResponses;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,15 +18,15 @@ public class BattlePhaseStart {
         if (defense.getSummonACardFromEveryWhere().hasEffect()) {
             ArrayList<Monster> cards = secondUser.getHand().getCardsWithType(7, defense
                     .getSummonACardFromEveryWhere().getType());
-            DuelMenu.isGetFromGY = true;
-            DuelMenu.isGetFromDeck = true;
-            DuelMenu.isGetFromHand = true;
+//            DuelMenu.isGetFromGY = true;
+//            DuelMenu.isGetFromDeck = true;
+//            DuelMenu.isGetFromHand = true;
             getNormal(cards);
-            DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
-            if (cards.size() != 0) PrintResponses.printSpecialSummonCards(cards);
-            while (DuelMenu.specialSummonsedCards != null) {
-                DuelMenu.checkSpecialSummon(duel, true);
-            }
+//            DuelMenu.specialSummonsedCards = new ArrayList<>(cards);
+//            if (cards.size() != 0) PrintResponses.printSpecialSummonCards(cards);
+//            while (DuelMenu.specialSummonsedCards != null) {
+//                DuelMenu.checkSpecialSummon(duel, true);
+//            }
             defense.getSummonACardFromEveryWhere().finishEffect();
             defense.getSummonACardFromEveryWhere().setNeedsToBeReset(true);
             return true;
