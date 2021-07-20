@@ -315,9 +315,10 @@ public class DataController {
         try {
             Connection connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
-            String query = "SELECT nickname FROM users WHERE nickname = '" + nickname + "'";
+            String query = "SELECT username FROM users WHERE nickname = '" + nickname + "'";
             ResultSet resultSet = getResultSet(connection, query);
-            return getUserByUsername(resultSet.getString("username"));
+            if (resultSet.next())
+                return getUserByUsername(resultSet.getString("username"));
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
