@@ -8,8 +8,8 @@ public class Responses {
     public static String equalityOfNewAndOldPassword = "New and old password are equal";
     public static String successful = "Successful";
     public static String userExists = "User already exists";
-    public static String NICKNAME_EXISTS = "Nickname already exists";
-    public static String LOGIN_ERROR = "Login error";
+    public static final String NICKNAME_EXISTS = "Nickname already exists";
+    public static final String LOGIN_ERROR = "Login error";
     public static final String ALREADY_LOGGED_IN = "User already logged in some other device.";
     public static String invalidFormat = "invalid command";
     public static String unableToSummonCard = "you can’t summon this card";

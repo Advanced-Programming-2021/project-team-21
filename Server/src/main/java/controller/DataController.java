@@ -19,10 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -130,11 +127,11 @@ public class DataController {
                     "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
             String query = "SELECT user_id FROM users WHERE username = '" + user.getUsername() + "'";
             Statement statement = connection.createStatement();
-            String cardClassName = card.getClass().getSimpleName();
+            String cardClassName = card.getClass().getSimpleName().toLowerCase();
             int user_id = statement.executeQuery(query).getInt(1);
             query = "SELECT " + cardClassName + "_id FROM " + cardClassName + "s WHERE Name = '" + card.getName() + "'";
             int card_id = statement.executeQuery(query).getInt(1);
-            query = "INSERT INTO users_has_" + card.getClass().getSimpleName() + "s (users_user_id, " + cardClassName + "s_" + cardClassName + "_id) " +
+            query = "INSERT INTO users_has_" + cardClassName + "s (users_user_id, " + card.getClass().getSimpleName() + "s_" + card.getClass().getSimpleName() + "_id) " +
                     "VALUES(?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(user_id, card_id);
@@ -153,7 +150,7 @@ public class DataController {
             Connection connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
             int canBuyInt = (canBuy) ? 1 : 0;
-            String query = "UPDATE " + card.getClass().getSimpleName() + "s SET can_buy = '" + canBuyInt + "' WHERE Name = '" + card.getName() + "'";
+            String query = "UPDATE " + card.getClass().getSimpleName().toLowerCase() + "s SET can_buy = '" + canBuyInt + "' WHERE Name = '" + card.getName() + "'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.execute();
             connection.close();
@@ -167,7 +164,7 @@ public class DataController {
         try {
             Connection connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
-            String query = "UPDATE " + card.getClass().getSimpleName() + "s SET Amount = '" + amount + "' WHERE Name = '" + card.getName() + "'";
+            String query = "UPDATE " + card.getClass().getSimpleName().toLowerCase() + "s SET Amount = '" + amount + "' WHERE Name = '" + card.getName() + "'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.execute();
             connection.close();
