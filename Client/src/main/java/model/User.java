@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class User implements Serializable {
+public class  User implements Serializable {
     private final ArrayList<Deck> decks;
     private final ArrayList<Card> cards;
     private String username;
@@ -39,7 +39,7 @@ public class User implements Serializable {
         this.password = password;
         this.nickname = nickname;
         this.avatar = setRandomAvatar();
-        DataController.saveData(this);
+//        DataController.saveData(this);
     }
 
     public static User getUserByUsername(String username) {
@@ -60,7 +60,7 @@ public class User implements Serializable {
 
     public void setPassword(String newPassword) {
         this.password = newPassword;
-        DataController.saveData(this);
+//        DataController.saveData(this); todo to fix
     }
 
     public void setAvatar(String avatar) {
@@ -77,7 +77,7 @@ public class User implements Serializable {
 
     public void setCoins(int coins) {
         this.coins = coins;
-        DataController.saveData(this);
+//        DataController.saveData(this);
     }
 
     public Board getBoard() {
@@ -94,7 +94,7 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-        DataController.saveData(this);
+//        DataController.saveData(this); todo to fix
     }
 
     public String getNickname() {
@@ -103,7 +103,7 @@ public class User implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-        DataController.saveData(this);
+//        DataController.saveData(this); todo to fix
     }
 
     public int getScore() {
@@ -112,7 +112,7 @@ public class User implements Serializable {
 
     public void setScore(int score) {
         this.score = score;
-        DataController.saveData(this);
+//        DataController.saveData(this);
     }
 
     public Deck getActiveDeck() {
@@ -130,17 +130,14 @@ public class User implements Serializable {
 
     public void addDeck(Deck deck) {
         this.decks.add(deck);
-        DataController.saveData(this);
     }
 
     public void removeDeck(Deck deck) {
         this.decks.remove(deck);
-        DataController.saveData(this);
     }
 
     public void addCard(Card card) {
         this.cards.add(card);
-        DataController.saveData(this);
     }
 
 
@@ -163,13 +160,6 @@ public class User implements Serializable {
         return images.get(0);
     }
 
-    public void deactivateDecks(String name) {
-        for (Deck deck : decks) {
-            if (deck.getName().equals(name)) continue;
-            deck.setActive(false);
-        }
-        DataController.saveData(this);
-    }
 
     public Hand getHand() {
         return hand;

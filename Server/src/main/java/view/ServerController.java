@@ -12,7 +12,6 @@ import view.annotation.Tag;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
@@ -47,8 +46,8 @@ public class ServerController {
     @Instruction("user")
     @Label("create")
     private String createUser(@Tag("username") String username,
-                              @Tag("password") String password,
-                              @Tag("nickname") String nickname) {
+                              @Tag("nickname") String nickname,
+                              @Tag("password") String password) {
         User user = User.getUserByUsername(username);
         if (user != null) {
             return Responses.USER_EXISTS;
@@ -84,7 +83,7 @@ public class ServerController {
 
     @Instruction("deck")
     @Label("all")
-    private ArrayList<Deck> getAllDecks(@Tag("token") String token){
+    private ArrayList<Deck> getAllDecks(@Tag("token") String token) {
         User user = ProgramController.getUserWithToken(token);
         if (user == null)
             return null;
@@ -95,7 +94,7 @@ public class ServerController {
     @Instruction("deck")
     @Label("delete")
     private String deleteDeck(@Tag("token") String token,
-                              @Tag("name") String name){
+                              @Tag("name") String name) {
         User user = ProgramController.getUserWithToken(token);
         if (user == null)
             return null;
@@ -103,15 +102,14 @@ public class ServerController {
         if (found) {
             DataController.deleteDeck(name);
             return Responses.DECK_DELETED;
-        }
-        else
+        } else
             return Responses.ERROR;
     }
 
     @Instruction("deck")
     @Label("activate")
     private String activateDeck(@Tag("token") String token,
-                                @Tag("name") String name){
+                                @Tag("name") String name) {
         User user = ProgramController.getUserWithToken(token);
         if (user == null)
             return null;
@@ -124,28 +122,30 @@ public class ServerController {
 
     @Instruction("deck")
     @Label("available-cards")
-    private ArrayList<Card> getAllUserCards(@Tag("token") String token){
+    private ArrayList<Card> getAllUserCards(@Tag("token") String token) {
         User user = ProgramController.getUserWithToken(token);
         if (user == null)
             return null;
         return user.getCards();
     }
+
     @Instruction("user")
     @Label("all")
-    private LinkedHashMap<User , Boolean> getAllUsers(@Tag("token") String token){
-        LinkedHashMap< User , Boolean> usersWithOnlineStatus = new LinkedHashMap<>();
-        ArrayList<User>users = getSortedUsers(DataController.getAllUsers());
+    private LinkedHashMap<User, Boolean> getAllUsers(@Tag("token") String token) {
+        LinkedHashMap<User, Boolean> usersWithOnlineStatus = new LinkedHashMap<>();
+        ArrayList<User> users = getSortedUsers(DataController.getAllUsers());
         for (User user : users) {
             Boolean isOnline = false;
             for (String token1 : ProgramController.getTokenUserHashMap().keySet()) {
                 if (ProgramController.getTokenUserHashMap().get(token1).getUsername().equals(user.getUsername()))
                     isOnline = true;
             }
-            usersWithOnlineStatus.put(user , isOnline);
+            usersWithOnlineStatus.put(user, isOnline);
         }
         return usersWithOnlineStatus;
     }
-    private ArrayList<User> getSortedUsers(ArrayList<User> users ) {
+
+    private ArrayList<User> getSortedUsers(ArrayList<User> users) {
         if (users == null)
             return null;
         Comparator<User> comparator = Comparator.comparing(User::getScore, Comparator.reverseOrder())
@@ -153,9 +153,10 @@ public class ServerController {
         users.sort(comparator);
         return users.stream().limit(20).collect(Collectors.toCollection(ArrayList::new));
     }
+
     @Instruction("user")
     @Label("get")
-    private User getUserByToken(@Tag("token") String token){
+    private User getUserByToken(@Tag("token") String token) {
         return ProgramController.getUserWithToken(token);
     }
 }

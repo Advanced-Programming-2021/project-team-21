@@ -8,7 +8,9 @@ public enum MessageLabel {
     DELETE("delete"),
     ACTIVATE("activate"),
     ADD("add"),
-    AVAILABLE_CARDS("available-cards");
+    AVAILABLE_CARDS("available-cards"),
+    GET("get");
+
 
 
     String name;

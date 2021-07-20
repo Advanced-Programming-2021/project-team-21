@@ -113,7 +113,6 @@ public class LoginMenu implements Menuable {
             ProgramController.stage.show();
             return;
         }
-        String commandSignup = "user --create --username " + usernameSignUp.getText() + " --nickname " + nicknameSignUp.getText() + " --password " + passwordSignUp.getText();
         Message message = new Message(MessageInstruction.USER, MessageLabel.CREATE, MessageTag.USERNAME, MessageTag.NICKNAME, MessageTag.PASSWORD);
         message.setTagsInOrder(usernameSignUp.getText(), nicknameSignUp.getText(), passwordSignUp.getText());
         createNewUser(message);

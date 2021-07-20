@@ -42,8 +42,10 @@ public class Main {
                 socket.close();
                 serverSocket.close();
                 Responses.logToConsole(Responses.CLIENT_DISCONNECTED);
-            } catch (Exception e) {
+            } catch (EOFException eofException) {
                 Responses.logToConsole(Responses.CLIENT_DISCONNECTED);
+            } catch (Exception exception){
+                exception.printStackTrace();
             }
         }).start();
     }
