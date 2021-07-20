@@ -3,10 +3,11 @@ package model;
 import controller.DataController;
 import model.card.Card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class User {
+public class  User implements Serializable {
     private final ArrayList<Deck> decks;
     private final ArrayList<Card> cards;
     private String username;

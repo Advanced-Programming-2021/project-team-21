@@ -11,6 +11,10 @@ import view.annotation.Label;
 import view.annotation.Tag;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
 
 public class ServerController {
@@ -126,6 +130,32 @@ public class ServerController {
             return null;
         return user.getCards();
     }
-
-
+    @Instruction("user")
+    @Label("all")
+    private LinkedHashMap<User , Boolean> getAllUsers(@Tag("token") String token){
+        LinkedHashMap< User , Boolean> usersWithOnlineStatus = new LinkedHashMap<>();
+        ArrayList<User>users = getSortedUsers(DataController.getAllUsers());
+        for (User user : users) {
+            Boolean isOnline = false;
+            for (String token1 : ProgramController.getTokenUserHashMap().keySet()) {
+                if (ProgramController.getTokenUserHashMap().get(token1).getUsername().equals(user.getUsername()))
+                    isOnline = true;
+            }
+            usersWithOnlineStatus.put(user , isOnline);
+        }
+        return usersWithOnlineStatus;
+    }
+    private ArrayList<User> getSortedUsers(ArrayList<User> users ) {
+        if (users == null)
+            return null;
+        Comparator<User> comparator = Comparator.comparing(User::getScore, Comparator.reverseOrder())
+                .thenComparing(User::getUsername);
+        users.sort(comparator);
+        return users.stream().limit(20).collect(Collectors.toCollection(ArrayList::new));
+    }
+    @Instruction("user")
+    @Label("get")
+    private User getUserByToken(@Tag("token") String token){
+        return ProgramController.getUserWithToken(token);
+    }
 }

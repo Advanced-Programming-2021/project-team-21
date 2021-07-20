@@ -41,4 +41,8 @@ public class ProgramController {
     public static boolean isUserLoggedIn(User user) {
         return tokenUserHashMap.values().stream().anyMatch(loggedInUser -> loggedInUser.getUsername().equals(user.getUsername()));
     }
+
+    public static HashMap<String, User> getTokenUserHashMap() {
+        return tokenUserHashMap;
+    }
 }
