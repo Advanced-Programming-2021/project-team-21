@@ -44,6 +44,7 @@ public class AdminPanel extends Application {
     }
 
     public static void main(String[] args) {
+        ProgramController.allCards = DataController.getAllCards();
         launch(args);
     }
 
