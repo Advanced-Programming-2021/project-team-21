@@ -210,7 +210,7 @@ public class DataController {
         try {
             Connection connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
-            String query = "SELECT * FROM " + tableName;
+            String query = "SELECT * FROM " + tableName.toLowerCase();
             ResultSet resultSet = getResultSet(connection, query);
             if (resultSet == null)
                 return null;
@@ -279,7 +279,7 @@ public class DataController {
         ResultSet resultSet;
         String[] cardTypes = {"Monster", "Spell", "Trap"};
         for (String cardType : cardTypes) {
-            query = "SELECT " + cardType + "s_" + cardType + "_id FROM users_has_" + cardType + "s WHERE users_user_id = '" + user_id + "'";
+            query = "SELECT " + cardType + "s_" + cardType + "_id FROM users_has_" + cardType.toLowerCase() + "s WHERE users_user_id = '" + user_id + "'";
             stmt = connection.createStatement();
             resultSet = stmt.executeQuery(query);
             ArrayList<Integer> cardIds = new ArrayList<>();
