@@ -46,6 +46,9 @@ public class ShopMenu implements Menuable {
     private static final HashMap<String, Button> buttonToUpdate = new HashMap<>();
     private final ArrayList<Animation> delays = new ArrayList<>();
     private final ArrayList<Stage> stages = new ArrayList<>();
+    public TextField cardToAuction = new TextField();
+    public TextField instantBuy = new TextField();
+    public TextField time = new TextField();
 
     public void showMenu() throws IOException {
         ProgramController.createNewScene(getClass().getResource("/FXMLs/shopMenu.fxml"));
@@ -53,6 +56,7 @@ public class ShopMenu implements Menuable {
         messageGetUser.setTagsInOrder(ProgramController.currentToken);
         AppController.sendMessageToServer(messageGetUser);
         User user = (User) AppController.receiveMessageFromServer();
+        System.out.println(user.getCoins());
         ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + user.getCoins());
         ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> closeAllStages());
         Message message = new Message(MessageInstruction.SHOP, MessageLabel.ALL , MessageTag.TOKEN);
@@ -77,7 +81,7 @@ public class ShopMenu implements Menuable {
             }
             cardPicture.setOnMouseEntered(event -> enlargeCardPicture(cardPicture, event));
             vBox.getChildren().add(cardPicture);
-            addLabelsToVBox(name, vBox);
+            addLabelsToVBox(name, vBox, cards);
             Button button = new Button("Buy");
             if (!cards.get(name).isCanBuyCard())
                 button.setDisable(true);
@@ -137,7 +141,7 @@ public class ShopMenu implements Menuable {
     }
 
 
-    private void addLabelsToVBox(String name, VBox vBox) {
+    private void addLabelsToVBox(String name, VBox vBox, HashMap<String, Card> cards) {
         Message messageGetUser = new Message(MessageInstruction.USER, MessageLabel.GET , MessageTag.TOKEN);
         messageGetUser.setTagsInOrder(ProgramController.currentToken);
         AppController.sendMessageToServer(messageGetUser);
@@ -149,7 +153,7 @@ public class ShopMenu implements Menuable {
         for (Card card : user.getCards())
             if (card.getName().equals(name))
                 countBought++;
-        Label labelCount = new Label("Count : " + Card.getCardByName(name).getAmountInShop());
+        Label labelCount = new Label("Count : " + cards.get(name).getAmountInShop());
         countToUpdate.put(name, labelCount);
         labelCount.setStyle("-fx-text-fill: white;");
         vBox.getChildren().add(labelCount);
@@ -161,18 +165,14 @@ public class ShopMenu implements Menuable {
     private void buy(Card card) {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         Message message = new Message(MessageInstruction.SHOP, MessageLabel.BUY , MessageTag.CARD, MessageTag.TOKEN);
-        message.setTagsInOrder(card.getName());
+        message.setTagsInOrder(card.getName(), ProgramController.currentToken);
         AppController.sendMessageToServer(message);
-        System.out.println(AppController.receiveMessageFromServer());
-        Message messageGetUser = new Message(MessageInstruction.USER, MessageLabel.GET , MessageTag.TOKEN);
-        messageGetUser.setTagsInOrder(ProgramController.currentToken);
-        AppController.sendMessageToServer(messageGetUser);
-        User user = (User) AppController.receiveMessageFromServer();
-        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + user.getCoins());
-        Message messageGetCard = new Message(MessageInstruction.CARD, MessageLabel.GET, MessageTag.CARD, MessageTag.TOKEN);
-        message.setTagsInOrder(card.getName());
-        Card card1 = (Card) AppController.receiveMessageFromServer();
-        countToUpdate.get(card.getName()).setText("Count : " + card1.getAmountInShop());
+        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + (Integer.parseInt(((Label) ProgramController.currentScene.lookup("#coin")).getText().substring(8)) - card.getPrice()));
+        Message message2 = new Message(MessageInstruction.SHOP, MessageLabel.ALL , MessageTag.TOKEN);
+        message2.setTagsInOrder(ProgramController.currentToken);
+        AppController.sendMessageToServer(message2);
+        HashMap<String, Card> cards = (HashMap<String, Card>) AppController.receiveMessageFromServer();
+        countToUpdate.get(card.getName()).setText("Count : " + (Integer.parseInt(countToUpdate.get(card.getName()).getText().substring(8)) - 1));
         updateButtons();
     }
 
@@ -238,5 +238,41 @@ public class ShopMenu implements Menuable {
         ProgramController.userInGame.setCoins(ProgramController.userInGame.getCoins() + amount);
         ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + ProgramController.userInGame.getCoins());
         updateButtons();
+    }
+
+    public void auction() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/Auction.fxml"));
+        ProgramController.stage.show();
+    }
+
+    public void setAuction() throws IOException {
+        ProgramController.createNewScene(getClass().getResource("/FXMLs/SetAuction.fxml"));
+        ProgramController.stage.show();
+    }
+
+    public void seeAuction() {
+        //TODO to get the list of cards on Auction
+        //Button buttonRefresh = new Button("refresh");
+        //buttonRefresh.setOnMouseClicked(->seeAuction());
+       // ListView<VBox> listView;
+       // ArrayList<Card> cards;
+       // for (Card card : cards) {
+         // VBox vBox = new VBox();
+          //vBox.getChildren().add(new Label(card.getName()));
+            //vBox.getChildren().add(new Label(instantBuy));
+            //vbox.getChildren().add(new Label(timeLeft));
+             //Button button = new Button("offer");
+            //vbox.getChildren.add(button);
+            //button.setOnMouseCLicked(-> setAnOffer);
+            // listView.add(vbox);
+
+       // }
+    }
+
+    public void doSetAuction() {
+        String cardName = cardToAuction.getText();
+        String instantToBuy = instantBuy.getText();
+        String timeToEnd = time.getText();
+        //TODO send message to server
     }
 }

@@ -14,7 +14,7 @@
    <top>
       <HBox spacing="113">
          <Button text="Back" prefWidth="100" prefHeight="33" onMouseClicked="#back" styleClass="buttonEntrance"/>
-         <Label text="Shop menu" textFill="white" styleClass="title-label">
+         <Label text="Shop menu" textFill="white" styleClass="title-label" onMouseClicked="#auction">
             <font>
                <Font size="19"/>
             </font>

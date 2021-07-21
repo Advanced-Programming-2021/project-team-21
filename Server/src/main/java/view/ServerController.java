@@ -173,7 +173,7 @@ public class ServerController {
         User user = ProgramController.getUserWithToken(token);
         Card card = Card.getCardByName(cardName);
         user.setCoins(user.getCoins() - card.getPrice());
-        card.setAmountInShop(card.getAmountInShop() + 1);
+        card.setAmountInShop(card.getAmountInShop() - 1);
         user.addCard(card);
         return Responses.SUCCESS;
     }
