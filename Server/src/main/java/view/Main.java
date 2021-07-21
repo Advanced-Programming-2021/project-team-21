@@ -17,7 +17,7 @@ public class Main {
     }
 
     private static void runApp() {
-        ProgramController.allCards = DataController.getAllCards();
+//        ProgramController.allCards = DataController.getAllCards();
         DataController.initializeEffectHolders();
         try {
             ServerSocket serverSocket = new ServerSocket(7777);

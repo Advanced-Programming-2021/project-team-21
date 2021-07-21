@@ -3,6 +3,7 @@ package model.card;
 // a problem is when there are multiple cards in print
 
 import com.rits.cloning.Cloner;
+import controller.DataController;
 import controller.ProgramController;
 import model.card.effects.Effect;
 import model.card.enums.CardType;
@@ -25,9 +26,7 @@ public class Card implements Serializable {
     private boolean canBuyCard;
 
     public static Card getCardByName(String name) {
-        HashMap<String, Card> allCards = ProgramController.allCards;
-        if (allCards == null)
-            return null;
+        HashMap<String, Card> allCards = DataController.getAllCards();
         for (String cardName : allCards.keySet()) {
             if (cardName.equals(name)) {
                 return new Cloner().deepClone(allCards.get(cardName));

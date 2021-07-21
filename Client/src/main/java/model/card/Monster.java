@@ -244,11 +244,7 @@ public class Monster extends Card {
 
     @Override
     public String toString() {
-        return "Name:" + name + "\nlevel: " + level +
-                "\nType: " + monsterType.getName() +
-                "\nATK: " + atk +
-                "\nDef: " + def +
-                "\nDescription: " + getDescription();
+        return "Name:" + name;
     }
 
     public boolean isHasAttackedOnceInTurn() {

@@ -82,7 +82,7 @@ public class Trap extends Card {
 
     @Override
     public String toString() {
-        return "Name: " + name + "\nTrap\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
+        return "Name:" + name;
     }
 
     public Effect getCanAttackLP() {
