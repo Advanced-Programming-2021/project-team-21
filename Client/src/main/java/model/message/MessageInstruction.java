@@ -8,6 +8,7 @@ public enum MessageInstruction {
     DUEL("duel"),
     CHAT("chat");
     String name;
+String name;
     MessageInstruction(String name) {
         this.name = name;
     }

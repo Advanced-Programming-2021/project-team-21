@@ -12,6 +12,7 @@ public enum MessageLabel {
     BUY("buy"),
     GET("get"),
     START("start");
+    CANCEL("cancel");
 
     String name;
     MessageLabel(String name) {

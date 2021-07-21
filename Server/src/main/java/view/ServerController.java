@@ -176,6 +176,8 @@ public class ServerController {
     private String buyCard(@Tag("card") String cardName, @Tag("token") String token) {
         User user = ProgramController.getUserWithToken(token);
         Card card = Card.getCardByName(cardName);
+        if (card != null && (card.getAmountInShop() == 0 || !card.isCanBuyCard()))
+            return Responses.ERROR;
         DataController.addCardToUser(card, user);
         user.setCoins(user.getCoins() - card.getPrice());
         card.setAmountInShop(card.getAmountInShop() - 1);
@@ -188,8 +190,9 @@ public class ServerController {
     @Label("get")
     private Card getCard(@Tag("card") String cardName, @Tag("token") String token) {
         User user = ProgramController.getUserWithToken(token);
-        Card card = Card.getCardByName(cardName);
-        return card;
+        if (user == null)
+            return null;
+        return Card.getCardByName(cardName);
     }
 
     @Instruction("chat")

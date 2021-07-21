@@ -110,7 +110,7 @@ public class Spell extends Card {
 
     @Override
     public String toString() {
-        return "Name: " + name + "\nSpell\nType: " + spellTrapIcon.getName() + "\nDescription: " + getDescription();
+        return "Name:" + name;
     }
 
 

@@ -3,6 +3,24 @@ package view;
 import controller.ProgramController;
 
 public class Responses {
+    // Server log responses
+    public static final String SERVER_IS_ON = "Server is running";
+    public static final String SERVER_INITIALIZATION_FAILED = "Server initialization failed. Error details: ";
+    public static final String NEW_CLIENT_CONNECTED = "New client successfully connected";
+    public static final String CLIENT_DISCONNECTED = "A client disconnected";
+    public static final String NEW_MESSAGE_FROM_CLIENT = "New message received from client. Message: ";
+    public static final String WRONG_FORMAT = "Error: Wrong message format";
+    public static final String MESSAGE_SENT = "Message sent: ";
+    public static final String USER_CREATED = "User created successfully";
+    public static final String LOGOUT = "User logged out and following token invalidated: ";
+    public static final String ALREADY_LOGGED_IN = "User already logged in some other device.";
+    public static final String DECK_ALREADY_EXISTS = "Error: Deck  with this name already exists";
+    public static final String DECK_CREATED = "Deck successfully created.";
+    public static final String INVALID_TOKEN = "Error: Token is invalid";
+    public static final String ERROR = "Error: Unknown error";
+    public static final String DECK_DELETED = "Deck deleted successfully.";
+    public static final String DECK_ACTIVATED = "Deck activated successfully.";
+    public static final String USER_NOT_FOUND = "Error: User does not exist";
     public static String changeToCurrentNickname = "This is your nickname";
     public static String emptyNicknameField = "Nickname field is empty";
     public static String invalidToken = "Token is invalid";
@@ -50,7 +68,6 @@ public class Responses {
     public static String wrongChoiceControl = "you did not choose the monster correctly";
     public static String canNotControl = "you can Not control any thing";
     public static String noSpellFound = "no spell found on this location";
-    static String askForChain = "do you want to activate your trap and spell?";
     public static String wrongSpell = "you have chosen a wrong place or a spell that can not be chained right now";
     public static String wrongSpellFormat = "you have to enter a number";
     public static String askToDiscard = "select the cards in your hand to discard";
@@ -66,27 +83,9 @@ public class Responses {
     public static String canNotAttackDueToEffect = "You can't attack due to an effect.";
     public static String wrongTurn = "It's not your turn!";
     public static String surrenderConfirmation = "Are you sure you want to surrender?";
+    static String askForChain = "do you want to activate your trap and spell?";
 
-    // Server log responses
-    public static final String SERVER_IS_ON = "Server is running";
-    public static final String SERVER_INITIALIZATION_FAILED = "Server initialization failed. Error details: ";
-    public static final String NEW_CLIENT_CONNECTED = "New client successfully connected";
-    public static final String CLIENT_DISCONNECTED = "A client disconnected";
-    public static final String NEW_MESSAGE_FROM_CLIENT = "New message received from client. Message: ";
-    public static final String WRONG_FORMAT = "Error: Wrong message format";
-    public static final String MESSAGE_SENT = "Message sent: ";
-    public static final String USER_CREATED = "User created successfully";
-    public static final String LOGOUT = "User logged out and following token invalidated: ";
-    public static final String ALREADY_LOGGED_IN = "User already logged in some other device.";
-    public static final String DECK_ALREADY_EXISTS = "Error: Deck  with this name already exists";
-    public static final String DECK_CREATED = "Deck successfully created.";
-    public static final String INVALID_TOKEN = "Error: Token is invalid";
-    public static final String ERROR = "Error: Unknown error";
-    public static final String DECK_DELETED = "Deck deleted successfully.";
-    public static final String DECK_ACTIVATED = "Deck activated successfully.";
-
-
-    public static void logToConsole(String logMessage){
+    public static void logToConsole(String logMessage) {
         System.out.println(ProgramController.getCurrentTimeAndDate() + logMessage);
     }
 

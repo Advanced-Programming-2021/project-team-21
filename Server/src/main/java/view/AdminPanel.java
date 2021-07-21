@@ -44,7 +44,6 @@ public class AdminPanel extends Application {
     }
 
     public static void main(String[] args) {
-        ProgramController.allCards = DataController.getAllCards();
         launch(args);
     }
 
@@ -75,21 +74,18 @@ public class AdminPanel extends Application {
             vBox.getChildren().add(hBox);
             listView.getItems().add(vBox);
         }
-        listView.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event1) {
-                if (event1.getClickCount() == 2) {
-                    VBox currentItemSelected = listView.getSelectionModel().getSelectedItem();
-                    for (Node node : currentItemSelected.getChildren()) {
-                        for (Node node1 : ((HBox) node).getChildren())
-                            cardToChoose = ((Label) node1).getText();
-                        ((Label) currentPanelScene.lookup("#selectedCard")).setText(cardToChoose);
-                        currentPanelScene.lookup("#buttonForbid").setDisable(false);
-                        currentPanelScene.lookup("#buttonSetCount").setDisable(false);
-                        currentPanelScene.lookup("#buttonUnForbid").setDisable(false);
-                    }
-                    stage.close();
+        listView.setOnMouseClicked(event1 -> {
+            if (event1.getClickCount() == 2) {
+                VBox currentItemSelected = listView.getSelectionModel().getSelectedItem();
+                for (Node node : currentItemSelected.getChildren()) {
+                    for (Node node1 : ((HBox) node).getChildren())
+                        cardToChoose = ((Label) node1).getText();
+                    ((Label) currentPanelScene.lookup("#selectedCard")).setText(cardToChoose);
+                    currentPanelScene.lookup("#buttonForbid").setDisable(false);
+                    currentPanelScene.lookup("#buttonSetCount").setDisable(false);
+                    currentPanelScene.lookup("#buttonUnForbid").setDisable(false);
                 }
+                stage.close();
             }
         });
         stage.show();

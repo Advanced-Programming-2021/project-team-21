@@ -62,6 +62,7 @@ public class ShopMenu implements Menuable {
         message.setTagsInOrder(ProgramController.currentToken);
         AppController.sendMessageToServer(message);
         HashMap<String, Card> cards = (HashMap<String, Card>) AppController.receiveMessageFromServer();
+        cardsName.clear();
         cardsName.addAll(cards.keySet());
         Collections.sort(cardsName);
         ListView<VBox> listView = (ListView<VBox>) ProgramController.currentScene.lookup("#showCards");
@@ -80,12 +81,20 @@ public class ShopMenu implements Menuable {
             }
             cardPicture.setOnMouseEntered(event -> enlargeCardPicture(cardPicture, event));
             vBox.getChildren().add(cardPicture);
-            addLabelsToVBox(name, vBox, cards);
+            addLabelsToVBox(name, vBox, cards, user);
             Button button = new Button("Buy");
-            if (!cards.get(name).isCanBuyCard())
-                button.setDisable(true);
             button.setPrefWidth(100);
-            button.setOnMouseClicked(event -> buy(DataController.getAllCards().get(name)));
+            if (!cards.get(name).isCanBuyCard() || cards.get(name).getAmountInShop() == 0) {
+                vBox.setStyle("-fx-background-color: red");
+                button.setDisable(true);
+            }
+            button.setOnMouseClicked(event -> {
+                if (cards.get(name).getAmountInShop() == 0 || !cards.get(name).isCanBuyCard()){
+                    button.setDisable(true);
+                    return;
+                }
+                buy(DataController.getAllCards().get(name));
+            });
             button.getStyleClass().add("buttonEntrance");
             buttonToUpdate.put(name, button);
             vBox.getChildren().add(button);
@@ -140,11 +149,9 @@ public class ShopMenu implements Menuable {
     }
 
 
-    private void addLabelsToVBox(String name, VBox vBox, HashMap<String, Card> cards) {
+    private void addLabelsToVBox(String name, VBox vBox, HashMap<String, Card> cards, User user) {
         Message messageGetUser = new Message(MessageInstruction.USER, MessageLabel.GET , MessageTag.TOKEN);
         messageGetUser.setTagsInOrder(ProgramController.currentToken);
-        AppController.sendMessageToServer(messageGetUser);
-        User user = (User) AppController.receiveMessageFromServer();
         Label labelName = new Label(name);
         labelName.setStyle("-fx-text-fill: white;");
         vBox.getChildren().add(labelName);
@@ -166,9 +173,11 @@ public class ShopMenu implements Menuable {
         Message message = new Message(MessageInstruction.SHOP, MessageLabel.BUY , MessageTag.CARD, MessageTag.TOKEN);
         message.setTagsInOrder(card.getName(), ProgramController.currentToken);
         AppController.sendMessageToServer(message);
-        AppController.receiveMessageFromServer();
-        ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + (Integer.parseInt(((Label) ProgramController.currentScene.lookup("#coin")).getText().substring(8)) - card.getPrice()));
-        countToUpdate.get(card.getName()).setText("Count : " + (Integer.parseInt(countToUpdate.get(card.getName()).getText().substring(8)) - 1));
+        String result = (String) AppController.receiveMessageFromServer();
+        if (result != null && !result.startsWith("Error")) {
+            ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + (Integer.parseInt(((Label) ProgramController.currentScene.lookup("#coin")).getText().substring(8)) - card.getPrice()));
+            countToUpdate.get(card.getName()).setText("Count : " + (Integer.parseInt(countToUpdate.get(card.getName()).getText().substring(8)) - 1));
+        }
         updateButtons();
     }
 

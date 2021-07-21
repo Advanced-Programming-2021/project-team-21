@@ -124,18 +124,27 @@ public class DataController {
     //is called when user buys a new card from shop
     public static void addCardToUser(Card card, User user) {
         try {
+            if (card.getAmountInShop() == 0)
+                return;
             Connection connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
             String query = "SELECT user_id FROM users WHERE username = '" + user.getUsername() + "'";
             Statement statement = connection.createStatement();
             String cardClassName = card.getClass().getSimpleName().toLowerCase();
-            int user_id = statement.executeQuery(query).getInt(1);
+            ResultSet resultSet = statement.executeQuery(query);
+            int user_id = 0;
+            if (resultSet.next())
+                user_id = resultSet.getInt(1);
             query = "SELECT " + cardClassName + "_id FROM " + cardClassName + "s WHERE Name = '" + card.getName() + "'";
-            int card_id = statement.executeQuery(query).getInt(1);
+            resultSet = statement.executeQuery(query);
+            int card_id = 0;
+            if (resultSet.next())
+                 card_id = resultSet.getInt(1);
             query = "INSERT INTO users_has_" + cardClassName + "s (users_user_id, " + card.getClass().getSimpleName() + "s_" + card.getClass().getSimpleName() + "_id) " +
                     "VALUES(?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(user_id, card_id);
+            preparedStatement.setInt(1, user_id);
+            preparedStatement.setInt(2, card_id);
             preparedStatement.execute();
             query = "UPDATE " + cardClassName + "s SET Amount = '" + (card.getAmountInShop() - 1) + "' WHERE Name = '" + card.getName() + "'";
             connection.prepareStatement(query).execute();
@@ -288,10 +297,11 @@ public class DataController {
             while (resultSet.next()) {
                 cardIds.add(resultSet.getInt(1));
             }
+            int i = 1;
             for (Integer cardId : cardIds) {
-                query = "SELECT Name FROM " + cardType + "s WHERE " + cardType + "_id = '" + cardId + "'";
+                query = "SELECT Name FROM " + cardType.toLowerCase() + "s WHERE " + cardType + "_id = '" + cardId + "'";
+                resultSet = stmt.executeQuery(query);
                 if (resultSet.next()) {
-                    resultSet = stmt.executeQuery(query);
                     user.addCard(Card.getCardByName(getAllCards().get(resultSet.getString(1)).getName()));
                 }
             }
@@ -314,16 +324,16 @@ public class DataController {
 
     // is called when we want to get a user with it's username
     public static User getUserByNickname(String nickname) {
-      //  try {
-       //     Connection connection = DriverManager.getConnection(
-        //            "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
-        //    String query = "SELECT username FROM users WHERE nickname = '" + nickname + "'";
-        //    ResultSet resultSet = getResultSet(connection, query);
-        //    if (resultSet.next())
-        //        return getUserByUsername(resultSet.getString("username"));
-       // } catch (SQLException sqlException) {
-       //     sqlException.printStackTrace();
-      //  }
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+            String query = "SELECT username FROM users WHERE nickname = '" + nickname + "'";
+            ResultSet resultSet = getResultSet(connection, query);
+            if (resultSet.next())
+                return getUserByUsername(resultSet.getString("username"));
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
         return null;
     }
 
