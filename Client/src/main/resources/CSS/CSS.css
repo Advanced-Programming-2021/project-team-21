@@ -129,7 +129,11 @@
   -fx-background-image: url("../images/Scoreboard.jpg");
   -fx-background-size: cover;
 }
-
+.chatBox {
+    -fx-font-size: 15pt ;
+    -fx-background-image: url("../images/chatBox.png");
+    -fx-background-size: cover;
+}
 .scoreboard-users {
     -fx-background-color: rgb(199, 240, 226);
     -fx-text-fill: purple;

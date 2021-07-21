@@ -40,6 +40,10 @@ import model.card.Card;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.enums.CardType;
+import model.message.Message;
+import model.message.MessageInstruction;
+import model.message.MessageLabel;
+import model.message.MessageTag;
 import org.apache.commons.math3.util.Pair;
 
 import java.io.FileInputStream;
@@ -1101,20 +1105,28 @@ public class DuelMenu implements Menuable {
 
     @SuppressWarnings("rawtypes")
     public void startNewGame() {
+        System.out.println("hoyyyyyyy");
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ChoiceBox userChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#playerChoiceBox"),
                 roundChoiceBox = (ChoiceBox) ProgramController.currentScene.lookup("#roundChoiceBox");
         TextField userTextField = (TextField) ProgramController.currentScene.lookup("#usernameTextField");
         String userOrAI = (String) userChoiceBox.getValue();
         userTextField.focusedProperty().addListener((obs, oldValue, newValue) -> userTextField.setStyle("-fx-text-fill: black"));
-        if (userOrAI.equals("Another Player") && isTextFieldInvalid(userTextField.getText())) {
-            userTextField.setStyle("-fx-text-fill: rgb(250, 0, 0);");
-            return;
+        if (userTextField.getText().isEmpty() || userTextField.getText().isBlank()){
+            Message message = new Message(MessageInstruction.DUEL, MessageLabel.START , MessageTag.TOKEN);
+            message.setTagsInOrder(ProgramController.currentToken);
+            AppController.sendMessageToServer(message);
+            User userInGame = (User) AppController.receiveMessageFromServer();
         }
+        userTextField.setStyle("-fx-text-fill: rgb(250, 0, 0);");
+
+        System.out.println("heeeefffffffffff");
         String rounds = (String) roundChoiceBox.getValue();
         if (userTextField.getText().isEmpty()) {
+            System.out.println("heeeccccccccc");
             createNewDuelWithAI(Integer.parseInt(rounds.replaceAll("\\D+", "")));
         } else {
+            System.out.println("is here");
             createNewDuel(userTextField.getText(), Integer.parseInt(rounds.replaceAll("\\D+", "")));
         }
     }
@@ -1278,12 +1290,7 @@ public class DuelMenu implements Menuable {
 
     }
 
-    private boolean isTextFieldInvalid(String username) {
-        if (username.isEmpty() || username.isBlank())
-            return true;
-        return Objects.requireNonNull(DataController.getAllUsers()).stream()
-                .noneMatch(user -> user.getUsername().equals(username) && !user.getUsername().equals(ProgramController.userInGame.getUsername()));
-    }
+
 
     private void loadInformationForBothUsers(User firstUser, User secondUser) {
         setLabelForAStage(firstUser, secondUser, firstUserStage);

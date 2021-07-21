@@ -3,11 +3,13 @@ package model.message;
 public enum MessageInstruction {
     USER("user"),
     DECK("deck"),
+    CARD("card"),
     SHOP("shop"),
-    CARD("card");
-String name;
+    DUEL("duel"),
+    CHAT("chat");
+    String name;
     MessageInstruction(String name) {
-    this.name = name;
+        this.name = name;
     }
 
     public String getName() {

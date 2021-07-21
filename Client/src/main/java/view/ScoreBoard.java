@@ -27,8 +27,7 @@ import model.message.MessageTag;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
+
 
 public class ScoreBoard implements Menuable {
     LinkedHashMap<User, Boolean> usersBefore = new LinkedHashMap<>();
@@ -82,7 +81,7 @@ public class ScoreBoard implements Menuable {
         String rank = ranks[i];
         User user = (new ArrayList<>(users.keySet())).get(i);
         HBox hBox = new HBox();
-        Message message = new Message(MessageInstruction.USER, MessageLabel.GET);
+        Message message = new Message(MessageInstruction.USER, MessageLabel.GET , MessageTag.TOKEN);
         message.setTagsInOrder(ProgramController.currentToken);
         AppController.sendMessageToServer(message);
         User userInGame = (User) AppController.receiveMessageFromServer();
@@ -134,5 +133,11 @@ public class ScoreBoard implements Menuable {
 
     public void refresh() throws IOException {
         showMenu();
+    }
+
+    public void chatBox(MouseEvent event) throws IOException {
+        ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
+        ProgramController.currentMenu = new ChatBox();
+        ProgramController.currentMenu.showMenu();
     }
 }

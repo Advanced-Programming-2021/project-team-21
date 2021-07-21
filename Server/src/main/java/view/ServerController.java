@@ -2,6 +2,7 @@ package view;
 
 import controller.DataController;
 import controller.ProgramController;
+import javafx.util.Pair;
 import model.Deck;
 import model.User;
 import model.card.Card;
@@ -10,6 +11,8 @@ import view.annotation.Instruction;
 import view.annotation.Label;
 import view.annotation.Tag;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class ServerController {
     private static final ServerController SERVER_CONTROLLER = new ServerController();
     // this class meant to call different methods of classes from the command receives
+    private HashMap<LocalDateTime, Pair<User, String>> messages = new HashMap<>();
 
     private ServerController() {
     }
@@ -187,4 +191,21 @@ public class ServerController {
         Card card = Card.getCardByName(cardName);
         return card;
     }
+
+    @Instruction("chat")
+    @Label("all")
+    private synchronized HashMap<LocalDateTime, Pair<User, String>> getMessages(@Tag("token") String token) {
+        return messages;
+    }
+
+    @Instruction("chat")
+    @Label("get")
+    private synchronized String sendMessage(@Tag("token") String token,
+                                          @Tag("message") String message,
+                                          @Tag("time") String time) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        messages.put(LocalDateTime.parse(time, dtf) , new Pair<>(ProgramController.getUserWithToken(token) , message));
+        return "Success";
+    }
+
 }

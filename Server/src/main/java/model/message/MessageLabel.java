@@ -8,11 +8,10 @@ public enum MessageLabel {
     DELETE("delete"),
     ACTIVATE("activate"),
     ADD("add"),
-    BUY("buy"),
     AVAILABLE_CARDS("available-cards"),
-    GET("get");
-
-
+    BUY("buy"),
+    GET("get"),
+    START("start");
 
     String name;
     MessageLabel(String name) {

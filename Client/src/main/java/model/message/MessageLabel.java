@@ -10,7 +10,8 @@ public enum MessageLabel {
     ADD("add"),
     AVAILABLE_CARDS("available-cards"),
     BUY("buy"),
-    GET("get");
+    GET("get"),
+    START("start");
 
     String name;
     MessageLabel(String name) {

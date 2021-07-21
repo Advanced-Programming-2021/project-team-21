@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import java.net.URL?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Label?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
 <?import javafx.scene.text.Font?>
+<?import java.net.URL?>
 <AnchorPane maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
             minWidth="-Infinity"
             prefHeight="400.0"
             prefWidth="600.0"
-            fx:controller="view.ScoreBoard"
+            fx:controller="view.ChatBox"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml">
     <ScrollPane hbarPolicy="NEVER" styleClass="scroll-bar" fitToWidth="true">
         <VBox alignment="TOP_CENTER" spacing="10" prefHeight="400"
-              prefWidth="600" styleClass="scoreboard" id="mainVBox">
-            <HBox spacing="50">
+              prefWidth="600" styleClass="chatBox " id="mainVBox">
+            <HBox spacing="100">
                 <Button text="Back" onMouseClicked="#handleBackToMenu" styleClass="buttonEntrance"/>
-                <Label text="  Scoreboard  " styleClass="title-label">
+                <Label text="  Chat Box  " styleClass="title-label">
+                    <Button text="refresh" onMouseClicked="#refresh" styleClass="buttonEntrance"/>
                     <font>
-                        <Font size="20.0" />
+                        <Font size="30.0" />
                     </font>
                 </Label>
-                <Button text="refresh" onMouseClicked="#refresh" styleClass="buttonEntrance"/>
-                <Button text="Chat" onMouseClicked="#chatBox" styleClass="buttonEntrance"/>
             </HBox>
 
         </VBox>

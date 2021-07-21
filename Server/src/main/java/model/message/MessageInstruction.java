@@ -4,10 +4,12 @@ public enum MessageInstruction {
     USER("user"),
     DECK("deck"),
     CARD("card"),
-    SHOP("shop");
-String name;
+    SHOP("shop"),
+    DUEL("duel"),
+    CHAT("chat");
+    String name;
     MessageInstruction(String name) {
-    this.name = name;
+        this.name = name;
     }
 
     public String getName() {
