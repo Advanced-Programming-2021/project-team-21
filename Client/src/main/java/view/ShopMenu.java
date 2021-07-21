@@ -56,7 +56,6 @@ public class ShopMenu implements Menuable {
         messageGetUser.setTagsInOrder(ProgramController.currentToken);
         AppController.sendMessageToServer(messageGetUser);
         User user = (User) AppController.receiveMessageFromServer();
-        System.out.println(user.getCoins());
         ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + user.getCoins());
         ProgramController.currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, event -> closeAllStages());
         Message message = new Message(MessageInstruction.SHOP, MessageLabel.ALL , MessageTag.TOKEN);
@@ -167,11 +166,8 @@ public class ShopMenu implements Menuable {
         Message message = new Message(MessageInstruction.SHOP, MessageLabel.BUY , MessageTag.CARD, MessageTag.TOKEN);
         message.setTagsInOrder(card.getName(), ProgramController.currentToken);
         AppController.sendMessageToServer(message);
+        AppController.receiveMessageFromServer();
         ((Label) ProgramController.currentScene.lookup("#coin")).setText("Coins : " + (Integer.parseInt(((Label) ProgramController.currentScene.lookup("#coin")).getText().substring(8)) - card.getPrice()));
-        Message message2 = new Message(MessageInstruction.SHOP, MessageLabel.ALL , MessageTag.TOKEN);
-        message2.setTagsInOrder(ProgramController.currentToken);
-        AppController.sendMessageToServer(message2);
-        HashMap<String, Card> cards = (HashMap<String, Card>) AppController.receiveMessageFromServer();
         countToUpdate.get(card.getName()).setText("Count : " + (Integer.parseInt(countToUpdate.get(card.getName()).getText().substring(8)) - 1));
         updateButtons();
     }

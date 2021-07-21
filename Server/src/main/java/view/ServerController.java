@@ -172,9 +172,11 @@ public class ServerController {
     private String buyCard(@Tag("card") String cardName, @Tag("token") String token) {
         User user = ProgramController.getUserWithToken(token);
         Card card = Card.getCardByName(cardName);
+        DataController.addCardToUser(card, user);
         user.setCoins(user.getCoins() - card.getPrice());
         card.setAmountInShop(card.getAmountInShop() - 1);
         user.addCard(card);
+        DataController.updateUserInformation(user);
         return Responses.SUCCESS;
     }
 
