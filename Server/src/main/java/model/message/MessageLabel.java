@@ -14,11 +14,13 @@ public enum MessageLabel {
 
 
     String name;
-
     MessageLabel(String name) {
         this.name = name;
     }
 
+    public static MessageLabel getInstance() {
+        return CREATE;
+    }
 
     public String getName() {
         return name;

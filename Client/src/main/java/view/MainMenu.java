@@ -1,8 +1,10 @@
 package view;
 
 import controller.ProgramController;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import model.message.Message;
 import model.message.MessageInstruction;
 import model.message.MessageLabel;
@@ -42,7 +44,9 @@ public class MainMenu implements Menuable {
     public void goToScoreboard() throws IOException {
         ProgramController.startNewAudio("src/main/resources/audios/click.mp3");
         ProgramController.currentMenu = new ScoreBoard();
-        ProgramController.currentMenu.showMenu();
+            ProgramController.currentMenu.showMenu();
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(8));
+            pauseTransition.play();
     }
 
     public void goToProfileMenu() throws IOException {
