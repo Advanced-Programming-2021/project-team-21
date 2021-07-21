@@ -65,10 +65,10 @@ public class DataController {
         String query = "SELECT * FROM users WHERE username = '" + user.getUsername() + "';";
         ResultSet resultSet = getResultSet(connection, query);
         if (!resultSet.next()) {
-            query = "INSERT INTO users (username, nickname, password, score, coins)"
-                    + " VALUES (?, ?, ?, ?, ?)";
+            query = "INSERT INTO users (username, nickname, password, score, coins, avatar)"
+                    + " VALUES (?, ?, ?, ?, ?, ?)";
         } else {
-            query = "UPDATE users SET username = ?, nickname = ?, password = ?, score = ?, coins = ? WHERE user_id = '" + resultSet.getInt(1) + "'";
+            query = "UPDATE users SET username = ?, nickname = ?, password = ?, score = ?, coins = ?, avatar = ? WHERE user_id = '" + resultSet.getInt(1) + "'";
         }
 
 
@@ -78,6 +78,7 @@ public class DataController {
         preparedStatement.setString(3, user.getPassword());
         preparedStatement.setInt(4, user.getScore());
         preparedStatement.setInt(5, user.getCoins());
+        preparedStatement.setString(6, user.getAvatar());
         preparedStatement.execute();
 
     }
@@ -253,6 +254,7 @@ public class DataController {
                 user = new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("nickname"));
                 user.setScore(resultSet.getInt("score"));
                 user.setCoins(resultSet.getInt("coins"));
+                user.setAvatar(resultSet.getString("avatar"));
                 user_id = resultSet.getInt("user_id");
             }
             if (user == null)
