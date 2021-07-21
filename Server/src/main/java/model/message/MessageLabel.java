@@ -11,7 +11,7 @@ public enum MessageLabel {
     AVAILABLE_CARDS("available-cards"),
     BUY("buy"),
     GET("get"),
-    START("start");
+    START("start"),
     CANCEL("cancel");
 
 
