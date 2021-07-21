@@ -40,6 +40,10 @@ import model.card.Card;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.enums.CardType;
+import model.message.Message;
+import model.message.MessageInstruction;
+import model.message.MessageLabel;
+import model.message.MessageTag;
 import org.apache.commons.math3.util.Pair;
 
 import java.io.FileInputStream;
@@ -1115,7 +1119,37 @@ public class DuelMenu implements Menuable {
         if (userTextField.getText().isEmpty()) {
             createNewDuelWithAI(Integer.parseInt(rounds.replaceAll("\\D+", "")));
         } else {
+            sendRequestToUser(userTextField.getText());
             createNewDuel(userTextField.getText(), Integer.parseInt(rounds.replaceAll("\\D+", "")));
+        }
+    }
+
+    private void sendRequestToUser(String username) {
+        Message message = new Message(MessageInstruction.DUEL, MessageLabel.CREATE, MessageTag.TOKEN, MessageTag.USERNAME);
+        message.setTagsInOrder(ProgramController.currentToken, username);
+        AppController.sendMessageToServer(message);
+        showRequestWait(username);
+    }
+
+    private void showRequestWait(String username) {
+        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+        informationAlert.getButtonTypes().add(ButtonType.CANCEL);
+        if (informationAlert.getResult().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE){
+            Message message = new Message(MessageInstruction.DUEL, MessageLabel.CANCEL, MessageTag.TOKEN);
+            message.setTagsInOrder(ProgramController.currentToken);
+            AppController.sendMessageToServer(message);
+            boolean isCancelled = !((String)AppController.receiveMessageFromServer()).startsWith("Error");
+            if (isCancelled)
+                informationAlert.close();
+        }
+        informationAlert.initStyle(StageStyle.UNDECORATED);
+        informationAlert.getDialogPane().getStylesheets()
+                .add(Objects.requireNonNull(PrintResponses.class.getResource("/CSS/CSS.css")).toExternalForm());
+        informationAlert.setContentText("waiting for " + username + " to accept request ...");
+        informationAlert.showAndWait();
+        String result = (String) AppController.receiveMessageFromServer();
+        if (result != null && result.startsWith("Success")) {
+            informationAlert.close();
         }
     }
 

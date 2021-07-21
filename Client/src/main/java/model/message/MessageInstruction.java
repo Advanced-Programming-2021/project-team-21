@@ -4,7 +4,8 @@ public enum MessageInstruction {
     USER("user"),
     DECK("deck"),
     SHOP("shop"),
-    CARD("card");
+    CARD("card"),
+    DUEL("duel");
 String name;
     MessageInstruction(String name) {
     this.name = name;

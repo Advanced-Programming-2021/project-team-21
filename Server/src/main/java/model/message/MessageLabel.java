@@ -10,7 +10,8 @@ public enum MessageLabel {
     ADD("add"),
     BUY("buy"),
     AVAILABLE_CARDS("available-cards"),
-    GET("get");
+    GET("get"),
+    CANCEL("cancel");
 
 
 
