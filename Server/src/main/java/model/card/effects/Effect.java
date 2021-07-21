@@ -1,9 +1,10 @@
 package model.card.effects;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Effect {
+public class Effect implements Serializable {
     private int isEffect;
     private int isEffectHolder;
     private int isContinuous;

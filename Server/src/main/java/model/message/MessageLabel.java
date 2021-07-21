@@ -8,17 +8,20 @@ public enum MessageLabel {
     DELETE("delete"),
     ACTIVATE("activate"),
     ADD("add"),
+    BUY("buy"),
     AVAILABLE_CARDS("available-cards"),
     GET("get");
 
 
 
     String name;
-
     MessageLabel(String name) {
         this.name = name;
     }
 
+    public static MessageLabel getInstance() {
+        return CREATE;
+    }
 
     public String getName() {
         return name;

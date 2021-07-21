@@ -9,6 +9,7 @@ public enum MessageLabel {
     ACTIVATE("activate"),
     ADD("add"),
     AVAILABLE_CARDS("available-cards"),
+    BUY("buy"),
     GET("get");
 
     String name;

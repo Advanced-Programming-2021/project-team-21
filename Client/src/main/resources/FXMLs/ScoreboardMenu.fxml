@@ -24,9 +24,10 @@
                 <Button text="Back" onMouseClicked="#handleBackToMenu" styleClass="buttonEntrance"/>
                 <Label text="  Scoreboard  " styleClass="title-label">
                     <font>
-                        <Font size="40.0" />
+                        <Font size="30.0" />
                     </font>
                 </Label>
+                <Button text="refresh" onMouseClicked="#refresh" styleClass="buttonEntrance"/>
             </HBox>
 
         </VBox>

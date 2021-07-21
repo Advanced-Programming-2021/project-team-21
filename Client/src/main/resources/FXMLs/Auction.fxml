@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="view.ShopMenu"
+            prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <Label styleClass="title-label" text="Auction" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="40.0" />
+            </font>
+        </Label>
+    </top>
+    <center>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" maxWidth="200.0" mnemonicParsing="false" onMouseClicked="#setAuction" styleClass="buttonEntrance" text="Set">
+                    <font>
+                        <Font size="20.0" />
+                    </font></Button>
+                <Button maxHeight="50.0" maxWidth="200.0" mnemonicParsing="false" onMouseClicked="#seeAuction" styleClass="buttonEntrance" text="See">
+                    <font>
+                        <Font size="20.0" />
+                    </font></Button>
+                <Button maxHeight="50.0" maxWidth="200.0" mnemonicParsing="false" onMouseClicked="#back" styleClass="buttonEntrance" text="Exit">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
