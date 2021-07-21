@@ -12,6 +12,7 @@ import view.annotation.Tag;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
@@ -158,5 +159,30 @@ public class ServerController {
     @Label("get")
     private User getUserByToken(@Tag("token") String token) {
         return ProgramController.getUserWithToken(token);
+    }
+
+    @Instruction("shop")
+    @Label("all")
+    private HashMap<String, Card> sendAllCards(@Tag("token") String token) {
+        return DataController.getAllCards();
+    }
+
+    @Instruction("shop")
+    @Label("buy")
+    private String buyCard(@Tag("card") String cardName, @Tag("token") String token) {
+        User user = ProgramController.getUserWithToken(token);
+        Card card = Card.getCardByName(cardName);
+        user.setCoins(user.getCoins() - card.getPrice());
+        card.setAmountInShop(card.getAmountInShop() + 1);
+        user.addCard(card);
+        return Responses.SUCCESS;
+    }
+
+    @Instruction("card")
+    @Label("get")
+    private Card getCard(@Tag("card") String cardName, @Tag("token") String token) {
+        User user = ProgramController.getUserWithToken(token);
+        Card card = Card.getCardByName(cardName);
+        return card;
     }
 }

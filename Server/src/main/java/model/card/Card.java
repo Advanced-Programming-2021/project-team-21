@@ -7,13 +7,14 @@ import controller.ProgramController;
 import model.card.effects.Effect;
 import model.card.enums.CardType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class Card {
+public class Card implements Serializable {
     protected String name;
     CardType cardType;
     private String description;

@@ -5,6 +5,7 @@ public enum MessageTag {
     PASSWORD("password"),
     NICKNAME("nickname"),
     TOKEN("token"),
+    CARD("card"),
     NAME("name");
 
     String name;

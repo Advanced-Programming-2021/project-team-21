@@ -312,16 +312,16 @@ public class DataController {
 
     // is called when we want to get a user with it's username
     public static User getUserByNickname(String nickname) {
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
-            String query = "SELECT username FROM users WHERE nickname = '" + nickname + "'";
-            ResultSet resultSet = getResultSet(connection, query);
-            if (resultSet.next())
-                return getUserByUsername(resultSet.getString("username"));
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
+      //  try {
+       //     Connection connection = DriverManager.getConnection(
+        //            "jdbc:mysql://localhost:3306/YuGiOh", "root", "YuGiOh212121%");
+        //    String query = "SELECT username FROM users WHERE nickname = '" + nickname + "'";
+        //    ResultSet resultSet = getResultSet(connection, query);
+        //    if (resultSet.next())
+        //        return getUserByUsername(resultSet.getString("username"));
+       // } catch (SQLException sqlException) {
+       //     sqlException.printStackTrace();
+      //  }
         return null;
     }
 
